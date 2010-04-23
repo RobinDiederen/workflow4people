@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jbpm-configuration spring="enabled">
+
+  <process-engine-context>
+  
+    <command-service name="newTxRequiredCommandService">
+    <!-- 
+    <skip-interceptor />
+     -->
+      <retry-interceptor />
+      <environment-interceptor policy="requiresNew" />
+       
+      
+      <spring-transaction-interceptor policy="requiresNew" current="false"/>
+    </command-service>
+    
+    <!-- Default command service has a Spring transaction interceptor-->
+    <command-service name="txRequiredCommandService">
+      <retry-interceptor />
+      <environment-interceptor />
+      <spring-transaction-interceptor />
+    </command-service>
+    
+  </process-engine-context>
+
+  <transaction-context>
+    <transaction type="spring" />
+    <hibernate-session current="true" />
+    
+    <repository-session />
+    <db-session />    
+    <message-session />
+    <timer-session />
+    <!-- <history-session />-->
+    <history-sessions>
+      <object class="org.jbpm.pvm.internal.history.HistorySessionImpl" />
+    </history-sessions>
+    
+    <mail-session>
+      <mail-server>
+        <session-properties resource="jbpm/jbpm.mail.properties" />
+      </mail-server>
+    </mail-session>
+     
+  </transaction-context>
+
+</jbpm-configuration>

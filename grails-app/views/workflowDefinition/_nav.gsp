@@ -1,0 +1,1 @@
+<span class="menuButton"><g:link class="create" action="generate" id="${workflowDefinitionInstance?.id}">Generate forms package</g:link></span>

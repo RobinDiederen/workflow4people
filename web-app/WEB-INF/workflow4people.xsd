@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--  
+ *
+ * Workflow4people
+ * Copyright 2009, Open-T B.V., and individual contributors as indicated
+ * by the @author tag. See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License
+ * version 3 published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses
+ *
+-->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://www.workflow4people.org/services" 
+		xmlns:wf4p="http://www.workflow4people.org/services" 
+		xmlns:doc="http://www.workflow4people.org/schemas/documents"
+		elementFormDefault="qualified">	
+		
+		<!-- Schema gets included through Spring WS in Config.groovy -->
+		<import namespace="http://www.workflow4people.org/schemas/documents"  />
+			
+		<complexType name="Authentication">
+			<sequence>
+				<element name="username" type="string" minOccurs="0" />
+				<element name="password" type="string" minOccurs="0" />
+				<element name="domain" 	 type="string" minOccurs="0" />
+				<element name="token" 	 type="string" minOccurs="0" />
+			</sequence>
+		</complexType>
+				
+		<complexType name="Variable">
+			<sequence>
+				<element type="string" name="name" />
+				<element name="value" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="Document">
+			<sequence>
+				<any minOccurs="0" processContents="skip" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="Variables">
+			<sequence>
+				<element type="wf4p:Variable" name="variable" minOccurs="0" maxOccurs="unbounded" />				
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="Outcomes">
+			<sequence>
+				<element type="string" name="outcome" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="HistoryComment">
+			<sequence>
+				<element type="string" name="message" minOccurs="0" maxOccurs="unbounded" />
+				<element type="wf4p:HistoryComment" name="historyComment" minOccurs="0" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="Comments">
+			<sequence>				
+				<element type="wf4p:HistoryComment" name="historyComment" minOccurs="0" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="Paginate">
+			<sequence>				
+				<element type="integer" name="page" />
+				<element type="integer" name="max" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="PaginateResult">
+			<sequence>				
+				<element type="integer" name="page" />
+				<element type="integer" name="totalPages" />
+				<element type="integer" name="totalResults" />
+			</sequence>
+		</complexType>
+		
+		<simpleType name="QueryType" >
+			<restriction base="string">
+				<enumeration value="all" />
+				<enumeration value="text" />
+				<enumeration value="lucene" />
+				<enumeration value="hql" />
+			</restriction>		
+		</simpleType>
+		
+		<simpleType name="OrderType" >
+			<restriction base="string">
+				<enumeration value="asc" />
+				<enumeration value="desc" />				
+			</restriction>		
+		</simpleType>
+		
+		
+		<complexType name="DocumentQuery">
+			<sequence>
+				<element type="string" name ="query" />
+				<element type="wf4p:QueryType" name ="queryType" />
+				<element type="string" name ="parameters" minOccurs="0"/>
+				<element type="string" name ="user" />
+				<element type="boolean" name="userDocumentsOnly" />
+				<element type="string"  name="documentType" minOccurs="0"/>
+				<element type="string" name ="sort" minOccurs="0"/>
+				<element type="wf4p:OrderType" name ="order" minOccurs="0"/>
+				<element type="wf4p:Paginate" name="paginate" minOccurs="0"/>				
+			</sequence>		
+		</complexType>
+		
+		
+		
+		<complexType name="DocumentList">
+			<sequence>
+				<element type="wf4p:PaginateResult" name="paginateResult" />
+				<element name="headers" >
+					<complexType>
+						<sequence>
+							<element ref="doc:header" minOccurs="0" maxOccurs="unbounded" />
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>		
+		</complexType>
+		
+		<complexType name="DocumentIndexField">
+			<sequence>
+				<element type="string" name="name" />
+				<element type="string" name="title" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="DocumentIndexFieldList">
+			<sequence>
+				<element name="documentIndexField" minOccurs="0" maxOccurs="unbounded" type="wf4p:DocumentIndexField"/>									
+			</sequence>		
+		</complexType>
+		
+		
+		<complexType name="Task">
+			<sequence>
+				<element type="string" name="activityName" minOccurs="0"/>
+				<element type="string" name="assignee" minOccurs="0"/>
+				<element type="string" name="description" minOccurs="0"/>
+				<element type="dateTime" name="createDate" minOccurs="0" nillable="true" />
+				<element type="dateTime" name="dueDate" minOccurs="0" nillable="true" />
+				<element type="string" name="executionId" minOccurs="0"/>
+				<element type="string" name="name" minOccurs="0"/>
+				<element type="string" name="id" minOccurs="0"/>
+				<element type="integer" name="priority" minOccurs="0"/>
+				<element type="wf4p:Form" name="form" />
+				<element type="wf4p:Outcomes" name="outcomes" />
+				<element type="wf4p:Variables" name="variables" />
+				<!-- <element type="wf4p:Comments" name="comments" /> -->
+			</sequence>
+		</complexType>
+		
+		<complexType name="TaskList">
+			<sequence>
+				<element type="wf4p:Task" name="task" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="ProcessInstance" >
+			<sequence>
+				<element type="string" name="id" />
+				<element type="string" name="key" />
+				<element type="string" name="name" />
+				<element type="string" name="state" />
+				<element type="integer" name="priority" />
+				<element type="boolean" name="isActive" />
+				<element type="boolean" name="isEnded" />
+				<element type="boolean" name="isSuspended" />
+			</sequence>		
+		</complexType>
+		
+		<complexType name="Form" >
+			<sequence>
+				<element type="string" name="url" />
+			</sequence>
+		</complexType>
+				
+		<complexType name="MinerCells" >
+			<sequence>
+				<element type="string" name="value" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="MinerRow" >
+			<sequence>
+				<element type="string" name="rowValue" />
+				<element type="wf4p:MinerCells" name="minerCells" />
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="MinerQuery" >
+			<sequence>
+				<element type="string" name="name" />
+				<element type="string" name="title" />
+				<element type="string" name="explanationMessage" />
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="MinerQueryList" >
+			<sequence>
+				<element type="wf4p:MinerQuery" name="minerQuery" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="MinerYearList" >
+			<sequence>
+				<element type="string" name="year" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+			
+		<complexType name="Features">
+			<sequence>
+				<element name="feature" type="string" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+
+		
+		<complexType name="UserDetails" >
+			<sequence>
+				<element name="name" type="string" />
+				<element name="realName" type="string" />
+				<element name="familyName" type="string" />
+				<element name="givenName" type="string" />
+				<element name="email" type="string" />
+				<element name="features" type="wf4p:Features" />				
+			</sequence>
+		</complexType>
+		
+		<!-- The WSDL messages -->
+		<element name="GetTaskRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+								<element type="string" name="taskId" />				
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetTaskResponse">
+			<complexType>
+				<sequence>
+					<element name="task" type="wf4p:Task" />						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="FindTasksRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+								<element type="string" name="userId" />
+								<element type="string" name="processInstanceId" minOccurs="0"/>
+								<element type="wf4p:Paginate" name="paginate" minOccurs="0"/>
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="FindTasksResponse">
+			<complexType>
+				<sequence>
+					<element type="wf4p:PaginateResult" name="paginateResult" />
+					<element name="personalTaskList" type="wf4p:TaskList" />
+					<element name="groupTaskList" type="wf4p:TaskList" />
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="TakeTaskRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+								<element type="string" name="userId" />
+								<element type="string" name="taskId" />
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="TakeTaskResponse">
+			<complexType>
+				<sequence>
+					<element name="confirmation" type="string" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="AssignTaskRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+								<element type="string" name="userId" />
+								<element type="string" name="taskId" />
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="AssignTaskResponse">
+			<complexType>
+				<sequence>
+					<element name="confirmation" type="string" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="CompleteTaskRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+								<element type="string" name="userId" />
+								<element type="string" name="taskId" />
+								<element type="string" name="outcome" />
+								<element type="wf4p:Variables" name="variables" minOccurs="0"/>
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="CompleteTaskResponse">
+			<complexType>
+				<sequence>
+					<element name="confirmation" type="string" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="StartProcessInstanceRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">
+							<complexType>
+							<sequence>
+							    <choice>
+									<element type="string" name="processDefinitionId" />
+									<element type="string" name="processDefinitionKey" />
+								</choice>															
+								<element type="wf4p:Variables" name="variables" minOccurs="0"/>
+							</sequence>					
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>
+		</element>
+		
+		<element name="StartProcessInstanceResponse">
+			<complexType>
+				<sequence>
+					<element name="processInstance" type="wf4p:ProcessInstance" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="StoreDocumentRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">
+						<complexType>
+							<sequence>
+								<element name="document" type="wf4p:Document" />							    																							
+							</sequence>					
+						</complexType>					
+					</element>
+				</sequence>
+			</complexType>
+		</element>
+		
+		<element name="StoreDocumentResponse">
+			<complexType>
+				<sequence>
+					<element name="documentId" type="string" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetDocumentRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">					
+							<complexType>
+							<sequence>
+							<choice>
+								<element type="string" name="documentId" />
+								<element type="string" name="taskId" />								
+							</choice>
+							</sequence>
+												
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+				
+		<element name="GetDocumentResponse">
+			<complexType>
+				<sequence>
+					<element name="document" type="wf4p:Document" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="DocumentQueryRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">					
+							<complexType>
+								<sequence>
+									<choice>
+										<element name="documentQuery" type="wf4p:DocumentQuery"  />																
+									</choice>
+								</sequence>
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="DocumentQueryResponse">
+			<complexType>
+				<sequence>
+					<element name="documentList" type="wf4p:DocumentList" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetDocumentIndexFieldsRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetDocumentIndexFieldsResponse">
+			<complexType>
+				<sequence>
+					<element name="documentIndexFieldList" type="wf4p:DocumentIndexFieldList" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="MinerQueryRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">					
+							<complexType>
+							<sequence>
+							<choice>
+								<element type="string" name="queryName" />
+								<element type="string" name="year" />								
+							</choice>
+							</sequence>												
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+				
+		<element name="MinerQueryResponse">
+			<complexType>
+				<sequence>
+					<element name="minerRow" type="wf4p:MinerRow" minOccurs="0" maxOccurs="unbounded" />
+					<element name="totalRow" type="wf4p:MinerRow" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="MinerDrilldownRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+						<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="wf4p:Paginate" name="paginate" minOccurs="0"/>
+							    <element type="string" name="queryName" />
+								<element type="string" name="year" />
+								<element type="string" name="month" />
+								<element type="string" name="value" />							
+							</sequence>												
+							</complexType>					
+						</element>
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="MinerDrilldownResponse">
+			<complexType>
+				<sequence>
+					<element name="documentList" type="wf4p:DocumentList" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetMinerParametersRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetMinerParametersResponse">
+			<complexType>
+				<sequence>
+					<element name="minerQueryList" type="wf4p:MinerQueryList" />
+					<element name="minerYearList" type="wf4p:MinerYearList" />
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="HasAccessToFormRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="userName" />
+							    <element type="string" name="workflowName" />
+								<element type="string" name="formName" minOccurs="0" />
+								<element type="string" name="documentId" minOccurs="0"/>
+								<element type="string" name="action" />							
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="HasAccessToFormResponse">
+			<complexType>
+				<sequence>
+					<element name="access" type="boolean" />
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetFeaturesRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="userName"/>							    						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetFeaturesResponse">
+			<complexType>
+				<sequence>
+				<element name="features" type="wf4p:Features" />
+				<!--  
+					<element name="features">
+						<complexType>
+							<sequence>
+								<element name="feature" type="string" minOccurs="0" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+					-->
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="AuthenticateRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="userName" />
+							    <element type="string" name="password" />							    						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="AuthenticateResponse">
+			<complexType>
+				<sequence>
+					<element name="access" type="boolean" />
+					<element name="userDetails" type="wf4p:UserDetails" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>	
+		
+		<element name="GetUserDetailsRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="userName" />							    						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetUserDetailsResponse">
+			<complexType>
+				<sequence>
+					<element name="userDetails" type="wf4p:UserDetails" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>	
+		
+</schema>

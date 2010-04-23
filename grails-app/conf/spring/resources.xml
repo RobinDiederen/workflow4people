@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>	
+	<!-- This is the context that is loaded after Grails' runtime bean 
+		configuration. Put post initialization beans here if you need to get hold
+		of the SessionFactory etc.
+	--> 
+	
+	<bean id="currentTime" class="java.util.Date" singleton="false">		
+	</bean>
+	
+	<bean id="identitySession" class="org.workflow4people.services.IdentitySession" singleton="true">		
+	</bean>
+	
+	
+	<!-- jBPM 4.1 style  
+	<bean id="jbpmConfiguration" class="org.jbpm.pvm.internal.cfg.SpringConfiguration">
+   		<constructor-arg value="jbpm/jbpm.cfg.xml" />
+	</bean>
+			
+
+	<bean id="processEngine" factory-bean="jbpmConfiguration" factory-method="buildProcessEngine" />
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
+	<bean id="executionService" factory-bean="processEngine" factory-method="getExecutionService" />
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" />
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+	 -->
+	 
+	 
+	<!-- jBPM 4.3 style config" --> 
+  
+    <bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper">
+       <property name="jbpmCfg" value="jbpm/jbpm.cfg.xml"/>
+    </bean>			
+			
+
+	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+
+</beans>
+
+
+	
+

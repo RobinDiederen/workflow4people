@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jbpm-configuration spring="enabled">
+
+  <process-engine-context>
+  
+    <repository-service />
+    <repository-cache />
+ 
+    <execution-service />
+     
+    <!-- <history-service />-->
+    <management-service />
+    <identity-service />
+  
+    <task-service />
+    
+    <object class="org.jbpm.pvm.internal.id.DatabaseDbidGenerator">
+      <field name="commandService"><ref object="newTxRequiredCommandService" /></field>
+    </object>
+
+    <object class="org.jbpm.pvm.internal.id.DatabaseIdComposer" init="eager" />
+    
+    
+
+    <script-manager default-expression-language="groovy"
+                    default-script-language="groovy" 
+                    read-contexts="execution, environment, process-engine, spring, job, task"
+                    write-context="">
+      <script-language name="juel" factory="org.jbpm.pvm.internal.script.JuelScriptEngineFactory" />
+      <script-language name="groovy" factory="org.jbpm.pvm.internal.script.GroovyScriptEngineFactory" />
+    </script-manager>
+    
+     <id-generator />
+    <types resource="jbpm/jbpm.variable.types.xml" />
+	
+    <address-resolver />
+
+    <mail-template name='task-notification'>
+      <to users="${task.assignee}"/>
+      <subject>${task.name}</subject>
+      <text><![CDATA[Hi ${task.assignee},
+Task "${task.name}" has been assigned to you.
+${task.description}
+
+Sent by JBoss jBPM
+]]></text>
+    </mail-template>
+  
+    <mail-template name='task-reminder'>
+      <to users="${task.assignee}"/>
+      <subject>${task.name}</subject>
+      <text><![CDATA[Hey ${task.assignee},
+Do not forget about task "${task.name}".
+${task.description}
+
+Sent by JBoss jBPM
+]]></text>
+    </mail-template>
+  
+  </process-engine-context>
+
+
+</jbpm-configuration>

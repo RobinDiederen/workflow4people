@@ -1,0 +1,20 @@
+We would like to thank the open source projects that we have used in workflow4people. Without their work, workflow4people would not exist today.
+ 
+
+- Grails (www.grails.org)
+- Grails jQuery plugin
+- Grails Searchable plugin
+- Grails Spring security plugin
+- Grails Jetty plugin
+- Grails Spring WS plugin
+
+- jQuery (www.jquery.org)
+- jQuery UI (jqueryui.com)
+- jQuery UI multiselect plugin
+- jQuery UI treeview plugin
+
+- Orbeon (www.orbeon.org)
+
+- jBPM (www.jbpm.org)
+
+

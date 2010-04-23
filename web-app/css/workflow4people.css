@@ -1,0 +1,140 @@
+.logo {float:left;}
+.nav {float:left;clear:both;}
+.title { float:left; width:1000px}
+.body { margin-top:10px; float:left;width:950px;}
+.body h1 {float:left;clear:both;}
+//.body div { float:left;}
+
+
+div.list {float:left;width:100%;margin-top:10px;margin-bottom:0px;paddding:0px;border:1px solid #CCC;}
+div.statuslist {width:940px;}
+
+.list table {padding:0px;margin-right:0px;border:none;margin-left:0px;}
+.list th, .list td {border-left: 0px solid #CCC;}
+.list tr td + td {border-left: 1px solid #CCC;}
+.list tr th + th {border-left: 1px solid #CCC;}
+div#editpane {margin-left:10px;}
+
+div.buttons { width:100%; }
+.buttons input.start {
+    background: transparent url(../images/skin/database_edit.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
+.buttons input.stop {
+    background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.cancel {
+    background: transparent url(../images/skin/database_delete.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
+div.main-menu { float:left;clear:both;
+	margin-top: 32px;
+}
+div.main-menu div {
+	
+    background: transparent url(../images/skin/main-menu-item.png) 10px 0px no-repeat;
+    height:64px;
+    padding-left:96px;
+    padding-top:16px;
+    cursor:pointer;
+    margin-left:20px;
+    width:400px;
+    border-left:8px solid #eeeeee;
+}
+div.main-menu div:hover {border-left:8px solid grey; background-color:#eeeeee;}
+
+div.tasks {background: transparent url(../images/skin/tasks.png) 10px 0px no-repeat !important;}
+div.flows {background: transparent url(../images/skin/processes.png) 10px 0px no-repeat !important;}
+
+tr.total td {border-top:2px solid #ddd;   font-weight: bold; border-left:0px;}
+span.user {background: transparent url(../images/skin/preferences-user-information.png) 5px 50% no-repeat; padding-left:24px;}
+span.logout {background: transparent url(../images/skin/system-log-out.png) 5px 50% no-repeat;padding-left:24px;}
+
+.menuButton a.new {
+    background: url(../images/skin/new-icon.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.filter {
+    background: url(../images/skin/filter-icon.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.instances {
+/*    background: url(../images/skin/list-icon.png) center left no-repeat; */
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.processes {
+   /* background: url(../images/skin/list-icon.png) center left no-repeat; */
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.process {
+/*    background: url(../images/skin/list-icon.png) center left no-repeat; */
+    color: #333;
+    padding-left: 25px;
+}
+
+.menuButton a.back {
+    background: url(../images/skin/back.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
+
+.logo a img { border:none;}
+
+div.itemlist {margin-top: 10px;}
+
+
+.nav {
+    
+    border: 1px solid #ccc;
+    
+    margin-bottom: 5px;
+    padding: 7px 0px;
+    width: 100%;
+    
+}
+div.dialog {clear:left;margin-top:10px;width:100%;}
+div.message {clear:left;margin-top:10px; padding:5px 5px 5px 30px;width:auto;}
+}
+div.buttons {clear:left;margin-top:10px;width:100%;}
+div.paginateButtons {clear:left;margin-top:0px;width:100%;padding:7px 0px;}
+
+h1 { font-weight: bold;color:#68A;}
+div.title h1 {margin-left:20px;margin-top:30px;} 
+div.masthead {margin-bottom:5px;}
+
+div.wf4p-menu {float:left;width:150px;clear:left;}
+div.wf4p-menu ul li {display:block;border-bottom:1px solid #888;margin-left:0px;height:20px;}
+div.wf4p-menu ul li {font-size:12px;font-weight:bold;color:#68A;}
+div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
+div.wf4p-menu ul ul li {font-size:10px;font-weight:bold;color:#666;}
+
+
+a.step, span.currentStep { margin-left:3px;margin-right:3px;}
+div.paging {margin-top: 10px;}
+div.result-header {margin-top: 10px;margin-bottom:10px;}
+
+.multiselect { width:700px;}
+
+      /* awesome buttons extensions was 0A50FF*/
+.awesome.blue {
+        background-color: #68A !important;
+}
+
+.awesome.red {
+        background-color: #e33100 !important;
+      }
+
+
+th.action {width:130px;}

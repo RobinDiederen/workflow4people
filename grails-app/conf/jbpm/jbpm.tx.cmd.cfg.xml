@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jbpm-configuration>
+
+  <process-engine-context>
+    <command-service name="user.command.service">
+      <retry-interceptor />
+      <environment-interceptor />
+      <standard-transaction-interceptor />
+    </command-service>
+    <command-service />
+  </process-engine-context>
+
+  <transaction-context>
+    <transaction />
+    <hibernate-session />
+  </transaction-context>
+
+</jbpm-configuration>

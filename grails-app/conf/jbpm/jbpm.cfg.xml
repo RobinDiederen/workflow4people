@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jbpm-configuration spring="enabled">
+
+	<import resource="jbpm/jbpm.jpdl.cfg.xml" />
+	<import resource="jbpm/jbpm.jobexecutor.cfg.xml" />
+	<import resource="jbpm/jbpm.mail.templates.examples.xml" />
+
+	<process-engine-context>
+		<repository-service />
+		<repository-cache />
+		<execution-service />
+		<history-service />
+		<identity-service />
+		<management-service />
+		<task-service />
+		<object class="org.jbpm.pvm.internal.id.DatabaseDbidGenerator">
+			<field name="commandService">
+				<ref object="newTxRequiredCommandService" />
+			</field>
+		</object>
+		<object class="org.jbpm.pvm.internal.id.DatabaseIdComposer" init="eager" />
+		<types resource="jbpm/jbpm.variable.types.xml" />
+		<address-resolver />
+
+		<command-service name="newTxRequiredCommandService">
+			<skip-interceptor />
+			<retry-interceptor />
+			<environment-interceptor policy="requiresNew" />
+			<!-- <spring-transaction-interceptor policy="requiresNew" />-->
+			<standard-transaction-interceptor />
+		</command-service>
+
+		<!-- Default command service has a Spring transaction interceptor-->
+		<command-service name="txRequiredCommandService">
+			<retry-interceptor />
+			<environment-interceptor />
+			<!-- <spring-transaction-interceptor />-->
+			<standard-transaction-interceptor />
+		</command-service>
+
+		<script-manager default-expression-language="groovy"
+			default-script-language="groovy"
+			read-contexts="execution, environment, process-engine, spring, job, task"
+			write-context="">
+			<script-language name="juel"
+				factory="org.jbpm.pvm.internal.script.JuelScriptEngineFactory" />
+			
+			<script-language name="groovy"
+				factory="org.jbpm.pvm.internal.script.GroovyScriptEngineFactory" />
+		</script-manager>
+
+		<id-generator />
+
+		<authentication />
+
+		<mail-template name='task-notification'>
+			<to users="${task.assignee}" />
+			<subject>${task.name}</subject>
+			<text><![CDATA[Hi ${task.assignee},
+Task "${task.name}" has been assigned to you.
+${task.description}
+
+Sent by JBoss jBPM
+]]></text>
+		</mail-template>
+
+		<mail-template name='task-reminder'>
+			<to users="${task.assignee}" />
+			<subject>${task.name}</subject>
+			<text><![CDATA[Hey ${task.assignee},
+Do not forget about task "${task.name}".
+${task.description}
+
+Sent by JBoss jBPM
+]]></text>
+		</mail-template>
+		<hibernate-configuration>
+			<cfg resource="jbpm.hibernate.cfg.xml" />
+		</hibernate-configuration>
+		<hibernate-session-factory />
+	</process-engine-context>
+
+	<transaction-context>
+		<repository-session />
+		<env class="identitySession" />
+		<db-session />
+		<message-session />
+		<timer-session />
+		<!-- <history-session />-->
+		<history-sessions>
+			<object class="org.jbpm.pvm.internal.history.HistorySessionImpl" />
+		</history-sessions>
+		<mail-session>
+			<mail-server>
+				<session-properties resource="jbpm/jbpm.mail.properties" />
+			</mail-server>
+		</mail-session>
+		<transaction />
+		<hibernate-session />
+	</transaction-context>
+	
+</jbpm-configuration>
