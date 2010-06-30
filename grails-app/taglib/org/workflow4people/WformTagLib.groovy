@@ -47,5 +47,40 @@ class WformTagLib {
 		})
 	}
 	
+	def tree = { attrs ->
+	  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
+	  Field.findAllByFieldList(attrs.fieldList,[sort:'fieldPosition',order:'asc']).each({
+	  if (it.childFieldList){
+		    out << "<li class=\"open field\" id=\"l${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name} [${it.childFieldList.name}]</a>\n"
+		    out << "<ul>"
+			def lattrs = [fieldList:it.childFieldList]
+			//println it.childFieldList
+			tree.call(lattrs)
+			out << "</ul></li>"
+		}
+		else {
+			out << "<li class=\"field\" id=\"l${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name}</a></li>\n"
+		}
+	})
+	}
+	
+	def modelTree = { attrs ->
+	  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
+	  Field.findAllByFieldList(attrs.fieldList,[sort:'fieldPosition',order:'asc']).each({
+	  if (it.childFieldList){
+		    out << "<li rel=\"fieldList\" class=\"open field\" id=\"field_${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name} [${it.childFieldList.name}]</a>\n"
+		    out << "<ul>"
+			def lattrs = [fieldList:it.childFieldList]
+			//println it.childFieldList
+			modelTree.call(lattrs)
+			out << "</ul></li>"
+		}
+		else {
+			out << "<li rel=\"field\" class=\"field\" id=\"field_${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name}</a></li>\n"
+		}
+	})
+		
+	}
+	
 }
 

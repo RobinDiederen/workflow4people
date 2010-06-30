@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'workflowDefinition.label', default: 'WorkflowDefinition')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="workflowDefinition.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="workflowDefinition.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,24 +21,26 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'workflowDefinition.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'workflowDefinition.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="publish" title="${message(code: 'workflowDefinition.publish.label', default: 'Publish')}" />
+                            <g:sortableColumn params="${filteredParams}" property="publish" title="${message(code: 'workflowDefinition.publish.label', default: 'Publish')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'workflowDefinition.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'workflowDefinition.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="title" title="${message(code: 'workflowDefinition.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'workflowDefinition.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn property="description" title="${message(code: 'workflowDefinition.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'workflowDefinition.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn property="dateCreated" title="${message(code: 'workflowDefinition.dateCreated.label', default: 'Date Created')}" />
+                            <g:sortableColumn params="${filteredParams}" property="dateCreated" title="${message(code: 'workflowDefinition.dateCreated.label', default: 'Date Created')}" />
                         
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +59,31 @@
                         
                             <td><g:formatDate date="${workflowDefinitionInstance.dateCreated}" format="yyyy-MM-dd'T'HH:mm:ss"/></td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${workflowDefinitionInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${workflowDefinitionInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowDefinitionInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'workflowDefinition.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${workflowDefinitionInstance.id}"><g:message default="show" code="workflowDefinition.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'workflowDefinition.list.edit.help')}" action="edit" params="${filteredParams}" id="${workflowDefinitionInstance.id}"><g:message default="edit" code="workflowDefinition.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'workflowDefinition.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'workflowDefinition.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowDefinitionInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${workflowDefinitionInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${workflowDefinitionInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${workflowDefinitionInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

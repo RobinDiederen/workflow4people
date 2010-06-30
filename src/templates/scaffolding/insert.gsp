@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${className}')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="${domainClass.propertyName}.insert.title" /></title>
     </head>
     <body>
         
@@ -23,7 +23,7 @@
                             <%  if (p.manyToOne ) { 
                                 hasManyToOne=true
                             %>
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="${p.referencedDomainClass?.propertyName}" action="show" id="\${${propertyName}?.${p.name}?.id}">&laquo;&nbsp;Back to ${p.naturalName} \${${propertyName}?.${p.name}?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="${p.referencedDomainClass?.propertyName}" action="show" id="\${${propertyName}?.${p.name}?.id}">&laquo;&nbsp; ${p.naturalName} \${${propertyName}?.${p.name}?.encodeAsHTML()}</g:link></span>
                             
                             <%  }  %>                        
                     <%  } 

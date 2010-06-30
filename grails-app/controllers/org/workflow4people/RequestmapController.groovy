@@ -34,7 +34,7 @@ class RequestmapController {
 	def authenticateService
 
 	// the delete, save and update actions only accept POST requests
-	static Map allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
+	static Map allowedMethods = [ save: 'POST', update: 'POST']
 
 	def index = {
 		redirect action: list, params: params

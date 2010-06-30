@@ -18,13 +18,15 @@
  */
 package org.workflow4people
 
+import java.io.Serializable;
+
 
 /**
  * Form domain class. 
  * Represents a workflow form.
  * @author Joost Horward
  */
-class Form {
+class Form implements Serializable {
 
     static constraints = {
     	name()
@@ -32,11 +34,11 @@ class Form {
     	description(size:0..50000)
     	explanationMessage(size:0..50000)
     	confirmationMessage(size:0..50000)
-    	template()
-    	fieldList()
+    	template()    
     	formAction()
-    	formItem(widget:"insert")
+    	//formItem(widget:"insert")
     	workflow(display:false)
+    	formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',show:true,edit:true,delete:true)
     }
 	static belongsTo = [workflow: WorkflowDefinition]
     static hasMany = [formItem : FormItem]                  
@@ -48,7 +50,10 @@ class Form {
     String confirmationMessage
     String template
     Action formAction
-    FieldList fieldList
+    
+    def getFieldList() {
+    	return workflow.documentType.fieldList
+    }
 	
     String toString() {
 		  return name;

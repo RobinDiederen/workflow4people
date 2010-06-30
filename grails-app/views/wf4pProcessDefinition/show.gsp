@@ -2,11 +2,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Process Definition details for process &quot;${processDefinition.id}&quot;</title>
+        <title>Process instances for process &quot;${processDefinition.id}&quot;</title>
     </head>
     <body>
 		<div class="body">
-	        <div class="nav">          
+	        <div class="nav">
+	          <span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo; Process definitions</g:link></span>
 	          <span class="menuButton"><a class="awesome small blue button" href="${createLink(action:'newinstance',params:[processName:processDefinition.name,processDefinitionId:processDefinition.id])}">New process instance</a></span>            
 	        </div>
             <g:if test="${flash.message}"><div class="message">${flash.message}</div></g:if>
@@ -44,7 +45,6 @@
 			          <th>Ended</th>
 			          <th>Executions</th>
 			          <th>Active activities</th>
-			          <th>Executions</th>
 			          <th>Details</th>
 			        </tr>
 			      </thead>
@@ -57,9 +57,11 @@
 			
 			          <td>${instance.executionsMap}</td>          
 			          <td>${instance.findActiveActivityNames()}</td>
-			          <td></td>
+			          
 			
-			 		  <td><g:link class="awesome small blue button" action="show" controller="wf4pProcessInstance" params="[processInstanceId:instance.id]">details&nbsp;&raquo;</g:link></td>
+			 		  <td><g:link class="awesome small blue button" action="show" controller="wf4pProcessInstance" params="[processInstanceId:instance.id]">details&nbsp;&raquo;</g:link>
+			 		  	  <g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" controller="wf4pProcessInstance" action="delete" id="${instance.id}">&times;</g:link>			 		  
+			 		  </td>
 			        </tr>
 			        </g:each>
 			      </tbody>

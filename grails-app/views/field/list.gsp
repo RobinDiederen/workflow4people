@@ -19,6 +19,8 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
@@ -36,7 +38,7 @@
                    	    
                             <th><g:message code="field.fieldList.label" default="Field List" /></th>
                    	    
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +57,25 @@
                         
                             <td>${fieldValue(bean: fieldInstance, field: "fieldList")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${fieldInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${fieldInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldInstance.id}">&times;</g:link></td>
+                        <td><g:link title ="${message(default: 'Show this item',code: 'default.list.show.help')}" action="show" class="awesome small blue button" id="${fieldInstance.id}"><g:message default="show" code="default.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'default.list.edit.help')}" action="edit" id="${fieldInstance.id}"><g:message default="edit" code="default.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;<g:link title="${message(default: 'Delete this item',code: 'default.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldInstance.id}">&times;</g:link></td>
+                        
+                        
                         
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${fieldInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${fieldInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${fieldInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

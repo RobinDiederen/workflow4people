@@ -30,7 +30,7 @@ class HolidayController {
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST"]
 
     def list = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)

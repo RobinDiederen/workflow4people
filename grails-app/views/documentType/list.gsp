@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'documentType.label', default: 'DocumentType')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="documentType.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="documentType.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,24 +21,26 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'documentType.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'documentType.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'documentType.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'documentType.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="description" title="${message(code: 'documentType.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'documentType.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn property="descriptionTemplate" title="${message(code: 'documentType.descriptionTemplate.label', default: 'Description Template')}" />
+                            <g:sortableColumn params="${filteredParams}" property="descriptionTemplate" title="${message(code: 'documentType.descriptionTemplate.label', default: 'Description Template')}" />
                         
-                            <g:sortableColumn property="dateCreated" title="${message(code: 'documentType.dateCreated.label', default: 'Date Created')}" />
+                            <g:sortableColumn params="${filteredParams}" property="dateCreated" title="${message(code: 'documentType.dateCreated.label', default: 'Date Created')}" />
                         
-                            <g:sortableColumn property="lastUpdated" title="${message(code: 'documentType.lastUpdated.label', default: 'Last Updated')}" />
+                            <g:sortableColumn params="${filteredParams}" property="lastUpdated" title="${message(code: 'documentType.lastUpdated.label', default: 'Last Updated')}" />
                         
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +59,31 @@
                         
                             <td><g:formatDate date="${documentTypeInstance.lastUpdated}" format="yyyy-MM-dd'T'HH:mm:ss"/></td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${documentTypeInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${documentTypeInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentTypeInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'documentType.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentTypeInstance.id}"><g:message default="show" code="documentType.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentType.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentTypeInstance.id}"><g:message default="edit" code="documentType.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'documentType.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentType.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentTypeInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${documentTypeInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${documentTypeInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${documentTypeInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

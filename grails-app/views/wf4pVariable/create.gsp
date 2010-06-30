@@ -14,7 +14,9 @@
             </g:if>
             
             
-            <div class="nav">&nbsp;</div>
+            <div class="nav">
+            <span class="menuButton"><g:link class="small awesome blue button" action="show" controller="wf4pProcessInstance" id="${params.processInstanceId}" >&laquo; Process instance ${params.processInstanceId}</g:link></span>
+            </div>
             
             
             <g:form action="save" method="post" >

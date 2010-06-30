@@ -222,6 +222,15 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="fieldLength"><g:message code="field.fieldLength.label" default="Field Length" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldLength', 'errors')}">
+                                    <g:textField name="fieldLength" value="${fieldInstance?.fieldLength}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="contentText"><g:message code="field.contentText.label" default="Content Text" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'contentText', 'errors')}">
@@ -270,7 +279,7 @@
                                   <label for="dependencyType"><g:message code="field.dependencyType.label" default="Dependency Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'dependencyType', 'errors')}">
-                                    <g:select name="dependencyType" from="${fieldInstance.constraints.dependencyType.inList}" value="${fieldInstance?.dependencyType}" valueMessagePrefix="field.dependencyType" noSelection="['': '']" />
+                                    <g:select name="dependencyType" from="${fieldInstance.constraints.dependencyType.inList}" value="${fieldInstance?.dependencyType}" valueMessagePrefix="field.dependencyType.value" noSelection="['': '']" />
                                 </td>
                             </tr>
                         
@@ -325,15 +334,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${fieldInstance?.xpath}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="fieldLength"><g:message code="field.fieldLength.label" default="Field Length" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldLength', 'errors')}">
-                                    <g:textField name="fieldLength" value="${fieldInstance?.fieldLength}" />
                                 </td>
                             </tr>
                                                 

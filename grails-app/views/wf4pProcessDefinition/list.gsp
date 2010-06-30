@@ -24,7 +24,7 @@
           <%--  TODO put this back when jBPM starts to support persistance of this field
           <th>Description</th>
           --%>
-          <th>Details</th>
+          <th>Instances</th>
                     
         </tr>
       </thead>
@@ -37,7 +37,10 @@
           <%--  TODO put this back when jBPM starts to support persistance of this field           
           <td>${processDefinition.description?.encodeAsHTML()}</td> 
           --%>
-          <td><g:link class="awesome small blue button" action="show" params="[processDefinitionId:processDefinition.id]">details&nbsp;&raquo;</g:link></td>          
+          <td><g:link class="awesome small blue button" action="show" params="[processDefinitionId:processDefinition.id]">instances &nbsp;&raquo;</g:link>
+          	  <g:link class="awesome small blue button" controller="wf4pHistoryProcessInstance" action="list" id="${processDefinition.id}">history &nbsp;&raquo;</g:link>
+          
+          </td>          
         </tr>
         </g:each>
       </tbody>

@@ -5,11 +5,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'documentType.label', default: 'DocumentType')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="documentType.edit.title" /></title>
     </head>
     <body>
         
         <div class="body">
+                    <g:form method="post" >
+        
                     <div class="nav">
             	
                         
@@ -44,8 +46,15 @@
                             
                                                     
                     
-                		<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            			<span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>                        
+                        
+                            
+                                                    
+                    
+                		<span class="menuButton"><g:link params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
+            			                        
+                    
+                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    
                     
 			<g:if test="${navTemplate}" >
             	<g:render template="${navTemplate}" model="[entityName:entityName,documentTypeInstance:documentTypeInstance]"/>
@@ -61,7 +70,6 @@
                 <g:renderErrors bean="${documentTypeInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form method="post" >
                 <g:hiddenField name="id" value="${documentTypeInstance?.id}" />
                 <g:hiddenField name="version" value="${documentTypeInstance?.version}" />
                 <div class="dialog">
@@ -74,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentTypeInstance?.name}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -83,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${documentTypeInstance?.description}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -92,6 +102,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'descriptionTemplate', 'errors')}">
                                     <g:textField name="descriptionTemplate" value="${documentTypeInstance?.descriptionTemplate}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.descriptionTemplate.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -100,7 +111,8 @@
                                   <label for="dateCreated"><g:message code="documentType.dateCreated.label" default="Date Created" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'dateCreated', 'errors')}">
-                                    <input class="datepicker" type="text" name="dateCreated" value="${formatDate(date:documentTypeInstance?.dateCreated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+                                    ${documentTypeInstance.dateCreated}
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.dateCreated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -109,7 +121,28 @@
                                   <label for="lastUpdated"><g:message code="documentType.lastUpdated.label" default="Last Updated" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'lastUpdated', 'errors')}">
-                                    <input class="datepicker" type="text" name="lastUpdated" value="${formatDate(date:documentTypeInstance?.lastUpdated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+                                    ${documentTypeInstance.lastUpdated}
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.lastUpdated.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="fieldList"><g:message code="documentType.fieldList.label" default="Field List" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'fieldList', 'errors')}">
+                                    <g:select name="fieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${documentTypeInstance?.fieldList?.id}"  />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.fieldList.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="viewForm"><g:message code="documentType.viewForm.label" default="View Form" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'viewForm', 'errors')}">
+                                    <g:select name="viewForm.id" from="${org.workflow4people.Form.list()}" optionKey="id" value="${documentTypeInstance?.viewForm?.id}"  />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.viewForm.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -119,25 +152,23 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'documentIndexField', 'errors')}">
                                     <g:select class="multiselect" name="documentIndexField" from="${org.workflow4people.DocumentIndexField.list(sort:'name')}" multiple="yes" optionKey="id" value="${documentTypeInstance?.documentIndexField}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="form"><g:message code="documentType.form.label" default="Form" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'form', 'errors')}">
-                                    <g:select class="multiselect" name="form" from="${org.workflow4people.Form.list()}" multiple="yes" optionKey="id"  value="${documentTypeInstance?.form}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.documentIndexField.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                                                 
                         </tbody>
                     </table>
+                        
+                        
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+                    <g:hiddenField name="q" value="${params.q}" />
+                        
                                             
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="awesome small red button" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>                    
                 </div>
             </g:form>
         </div>

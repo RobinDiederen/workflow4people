@@ -25,7 +25,7 @@ package org.workflow4people
  * @author Joost Horward
  */
 
-class WorkflowDefinition {
+class WorkflowDefinition implements Serializable {
 	static hasMany = [form : Form,workflowPermission:WorkflowPermission]	
 	
     static constraints = {
@@ -36,7 +36,9 @@ class WorkflowDefinition {
         version()
         dateCreated(nullable:true)
         lastUpdated(nullable:true)
-        fieldList()
+        documentType()
+    	form(display:false,sortable:false,sort:'name',sortOrder:'asc',show:true,edit:true,delete:true)
+    	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',show:true,edit:true,delete:true)
     }
     
     
@@ -45,7 +47,8 @@ class WorkflowDefinition {
     String description
     
     
-    FieldList fieldList
+    
+    DocumentType documentType
     
     int version
     Date dateCreated
@@ -56,4 +59,9 @@ class WorkflowDefinition {
 	String toString() {
 		  return name;
 	  }
+	
+	def getFieldList() {
+		return documentType.fieldList
+	}
+	
 }

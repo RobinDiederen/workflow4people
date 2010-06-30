@@ -10,6 +10,8 @@
     <body>
         
         <div class="body">
+                    <g:form method="post" >
+        
                     <div class="nav">
             	
                         
@@ -51,6 +53,10 @@
                 		<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
             			<span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>                        
                     
+                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    <span class="button"><g:actionSubmit class="awesome small red button" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    
+                    
 			<g:if test="${navTemplate}" >
             	<g:render template="${navTemplate}" model="[entityName:entityName,fieldListInstance:fieldListInstance]"/>
             </g:if>
@@ -65,55 +71,59 @@
                 <g:renderErrors bean="${fieldListInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form method="post" >
                 <g:hiddenField name="id" value="${fieldListInstance?.id}" />
                 <g:hiddenField name="version" value="${fieldListInstance?.version}" />
                 <div class="dialog">
                     <table>
                         <tbody>
                         
-                            <tr class="prop">
+                            <tr class="prop null">
                                 <td valign="top" class="name">
                                   <label for="name"><g:message code="fieldList.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldListInstance?.name}" />
+                                                                        
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop null">
                                 <td valign="top" class="name">
                                   <label for="namespace"><g:message code="fieldList.namespace.label" default="Namespace" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
+                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldListInstance?.namespace?.id}"  />
+                                                                        
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop null">
                                 <td valign="top" class="name">
                                   <label for="baseType"><g:message code="fieldList.baseType.label" default="Base Type" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
+                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldListInstance?.baseType?.id}"  />
+                                                                        
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop null">
                                 <td valign="top" class="name">
                                   <label for="label"><g:message code="fieldList.label.label" default="Label" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
+                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldListInstance?.label}" />
+                                                                        
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop null">
                                 <td valign="top" class="name">
                                   <label for="description"><g:message code="fieldList.description.label" default="Description" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'description', 'errors')}">
+                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldListInstance?.description}" />
+                                                                        
                                 </td>
                             </tr>
                                                 

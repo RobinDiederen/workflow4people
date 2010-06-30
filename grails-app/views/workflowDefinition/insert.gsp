@@ -5,13 +5,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'workflowDefinition.label', default: 'WorkflowDefinition')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="workflowDefinition.insert.title" /></title>
     </head>
     <body>
         
         <div class="body">
                     <div class="nav">
             	
+                        
+                            
+                                                    
+                    
                         
                             
                                                     
@@ -132,10 +136,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="fieldList"><g:message code="workflowDefinition.fieldList.label" default="Field List" /></label>
+                                  <label for="documentType"><g:message code="workflowDefinition.documentType.label" default="Document Type" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'fieldList', 'errors')}">
-                                    <g:select name="fieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${workflowDefinitionInstance?.fieldList?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'documentType', 'errors')}">
+                                    <g:select name="documentType.id" from="${org.workflow4people.DocumentType.list()}" optionKey="id" value="${workflowDefinitionInstance?.documentType?.id}"  />
                                 </td>
                             </tr>
                                                 

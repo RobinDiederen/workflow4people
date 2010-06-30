@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'form.label', default: 'Form')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="form.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="form.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,24 +21,26 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'form.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'form.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'form.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'form.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="title" title="${message(code: 'form.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'form.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn property="description" title="${message(code: 'form.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'form.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn property="explanationMessage" title="${message(code: 'form.explanationMessage.label', default: 'Explanation Message')}" />
+                            <g:sortableColumn params="${filteredParams}" property="explanationMessage" title="${message(code: 'form.explanationMessage.label', default: 'Explanation Message')}" />
                         
-                            <g:sortableColumn property="confirmationMessage" title="${message(code: 'form.confirmationMessage.label', default: 'Confirmation Message')}" />
+                            <g:sortableColumn params="${filteredParams}" property="confirmationMessage" title="${message(code: 'form.confirmationMessage.label', default: 'Confirmation Message')}" />
                         
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +59,31 @@
                         
                             <td>${fieldValue(bean: formInstance, field: "confirmationMessage")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${formInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${formInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${formInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'form.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${formInstance.id}"><g:message default="show" code="form.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'form.list.edit.help')}" action="edit" params="${filteredParams}" id="${formInstance.id}"><g:message default="edit" code="form.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'form.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'form.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${formInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${formInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${formInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${formInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

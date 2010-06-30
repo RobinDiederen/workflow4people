@@ -37,6 +37,7 @@ public class TemplateService implements  ApplicationContextAware {
 
     def sessionFactoryBean
     def sessionFactory
+    def globalModel
 
     void setApplicationContext(ApplicationContext inApplicationContext){
         applicationContext = inApplicationContext
@@ -50,6 +51,10 @@ public class TemplateService implements  ApplicationContextAware {
     
     String runTemplate(String filename,model) {
 		
+		// This is a bit of a hack. We store the model in the TemplateService singleton so that subsequent runSnippetTemplate calls can re-use the model.
+		// Obviously, the consequence is that only one template generation process can run at any given time. 
+		
+		globalModel=model
 		def gspFile=new File(filename)
     	
     	groovyPagesTemplateEngine.setApplicationContext(applicationContext)
@@ -96,9 +101,9 @@ public class TemplateService implements  ApplicationContextAware {
     	}
 		
 		
-		def model=[:]		
-   		model=object.binding().getVariables()
-		
+		def model=[:]+globalModel		
+   		model+=object.binding().getVariables()
+		println "The model is ${model}"
 		
 		def snippetPath
 		if(fieldType) {

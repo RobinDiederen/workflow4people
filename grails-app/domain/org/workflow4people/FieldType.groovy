@@ -196,7 +196,7 @@ class FieldType {
     
     /**
      * getSchemaType
-     * @return The name of this schema type, or the base type if this fieldtype does no generate its own schema type
+     * @return The name of this schema type, or the base type if this fieldtype does not generate its own schema type
      */
     
     def getSchemaType() {

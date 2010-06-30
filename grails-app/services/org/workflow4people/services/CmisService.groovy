@@ -58,7 +58,7 @@ class CmisService {
        	
        	def caseName="${casePrefix}${caseNumber}"
 
-    def postdata="""<?xml version="1.0" encoding="UTF-8"?> 
+    def postdataCmis06="""<?xml version="1.0" encoding="UTF-8"?> 
     <entry xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app" xmlns:cmis="http://docs.oasis-open.org/ns/cmis/core/200901" > 
     <author><name>cmis</name></author> 
     <summary>${caseName}</summary> 
@@ -72,6 +72,24 @@ class CmisService {
     </cmis:object>
     </entry>
     """
+    	
+    def postdata="""<?xml version="1.0" encoding="UTF-8"?> 
+    <entry xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app" 
+    	xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/"
+    	xmlns:cmis="http://docs.oasis-open.org/ns/cmis/core/200908/" > 
+    <author><name>cmis</name></author> 
+    <summary>${caseName}</summary> 
+    <title>${caseName}</title> 
+    <cmisra:object>
+    <cmis:properties>
+    <cmis:propertyId propertyDefinitionId="cmis:objectTypeId" displayName="Object Type Id" queryName="cmis:objectTypeId"><cmis:value>cmis:folder</cmis:value></cmis:propertyId>
+    </cmis:properties>
+    </cmisra:object>
+    </entry>
+    </entry>
+    """	
+    	
+    	
 
     	writer.write(postdata)
     	writer.flush()

@@ -11,7 +11,7 @@
             </g:if>            
             
           	<div class="nav">          	          	                      
-   	              <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessInstance',action:'show',params:[processInstanceId:processInstance.id])}">Process Instance</a></span>
+   	              <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessInstance',action:'show',params:[processInstanceId:processInstance.id])}">&laquo; Process instance ${processInstance.id}</a></span>
 	        </div>
             
            <g:form method="post">
@@ -20,7 +20,7 @@
                     <table>
                         <tbody>                        
                             <tr class="prop">
-                                <td valign="top" class="name"><g:message code="task.id" default="Id" />:</td>                                
+                                <td valign="top" class="name"><g:message code="task.id" default="Task id" />:</td>                                
                                 <td valign="top" class="value">${fieldValue(bean: task, field: "id")}</td>                                
                             </tr>                            
                             <tr class="prop">

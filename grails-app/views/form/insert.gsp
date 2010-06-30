@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'form.label', default: 'Form')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="form.insert.title" /></title>
     </head>
     <body>
         
@@ -46,16 +46,16 @@
                     
                         
                             
-                                                    
-                    
-                        
+                            
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="workflowDefinition" action="show" id="${formInstance?.workflow?.id}">&laquo;&nbsp; Workflow ${formInstance?.workflow?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     
                         
                             
-                            
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="workflowDefinition" action="show" id="${formInstance?.workflow?.id}">&laquo;&nbsp;Back to Workflow ${formInstance?.workflow?.encodeAsHTML()}</g:link></span>
+                                                    
+                    
+                        
                             
                                                     
                     
@@ -131,15 +131,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'template', 'errors')}">
                                     <g:textField name="template" value="${formInstance?.template}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="fieldList"><g:message code="form.fieldList.label" default="Field List" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'fieldList', 'errors')}">
-                                    <g:select name="fieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${formInstance?.fieldList?.id}"  />
                                 </td>
                             </tr>
                         

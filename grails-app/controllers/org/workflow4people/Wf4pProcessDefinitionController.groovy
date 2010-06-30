@@ -22,7 +22,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import org.jbpm.api.*
 import org.springframework.beans.factory.InitializingBean
 /**
- * Controller for WfpProcessDefinition domain class
+ * Controller for WfpProcessDefinition
  * 
  * @author Joost Horward
  */
@@ -68,13 +68,71 @@ class Wf4pProcessDefinitionController implements InitializingBean{
 
                 try{
                 	
-                deployedFilename=file.getOriginalFilename()
+            	deployedFilename=file.getOriginalFilename()
+                
+            	file.transferTo(new File("/tmp/${deployedFilename}"))
+                
                 // addResourceFromInputStream is sensitive to the extension of the name given like below
-                def deployment = repositoryService.createDeployment().addResourceFromInputStream(deployedFilename,is);
+                /*
+                 * commented out not to mess up the test db too much
+                def f=new File ("/tmp/${deployedFilename}")
+                def deployment=repositoryService.createDeployment().addResourceFromFile(f);
+                //def deployment = repositoryService.createDeployment().addResourceFromInputStream(deployedFilename,is);
+                
                 deployment.setName(deployedFilename)
                 deploymentId=deployment.deploy()               
        			log.debug("And the filename is: ${file.getOriginalFilename()}")
-
+*/
+       			def f2=new File ("/tmp/${deployedFilename}")
+       			def processXML = new XmlSlurper().parse(f2)
+       			
+       			def processName=processXML.@name.text()
+       			def processDescription=processXML.@description.text()
+       			println "The process name is: ${processName}"
+       			
+       			def processDefinition=WorkflowDefinition.findByName(processName)
+       			if (processDefinition) {
+       				println "Found workflow definition for process ${processName}"
+       			} else {
+       				println "Workflow definition for process ${processName} not found!"
+       			}
+       			
+       			processXML.task.each  { task ->
+       				def taskName=task.@name.text()
+       				println "Found task: ${taskName}"
+       				def form=Form.findByName(taskName)
+       				if (form) {
+       					println "Found form for task ${taskName}"
+       				} else {
+       					println "Form for task ${taskName} not found!"
+       				}
+       				
+       				// find the first task, and make it use a request template
+       				// all the others get the handle template
+       				
+       				// assignee groups on the tasks need to have a 'handle' role
+       				// assignee groups on the request need a request role
+       				
+       				
+       				
+       				def candidateGroups=task.@'candidate-groups'       				
+       				println "The candidate groups are: ${candidateGroups}"
+       				
+       				def candidateUsers=task.@'candidate-users'       				
+       				println "The candidate users are: ${candidateUsers}"
+       				
+       				def assignee=task.@assignee       				
+       				println "The assignee is: ${assignee}"
+       				
+       				
+       			}
+                
+                
+       			
+       			
+       			
+       			
+       			
                 }finally{
                     is?.close()
                 }
@@ -89,7 +147,8 @@ class Wf4pProcessDefinitionController implements InitializingBean{
 	
     def show = {	    
 		// get the Process Definition
-		ProcessDefinitionQuery pdQuery=repositoryService.createProcessDefinitionQuery()    	   
+		ProcessDefinitionQuery pdQuery=repositoryService.createProcessDefinitionQuery()
+		if(params.id) params.processDefinitionId=params.id
 		pdQuery.processDefinitionId(params.processDefinitionId)			
 		def processDefinition = pdQuery.uniqueResult() 			
 

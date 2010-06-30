@@ -42,7 +42,9 @@
           <td>${instance.findActiveActivityNames()}</td>
           <td></td>
 
- 		  <td><g:link action="show" params="[processInstanceId:instance.id]">Details &gt;&gt;&gt;</g:link></td>
+ 		  <td><g:link action="show" params="[processInstanceId:instance.id]">Details &gt;&gt;&gt;</g:link>
+ 		  <g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${instance.id}">&times;</g:link>
+ 		  </td>
         </tr>
         </g:each>
       </tbody>

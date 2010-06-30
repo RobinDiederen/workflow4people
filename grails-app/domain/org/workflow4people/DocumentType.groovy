@@ -29,21 +29,25 @@ import java.util.Date;
 @Searchable(root = false)
 class DocumentType {
     static constraints = {
-    	name()
-    	description()
-    	descriptionTemplate()
-    	dateCreated()
-    	lastUpdated()
-    	documentIndexField(selectSort:'name')
+    	name(help:'x')
+    	description(help:'x')
+    	descriptionTemplate(help:'x')
+    	dateCreated(nullable:true,edit:false,help:'x')
+    	lastUpdated(nullable:true,edit:false,help:'x')
+    	fieldList(help:'x')
+    	viewForm(help:'x')
+    	documentIndexField(selectSort:'name',help:'x')    	
     }
     
-    static hasMany = [documentIndexField:DocumentIndexField,form:Form]
+    static hasMany = [documentIndexField:DocumentIndexField]
     Date dateCreated
     Date lastUpdated
     @SearchableProperty(index = Index.NOT_ANALYZED, name = "documentType")
     String name
     String description
     String descriptionTemplate
+    FieldList fieldList
+    Form viewForm
     
     String toString() {
 		  return name;

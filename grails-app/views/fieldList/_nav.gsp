@@ -1,1 +1,1 @@
-<span class="menuButton"><g:link controller="fieldList" class="list" action="tree" id="${fieldListInstance.id}" >Show as tree</g:link></span>
+<span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" class="list" action="tree" id="${fieldListInstance.id}" >Show as tree</g:link></span>

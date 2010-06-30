@@ -129,7 +129,7 @@ class TemplateConfigDelegate
 	if (lastSlashIndex>-1) {
 		def outputDir= new File(fullOutputPath.substring(0, lastSlashIndex))
   		outputDir.mkdirs() 
-	}
+	}	
 	new File(fullOutputPath).write(templateService.runTemplate(templatePath+theTemplatePath, model))
 	}
 

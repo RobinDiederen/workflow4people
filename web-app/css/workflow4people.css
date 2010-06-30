@@ -1,7 +1,7 @@
 .logo {float:left;}
 .nav {float:left;clear:both;}
-.title { float:left; width:1000px}
-.body { margin-top:10px; float:left;width:950px;}
+.title { float:left; width:900px}
+.body { margin-top:10px; float:left;width:850px;}
 .body h1 {float:left;clear:both;}
 //.body div { float:left;}
 
@@ -138,3 +138,40 @@ div.result-header {margin-top: 10px;margin-bottom:10px;}
 
 
 th.action {width:130px;}
+tbody.sortable tr {cursor:move;}
+
+div.explanation {
+	float:left;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 5px;    
+}
+
+div.inner-explanation {
+	padding:5px;
+	}
+
+div.dialog-buttons {
+	float:left;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 5px;
+    background:url("../images/skin/shadow.jpg") repeat-x scroll center bottom     
+}
+
+div.inner-dialog-buttons {
+	padding:5px;
+	}
+
+div.new-dialog {
+	float:left;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 5px;    
+}
+
+div.inner-new-dialog {
+	padding:5px;
+	}
+
+.dialog-table {border:none;}

@@ -30,36 +30,38 @@ class Field {
 	static belongsTo = [fieldList: FieldList]	
     static constraints = {
 		fieldPosition()
-		name()
-		fieldType()
-		childFieldList(nullable:true,display:true)		
+		name(help:'x')
+		fieldType(help:'x')
+		childFieldList(nullable:true,display:true,help:'x')		
 		fieldList(display:false)
 				
-		description(size:0..50000)
+		description(size:0..50000,help:'x')
     	
-    	defaultValue()
-    	label()
-    	help(size:0..50000)
-	    alert(size:0..50000)
-	    contentText(size:0..50000)
+    	defaultValue(nullable:true,help:'x')
+    	label(help:'x')
+    	help(nullable:true,size:0..50000,help:'x')
+	    alert(nullable:true,size:0..50000,help:'x')
+	    fieldLength(nullable:true)
+	    contentText(nullable:true,size:0..50000,help:'x')
 	    
 	    
 	    // Determines repetition of this field
 	    
-	    minOccurs(nullable:true)
-	    maxOccurs(nullable:true)
-	    nillable()
+	    minOccurs(nullable:true,help:'x')
+	    maxOccurs(nullable:true,help:'x')
+	    nillable(help:'x')
 	    
 	    // Determines dependency of this field on another field
-	    dependsOn(nullable:true)
-	    dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'])	    	
-	    dependencyParameter()
-	    customDependencyExpression(size:0..50000)
+	    dependsOn(nullable:true,help:'x')
+	    dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
+	    dependencyParameter(nullable:true,help:'x')
+	    customDependencyExpression(nullable:true,size:0..50000,help:'x')
 	    
-    	readonly()
-	    securitylevelRead()
-    	securitylevelReadWrite()
+    	readonly(help:'x')
+	    securitylevelRead(nullable:true,help:'x')
+    	securitylevelReadWrite(nullable:true,help:'x')
 
+	    xpath(nullable:true)
 	    
     }
 	def templateService

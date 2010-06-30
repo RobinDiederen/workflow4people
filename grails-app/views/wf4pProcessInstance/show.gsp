@@ -14,7 +14,7 @@
   
   <div class="nav">
     
-    <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessDefinition',action:'show',params:[processDefinitionId:processInstance.getProcessDefinitionId()])}">Process Definition</a></span>
+    <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessDefinition',action:'show',params:[processDefinitionId:processInstance.getProcessDefinitionId()])}">&laquo; Process definition ${processInstance.processDefinitionId}</a></span>
     <span class="menuButton"><a class="create" href="${createLink(controller:'wf4pVariable',action:'create',params:[processInstanceId:processInstance.id])}">New variable</a></span>
    
   </div>  
@@ -38,18 +38,43 @@
                                     ${processInstance.id}
                                 </td>
                             </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="customer">Version:</label>
-                                </td>
-                                <td valign="top" class="value">
-                                   <%-- ${processInstance.version} --%>
-                                </td>
-                            </tr>                            
+                                                 
                         </tbody>
                     </table>
                 </div>
+                
+                <h1>Task history</h1>
+        	<div class="list">
+			    <table>
+			      <thead>
+			        <tr>
+			          <th>Task Id</th>
+			          <th>Start time</th>
+			          <th>End time</th>
+			          <th>Assignee</th>
+			          <th>Outcome</th>
+			          <th>State</th>
+			        </tr>
+			      </thead>
+			      <tbody>
+			        <g:each in="${historyTaskList}" status="i" var="historyTask">
+			        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+			          <td>${historyTask.id}</td>
+			          <td>${historyTask.createTime}</td>
+			          <td>${historyTask.endTime}</td>
+			          <td>${historyTask.assignee}</td>
+			          <td>${historyTask.outcome}</td>
+			          <td>${historyTask.state}</td>			          			          
+			        </tr>
+			        </g:each>
+			      </tbody>
+			    </table>
+			</div>
+                
+                
+                
+                
+                
                 
                 <h1>Tasks</h1>
                 <div class="list" >

@@ -20,6 +20,7 @@
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import org.springframework.beans.factory.InitializingBean;
+import org.jbpm.api.history.*
 
 /**
  * Controller for WfpProcesInstance domain class
@@ -33,16 +34,28 @@ class Wf4pProcessInstanceController implements InitializingBean {
 	def executionService
 	def repositoryService
 	def taskService
+	def historyService
 	
 	void afterPropertiesSet() {
 		executionService=processEngine.getExecutionService()
 		repositoryService=processEngine.getRepositoryService()
 		taskService=processEngine.getTaskService()
+		historyService=processEngine.getHistoryService()
 	}
 
     def index = { 
 	        redirect(action:list)			
 	}
+    
+    def delete = {
+    	
+    	// TODO remove corresponding XML document
+    	
+    	def processDefinitionId=executionService.findProcessInstanceById(params.id).processDefinitionId
+    	executionService.endProcessInstance(params.id,'terminated')
+		flash.message = "Process instance ${params.id} ended."
+		redirect(action:'show',controller:'wf4pProcessDefinition',id:processDefinitionId)
+    }
     
     def list = {
     		// get the Process Definition
@@ -72,6 +85,7 @@ class Wf4pProcessInstanceController implements InitializingBean {
 	def show = {
 			// get the process instance
 			log.debug "processInstanceId=${params.processInstanceId}"
+			if(params.id) params.processInstanceId=params.id
 			def query=executionService.createProcessInstanceQuery()    	   
     		query.processInstanceId(params.processInstanceId)
     		def processInstance=query.uniqueResult()
@@ -84,11 +98,17 @@ class Wf4pProcessInstanceController implements InitializingBean {
     		taskQuery.processInstanceId(params.processInstanceId)
     		def taskList = taskQuery.list()
     		
+    		// history tasks
+    		
+    		def historyTaskList=historyService.createHistoryTaskQuery().executionId(params.processInstanceId).orderAsc(HistoryTaskQuery.PROPERTY_CREATETIME).list()
     		
     		
     		
     		
-    		render(view:'show',model:["processInstance":processInstance,"taskList":taskList,"taskService":taskService,"executionService":executionService])
+    		
+    		
+    		
+    		render(view:'show',model:[historyTaskList:historyTaskList,"processInstance":processInstance,"taskList":taskList,"taskService":taskService,"executionService":executionService])
 	}
 	
 	

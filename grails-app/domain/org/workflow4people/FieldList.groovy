@@ -27,7 +27,7 @@ import groovy.lang.Binding;
  * @author Joost Horward
  */
 
-class FieldList {
+class FieldList implements Serializable {
 	def templateService
     static constraints = {
     	name()    	
@@ -35,6 +35,7 @@ class FieldList {
     	baseType()
     	label()
     	description(size:0..50000)
+    	field(sortable:true,sort:'fieldPosition',sortOrder:'asc')
     	    
     }
     static mapping = {
