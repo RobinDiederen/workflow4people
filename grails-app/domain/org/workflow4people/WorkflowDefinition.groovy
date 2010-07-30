@@ -37,8 +37,8 @@ class WorkflowDefinition implements Serializable {
         dateCreated(nullable:true)
         lastUpdated(nullable:true)
         documentType()
-    	form(display:false,sortable:false,sort:'name',sortOrder:'asc',show:true,edit:true,delete:true)
-    	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',show:true,edit:true,delete:true)
+    	form(display:false,sortable:false,sort:'name',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
+    	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
     
     

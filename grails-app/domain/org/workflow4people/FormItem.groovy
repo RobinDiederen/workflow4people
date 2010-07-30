@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import groovy.lang.Binding;
 
 /**
  * FormItem domain class. 
@@ -26,6 +27,7 @@ package org.workflow4people
 
 
 class FormItem {
+	def templateService
 	static belongsTo = [form: Form]
     static constraints = {
     	position()
@@ -52,5 +54,36 @@ class FormItem {
 		}
 			
 	}
+	
+	Binding binding() {	
+		groovy.lang.Binding binding = new Binding()
+		binding.formItem=this		
+		binding.output=""
+		return binding
+	}
+	
+	def runSnippet(String snippetName) {
+		return templateService.runSnippetTemplate(this,snippetName)
+	}
+	
+	
+	
+	def propertyMissing(String name,args){		
+		if (name.lastIndexOf("Snippet")>0) {
+			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))
+			//TODO make this more generic so that it works for all snippets that have an existing readonly variant
+			// and defaults to the indicated snippet if the readonly version doesn't exist
+			if((readonly) && (snippetName=="section")) {
+				snippetName="readonlySection"
+			}
+			return runSnippet(snippetName)			
+		} else {
+			throw new MissingPropertyException(name,Field.class,args)
+		}
+			
+	}
+	
+	
+	
     
 }

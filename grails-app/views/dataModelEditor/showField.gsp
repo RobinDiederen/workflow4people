@@ -135,30 +135,9 @@
                             </tr>
                             
                             <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.dependsOn" default="Depends On" />:</td>
+                                <td valign="top" class="name"><g:message code="field.dependencyExpression" default="Dependency Expression" />:</td>
                                 
-                                <td valign="top" class="value"><g:link controller="field" action="show" id="${fieldInstance?.dependsOn?.id}">${fieldInstance?.dependsOn?.encodeAsHTML()}</g:link></td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.dependencyType" default="Dependency Type" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "dependencyType")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.dependencyParameter" default="Dependency Parameter" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "dependencyParameter")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.customDependencyExpression" default="Custom Dependency Expression" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "customDependencyExpression")}</td>
+                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "dependencyExpression")}</td>
                                 
                             </tr>
                             
@@ -169,19 +148,7 @@
                                 
                             </tr>
                             
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.securitylevelRead" default="Securitylevel Read" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "securitylevelRead")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.securitylevelReadWrite" default="Securitylevel Read Write" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "securitylevelReadWrite")}</td>
-                                
-                            </tr>
+
                             
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="field.fieldLength" default="Field Length" />:</td>

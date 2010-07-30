@@ -71,7 +71,7 @@
             	</li>
             	</ul> 
             </div>
-            <div id="editpane" style="float:right;width:500px;">
+            <div id="editpane" style="float:right;width:400px;">
             Select a field on the left to show the field details in this pane.
             </div>
 

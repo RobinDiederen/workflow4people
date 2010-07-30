@@ -19,6 +19,7 @@
 package org.workflow4people
 
 import java.io.Serializable;
+import groovy.lang.Binding;
 
 
 /**
@@ -27,7 +28,7 @@ import java.io.Serializable;
  * @author Joost Horward
  */
 class Form implements Serializable {
-
+	def templateService
     static constraints = {
     	name()
     	title()
@@ -38,7 +39,7 @@ class Form implements Serializable {
     	formAction()
     	//formItem(widget:"insert")
     	workflow(display:false)
-    	formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',show:true,edit:true,delete:true)
+    	formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
 	static belongsTo = [workflow: WorkflowDefinition]
     static hasMany = [formItem : FormItem]                  
@@ -57,5 +58,17 @@ class Form implements Serializable {
 	
     String toString() {
 		  return name;
-	}        
+	}
+    
+	Binding binding() {	
+		groovy.lang.Binding binding = new Binding()
+		binding.form=this		
+		binding.output=""
+		return binding
+	}
+	
+	def runSnippet(String snippetName) {
+		return templateService.runGenericSnippetTemplate("Form",snippetName,binding().getVariables())
+	}
+    
 }

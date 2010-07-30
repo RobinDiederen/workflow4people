@@ -71,15 +71,25 @@ class FieldList implements Serializable {
 			throw new MissingPropertyException(name,Field.class,args)
 		}			
 	}
+    
+    def runSnippet(String snippetName) {
+		return templateService.runSnippetTemplate(this,snippetName)
+	}
         
     void storeXPath(String prefix, String theXPath){
     	//xpath=theXPath+"/${prefix}:${name}"
     	xpath=theXPath
     	log.debug("Stored xpath: ${xpath}")
+    	println "Fieldlist stored xpath: ${xpath}"
     	field.each {
-    		it.storeXPath(namespace.prefix,xpath+'/'+namespace.prefix+':'+it.name)    	
+    		it.storeXPath(namespace.prefix,xpath+'/'+namespace.prefix+':'+it.name)
+    		println "Storing XPath prefix=${namespace.prefix} xpath=/${namespace.prefix}:${it.name}"
     	}
     	
+    }
+    
+    void init() {
+    	storeXPath(namespace.prefix,"/${namespace.prefix}:${name}")
     }
 	
 	String toString() {

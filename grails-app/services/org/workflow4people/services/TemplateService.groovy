@@ -1,6 +1,4 @@
 /*
-
- * Workflow4people
  * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
@@ -23,6 +21,11 @@ import org.workflow4people.*;
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.ApplicationContext
 import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.springframework.web.context.support.WebApplicationContextUtils
+import grails.util.GrailsWebUtil
+
+
 import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine
 import groovy.text.*;
 import org.springframework.web.context.request.RequestContextHolder
@@ -33,27 +36,36 @@ public class TemplateService implements  ApplicationContextAware {
     def applicationContext
     
 	def wf4pConfigService
+	def backgroundService
+	def templateConfigDelegate
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
+	
 
     def sessionFactoryBean
     def sessionFactory
     def globalModel
+    
+    //static scope="session"
 
     void setApplicationContext(ApplicationContext inApplicationContext){
         applicationContext = inApplicationContext
         sessionFactoryBean = applicationContext.getBean('&sessionFactory')  
     }
+    
+
+    
 
 	def servletContext = SCH.servletContext
 	
-    boolean transactional = true
+    boolean transactional = false
     
     
     String runTemplate(String filename,model) {
 		
 		// This is a bit of a hack. We store the model in the TemplateService singleton so that subsequent runSnippetTemplate calls can re-use the model.
 		// Obviously, the consequence is that only one template generation process can run at any given time. 
-		
+		// One would expect simply to make this service session-scoped, but that doesn't work, probably because of the background thread that it's running in.
+				
 		globalModel=model
 		def gspFile=new File(filename)
     	
@@ -63,25 +75,18 @@ public class TemplateService implements  ApplicationContextAware {
     	
     	Template t = groovyPagesTemplateEngine.createTemplate(gspFile)
     	StringWriter writer = new StringWriter();
-        
-        def requestAttributes = RequestContextHolder.getRequestAttributes()
-        def originalOut = requestAttributes.getOut()
-        
-        requestAttributes.setOut(writer)
-
-                      
                       
   	    t.make(model).writeTo(writer)
   	    def s= writer.toString()
   	    
-  	    requestAttributes.setOut(originalOut)
 		
-		return s			
+		return s
+	
 	}
 	
-	String runSnippetTemplate(def object,def snippetType) {		
+	String runSnippetTemplate(def object,def snippetType,def extraModel=[:]) {		
 		String className=object.class.name.substring(object.class.name.lastIndexOf('.')+1)
-		log.debug "${className} ${object.name}"
+		log.debug "running snippet for ${className}"
     	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue
     	
     	def baseType
@@ -90,6 +95,11 @@ public class TemplateService implements  ApplicationContextAware {
     		baseType=object.fieldType.baseType
     		fieldType=object.fieldType
     	}
+		
+		if (object.class==org.workflow4people.FormItem) {			
+			baseType=object.field.fieldType.baseType
+    		fieldType=object.field.fieldType		
+		}
 		
 		if (object.class==org.workflow4people.FieldType) {
     		baseType=object.baseType
@@ -101,9 +111,8 @@ public class TemplateService implements  ApplicationContextAware {
     	}
 		
 		
-		def model=[:]+globalModel		
+		def model=[:]+globalModel+extraModel		
    		model+=object.binding().getVariables()
-		println "The model is ${model}"
 		
 		def snippetPath
 		if(fieldType) {
@@ -118,10 +127,73 @@ public class TemplateService implements  ApplicationContextAware {
 		log.debug "The snippet path is: ${snippetPath}"
 		
 		return runTemplate(snippetPath,model)
-
-		
-		
 	}
+	
+	String runGenericSnippetTemplate(String templateType,def snippetType,def extraModel=[:]) {		
+		
+		log.debug "running common snippet for type ${templateType}"
+    	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue
+    	
+		def model=[:]+globalModel+extraModel		
+   		
+		def	snippetPath=templatePath+'/snippets/'+templateType+'/'+snippetType+'.gsp'
+		
+		log.debug "The snippet path is: ${snippetPath}"
+		
+		return runTemplate(snippetPath,model)
+	}
+	
+	
+	
+	 def generate(def workflowDefinitionId) {			
+  		def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
+  	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
+		  templatePath+='/'
+  	  	}
+  	  	
+    	def outputPath=ApplicationConfiguration.findByConfigKey('template.outputPath').configValue;  	  	
+  	  	def templateText=new File(templatePath+"template.conf").text
+  	  	
+  	  	backgroundService.execute("Generating forms ...", {
+  	  		
+  	        def servletContext2  = ServletContextHolder.getServletContext()
+  	        def applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext2)
+  	        def requestAttributes = GrailsWebUtil.bindMockWebRequest(applicationContext)
+  	        
+  	        def servletContext = requestAttributes.request.servletContext
+  	        def request = requestAttributes.request
+  	  			  	  		
+			def workflowDefinitionInstance = WorkflowDefinition.get( workflowDefinitionId )
+
+  	  		templateConfigDelegate = new TemplateConfigDelegate(this,workflowDefinitionInstance,templatePath,outputPath)
+  	  	
+  	  		def template=new GroovyShell().evaluate(templateText)
+
+  	  		log.debug "Generating forms package ..."
+  	  		template.delegate=templateConfigDelegate
+  	  		try {
+  	  			template()
+  	  			templateConfigDelegate.msg "Processing completed"
+  	  			templateConfigDelegate.total=100
+  	  			templateConfigDelegate.current=100	  	       
+  	  			templateConfigDelegate.completed=true
+  	  		} catch (Exception e) {
+  	  			templateConfigDelegate.msg "An error has occurred"
+  	  			templateConfigDelegate.mlog e.message
+  	  		}
+  	        
+	  	  	
+  	  	});
+     }
+	
+	 
+	 def getProgress() {
+		 
+			return templateConfigDelegate?.progress
+		 
+		}
+		
+	
     
 
 }

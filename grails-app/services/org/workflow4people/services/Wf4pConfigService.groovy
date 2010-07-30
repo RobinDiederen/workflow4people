@@ -52,6 +52,10 @@ public class Wf4pConfigService implements  ApplicationContextAware {
     def getWebAppLocation(){
     		return servletContext.getRealPath('/') 
     }
+	
+	def getConfigValue(key) {
+		return ApplicationConfiguration.findByConfigKey(key).configValue
+	}
 
 }
 

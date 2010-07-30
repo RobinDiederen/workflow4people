@@ -28,6 +28,7 @@ package org.workflow4people
 
 class FormTagLib {
 	static namespace="w"
+	def templateService
 	
 	def models = { attrs, body ->
 		org.workflow4people.FieldType.findAll().each { fieldType ->
@@ -37,6 +38,54 @@ class FormTagLib {
 			}
 		}
 	}
+
+	def fields = { attrs, body ->
+		println "FIELDS: ${attrs}"
+		if(attrs.workflow) {
+			def workflow=attrs.workflow
+			workflow.documentType.fieldList.init()
+			org.workflow4people.Field.findAllByFieldList(workflow.documentType.fieldList,[sort:'name',order:'asc']).each { field ->					
+		        out << body((attrs.var):field)			
+			}
+		}
+		
+		if (attrs.fieldList) {
+			def fieldList=attrs.fieldList
+			fieldList.init()
+			org.workflow4people.Field.findAllByFieldList(fieldList,[sort:'fieldPosition',order:'asc']).each { field ->					
+		        out << body((attrs.var):field)			
+			}
+		}				
+	}
+
+	def fieldTypes = { attrs, body ->		
+		org.workflow4people.FieldType.findAll().each { fieldType ->					
+        	out << body((attrs.var):fieldType)			
+		}
+	}
+	
+	def snippet = { attrs, body ->
+		if (attrs.type) {
+			out << templateService.runGenericSnippetTemplate(attrs.type,attrs.name,[:])
+		}
+		if (attrs.var) {	
+			out << attrs.var.runSnippet(attrs.name)
+		}
+	}
+	
+	def formItems = { attrs,body -> 
+		def formInstance=attrs.form
+		org.workflow4people.FormItem.findAllByForm(formInstance,[sort:'position',order:'asc']).each { formItem ->	
+        out << body((attrs.var):formItem)			
+		}		
+	}
+	
+	
+	
+	
+	
+
+	
 	
 	def workflows = { attrs, body ->
 	org.workflow4people.WorkflowDefinition.findAllByPublish(true).each { workflow ->			

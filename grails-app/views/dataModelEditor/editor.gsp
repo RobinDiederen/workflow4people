@@ -232,7 +232,7 @@
     	</div>
     	<g:formRemote name="editor" update="editpane" url="[action:'submit']">
     
-        <div class="nav" style="padding-left:5px;width:905px;clear:both;">            
+        <div class="nav" style="padding-left:5px;width:805px;clear:both;">            
             <span><a id="editButton" href="" class="awesome small blue button" >edit</a></span>
             <span><a id="createFieldButton" href="" class="awesome small blue button" >create field</a></span>
             <span><a id="createFieldListButton" href="" class="awesome small blue button" >create field list</a></span>
@@ -254,7 +254,7 @@
             	</ul> 
             </div>
             </div>
-            <div id="outer-editpane" style="float:left;width:500px;height:500px;border:1px solid #DDD;margin-left:5px;">
+            <div id="outer-editpane" style="float:left;width:400px;height:500px;border:1px solid #DDD;margin-left:5px;">
             <div id="editpane" style="float:left;width:95%;height:95%;overflow:auto;">
             		
             

@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'field.label', default: 'Field')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="field.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="field.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -26,11 +28,11 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'field.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'field.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="fieldPosition" title="${message(code: 'field.fieldPosition.label', default: 'Field Position')}" />
+                            <g:sortableColumn params="${filteredParams}" property="fieldPosition" title="${message(code: 'field.fieldPosition.label', default: 'Field Position')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'field.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'field.name.label', default: 'Name')}" />
                         
                             <th><g:message code="field.fieldType.label" default="Field Type" /></th>
                    	    
@@ -57,10 +59,16 @@
                         
                             <td>${fieldValue(bean: fieldInstance, field: "fieldList")}</td>
                         
-                        <td><g:link title ="${message(default: 'Show this item',code: 'default.list.show.help')}" action="show" class="awesome small blue button" id="${fieldInstance.id}"><g:message default="show" code="default.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'default.list.edit.help')}" action="edit" id="${fieldInstance.id}"><g:message default="edit" code="default.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;<g:link title="${message(default: 'Delete this item',code: 'default.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldInstance.id}">&times;</g:link></td>
-                        
-                        
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'field.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${fieldInstance.id}"><g:message default="show" code="field.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'field.list.edit.help')}" action="edit" params="${filteredParams}" id="${fieldInstance.id}"><g:message default="edit" code="field.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'field.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'field.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>

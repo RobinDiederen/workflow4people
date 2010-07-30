@@ -30,6 +30,7 @@ import groovy.text.*;
 import org.springframework.web.context.request.RequestContextHolder
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.apache.commons.lang.StringUtils
+//import grails.converters.JSON
 /**
  * Controller for WorkflowDefinition domain class
  * 
@@ -39,9 +40,11 @@ import org.apache.commons.lang.StringUtils
 class WorkflowDefinitionController {
 	
 	def wf4pConfigService
+	def formGeneratorService
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
 	def applicationContext
 	TemplateService templateService
+	
     
     def index = { redirect(action:list,params:params) }
 
@@ -243,6 +246,10 @@ class WorkflowDefinitionController {
 	
 	
     def generate = {
+			
+		//formGeneratorService.generate(params.id)
+		templateService.generate(params.id)
+		/*
     	def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
 	
   	  	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
@@ -259,11 +266,54 @@ class WorkflowDefinitionController {
   	  	template.delegate=templateConfigDelegate
   	  	template()		
     	log.debug ("Done.")
-        
-  	    redirect(action: "generated")	  	  		 
+        */
+  	    //redirect(action: "generated")
+  	    render(view:"formGeneratorStatus")
     }
     
     def generated = {}
+	
+
+	def progress = { 
+		def p=templateService.progress
+		if(p) {
+			int percentage=0
+	
+			if (p.total>0 ) {
+				percentage=(p.current/p.total)*100
+			}
+			
+			render (contentType:"text/json") { 
+
+				[total:p.total,
+				count:p.current,
+				message:p.message,
+				pct: percentage,
+				log: p.log,
+				completed: p.completed
+				]
+				//)
+			}	
+			
+			
+			
+		} else {
+			
+			render (contentType:"text/json") { 
+				[
+				total:0,
+				count:0,
+				message:"No form generation in progress",
+				pct: 0,
+				log: "",
+				completed: false	
+				
+				]
+			
+				}
+		}
+			
+	}
     
     
 }

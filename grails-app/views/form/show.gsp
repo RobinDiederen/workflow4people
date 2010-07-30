@@ -266,6 +266,8 @@
                             	<tr><td><b><g:message code="formItem.list.name.label" /></b></td><td>
                             	
                             	
+                            	<g:link title ="${message(code: 'formItem.list.create.help')}" class="awesome small blue button" controller="formItem" action="create" params="['form.id': formInstance?.id]"><g:message code="formItem.list.new.label" />&nbsp;&raquo;</g:link>
+                            	
                             	
                             	</td></tr>
                             	 

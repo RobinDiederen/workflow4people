@@ -194,6 +194,11 @@ class FieldType {
 			
 	}
     
+    def runSnippet(String snippetName) {
+		return templateService.runSnippetTemplate(this,snippetName)
+	}
+    
+    
     /**
      * getSchemaType
      * @return The name of this schema type, or the base type if this fieldtype does not generate its own schema type

@@ -45,7 +45,7 @@ class Namespace {
     
     boolean generateXSDFile=true
 
-	def getTargetNamespaceDeclaration(){
+	def getTargetNamespaceDeclaration(){		
 		return "targetNamespace=\"${this.uri}\"\n"
 	}
     

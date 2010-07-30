@@ -52,14 +52,15 @@ class Field {
 	    nillable(help:'x')
 	    
 	    // Determines dependency of this field on another field
-	    dependsOn(nullable:true,help:'x')
-	    dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
-	    dependencyParameter(nullable:true,help:'x')
-	    customDependencyExpression(nullable:true,size:0..50000,help:'x')
+	    //dependsOn(nullable:true,help:'x')
+	    //dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
+	    //dependencyParameter(nullable:true,help:'x')
+	    //customDependencyExpression(nullable:true,size:0..50000,help:'x')
+	    dependencyExpression(nullable:true,size:0..50000,help:'x')
 	    
     	readonly(help:'x')
-	    securitylevelRead(nullable:true,help:'x')
-    	securitylevelReadWrite(nullable:true,help:'x')
+	   // securitylevelRead(nullable:true,help:'x')
+    //	securitylevelReadWrite(nullable:true,help:'x')
 
 	    xpath(nullable:true)
 	    
@@ -80,8 +81,8 @@ class Field {
     
     
 	boolean readonly=false
-	int securitylevelRead
-	int securitylevelReadWrite
+	//int securitylevelRead
+	//int securitylevelReadWrite
 	
     String description
     
@@ -105,10 +106,11 @@ class Field {
     boolean nillable=false
     
     // Arranges conditional showing of this field
-    Field dependsOn
-    String dependencyType
-    String dependencyParameter
-    String customDependencyExpression
+    //Field dependsOn
+    //String dependencyType
+    //String dependencyParameter
+    //String customDependencyExpression
+    String dependencyExpression
     
     // Transient field
     String xpath
@@ -145,6 +147,11 @@ class Field {
 			return (this."${name}");
 		}
 	}
+	
+	def getPrefixedName() {
+		return "${fieldList.namespace.prefix}:${getFieldProperty('name')}"
+	}
+	
 	
 	Binding binding() {
 		
@@ -185,9 +192,11 @@ class Field {
 		binding.xpath=getFieldProperty('xpath')
 		return binding
 	}
-		void storeXPath(String prefix,String theXPath){
-		xpath=theXPath
-    			    	
+	
+	void storeXPath(String prefix,String theXPath){
+		//xpath=theXPath+"/${prefix}:${name}"
+    	xpath=theXPath
+    	println "Field storing XPath ${xpath}"
     	if (childFieldList) {
     		childFieldList.storeXPath(prefix,xpath)    			    	    		
     	}
@@ -207,5 +216,24 @@ class Field {
 		}
 			
 	}
+	// This should have been done using methodMissing so we would have xxxSnippet([]) calls for every type of snippet
+	// But methodMissing doesn't work on Domain classes.
+	/*
+	def sectionSnippet(extraModel){
+		
+		
+		def snippetName="section"
+		if(readonly) {
+			snippetName="readonlySection"
+		}
+		return templateService.runSnippetTemplate(this,snippetName,extraModel)			
+	}
+	*/
+	def runSnippet(String snippetName) {
+		return templateService.runSnippetTemplate(this,snippetName)
+	}	
+	
+	
+	
 	
 }

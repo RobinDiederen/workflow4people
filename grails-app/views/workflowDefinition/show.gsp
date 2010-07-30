@@ -257,6 +257,8 @@
                             	<tr><td><b><g:message code="form.list.name.label" /></b></td><td>
                             	
                             	
+                            	<g:link title ="${message(code: 'form.list.create.help')}" class="awesome small blue button" controller="form" action="create" params="['workflow.id': workflowDefinitionInstance?.id]"><g:message code="form.list.new.label" />&nbsp;&raquo;</g:link>
+                            	
                             	
                             	</td></tr>
                             	
@@ -297,6 +299,8 @@
                             	<tr><th colspan="2"><g:message code="workflowDefinition.workflowPermission.label" default="Workflow Permission" /></th></tr>
                             	<tr><td><b><g:message code="workflowPermission.list.name.label" /></b></td><td>
                             	
+                            	
+                            	<g:link title ="${message(code: 'workflowPermission.list.create.help')}" class="awesome small blue button" controller="workflowPermission" action="create" params="['workflow.id': workflowDefinitionInstance?.id]"><g:message code="workflowPermission.list.new.label" />&nbsp;&raquo;</g:link>
                             	
                             	
                             	</td></tr>

@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'field.label', default: 'Field')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="field.create.title" /></title>
     </head>
     <body>
         
@@ -33,34 +33,14 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.childFieldList?.id}">&laquo;&nbsp;Back to Child Field List ${fieldInstance?.childFieldList?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.childFieldList?.id}">&laquo;&nbsp; ${fieldInstance?.childFieldList?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.fieldList?.id}">&laquo;&nbsp;Back to Field List ${fieldInstance?.fieldList?.encodeAsHTML()}</g:link></span>
-                            
-                                                    
-                    
-                        
-                            
-                                                    
-                    
-                        
-                            
-                                                    
-                    
-                        
-                            
-                                                    
-                    
-                        
-                            
-                                                    
-                    
-                        
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.fieldList?.id}">&laquo;&nbsp; ${fieldInstance?.fieldList?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     
@@ -285,41 +265,11 @@
                         
                             <tr class="prop null">
                                 <td valign="top" class="name">
-                                    <label for="dependsOn"><g:message code="field.dependsOn.label" default="Depends On" /></label>
+                                    <label for="dependencyExpression"><g:message code="field.dependencyExpression.label" default="Dependency Expression" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'dependsOn', 'errors')}">
-                                    <g:select name="dependsOn.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${fieldInstance?.dependsOn?.id}" noSelection="['null': '']" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.dependsOn.help',default:'x')}" href="" >?</a>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop null">
-                                <td valign="top" class="name">
-                                    <label for="dependencyType"><g:message code="field.dependencyType.label" default="Dependency Type" /></label>
-                                </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'dependencyType', 'errors')}">
-                                    <g:select name="dependencyType" from="${fieldInstance.constraints.dependencyType.inList}" value="${fieldInstance?.dependencyType}" valueMessagePrefix="field.dependencyType.value" noSelection="['': '']" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.dependencyType.help',default:'x')}" href="" >?</a>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop null">
-                                <td valign="top" class="name">
-                                    <label for="dependencyParameter"><g:message code="field.dependencyParameter.label" default="Dependency Parameter" /></label>
-                                </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'dependencyParameter', 'errors')}">
-                                    <g:textField name="dependencyParameter" value="${fieldInstance?.dependencyParameter}" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.dependencyParameter.help',default:'x')}" href="" >?</a>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop null">
-                                <td valign="top" class="name">
-                                    <label for="customDependencyExpression"><g:message code="field.customDependencyExpression.label" default="Custom Dependency Expression" /></label>
-                                </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'customDependencyExpression', 'errors')}">
-                                    <g:textArea name="customDependencyExpression" cols="40" rows="5" value="${fieldInstance?.customDependencyExpression}" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.customDependencyExpression.help',default:'x')}" href="" >?</a>
+                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'dependencyExpression', 'errors')}">
+                                    <g:textArea name="dependencyExpression" cols="40" rows="5" value="${fieldInstance?.dependencyExpression}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.dependencyExpression.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
@@ -335,26 +285,6 @@
                         
                             <tr class="prop null">
                                 <td valign="top" class="name">
-                                    <label for="securitylevelRead"><g:message code="field.securitylevelRead.label" default="Securitylevel Read" /></label>
-                                </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'securitylevelRead', 'errors')}">
-                                    <g:textField name="securitylevelRead" value="${fieldValue(bean: fieldInstance, field: 'securitylevelRead')}" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.securitylevelRead.help',default:'x')}" href="" >?</a>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop null">
-                                <td valign="top" class="name">
-                                    <label for="securitylevelReadWrite"><g:message code="field.securitylevelReadWrite.label" default="Securitylevel Read Write" /></label>
-                                </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'securitylevelReadWrite', 'errors')}">
-                                    <g:textField name="securitylevelReadWrite" value="${fieldValue(bean: fieldInstance, field: 'securitylevelReadWrite')}" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.securitylevelReadWrite.help',default:'x')}" href="" >?</a>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop null">
-                                <td valign="top" class="name">
                                     <label for="xpath"><g:message code="field.xpath.label" default="Xpath" /></label>
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
@@ -365,11 +295,13 @@
                         
                         </tbody>
                     </table>
-                    
+                                                    
+                           	<g:hiddenField name="fieldList.id" value="${fieldInstance?.fieldList?.id}" />                            
                                 
-                           	<g:hiddenField name="fieldList.id" value="${fieldInstance?.fieldList?.id}" />
-                            
-                                
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+					<g:hiddenField name="q" value="${params.q}" />
                     
                     
                 </div>
