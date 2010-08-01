@@ -62,7 +62,7 @@
 				
 				<tr class="prop">                            
 					<td valign="top" class="name">Log</td>
-					<td valign="top" class="value" id="log">[log]</td>
+					<td valign="top" class="value" ><div id="log" style="height:200px;overflow:scroll;">[log]</div></td>
 				</tr>
 				
 								

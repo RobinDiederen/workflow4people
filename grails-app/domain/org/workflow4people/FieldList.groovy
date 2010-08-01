@@ -72,8 +72,8 @@ class FieldList implements Serializable {
 		}			
 	}
     
-    def runSnippet(String snippetName) {
-		return templateService.runSnippetTemplate(this,snippetName)
+	def runSnippet(String snippetName,def model=[:]) {
+		return templateService.runSnippetTemplate(this,snippetName,model)
 	}
         
     void storeXPath(String prefix, String theXPath){

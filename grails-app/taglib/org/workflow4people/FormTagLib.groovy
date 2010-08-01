@@ -64,12 +64,24 @@ class FormTagLib {
 		}
 	}
 	
+	/*
+	 * Creates tags of the form:
+	 * <snippet var="" name="" model="" />
+	 * or
+	 * <snippet type="" name="" model="" />
+	 * The model attribute is optional. 
+	 * First form: The var attribute is a domain class variable which needs to have a runSnippet method. The type of snippet is determined from the var class name and the model is the domain class' binding, merged with the binding from the model attribute.
+	 * Second form form: The type attribute determines the snippet type. The model is the binding from the model attribute. 
+	 */
+	
+	
 	def snippet = { attrs, body ->
+		def model=attrs.model? attrs.model : [:]
 		if (attrs.type) {
-			out << templateService.runGenericSnippetTemplate(attrs.type,attrs.name,[:])
+			out << templateService.runGenericSnippetTemplate(attrs.type,attrs.name,model)
 		}
 		if (attrs.var) {	
-			out << attrs.var.runSnippet(attrs.name)
+			out << attrs.var.runSnippet(attrs.name,model)
 		}
 	}
 	

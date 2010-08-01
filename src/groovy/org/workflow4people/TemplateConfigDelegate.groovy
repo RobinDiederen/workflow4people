@@ -33,8 +33,24 @@ class TemplateConfigDelegate
 	String templatePath
 	String outputPath
 	TemplateService templateService
+	
 	def model=[]
-
+	def total=0
+	def current=0
+	def gLogMessage=""
+	def message="Initializing..."
+	def completed=false
+	
+  def mlog (logMessage) { 
+		gLogMessage+="<br />"+logMessage
+	}
+  
+  def msg (theMessage) {
+	  message=theMessage
+	  println message
+	  mlog message
+  }
+	
   def TemplateConfigDelegate(TemplateService theTemplateService,WorkflowDefinition theWorkflowDefinition,String theTemplatePath,String theOutputPath) {
 	  workflowDefinition=theWorkflowDefinition
 	  templateService=theTemplateService
@@ -47,6 +63,12 @@ class TemplateConfigDelegate
 		  outputPath+='/'
 	  }
   }
+
+  def getProgress() {
+		return [total:total,current:current,message:message,log:gLogMessage,completed:completed]
+  }
+	
+	
 	
   def getName() {
 	return "Default name"
@@ -69,60 +91,85 @@ class TemplateConfigDelegate
   }
   
   def common(Closure closure) {
-	  println "Processing common..."
+	  msg "Processing common..."
+      total=1
+      current=1
 	  model = [ 'workflowDefinitions' : WorkflowDefinition.findaAll() ]
 	  closure.workflow=workflowDefinition
 	  closure()
+	  mlog "Processing common completed"
   }
   
   def workflow(Closure closure) {
-	  println "Processing workflow..."
+	  msg "Processing workflow..."
+	  total=1
+      current=1
 	  model = [ 'workflowDefinitionInstance' : workflowDefinition ]
 	  closure.workflow=workflowDefinition
 	  closure()
+	  mlog "Processing workflow completed"
   }
   
   
   def form(Closure closure) {
-	  println "Processing forms ..."
-	      
+	  msg "Processing forms ..."
+	  current=0
+	  total=workflowDefinition.form.size()
+	  println "The total is ${total}"
 	  workflowDefinition.form.each { form ->
-  	  	println "Processing form ${form.name} ..."
+  	  	msg "Processing form ${form.name} ..."
   		closure.formName=form.name
   		closure.form=form
-  	  	model = [ 'workflowDefinitionInstance' : workflowDefinition, 'formInstance':form ]
-  	    closure()          
-  	}      
+  	  	model = [ 'workflowDefinitionInstance' : workflowDefinition, 'formInstance':form,'form':form ]
+  	    closure()
+  	  	mlog "Procesed form ${form.name}"
+  	  	current++
+  	}
+	mlog "Processing forms completed"
   }
   
   def fieldType(Closure closure) {
-	  println "Processing fieldTypes ..."
+	  msg "Processing fieldTypes ..."
+	  current=0
+	  total=FieldType.count()
 	  FieldType.findAll().each { fieldType ->	  
-  	  	println "Processing fieldType ${fieldType.name} ..."
+  	  	msg "- Processing fieldType ${fieldType.name}"
   		closure.fieldTypeName=fieldType.name
   		closure.fieldType=fieldType
   	  	model = [ 'fieldTypeInstance' : fieldType]
-  	    closure()          
-  	}      
+  	    closure()
+  	  	current++
+  	  	//	mlog "-- Processed fieldType ${fieldType.name}"
+  	}
+	mlog "Processing fieldTypes completed"
   }
   
 
   def namespace(Closure closure) {
-	  println "Processing namespaces ..."
+	  msg "Processing namespaces ..."
+	  
+      total=Namespace.count()
+      current=0
+	  
 	  Namespace.findAll().each { namespace ->	 
 	    if (namespace.generateXSDFile) {
-  	  		println "Processing namespace ${namespace.filename} ..."
-  	  		println "The namespace is ${namespace}"
+  	  		msg "Processing namespace ${namespace.uri} into ${namespace.filename}"
   	  		closure.namespaceName=namespace.filename
   	  	    closure.namespace=namespace
   	  		model = [ 'namespaceInstance' : namespace]
             closure()
+  	  		mlog "Processed namespace ${namespace.uri}"
+  	  		current++
+	    } else {
+	    	mlog "Skipped namespace ${namespace.uri}"
 	    }
   	}
+	mlog "Processing namespaces completed"
   }
   
   def template(String theTemplatePath,String theOutputPath) {
-	println "Calling runtemplate  with ${templatePath+theTemplatePath}"
+	mlog "- Running template ${templatePath+theTemplatePath}"
+	
 	// Make the target directory tree if it doesn't exist
 	def fullOutputPath=outputPath+theOutputPath
 	def lastSlashIndex=fullOutputPath.lastIndexOf('/')

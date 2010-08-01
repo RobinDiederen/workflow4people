@@ -62,8 +62,8 @@ class FormItem {
 		return binding
 	}
 	
-	def runSnippet(String snippetName) {
-		return templateService.runSnippetTemplate(this,snippetName)
+	def runSnippet(String snippetName,def model=[:]) {
+		return templateService.runSnippetTemplate(this,snippetName,model)
 	}
 	
 	

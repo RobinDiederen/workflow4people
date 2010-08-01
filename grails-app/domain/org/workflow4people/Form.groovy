@@ -67,8 +67,11 @@ class Form implements Serializable {
 		return binding
 	}
 	
-	def runSnippet(String snippetName) {
-		return templateService.runGenericSnippetTemplate("Form",snippetName,binding().getVariables())
+	def runSnippet(String snippetName,def model=[:]) {
+		model+=binding().getVariables()
+		return templateService.runGenericSnippetTemplate("Form",snippetName,model)
 	}
+	
+	
     
 }
