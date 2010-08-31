@@ -1,4 +1,20 @@
+					<g:javascript>
+					$(function() {	
+						$("#saveButton").click(function() {
+							//alert('Click!');
+							$("#editpane").load("/workflow4people/dataModelEditor/showField/${fieldInstance.id}",'',function() {
+	                		$("#tabs").tabs();
+	                		//alert('Click2!');
+	                		});
+						});
+					});
 					
+					</g:javascript>
+					
+					<div id="toolbar" style="background:url('../images/skin/shadow.jpg') repeat-x scroll center bottom #FFFFFF;;border:1px solid #DDD;height:20px;margin-top:5px;margin-bottom:5px;padding:5px;margin-right:5px;">
+					<a id="saveButton" class="awesome small blue button" >save</a>
+					
+					</div>
 					
 					<div id="tabs" style="border:none;"> 
 					<ul>						
@@ -134,9 +150,16 @@
                         <tbody>
                             
                             <tr class="prop">
-                                <td valign="top" class="name"><g:message code="field.minOccurs" default="Min Occurs" />:</td>
+                                <td valign="top" class="name"><g:message code="field.minOccurs" default="Min Occurs" />:</td>                                
+                                <%-- <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "minOccurs")}</td>--%>
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'minOccurs', 'errors')}">
+                                    <g:textField name="name" value="${fieldInstance?.minOccurs}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.minOccurs.help',default:'x')}" href="" >?</a>                                    
+                                </td>
                                 
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "minOccurs")}</td>
+                                
+                                
+                                
                                 
                             </tr>
                             

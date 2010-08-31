@@ -50,11 +50,23 @@ class DataModelEditorController {
             def fieldListInstance = FieldList.get( params.id )
 
             if(!fieldListInstance) {
-                flash.message = "Field not found with id ${params.id}"
+                flash.message = "FieldList not found with id ${params.id}"
                 redirect(action:list)
             }
             else { return [ fieldListInstance : fieldListInstance ] }
         }
+
+	def editFieldList = {
+            def fieldListInstance = FieldList.get( params.id )
+
+            if(!fieldListInstance) {
+                flash.message = "FieldList not found with id ${params.id}"
+                redirect(action:list)
+            }
+            else { return [ fieldListInstance : fieldListInstance ] }
+        }
+
+	
 
     def beforemove = {
     		println params
@@ -78,12 +90,23 @@ class DataModelEditorController {
     			theAdvice="copy";
     		}
     		
-    		render(contentType:"text/json") {
+    		/*render(contentType:"text/json") {
     			result(
     					advice:theAdvice,
     					message:'ooooh een berichtje'
     				)
-    		}
+    		}*/
+    		
+        	render(builder:'json') {
+        		result(
+    					advice:theAdvice,
+    					message:'ooooh een berichtje'
+    				)
+        		        	  
+          	}
+    		
+    		
+    		
     }
     
     def onmove = {

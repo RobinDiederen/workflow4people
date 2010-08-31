@@ -69,7 +69,7 @@
                       
                     
               	<g:if test="${navTemplate}" >
-            		<g:render template="${navTemplate}" model="[entityName:entityName,workflowDefinitionInstance:workflowDefinitionInstance]"/>
+            		<g:render contextPath="${pluginContextPath}" template="${navTemplate}" model="[entityName:entityName,workflowDefinitionInstance:workflowDefinitionInstance]"/>
             	</g:if>
         	</div>
            
