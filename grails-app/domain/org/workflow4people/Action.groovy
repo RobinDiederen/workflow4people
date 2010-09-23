@@ -31,9 +31,9 @@ class Action {
 	
 
     static constraints = {
-		name()
-		title()
-		description(nullable:true)
+		name(help:'x',class:'wide')
+		title(help:'x',class:'wide')
+		description(help:'x',class:'extrawide',nullable:true)
     }
 	
 	String toString() {

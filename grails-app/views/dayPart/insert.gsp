@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'dayPart.label', default: 'DayPart')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="dayPart.insert.title" /></title>
     </head>
     <body>
         
@@ -58,10 +58,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="position"><g:message code="dayPart.position.label" default="Position" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'position', 'errors')}">
+                                    <g:textField name="position" value="${fieldValue(bean: dayPartInstance, field: 'position')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="dayName"><g:message code="dayPart.dayName.label" default="Day Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'dayName', 'errors')}">
-                                    <g:select name="dayName" from="${dayPartInstance.constraints.dayName.inList}" value="${dayPartInstance?.dayName}" valueMessagePrefix="dayPart.dayName"  />
+                                    <g:select name="dayName" from="${dayPartInstance.constraints.dayName.inList}" value="${dayPartInstance?.dayName}" valueMessagePrefix="dayPart.dayName.value"  />
                                 </td>
                             </tr>
                         
@@ -80,15 +89,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'toTime', 'errors')}">
                                     <g:textField name="toTime" value="${dayPartInstance?.toTime}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="position"><g:message code="dayPart.position.label" default="Position" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'position', 'errors')}">
-                                    <g:textField name="position" value="${fieldValue(bean: dayPartInstance, field: 'position')}" />
                                 </td>
                             </tr>
                                                 

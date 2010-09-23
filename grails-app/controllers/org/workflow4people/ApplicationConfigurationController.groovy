@@ -1,5 +1,4 @@
 /*
-
  * Workflow4people
  * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a

@@ -30,10 +30,10 @@ import groovy.lang.Binding;
 class FieldList implements Serializable {
 	def templateService
     static constraints = {
-    	name()    	
-    	namespace()
-    	baseType()
-    	label()
+    	name(help:'x',class:'wide')    	
+    	namespace(help:'x')
+    	baseType(help:'x')
+    	label(help:'x',class:'wide')
     	description(size:0..50000)
     	field(sortable:true,sort:'fieldPosition',sortOrder:'asc')
     	    

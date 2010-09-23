@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'workflowPermission.label', default: 'WorkflowPermission')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="workflowPermission.insert.title" /></title>
     </head>
     <body>
         
@@ -31,7 +31,7 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="workflowDefinition" action="show" id="${workflowPermissionInstance?.workflow?.id}">&laquo;&nbsp;Back to Workflow ${workflowPermissionInstance?.workflow?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="workflowDefinition" action="show" id="${workflowPermissionInstance?.workflow?.id}">&laquo;&nbsp; Workflow ${workflowPermissionInstance?.workflow?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     

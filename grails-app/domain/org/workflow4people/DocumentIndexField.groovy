@@ -24,11 +24,11 @@ package org.workflow4people
  */
 class DocumentIndexField {
     static constraints = {
-    	name()
-    	title()
-    	description(nullable:true)
-    	xpath()
-    	publish()
+    	name(help:'x',class:'extrawide')
+    	title(help:'x',class:'extrawide')
+    	description(nullable:true,help:'x')
+    	xpath(help:'x',class:'extrawide')
+    	publish(help:'x')
     }
     String name
     String title

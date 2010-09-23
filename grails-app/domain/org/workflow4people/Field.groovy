@@ -29,16 +29,16 @@ class Field {
 	//static transients = ["xpath"]
 	static belongsTo = [fieldList: FieldList]	
     static constraints = {
-		fieldPosition()
-		name(help:'x')
+		fieldPosition(help:'x')
+		name(help:'x',class:'wide')
 		fieldType(help:'x')
 		childFieldList(nullable:true,display:true,help:'x')		
 		fieldList(display:false)
 				
 		description(size:0..50000,help:'x')
     	
-    	defaultValue(nullable:true,help:'x')
-    	label(help:'x')
+    	defaultValue(nullable:true,help:'x',class:'wide')
+    	label(help:'x',class:'wide')
     	help(nullable:true,size:0..50000,help:'x')
 	    alert(nullable:true,size:0..50000,help:'x')
 	    fieldLength(nullable:true)
@@ -62,7 +62,7 @@ class Field {
 	   // securitylevelRead(nullable:true,help:'x')
     //	securitylevelReadWrite(nullable:true,help:'x')
 
-	    xpath(nullable:true)
+	    xpath(nullable:true,help:'x',class:'extrawide')
 	    
     }
 	def templateService
@@ -116,12 +116,19 @@ class Field {
     String xpath
     
     String toString() {
+		
 		  def theName
-		  theName = name ? name : fieldType.name;
-		  if (fieldList){
-			  theName="${theName} (${fieldList.name})"
+		  try {
+			  theName = name ? name : fieldType.name;
+			  if (fieldList){			  
+				  theName="${theName} (${fieldList.name})"
+			  }
+		  
+			  return "${theName} - ${fieldType.name}"
+		  } 
+		  catch (Exception e) {
+			  return "${name} - fieldType or fieldList does not exist"
 		  }
-		  return "${theName} - ${fieldType.name}"
 	  }
 	
 	/*
@@ -190,6 +197,8 @@ class Field {
 		// Yes. we need to do this for the xpath, too. It will always stop at the field though
 		// It will never reach the FieldType because the lowest level field always has its' xpath value filled.
 		binding.xpath=getFieldProperty('xpath')
+		
+		println "XPATH: ${binding.xpath}"
 		return binding
 	}
 	

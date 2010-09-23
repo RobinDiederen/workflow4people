@@ -26,10 +26,10 @@ package org.workflow4people
  */
 
 class ApplicationConfiguration {
-
+	static features = []
     static constraints = {
-    	configKey()
-    	configValue()
+    	configKey(class:'extrawide',help:'x')
+    	configValue(class:'extrawide',help:'x')
     }
     /**
      * The key that identifies the configuration item
@@ -44,7 +44,7 @@ class ApplicationConfiguration {
      * @returns The string representation of this configuration item
      */
     String toString() {		  
-		  return "${configKey} [${configValue}]"
+		  return "${configKey} - [${configValue}]"
 	  }
     
     

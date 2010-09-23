@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'minerQuery.label', default: 'MinerQuery')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="minerQuery.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="minerQuery.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,24 +21,26 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'minerQuery.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'minerQuery.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'minerQuery.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'minerQuery.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="title" title="${message(code: 'minerQuery.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'minerQuery.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn property="description" title="${message(code: 'minerQuery.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'minerQuery.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn property="explanationMessage" title="${message(code: 'minerQuery.explanationMessage.label', default: 'Explanation Message')}" />
+                            <g:sortableColumn params="${filteredParams}" property="explanationMessage" title="${message(code: 'minerQuery.explanationMessage.label', default: 'Explanation Message')}" />
                         
-                            <g:sortableColumn property="query" title="${message(code: 'minerQuery.query.label', default: 'Query')}" />
+                            <g:sortableColumn params="${filteredParams}" property="query" title="${message(code: 'minerQuery.query.label', default: 'Query')}" />
                         
-                        <th class="action">Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +59,31 @@
                         
                             <td>${fieldValue(bean: minerQueryInstance, field: "query")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${minerQueryInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${minerQueryInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${minerQueryInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'minerQuery.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${minerQueryInstance.id}"><g:message default="show" code="minerQuery.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'minerQuery.list.edit.help')}" action="edit" params="${filteredParams}" id="${minerQueryInstance.id}"><g:message default="edit" code="minerQuery.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'minerQuery.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'minerQuery.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${minerQueryInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${minerQueryInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${minerQueryInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${minerQueryInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

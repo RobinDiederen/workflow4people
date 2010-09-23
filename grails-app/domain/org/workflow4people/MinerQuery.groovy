@@ -28,14 +28,14 @@ package org.workflow4people
 
 class MinerQuery {
 	static constraints = {
-    	name()
-    	title()
-    	description(size:0..50000)
-    	explanationMessage(size:0..50000)
-    	query(size:0..50000)
-    	drilldownQuery(size:0..50000)
-    	drilldownCountQuery(size:0..50000)
-    	calculateTotals()
+    	name(class:'wide',help:'x')
+    	title(class:'wide',help:'x')
+    	description(size:0..50000,help:'x')
+    	explanationMessage(size:0..50000,help:'x')
+    	query(size:0..50000,help:'x')
+    	drilldownQuery(size:0..50000,help:'x')
+    	drilldownCountQuery(size:0..50000,help:'x')
+    	calculateTotals(help:'x')
     }
 	
     String name

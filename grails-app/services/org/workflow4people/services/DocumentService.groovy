@@ -173,6 +173,20 @@ class DocumentService implements InitializingBean {
     		LinkedHashMap variableMap = new LinkedHashMap()    							
     		variableMap.put("documentId",documentInstance.id)
     		variableMap.put("user",documentInstance.user)
+    		// The home group is the first group that has the type home
+    		def homeGroup=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0];
+    		// Fall back on identity.group.home.default if the user has no home group
+    		if (!homeGroup) {
+    			homeGroup=ApplicationConfiguration.findByConfigKey('identity.group.home.default').configValue
+    		}
+    		// Fall back on home if identity.group.home.default does not exist
+    		
+    		if (!homeGroup) {
+    			homeGroup="home"
+    		}
+    		
+    		variableMap.put("group",homeGroup)
+    		
 			processInstance = executionService.startProcessInstanceByKey(header.documentType.text(),variableMap)
 			
 			// Store the document again, now with the processInstanceId in it.

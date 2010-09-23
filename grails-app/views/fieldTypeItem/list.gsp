@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'fieldTypeItem.label', default: 'FieldTypeItem')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="fieldTypeItem.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="fieldTypeItem.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,22 +21,24 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'fieldTypeItem.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'fieldTypeItem.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="itemPosition" title="${message(code: 'fieldTypeItem.itemPosition.label', default: 'Item Position')}" />
+                            <g:sortableColumn params="${filteredParams}" property="itemPosition" title="${message(code: 'fieldTypeItem.itemPosition.label', default: 'Item Position')}" />
                         
-                            <g:sortableColumn property="label" title="${message(code: 'fieldTypeItem.label.label', default: 'Label')}" />
+                            <g:sortableColumn params="${filteredParams}" property="label" title="${message(code: 'fieldTypeItem.label.label', default: 'Label')}" />
                         
-                            <g:sortableColumn property="value" title="${message(code: 'fieldTypeItem.value.label', default: 'Value')}" />
+                            <g:sortableColumn params="${filteredParams}" property="value" title="${message(code: 'fieldTypeItem.value.label', default: 'Value')}" />
                         
                             <th><g:message code="fieldTypeItem.fieldType.label" default="Field Type" /></th>
                    	    
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,16 +55,31 @@
                         
                             <td>${fieldValue(bean: fieldTypeItemInstance, field: "fieldType")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${fieldTypeItemInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${fieldTypeItemInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldTypeItemInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'fieldTypeItem.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${fieldTypeItemInstance.id}"><g:message default="show" code="fieldTypeItem.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'fieldTypeItem.list.edit.help')}" action="edit" params="${filteredParams}" id="${fieldTypeItemInstance.id}"><g:message default="edit" code="fieldTypeItem.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'fieldTypeItem.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'fieldTypeItem.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${fieldTypeItemInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${fieldTypeItemInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${fieldTypeItemInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${fieldTypeItemInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

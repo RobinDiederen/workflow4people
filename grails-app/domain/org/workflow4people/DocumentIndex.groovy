@@ -22,8 +22,8 @@ import org.compass.annotations.*
 class DocumentIndex {
 	static belongsTo=[document:Document]
     static constraints = {
-    	name()
-    	value(nullable:true)
+    	name(help:'x')
+    	value(nullable:true,help:'x')
     	document(display:false)
     }
 	@SearchableDynamicName

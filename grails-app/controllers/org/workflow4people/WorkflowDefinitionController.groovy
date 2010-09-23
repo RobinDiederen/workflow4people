@@ -53,7 +53,7 @@ class WorkflowDefinitionController {
 
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ workflowDefinitionInstanceList: WorkflowDefinition.list( params ), workflowDefinitionInstanceTotal: WorkflowDefinition.count() ]
+        [ workflowDefinitionInstanceList: WorkflowDefinition.list( params ), workflowDefinitionInstanceTotal: WorkflowDefinition.count(),filteredParams:'' ]
     }
 
     def show = {

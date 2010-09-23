@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'documentIndex.label', default: 'DocumentIndex')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="documentIndex.insert.title" /></title>
     </head>
     <body>
         
@@ -27,7 +27,7 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="document" action="show" id="${documentIndexInstance?.document?.id}">&laquo;&nbsp;Back to Document ${documentIndexInstance?.document?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="document" action="show" id="${documentIndexInstance?.document?.id}">&laquo;&nbsp; Document ${documentIndexInstance?.document?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     

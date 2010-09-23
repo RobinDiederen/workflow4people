@@ -100,6 +100,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
                     
@@ -129,15 +133,15 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'fieldPosition', 'errors')}">
                                     <g:textField name="fieldPosition" value="${fieldValue(bean: fieldInstance, field: 'fieldPosition')}" />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.fieldPosition.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop null">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="name"><g:message code="field.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldInstance?.name}" />
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.name.help',default:'x')}" href="" >?</a>
                                 </td>
@@ -173,21 +177,21 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop null">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="defaultValue"><g:message code="field.defaultValue.label" default="Default Value" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'defaultValue', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'defaultValue', 'errors')}">
                                     <g:textField name="defaultValue" value="${fieldInstance?.defaultValue}" />
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.defaultValue.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop null">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="label"><g:message code="field.label.label" default="Label" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'label', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldInstance?.label}" />
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.label.help',default:'x')}" href="" >?</a>
                                 </td>
@@ -283,13 +287,13 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop null">
+                            <tr class="prop extrawide">
                                 <td valign="top" class="name">
                                     <label for="xpath"><g:message code="field.xpath.label" default="Xpath" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
+                                <td valign="top" class="value extrawide ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${fieldInstance?.xpath}" />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.xpath.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         

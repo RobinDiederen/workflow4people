@@ -57,10 +57,10 @@ class Authority {
 	String authorityType
 
 	static constraints = {
-		authority(blank: false)
-		description()
-		authorityType()
-		people(selectSort:'username')
+		authority(help:'x',class:'wide',blank: false,unique:true)
+		description(help:'x',class:'extrawide')
+		authorityType(help:'x',class:'wide')
+		people(help:'x',selectSort:'username')
 	}	
 	
 	String toString() {

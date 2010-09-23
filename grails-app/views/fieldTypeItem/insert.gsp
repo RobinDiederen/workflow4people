@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'fieldTypeItem.label', default: 'FieldTypeItem')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="fieldTypeItem.insert.title" /></title>
     </head>
     <body>
         
@@ -31,7 +31,7 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldType" action="show" id="${fieldTypeItemInstance?.fieldType?.id}">&laquo;&nbsp;Back to Field Type ${fieldTypeItemInstance?.fieldType?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="fieldType" action="show" id="${fieldTypeItemInstance?.fieldType?.id}">&laquo;&nbsp; Field Type ${fieldTypeItemInstance?.fieldType?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     

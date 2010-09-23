@@ -30,10 +30,10 @@ class FormItem {
 	def templateService
 	static belongsTo = [form: Form]
     static constraints = {
-    	position()
-    	field()
-    	baseXpath(nullable:true)
-    	readonly()
+    	position(help:'x')
+    	field(help:'x')
+    	baseXpath(nullable:true,help:'x',class:'extrawide')
+    	readonly(help:'x')
     	form(display:false)
     }
     int position
@@ -42,7 +42,11 @@ class FormItem {
     boolean readonly=false
     
     String toString() {
-		return "${position} - ${field.name}" 
+		try {
+			return "${position} - ${field?.name}"
+		} catch (Exception e) {
+			return "${position} - non-existing field"
+		}
 	}
 	
 	String formSnippet() {

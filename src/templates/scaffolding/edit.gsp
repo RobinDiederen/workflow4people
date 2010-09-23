@@ -30,8 +30,8 @@
                             <%  }  %>                        
                     <%  } 
                     if (!hasManyToOne) {
-                    %>
-                		<span class="menuButton"><g:link params="\${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
+                    %>                		
+                		<span class="menuButton"><g:link  params="\${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="${domainClass.propertyName}.list.label" args="[entityName]" /></g:link></span>
             			                        
                     <%
                     }

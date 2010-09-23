@@ -31,32 +31,32 @@ class FieldType {
 	def templateService
 	static hasMany = [fieldTypeItem : FieldTypeItem]    
 	static constraints = {
-		name()
-		namespace(nullable:true)
+		name(help:'x',class:'wide')
+		namespace(nullable:true,help:'x')
 		// TODO Nullable alleen voor migratie
 	
-		baseType(nullable:true)
-		baseSchemaType(nullable:true)
+		baseType(nullable:true,help:'x')
+		baseSchemaType(nullable:true,help:'x')
 		
 				
-		description(size:0..50000)	    
-	    defaultValue(nullable:true)
-	    label(nullable:true)
-	    help(size:0..50000)
-	    alert(size:0..50000)
+		description(size:0..50000,help:'x')	    
+	    defaultValue(nullable:true,help:'x',class:'wide')
+	    label(nullable:true,help:'x',class:'wide')
+	    help(size:0..50000,help:'x')
+	    alert(size:0..50000,help:'x')
 	    
-	    runtimeEditableList()
+	    runtimeEditableList(help:'x')
 	    
-	    generateSchemaType(nullable:true)
-	    restrictions(nullable:true)
-	    length(nullable:true)
-	    minLength(nullable:true)
-	    maxLength(nullable:true)
-	    pattern(nullable:true)
-	    minInclusive(nullable:true)
-	    maxInclusive(nullable:true)
-	    minExclusive(nullable:true)
-	    maxExclusive(nullable:true)
+	    generateSchemaType(nullable:true,help:'x')
+	    restrictions(nullable:true,help:'x')
+	    length(nullable:true,help:'x')
+	    minLength(nullable:true,help:'x')
+	    maxLength(nullable:true,help:'x')
+	    pattern(nullable:true,class:'wide',help:'x')
+	    minInclusive(nullable:true,help:'x')
+	    maxInclusive(nullable:true,help:'x')
+	    minExclusive(nullable:true,help:'x')
+	    maxExclusive(nullable:true,help:'x')
 	    
     }
 	/**

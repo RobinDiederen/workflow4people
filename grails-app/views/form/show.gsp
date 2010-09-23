@@ -61,6 +61,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
 				    
                   <span class="button"><g:actionSubmit params="${filteredParams}" class="awesome small blue button"  action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                   
@@ -94,24 +98,24 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="form.name.label" default="Name" /></td>
                          
                             
-                            <td valign="top" class="value">${formInstance.name}</td>
+                            <td valign="top" class="value wide">${formInstance.name}</td>
                             
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="form.title.label" default="Title" /></td>
                          
                             
-                            <td valign="top" class="value">${formInstance.title}</td>
+                            <td valign="top" class="value wide">${formInstance.title}</td>
                             
 						
                         </tr>
@@ -149,13 +153,13 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="form.template.label" default="Template" /></td>
                          
                             
-                            <td valign="top" class="value">${formInstance.template}</td>
+                            <td valign="top" class="value wide">${formInstance.template}</td>
                             
 						
                         </tr>
@@ -183,6 +187,10 @@
 
                             
 						
+                        </tr>
+                    
+                        <tr class="prop">
+                         
                         </tr>
                     
                         <tr class="prop">
@@ -297,6 +305,10 @@
                             </tbody>
                             </table>
                             </div>
+                                                    
+                    
+                        
+                            
                                                     
                     
                         

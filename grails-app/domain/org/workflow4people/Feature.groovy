@@ -30,9 +30,9 @@ class Feature {
 	String description
 	
     static constraints = {
-		name()
-		title()
-		description(nullable:true)
+		name(help:'x',class:'wide')
+		title(help:'x',class:'wide')
+		description(nullable:true,help:'x',class:'extrawide')
     }
 	
 	String toString() {

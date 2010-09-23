@@ -49,8 +49,8 @@
                         
                             
                                                     
-                    
-                		<span class="menuButton"><g:link params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
+                                    		
+                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="documentType.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>

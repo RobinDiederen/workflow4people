@@ -5,11 +5,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'fieldType.label', default: 'FieldType')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="fieldType.edit.title" /></title>
     </head>
     <body>
         
         <div class="body">
+                    <g:form method="post" >
+        
                     <div class="nav">
             	
                         
@@ -107,9 +109,12 @@
                         
                             
                                                     
+                                    		
+                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="fieldType.list.label" args="[entityName]" /></g:link></span>
+            			                        
                     
-                		<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            			<span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>                        
+                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    
                     
 			<g:if test="${navTemplate}" >
             	<g:render template="${navTemplate}" model="[entityName:entityName,fieldTypeInstance:fieldTypeInstance]"/>
@@ -125,19 +130,19 @@
                 <g:renderErrors bean="${fieldTypeInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form method="post" >
                 <g:hiddenField name="id" value="${fieldTypeInstance?.id}" />
                 <g:hiddenField name="version" value="${fieldTypeInstance?.version}" />
                 <div class="dialog">
                     <table>
                         <tbody>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                   <label for="name"><g:message code="fieldType.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldTypeInstance?.name}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -147,6 +152,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldTypeInstance?.namespace?.id}" noSelection="['null': '']" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.namespace.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -156,6 +162,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldTypeInstance?.baseType?.id}" noSelection="['null': '']" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.baseType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -165,6 +172,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'baseSchemaType', 'errors')}">
                                     <g:textField name="baseSchemaType" value="${fieldTypeInstance?.baseSchemaType}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.baseSchemaType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -174,24 +182,27 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldTypeInstance?.description}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                   <label for="defaultValue"><g:message code="fieldType.defaultValue.label" default="Default Value" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'defaultValue', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldTypeInstance, field: 'defaultValue', 'errors')}">
                                     <g:textField name="defaultValue" value="${fieldTypeInstance?.defaultValue}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.defaultValue.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                   <label for="label"><g:message code="fieldType.label.label" default="Label" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'label', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldTypeInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldTypeInstance?.label}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.label.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -201,6 +212,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'help', 'errors')}">
                                     <g:textArea name="help" cols="40" rows="5" value="${fieldTypeInstance?.help}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.help.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -210,6 +222,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'alert', 'errors')}">
                                     <g:textArea name="alert" cols="40" rows="5" value="${fieldTypeInstance?.alert}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.alert.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -219,6 +232,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'runtimeEditableList', 'errors')}">
                                     <g:checkBox name="runtimeEditableList" value="${fieldTypeInstance?.runtimeEditableList}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.runtimeEditableList.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -228,6 +242,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'generateSchemaType', 'errors')}">
                                     <g:checkBox name="generateSchemaType" value="${fieldTypeInstance?.generateSchemaType}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.generateSchemaType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -237,6 +252,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'restrictions', 'errors')}">
                                     <g:checkBox name="restrictions" value="${fieldTypeInstance?.restrictions}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.restrictions.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -246,6 +262,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'length', 'errors')}">
                                     <g:textField name="length" value="${fieldTypeInstance?.length}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.length.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -255,6 +272,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minLength', 'errors')}">
                                     <g:textField name="minLength" value="${fieldTypeInstance?.minLength}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.minLength.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -264,15 +282,17 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxLength', 'errors')}">
                                     <g:textField name="maxLength" value="${fieldTypeInstance?.maxLength}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.maxLength.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                   <label for="pattern"><g:message code="fieldType.pattern.label" default="Pattern" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'pattern', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldTypeInstance, field: 'pattern', 'errors')}">
                                     <g:textField name="pattern" value="${fieldTypeInstance?.pattern}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.pattern.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -282,6 +302,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minInclusive', 'errors')}">
                                     <g:textField name="minInclusive" value="${fieldTypeInstance?.minInclusive}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.minInclusive.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -291,6 +312,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxInclusive', 'errors')}">
                                     <g:textField name="maxInclusive" value="${fieldTypeInstance?.maxInclusive}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.maxInclusive.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -300,6 +322,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minExclusive', 'errors')}">
                                     <g:textField name="minExclusive" value="${fieldTypeInstance?.minExclusive}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.minExclusive.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -309,16 +332,40 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxExclusive', 'errors')}">
                                     <g:textField name="maxExclusive" value="${fieldTypeInstance?.maxExclusive}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.maxExclusive.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="fieldTypeItem"><g:message code="fieldType.fieldTypeItem.label" default="Field Type Item" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'fieldTypeItem', 'errors')}">
+                                    
+<ul>
+<g:each in="${fieldTypeInstance?.fieldTypeItem?}" var="f">
+    <li><g:link controller="fieldTypeItem" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="fieldTypeItem" action="create" params="['fieldType.id': fieldTypeInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'fieldTypeItem.label', default: 'FieldTypeItem')])}</g:link>
+
+                                                                        
                                 </td>
                             </tr>
                                                 
                         </tbody>
                     </table>
+                        
+                        
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+                    <g:hiddenField name="q" value="${params.q}" />
+                        
                                             
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="awesome small red button" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>                    
                 </div>
             </g:form>
         </div>

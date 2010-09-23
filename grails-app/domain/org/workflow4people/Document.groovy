@@ -29,26 +29,31 @@ import org.compass.annotations.*
 
 class Document {
 	static searchable=true
+    static listProperties=['documentDescription','documentType','dateCreated','lastUpdated']
 
     static constraints = {    	    
-    	    documentType()
-    	    documentStatus(nullable:true)
-    	    documentKey(nullable:true)
-    	    documentDescription(nullable:true)
+    	    documentType(help:'x')
+    	    documentStatus(nullable:true,help:'x')
+    	    documentKey(nullable:true,help:'x')
+    	    documentDescription(nullable:true,help:'x',class:'extrawide')
     	    //taskId(nullable:true)
     	    
-    	    dateCreated(nullable:true)
-    	    lastUpdated(nullable:true)
-    	    completionDate(nullable:true)
-    	    processingDays(nullable:true)
+    	    dateCreated(nullable:true,help:'x')
+    	    lastUpdated(nullable:true,help:'x')
+    	    completionDate(nullable:true,help:'x')
+    	    processingDays(nullable:true,help:'x')
     	    
-    	    user(nullable:true)
-    	    groupId(nullable:true)
+    	    user(nullable:true,help:'x')
+    	    groupId(nullable:true,help:'x')
     	    
-    	    cmisFolderObjectId(nullable:true)
-    	    cmisFolderUrl(nullable:true)
+    	    cmisFolderObjectId(nullable:true,class:'extrawide',help:'x')
+    	    cmisFolderUrl(nullable:true,class:'extrawide',help:'x')
     	    
-    	    xmlDocument(size:0..50000)
+    	    xmlDocument(size:0..50000,class:'extrawide',help:'x')
+    	    
+    	    documentIndex(sortable:false,sort:'id',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
+    	    form(help:'x')
+    	    
     }
     @SearchableId
     Long id

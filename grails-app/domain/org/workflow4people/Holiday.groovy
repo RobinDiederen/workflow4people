@@ -27,9 +27,9 @@ package org.workflow4people
 class Holiday {
 
     static constraints = {
-    	title()
-    	fromDate()
-    	toDate()
+    	title(help:'x',class:'wide')
+    	fromDate(help:'x')
+    	toDate(help:'x')
     }
     String title
     Date fromDate

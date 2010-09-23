@@ -35,14 +35,20 @@ class FormPermission {
 	
     static constraints = {
 		
-		authority()
-		role()
-		remark(nullable:true)
-		form(display:false)
+		authority(help:'x')
+		role(help:'x')
+		remark(nullable:true,class:'extrawide',help:'x')
+		form(display:false,help:'x')
     }
 	
 	String toString() {
-		return "${authority.authority} (${role.name})"
+		try {
+			return "${authority.authority} (${role.name})"
+		}
+		catch (Exception e) {
+			return "Authority or role does not exist"
+		}
 	}
+	
 	
 }

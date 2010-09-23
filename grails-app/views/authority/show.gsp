@@ -5,11 +5,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'authority.label', default: 'Authority')}" />
-        <title><g:message code="default.show.label" args="[entityName]" /></title>
+        <title><g:message code="authority.show.title" /></title>
     </head>
     <body>
 
         <div class="body">
+                        <g:form>
+        
             <div class="nav">
             	
                         
@@ -32,8 +34,15 @@
                             
                                                     
                     
-                		<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            			<span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>                        
+                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="authority.list.label" args="[entityName]" /></g:link></span>
+                    
+				    
+                  <span class="button"><g:actionSubmit params="${filteredParams}" class="awesome small blue button"  action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                  
+                  
+                  
+                  <span class="button"><g:actionSubmit params="${filteredParams}" class="awesome small red button"  action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                      
                     
               	<g:if test="${navTemplate}" >
             		<g:render template="${navTemplate}" model="[entityName:entityName,authorityInstance:authorityInstance]"/>
@@ -51,7 +60,7 @@
                     
                         <tr class="prop">
                          
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@ab5423f[name=id,type=class java.lang.Long,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=null -->
+                            
                             <td valign="top" class="name"><g:message code="authority.id.label" default="Id" /></td>
                          
                             
@@ -60,42 +69,42 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@5f47cab0[name=authority,type=class java.lang.String,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@624c19ae[class org.workflow4people.Authority,authority,class java.lang.String,{blank=org.codehaus.groovy.grails.validation.BlankConstraint@722a20ec[false], nullable=org.codehaus.groovy.grails.validation.NullableConstraint@2bd7a082[false]}] -->
+                            
                             <td valign="top" class="name"><g:message code="authority.authority.label" default="Authority" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldValue(bean: authorityInstance, field: "authority")}</td>
+                            <td valign="top" class="value wide">${authorityInstance.authority}</td>
                             
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop extrawide">
                          
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@596acd4a[name=description,type=class java.lang.String,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@72cbe322[class org.workflow4people.Authority,description,class java.lang.String,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@27ad080f[false]}] -->
+                            
                             <td valign="top" class="name"><g:message code="authority.description.label" default="Description" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldValue(bean: authorityInstance, field: "description")}</td>
+                            <td valign="top" class="value extrawide">${authorityInstance.description}</td>
                             
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@63c99db7[name=authorityType,type=class java.lang.String,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@49918c8f[class org.workflow4people.Authority,authorityType,class java.lang.String,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@72a32604[false]}] -->
+                            
                             <td valign="top" class="name"><g:message code="authority.authorityType.label" default="Authority Type" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldValue(bean: authorityInstance, field: "authorityType")}</td>
+                            <td valign="top" class="value wide">${authorityInstance.authorityType}</td>
                             
 						
                         </tr>
                     
                         <tr class="prop">
                          
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@4d50c5f5[name=people,type=interface java.util.Set,persistent=true,optional=true,association=true,bidirectional=true,association-type=many-to-many] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@71f47f7a[class org.workflow4people.Authority,people,interface java.util.Set,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@6add5d08[true]}] -->
+                            
                             <td valign="top" class="name"><g:message code="authority.people.label" default="People" /></td>
                          
                             
@@ -114,15 +123,26 @@
                 </table>
             </div>
             <div class="buttons">
-                <g:form>
                     <g:hiddenField name="id" value="${authorityInstance?.id}" />
+                      
                     <span class="button"><g:actionSubmit class="awesome small blue button"  action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                  	
+                  
+                  	
                     <span class="button"><g:actionSubmit class="awesome small red button"  action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                  	                     
                     <g:if test="${buttonsTemplate}" >
             			<g:render template="${buttonsTemplate}" model="[entityName:entityName,authorityInstance:authorityInstance]"/>
             	</g:if>
-                </g:form>
             </div>
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+                    <g:hiddenField name="navigatedFrom" value="show" />
+                    <g:hiddenField name="q" value="${params.q}" />
+            
+            
+                </g:form>
             
             
             

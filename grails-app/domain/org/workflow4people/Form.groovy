@@ -30,15 +30,15 @@ import groovy.lang.Binding;
 class Form implements Serializable {
 	def templateService
     static constraints = {
-    	name()
-    	title()
-    	description(size:0..50000)
-    	explanationMessage(size:0..50000)
-    	confirmationMessage(size:0..50000)
-    	template()    
-    	formAction()
+    	name(help:'x',class:'wide')
+    	title(help:'x',class:'wide')
+    	description(size:0..50000,help:'x')
+    	explanationMessage(size:0..50000,help:'x')
+    	confirmationMessage(size:0..50000,help:'x')
+    	template(class:'wide',help:'x')    
+    	formAction(help:'x')
     	//formItem(widget:"insert")
-    	workflow(display:false)
+    	workflow(display:false,help:'x')
     	formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
 	static belongsTo = [workflow: WorkflowDefinition]

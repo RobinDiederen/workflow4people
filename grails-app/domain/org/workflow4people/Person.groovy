@@ -50,14 +50,14 @@ class Person  {
 	
 
 	static constraints = {
-		username(blank: false, unique: true)
-		userRealName(blank: false)
-		familyName(blank: false)
-		givenName(blank: false)
-		email()
-		emailShow()
-		enabled()
-		passwd(blank: false,password:true,show:false)		
+		username(blank: false, unique: true,help:'x',class:'wide')
+		userRealName(blank: false,help:'x',class:'wide')
+		familyName(blank: false,help:'x',class:'wide')
+		givenName(blank: false,help:'x',class:'wide')
+		email(help:'x',class:'wide')
+		emailShow(help:'x')
+		enabled(help:'x')
+		passwd(blank: false,password:true,show:false,help:'x',class:'wide')		
 	}
 			
 	String toString() {

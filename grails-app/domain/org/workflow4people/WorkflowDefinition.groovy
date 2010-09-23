@@ -29,14 +29,14 @@ class WorkflowDefinition implements Serializable {
 	static hasMany = [form : Form,workflowPermission:WorkflowPermission]	
 	
     static constraints = {
-		publish()
-    	name()
-    	title()
-        description(size:0..50000)	
-        version()
-        dateCreated(nullable:true)
-        lastUpdated(nullable:true)
-        documentType()
+		publish(help:'x')
+    	name(help:'x',class:'wide')
+    	title(help:'x',class:'wide')
+        description(size:0..50000,help:'x')	
+        version(help:'x')
+        dateCreated(nullable:true,help:'x')
+        lastUpdated(nullable:true,help:'x')
+        documentType(help:'x')
     	form(display:false,sortable:false,sort:'name',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }

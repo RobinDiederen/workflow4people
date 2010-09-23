@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'workflowPermission.label', default: 'WorkflowPermission')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="workflowPermission.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="workflowPermission.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,22 +21,24 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'workflowPermission.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'workflowPermission.id.label', default: 'Id')}" />
                         
                             <th><g:message code="workflowPermission.authority.label" default="Authority" /></th>
                    	    
                             <th><g:message code="workflowPermission.role.label" default="Role" /></th>
                    	    
-                            <g:sortableColumn property="remark" title="${message(code: 'workflowPermission.remark.label', default: 'Remark')}" />
+                            <g:sortableColumn params="${filteredParams}" property="remark" title="${message(code: 'workflowPermission.remark.label', default: 'Remark')}" />
                         
                             <th><g:message code="workflowPermission.workflow.label" default="Workflow" /></th>
                    	    
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,16 +55,31 @@
                         
                             <td>${fieldValue(bean: workflowPermissionInstance, field: "workflow")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${workflowPermissionInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${workflowPermissionInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowPermissionInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'workflowPermission.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${workflowPermissionInstance.id}"><g:message default="show" code="workflowPermission.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'workflowPermission.list.edit.help')}" action="edit" params="${filteredParams}" id="${workflowPermissionInstance.id}"><g:message default="edit" code="workflowPermission.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'workflowPermission.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'workflowPermission.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowPermissionInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${workflowPermissionInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${workflowPermissionInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${workflowPermissionInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

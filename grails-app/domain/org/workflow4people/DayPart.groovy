@@ -25,9 +25,10 @@ package org.workflow4people
 class DayPart {
 
     static constraints = {
-    	dayName(inList:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'])
-    	fromTime(matches:"[0-9]{2}:[0-9]{2}")
-    	toTime(matches:"[0-9]{2}:[0-9]{2}")
+    	position(help:'x')
+    	dayName(inList:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],help:'x')
+    	fromTime(matches:"[0-9]{2}:[0-9]{2}",help:'x')
+    	toTime(matches:"[0-9]{2}:[0-9]{2}",help:'x')
     }
     int position
     String dayName

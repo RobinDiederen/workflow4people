@@ -98,6 +98,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
 			<g:if test="${navTemplate}" >
             	<g:render template="${navTemplate}" model="[entityName:entityName,fieldInstance:fieldInstance]"/>
             </g:if>

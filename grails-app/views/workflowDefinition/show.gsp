@@ -69,7 +69,7 @@
                       
                     
               	<g:if test="${navTemplate}" >
-            		<g:render contextPath="${pluginContextPath}" template="${navTemplate}" model="[entityName:entityName,workflowDefinitionInstance:workflowDefinitionInstance]"/>
+            		<g:render template="${navTemplate}" model="[entityName:entityName,workflowDefinitionInstance:workflowDefinitionInstance]"/>
             	</g:if>
         	</div>
            
@@ -104,24 +104,24 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="workflowDefinition.name.label" default="Name" /></td>
                          
                             
-                            <td valign="top" class="value">${workflowDefinitionInstance.name}</td>
+                            <td valign="top" class="value wide">${workflowDefinitionInstance.name}</td>
                             
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="workflowDefinition.title.label" default="Title" /></td>
                          
                             
-                            <td valign="top" class="value">${workflowDefinitionInstance.title}</td>
+                            <td valign="top" class="value wide">${workflowDefinitionInstance.title}</td>
                             
 						
                         </tr>

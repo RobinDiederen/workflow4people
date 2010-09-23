@@ -26,8 +26,8 @@ package org.workflow4people
 class BaseType {
 
     static constraints = {
-        name()    
-        description(size:0..50000)
+        name(help:'x',class:'wide')    
+        description(size:0..50000,class:'wide')
     }
     /**
      * The name of the base type

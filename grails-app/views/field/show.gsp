@@ -100,6 +100,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
 				    
                   <span class="button"><g:actionSubmit params="${filteredParams}" class="awesome small blue button"  action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                   
@@ -144,13 +148,13 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="field.name.label" default="Name" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldInstance.name}</td>
+                            <td valign="top" class="value wide">${fieldInstance.name}</td>
                             
 						
                         </tr>
@@ -205,24 +209,24 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="field.defaultValue.label" default="Default Value" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldInstance.defaultValue}</td>
+                            <td valign="top" class="value wide">${fieldInstance.defaultValue}</td>
                             
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop wide">
                          
                             
                             <td valign="top" class="name"><g:message code="field.label.label" default="Label" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldInstance.label}</td>
+                            <td valign="top" class="value wide">${fieldInstance.label}</td>
                             
 						
                         </tr>
@@ -326,15 +330,19 @@
 						
                         </tr>
                     
-                        <tr class="prop">
+                        <tr class="prop extrawide">
                          
                             
                             <td valign="top" class="name"><g:message code="field.xpath.label" default="Xpath" /></td>
                          
                             
-                            <td valign="top" class="value">${fieldInstance.xpath}</td>
+                            <td valign="top" class="value extrawide">${fieldInstance.xpath}</td>
                             
 						
+                        </tr>
+                    
+                        <tr class="prop">
+                         
                         </tr>
                     
                         <tr class="prop">
@@ -368,6 +376,10 @@
             
             
             
+                        
+                            
+                                                    
+                    
                         
                             
                                                     

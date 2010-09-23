@@ -5,13 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'documentIndex.label', default: 'DocumentIndex')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="documentIndex.list.title" /></title>
     </head>
     <body>
         
         <div class="body">
         <div class="nav">
-            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>
+        
+            <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="documentIndex.new.label"  /></g:link></span>
+            
         </div>
             
             <g:if test="${flash.message}">
@@ -19,20 +21,22 @@
             <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
             </div>
             </g:if>
+            
+            
             <div class="list">
                 <table>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'documentIndex.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'documentIndex.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'documentIndex.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'documentIndex.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="value" title="${message(code: 'documentIndex.value.label', default: 'Value')}" />
+                            <g:sortableColumn params="${filteredParams}" property="value" title="${message(code: 'documentIndex.value.label', default: 'Value')}" />
                         
                             <th><g:message code="documentIndex.document.label" default="Document" /></th>
                    	    
-                        <th>Action</th>
+                        <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,16 +51,31 @@
                         
                             <td>${fieldValue(bean: documentIndexInstance, field: "document")}</td>
                         
-                        <td><g:link title ="Show this item" action="show" class="awesome small blue button" id="${documentIndexInstance.id}">show&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small blue button" title="Modify this item" action="edit" id="${documentIndexInstance.id}">edit&nbsp;&raquo;</g:link>&nbsp;<g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexInstance.id}">&times;</g:link></td>
-                        
+                        <td> 
+                            
+                        		<g:link title ="${message(default: 'Show this item',code: 'documentIndex.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentIndexInstance.id}"><g:message default="show" code="documentIndex.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        	
+                        	
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentIndex.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentIndexInstance.id}"><g:message default="edit" code="documentIndex.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            
+                            
+                            	<g:link title="${message(default: 'Delete this item',code: 'documentIndex.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentIndex.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                                                    
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${documentIndexInstanceTotal}" />
+                        <div class="paginateButtons">
+            	<g:if test="${q}" >
+                <g:paginate total="${documentIndexInstanceTotal}" action="search" params="[q:q]"/>
+                </g:if>
+                <g:else>
+                <g:paginate total="${documentIndexInstanceTotal}" action="list" />
+                </g:else>
+                
             </div>
+
         </div>
     </body>
 </html>

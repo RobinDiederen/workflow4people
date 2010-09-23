@@ -28,7 +28,7 @@
           		<p>This action will reindex all database fields, read the XML documents, re-parse the associated XPath expressions for one document type.<br />This is a slow operation.</p>
           		<br />
 				<g:each in="${org.workflow4people.DocumentType.findAll([params:[sort:'name']])}" var="dt" >
-					<g:link class="awesome small blue button" action="reindexOneType" params="${[documentTypeName:dt.name]}">Re-index all documents of type: &quot;${dt.name}&quot;</g:link>
+					<g:link class="awesome small blue button" action="reindexOneType" params="${[documentTypeName:dt.name]}">Re-index all documents of type: &quot;${dt.name}&quot;</g:link><br /><br />
 				</g:each>          		
           		
           		

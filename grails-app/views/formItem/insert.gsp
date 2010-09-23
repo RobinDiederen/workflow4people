@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'formItem.label', default: 'FormItem')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="formItem.insert.title" /></title>
     </head>
     <body>
         
@@ -35,7 +35,11 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="form" action="show" id="${formItemInstance?.form?.id}">&laquo;&nbsp;Back to Form ${formItemInstance?.form?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="form" action="show" id="${formItemInstance?.form?.id}">&laquo;&nbsp; Form ${formItemInstance?.form?.encodeAsHTML()}</g:link></span>
+                            
+                                                    
+                    
+                        
                             
                                                     
                     

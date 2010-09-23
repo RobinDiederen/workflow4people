@@ -34,12 +34,18 @@ class WorkflowPermission {
 	String remark
 	              	
 	static constraints = {	              		
-		authority()
-	    role()
-	    remark(nullable:true)
+		authority(help:'x')
+	    role(help:'x')
+	    remark(nullable:true,help:'x',class:'extrawide')
 	    workflow()
 	}
+	
 	String toString() {
-		return "${authority.authority} (${role.name})"
+		try {
+			return "${authority.authority} (${role.name})"
+		}
+		catch (Exception e) {
+			return "Authority or role does not exist"
+		}
 	}
 }

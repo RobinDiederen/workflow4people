@@ -30,12 +30,17 @@ class FeaturePermission {
 	String remark
 	              	
 	static constraints = {
-		authority()
-		role()
-		remark(nullable:true)
+		authority(help:'x')
+		role(help:'x')
+		remark(help:'x',class:'wide',nullable:true)
 		feature(display:false)
     }
 	String toString() {
-		return "${authority.authority} (${role.name})"
+		try {
+			return "${authority.authority} (${role.name})"
+		}
+		catch (Exception e) {
+			return "Authority or role does not exist"
+		}
 	}
 }

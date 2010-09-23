@@ -5,11 +5,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'action.label', default: 'Action')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="action.create.title" /></title>
     </head>
     <body>
         
         <div class="body">
+                    <g:form action="save" method="post" >
+        
 			<div class="nav">
             	
                         
@@ -28,7 +30,11 @@
                             
                                                     
                     
-                     	<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>                		                        
+                    
+                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="action.list.label" args="[entityName]" /></g:link></span>                		                        
+                    
+                    <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+                    
                     
               	<g:if test="${navTemplate}" >
             		<g:render template="${navTemplate}" model="[entityName:entityName,actionInstance:actionInstance]"/>
@@ -45,41 +51,48 @@
                 <g:renderErrors bean="${actionInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" method="post" >
+            
                 <div class="dialog">
                     <table>
                         <tbody>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="name"><g:message code="action.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: actionInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: actionInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${actionInstance?.name}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="title"><g:message code="action.title.label" default="Title" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: actionInstance, field: 'title', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: actionInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${actionInstance?.title}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.title.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
+                            <tr class="prop extrawide">
                                 <td valign="top" class="name">
                                     <label for="description"><g:message code="action.description.label" default="Description" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: actionInstance, field: 'description', 'errors')}">
+                                <td valign="top" class="value extrawide ${hasErrors(bean: actionInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${actionInstance?.description}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.description.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
                         </tbody>
                     </table>
                             
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+					<g:hiddenField name="q" value="${params.q}" />
                     
                     
                 </div>

@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'fieldList.label', default: 'FieldList')}" />
-        <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <title><g:message code="fieldList.create.title" /></title>
     </head>
     <body>
         
@@ -50,7 +50,8 @@
                             
                                                     
                     
-                     	<span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="default.list.label" args="[entityName]" /></g:link></span>                		                        
+                    
+                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="fieldList.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -75,13 +76,13 @@
                     <table>
                         <tbody>
                         
-                            <tr class="prop null">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="name"><g:message code="fieldList.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldListInstance?.name}" />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
@@ -91,7 +92,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldListInstance?.namespace?.id}"  />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.namespace.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
@@ -101,17 +102,17 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldListInstance?.baseType?.id}"  />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.baseType.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
-                            <tr class="prop null">
+                            <tr class="prop wide">
                                 <td valign="top" class="name">
                                     <label for="label"><g:message code="fieldList.label.label" default="Label" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldListInstance?.label}" />
-                                    
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.label.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
                         
@@ -128,6 +129,10 @@
                         </tbody>
                     </table>
                             
+                    <g:hiddenField name="offset" value="${params.offset}" />
+                    <g:hiddenField name="sort" value="${params.sort}" />
+                    <g:hiddenField name="order" value="${params.order}" />
+					<g:hiddenField name="q" value="${params.q}" />
                     
                     
                 </div>

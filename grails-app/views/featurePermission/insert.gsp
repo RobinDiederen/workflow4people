@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'featurePermission.label', default: 'FeaturePermission')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="featurePermission.insert.title" /></title>
     </head>
     <body>
         
@@ -31,7 +31,7 @@
                         
                             
                             
-                            <span class="menuButton"><g:link class="awesome small blue button" controller="feature" action="show" id="${featurePermissionInstance?.feature?.id}">&laquo;&nbsp;Back to Feature ${featurePermissionInstance?.feature?.encodeAsHTML()}</g:link></span>
+                            <span class="menuButton"><g:link class="awesome small blue button" controller="feature" action="show" id="${featurePermissionInstance?.feature?.id}">&laquo;&nbsp; Feature ${featurePermissionInstance?.feature?.encodeAsHTML()}</g:link></span>
                             
                                                     
                     

@@ -28,11 +28,11 @@ class Namespace {
 	static hasMany = [importSchema:Namespace]
 	
     static constraints = {
-    	prefix()
-    	uri()
-    	filename()
-    	generateXSDFile()
-    	includeSchema(nullable:true)
+    	prefix(help:'x',class:'wide')
+    	uri(help:'x',class:'extrawide')
+    	filename(help:'x',class:'wide')
+    	generateXSDFile(help:'x')
+    	includeSchema(nullable:true,help:'x')
     	importSchema(nullable:true,selectSort:'prefix')
     	
     }

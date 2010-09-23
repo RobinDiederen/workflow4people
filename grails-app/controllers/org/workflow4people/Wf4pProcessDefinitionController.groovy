@@ -75,6 +75,7 @@ class Wf4pProcessDefinitionController implements InitializingBean{
                 // addResourceFromInputStream is sensitive to the extension of the name given like below
                 /*
                  * commented out not to mess up the test db too much
+                 */
                 def f=new File ("/tmp/${deployedFilename}")
                 def deployment=repositoryService.createDeployment().addResourceFromFile(f);
                 //def deployment = repositoryService.createDeployment().addResourceFromInputStream(deployedFilename,is);
@@ -82,8 +83,9 @@ class Wf4pProcessDefinitionController implements InitializingBean{
                 deployment.setName(deployedFilename)
                 deploymentId=deployment.deploy()               
        			log.debug("And the filename is: ${file.getOriginalFilename()}")
-*/
-       			def f2=new File ("/tmp/${deployedFilename}")
+
+            	
+            	def f2=new File ("/tmp/${deployedFilename}")
        			def processXML = new XmlSlurper().parse(f2)
        			
        			def processName=processXML.@name.text()

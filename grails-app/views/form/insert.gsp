@@ -59,6 +59,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
 			<g:if test="${navTemplate}" >
             	<g:render template="${navTemplate}" model="[entityName:entityName,formInstance:formInstance]"/>
             </g:if>
