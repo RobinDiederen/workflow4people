@@ -125,23 +125,6 @@
                                                                         
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="field"><g:message code="fieldList.field.label" default="Field" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'field', 'errors')}">
-                                    
-<ul>
-<g:each in="${fieldListInstance?.field?}" var="f">
-    <li><g:link controller="field" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="field" action="create" params="['fieldList.id': fieldListInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'field.label', default: 'Field')])}</g:link>
-
-                                                                        
-                                </td>
-                            </tr>
                                                 
                         </tbody>
                     </table>

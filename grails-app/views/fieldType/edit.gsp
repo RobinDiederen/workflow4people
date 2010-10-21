@@ -335,23 +335,6 @@
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldType.maxExclusive.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="fieldTypeItem"><g:message code="fieldType.fieldTypeItem.label" default="Field Type Item" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'fieldTypeItem', 'errors')}">
-                                    
-<ul>
-<g:each in="${fieldTypeInstance?.fieldTypeItem?}" var="f">
-    <li><g:link controller="fieldTypeItem" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="fieldTypeItem" action="create" params="['fieldType.id': fieldTypeInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'fieldTypeItem.label', default: 'FieldTypeItem')])}</g:link>
-
-                                                                        
-                                </td>
-                            </tr>
                                                 
                         </tbody>
                     </table>

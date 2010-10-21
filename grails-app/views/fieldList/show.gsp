@@ -142,16 +142,6 @@
                     
                         <tr class="prop">
                          
-                            
-                            <td valign="top" class="name"><g:message code="fieldList.field.label" default="Field" /></td>
-                         
-                            
-                            <!-- manyToOne and oneToMany are shown again -->
-  							<td valign="top" class="value"><g:link controller="field" action="show" id="${fieldListInstance?.field?.id}">${fieldListInstance?.field?.encodeAsHTML()}</g:link></td>                            
-
-
-                            
-						
                         </tr>
                     
                         <tr class="prop">
@@ -223,6 +213,8 @@
                             	<tr><td><b><g:message code="field.list.name.label" /></b></td><td>
                             	
                             	
+                            	<g:link title ="${message(code: 'field.list.create.help')}" class="awesome small blue button" controller="field" action="create" params="['fieldList.id': fieldListInstance?.id]"><g:message code="field.list.new.label" />&nbsp;&raquo;</g:link>
+                            	
                             	
                             	</td></tr>
                             	 
@@ -236,8 +228,14 @@
                                 <td>${f?.encodeAsHTML()}</td>
                                 	<td>
                                 	
+                                	<g:link title ="${message(code: 'field.list.show.help')}" class="awesome small blue button" controller="field" action="show" id="${f.id}"><g:message code="field.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                                 	
                                 	
+                                	<g:link title ="${message(code: 'field.list.edit.help')}" class="awesome small blue button" controller="field" action="edit" id="${f.id}"><g:message code="field.list.edit.label" />&nbsp;&raquo;</g:link>&nbsp;
+                                	
+                                	
+                                	
+                                	<g:link title ="${message(code: 'field.list.delete.help')}" class="awesome small red button" controller="field" action="delete" id="${f.id}" onclick="return confirm('${message(code: 'field.button.delete.confirm.message', default: 'Are you sure?')}');">X</g:link></td>
                                 	
                            
                                 </tr>

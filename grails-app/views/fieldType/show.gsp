@@ -367,16 +367,6 @@
                     
                         <tr class="prop">
                          
-                            
-                            <td valign="top" class="name"><g:message code="fieldType.fieldTypeItem.label" default="Field Type Item" /></td>
-                         
-                            
-                            <!-- manyToOne and oneToMany are shown again -->
-  							<td valign="top" class="value"><g:link controller="fieldTypeItem" action="show" id="${fieldTypeInstance?.fieldTypeItem?.id}">${fieldTypeInstance?.fieldTypeItem?.encodeAsHTML()}</g:link></td>                            
-
-
-                            
-						
                         </tr>
                     
                         <tr class="prop">
@@ -508,21 +498,29 @@
                             	<tr><td><b><g:message code="fieldTypeItem.list.name.label" /></b></td><td>
                             	
                             	
+                            	<g:link title ="${message(code: 'fieldTypeItem.list.create.help')}" class="awesome small blue button" controller="fieldTypeItem" action="create" params="['fieldType.id': fieldTypeInstance?.id]"><g:message code="fieldTypeItem.list.new.label" />&nbsp;&raquo;</g:link>
+                            	
                             	
                             	</td></tr>
-                            	
-                           			<tbody  id="fieldTypeItem">                            	
+                            	 
+                            		<tbody  class="sortable" id="fieldTypeItem">
                             	
                             	
                                 
-                                <g:each in="${org.workflow4people.FieldTypeItem.findAllByFieldType(fieldTypeInstance,[sort:'null',order:'null'])}" var="f">
+                                <g:each in="${org.workflow4people.FieldTypeItem.findAllByFieldType(fieldTypeInstance,[sort:'itemPosition',order:'asc'])}" var="f">
                                 
                                 <tr id="position-${f.id}">
                                 <td>${f?.encodeAsHTML()}</td>
                                 	<td>
                                 	
+                                	<g:link title ="${message(code: 'fieldTypeItem.list.show.help')}" class="awesome small blue button" controller="fieldTypeItem" action="show" id="${f.id}"><g:message code="fieldTypeItem.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                                 	
                                 	
+                                	<g:link title ="${message(code: 'fieldTypeItem.list.edit.help')}" class="awesome small blue button" controller="fieldTypeItem" action="edit" id="${f.id}"><g:message code="fieldTypeItem.list.edit.label" />&nbsp;&raquo;</g:link>&nbsp;
+                                	
+                                	
+                                	
+                                	<g:link title ="${message(code: 'fieldTypeItem.list.delete.help')}" class="awesome small red button" controller="fieldTypeItem" action="delete" id="${f.id}" onclick="return confirm('${message(code: 'fieldTypeItem.button.delete.confirm.message', default: 'Are you sure?')}');">X</g:link></td>
                                 	
                            
                                 </tr>

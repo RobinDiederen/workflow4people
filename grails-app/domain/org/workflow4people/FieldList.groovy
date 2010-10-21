@@ -35,7 +35,7 @@ class FieldList implements Serializable {
     	baseType(help:'x')
     	label(help:'x',class:'wide')
     	description(size:0..50000)
-    	field(sortable:true,sort:'fieldPosition',sortOrder:'asc')
+    	field(sortable:true,sort:'fieldPosition',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
     	    
     }
     static mapping = {

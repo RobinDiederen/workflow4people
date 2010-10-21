@@ -58,6 +58,8 @@ class FieldType {
 	    minExclusive(nullable:true,help:'x')
 	    maxExclusive(nullable:true,help:'x')
 	    
+	    fieldTypeItem(sortable:true,sort:'itemPosition',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
+	    
     }
 	/**
 	 *  The name of the field type. This name is used in the XML Schema. 
