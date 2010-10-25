@@ -10,6 +10,9 @@
   <div class="message">${flash.message}</div>
   </g:if>
   <div class="nav">
+    <g:if test="${params.processDefinitionName}">
+	    <span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo; Latest process definitions</g:link></span>
+    </g:if>
     <span class="menuButton"><g:link class="awesome small blue button" action="create">Install new process</g:link></span>
   </div>
 
@@ -48,7 +51,12 @@
   </div>
   
     <div class="paginateButtons">
-                	<g:paginate total="${processDefinitionTotal}" />
+        <g:if test="${!params.processDefinitionName}">
+            <g:paginate total="${processDefinitionTotal}" />
+        </g:if>
+        <g:else>
+            <g:paginate total="${processDefinitionTotal}" params="[processDefinitionName: params.processDefinitionName]" />
+        </g:else>
     </div>
   
   </div>
