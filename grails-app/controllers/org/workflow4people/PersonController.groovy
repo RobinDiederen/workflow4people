@@ -37,7 +37,14 @@ class PersonController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [personInstanceList: Person.list(params), personInstanceTotal: Person.count()]
+        [personInstanceList: Person.list(params), personInstanceTotal: Person.count(), searchTemplate: "/person/search"]
+    }
+
+    def search = {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        def q = (params.q ? params.q : "")
+        def model = [personInstanceList: Person.findAllByUsernameLike(q + "%", params), personInstanceTotal: Person.countByUsernameLike(q + "%"), searchTemplate: "/person/search", q: q]
+        render(view: "list", model: model)
     }
 
     def create = {
@@ -54,6 +61,7 @@ class PersonController {
             redirect(action: "show", id: personInstance.id)
         }
         else {
+            personInstance.passwd = ""
             render(view: "create", model: [personInstance: personInstance])
         }
     }
@@ -81,7 +89,7 @@ class PersonController {
     }
 
     def update = {
-        def personInstance = Person.get(params.id)
+       def personInstance = Person.get(params.id)
         if (personInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -92,16 +100,26 @@ class PersonController {
                     return
                 }
             }
-            
+			
             def oldPassword = personInstance.passwd
+			Authority[] currentPersonAuth = personInstance.getAuthorities()
             personInstance.properties = params
             if (!params.passwd.equals(oldPassword)) {
     			personInstance.passwd = authenticateService.encodePassword(params.passwd)
-    			def test=authenticateService.encodePassword(params.passwd)
-    			//println "The password is ${personInstance.passwd} - ${test} ${params.passwd}"
-    			
+    			def test=authenticateService.encodePassword(params.passwd)    			
     		}
             if (!personInstance.hasErrors() && personInstance.save(flush: true)) {
+				currentPersonAuth.each { Authority currentAuthority -> 
+					def deletePersonAuthority = true
+					personInstance.getAuthorities().each { Authority newAuthority ->
+						if (currentAuthority.getId() == newAuthority.getId()) {
+							deletePersonAuthority = false;
+						}
+					}
+					if (deletePersonAuthority) {
+						currentAuthority.removeFromPeople(personInstance)
+					}
+				}
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
                 redirect(action: "show", id: personInstance.id)
             }

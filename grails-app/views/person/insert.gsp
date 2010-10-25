@@ -86,6 +86,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'username', 'errors')}">
                                     <g:textField name="username" value="${personInstance?.username}" />
+
                                 </td>
                             </tr>
                         
@@ -95,6 +96,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'userRealName', 'errors')}">
                                     <g:textField name="userRealName" value="${personInstance?.userRealName}" />
+
                                 </td>
                             </tr>
                         
@@ -104,6 +106,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'familyName', 'errors')}">
                                     <g:textField name="familyName" value="${personInstance?.familyName}" />
+
                                 </td>
                             </tr>
                         
@@ -113,6 +116,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'givenName', 'errors')}">
                                     <g:textField name="givenName" value="${personInstance?.givenName}" />
+
                                 </td>
                             </tr>
                         
@@ -122,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'email', 'errors')}">
                                     <g:textField name="email" value="${personInstance?.email}" />
+
                                 </td>
                             </tr>
                         
@@ -131,6 +136,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'emailShow', 'errors')}">
                                     <g:checkBox name="emailShow" value="${personInstance?.emailShow}" />
+
                                 </td>
                             </tr>
                         
@@ -140,6 +146,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'enabled', 'errors')}">
                                     <g:checkBox name="enabled" value="${personInstance?.enabled}" />
+
                                 </td>
                             </tr>
                         
@@ -149,6 +156,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'passwd', 'errors')}">
                                     <g:passwordField name="passwd" value="${personInstance?.passwd}" />
+
                                 </td>
                             </tr>
                         
@@ -157,7 +165,8 @@
                                   <label for="authorities"><g:message code="person.authorities.label" default="Authorities" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'authorities', 'errors')}">
-                                    
+                                    <g:select class="multiselect" name="authorities" from="${org.workflow4people.Authority.list(sort:'authority')}" multiple="yes" optionKey="id" value="${personInstance?.authorities}" />
+
                                 </td>
                             </tr>
                         
@@ -167,6 +176,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${personInstance?.description}" />
+
                                 </td>
                             </tr>
                                                 

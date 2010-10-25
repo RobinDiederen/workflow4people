@@ -16,6 +16,9 @@
               if (!features?.contains("noCreate")) { %>
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="${domainClass.propertyName}.new.label"  /></g:link></span>
             <% } %>
+         	<g:if test="\${searchTemplate}" >
+        		<g:render template="\${searchTemplate}" model="[entityName:entityName,${propertyName}:${propertyName}]"/>
+        	</g:if>
         </div>
             
             <g:if test="\${flash.message}">

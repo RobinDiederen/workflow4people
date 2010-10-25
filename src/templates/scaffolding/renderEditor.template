@@ -37,6 +37,8 @@
         out << renderManyToOne(domainClass, property)
     else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide()))
         out << renderManyToMany(domainClass, property)
+    else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && !property.isOwningSide()))
+        out << renderManyToMany(domainClass, property)
     else if (property.oneToMany)
         out << renderOneToMany(domainClass, property)
 

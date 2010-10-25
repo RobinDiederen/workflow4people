@@ -45,15 +45,61 @@ class Wf4pProcessDefinitionController implements InitializingBean{
 	}
 
 	def list = {
-		
-		
-		def processDefinitionTotal = repositoryService.createProcessDefinitionQuery().count()
 		params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
 		params.offset = params.offset ? params.offset?.toInteger():0
 		
-		def processDefinitionList=repositoryService.createProcessDefinitionQuery().orderDesc(ProcessDefinitionQuery.PROPERTY_DEPLOYMENT_TIMESTAMP).page(params.offset,params.max).list()
-				
-		return [processDefinitionList: processDefinitionList,processDefinitionTotal:processDefinitionTotal]
+		def wf4pProcessDefinitionName = params.processDefinitionName
+		if (wf4pProcessDefinitionName) {
+			//get all ordered by name DESC, version DESC
+			def processDefinitionList = repositoryService.createProcessDefinitionQuery()
+			.processDefinitionName(wf4pProcessDefinitionName)
+			.orderDesc(ProcessDefinitionQuery.PROPERTY_VERSION)
+			.page(params.offset,params.max)
+			.list()
+			
+			def processDefinitionTotal = repositoryService.createProcessDefinitionQuery()
+			.processDefinitionName(wf4pProcessDefinitionName)
+			.count()
+			
+			if (processDefinitionTotal > 0) {
+				render(view: 'list', model: [processDefinitionList: processDefinitionList, processDefinitionTotal: processDefinitionTotal])
+			}
+			else {
+				flash.message = "Wf4pProcessDefinition not found with name ${params.processDefinitionName}"
+				redirect(action:list)
+			}
+		
+		}
+		else {
+			//get all ordered by name DESC, version DESC
+			def processDefinitionList=repositoryService.createProcessDefinitionQuery()
+			.orderAsc(ProcessDefinitionQuery.PROPERTY_NAME)
+			.orderDesc(ProcessDefinitionQuery.PROPERTY_VERSION)
+			/*.page(params.offset,params.max)*/
+			.list()
+			//only keep all latest versions of processDefinitions in the list
+			String previousProcessDefinitionName = null
+			for (int i = 0; i < processDefinitionList.size(); i++) {
+				if (processDefinitionList[i].getName() != previousProcessDefinitionName) {
+					previousProcessDefinitionName = processDefinitionList[i].getName()
+				}
+				else {
+					processDefinitionList.remove(i)
+					i--
+				}
+			}
+			//manual crop list (offset & max)
+			def croppedProcessDefinitionList = new ArrayList<ProcessDefinition>()
+			for (int i = 0; i < processDefinitionList.size(); i++) {
+				if (i >= params.offset && i < (params.offset + params.max)) {
+					croppedProcessDefinitionList.add(processDefinitionList[i])
+				}
+			}
+			
+			def processDefinitionTotal = processDefinitionList.size()	
+			
+			render(view: 'list', model: [processDefinitionList: croppedProcessDefinitionList, processDefinitionTotal: processDefinitionTotal])
+		}
 	}
 	
 	def create ={}

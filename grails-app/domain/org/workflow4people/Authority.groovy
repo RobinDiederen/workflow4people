@@ -60,7 +60,7 @@ class Authority {
 		authority(help:'x',class:'wide',blank: false,unique:true)
 		description(help:'x',class:'extrawide')
 		authorityType(help:'x',class:'wide')
-		people(help:'x',selectSort:'username')
+		people(help:'x',selectSort:'username',display:false)
 	}	
 	
 	String toString() {

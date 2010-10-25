@@ -20,12 +20,8 @@
           <th>Id</th>
           <th>Name</th>          
           <th>Version</th>
-
-          <%--  TODO put this back when jBPM starts to support persistance of this field
           <th>Description</th>
-          --%>
           <th>Instances</th>
-                    
         </tr>
       </thead>
       <tbody>
@@ -33,14 +29,18 @@
         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
           <td>${processDefinition.id}</td>
           <td>${processDefinition.name?.encodeAsHTML()}</td>
-          <td>${processDefinition.version}</td>          
-          <%--  TODO put this back when jBPM starts to support persistance of this field           
-          <td>${processDefinition.description?.encodeAsHTML()}</td> 
-          --%>
+          <td>
+          	<g:if test="${!params.processDefinitionName}">
+          		<g:link action="list" params="[processDefinitionName: processDefinition.name]" title="Show version history">${processDefinition.version}</g:link>
+          	</g:if>
+          	<g:else>
+          		${processDefinition.version}
+          	</g:else>
+          </td>
+          <td>${processDefinition.description?.encodeAsHTML()}</td>
           <td><g:link class="awesome small blue button" action="show" params="[processDefinitionId:processDefinition.id]">instances &nbsp;&raquo;</g:link>
           	  <g:link class="awesome small blue button" controller="wf4pHistoryProcessInstance" action="list" id="${processDefinition.id}">history &nbsp;&raquo;</g:link>
-          
-          </td>          
+          </td>
         </tr>
         </g:each>
       </tbody>

@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: authorityInstance, field: 'authority', 'errors')}">
                                     <g:textField name="authority" value="${authorityInstance?.authority}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'authority.authority.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: authorityInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${authorityInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'authority.description.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: authorityInstance, field: 'authorityType', 'errors')}">
                                     <g:textField name="authorityType" value="${authorityInstance?.authorityType}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'authority.authorityType.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

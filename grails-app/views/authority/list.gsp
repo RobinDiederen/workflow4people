@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="authority.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,authorityInstance:authorityInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">

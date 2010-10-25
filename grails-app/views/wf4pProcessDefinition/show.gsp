@@ -21,13 +21,11 @@
                         <tr class="prop">
                             <td valign="top" class="name">Name:</td>                            
                             <td valign="top" class="value">${processDefinition.name}</td>
-                        </tr>            
-                          <%--  TODO put this back when jBPM starts to support persistance of this field            
+                        </tr>
                         <tr class="prop">
                             <td valign="top" class="name">Description:</td>                            
                             <td valign="top" class="value">${processDefinition.description}</td>
-                        </tr>            
-                        --%>        
+                        </tr>
                         <tr class="prop">
                             <td valign="top" class="name">Version:</td>                            
                             <td valign="top" class="value">${processDefinition.version}</td>

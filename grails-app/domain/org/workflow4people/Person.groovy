@@ -57,7 +57,8 @@ class Person  {
 		email(help:'x',class:'wide')
 		emailShow(help:'x')
 		enabled(help:'x')
-		passwd(blank: false,password:true,show:false,help:'x',class:'wide')		
+		passwd(blank: false,password:true,show:false,help:'x',class:'wide')
+		authorities(nullable:true,help:'x',sortable:true,selectSort:'authority')		
 	}
 			
 	String toString() {
