@@ -54,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: applicationConfigurationInstance, field: 'configKey', 'errors')}">
                                     <g:textField name="configKey" value="${applicationConfigurationInstance?.configKey}" />
+
                                 </td>
                             </tr>
                         
@@ -63,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: applicationConfigurationInstance, field: 'configValue', 'errors')}">
                                     <g:textField name="configValue" value="${applicationConfigurationInstance?.configValue}" />
+
                                 </td>
                             </tr>
                                                 

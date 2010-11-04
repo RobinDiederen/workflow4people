@@ -90,6 +90,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${formInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -99,6 +100,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${formInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -108,6 +110,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${formInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -117,6 +120,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'explanationMessage', 'errors')}">
                                     <g:textArea name="explanationMessage" cols="40" rows="5" value="${formInstance?.explanationMessage}" />
+
                                 </td>
                             </tr>
                         
@@ -126,6 +130,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'confirmationMessage', 'errors')}">
                                     <g:textArea name="confirmationMessage" cols="40" rows="5" value="${formInstance?.confirmationMessage}" />
+
                                 </td>
                             </tr>
                         
@@ -135,6 +140,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'template', 'errors')}">
                                     <g:textField name="template" value="${formInstance?.template}" />
+
                                 </td>
                             </tr>
                         
@@ -144,6 +150,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formInstance, field: 'formAction', 'errors')}">
                                     <g:select name="formAction.id" from="${org.workflow4people.Action.list()}" optionKey="id" value="${formInstance?.formAction?.id}"  />
+
                                 </td>
                             </tr>
                                                 

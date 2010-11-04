@@ -38,7 +38,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="documentIndexField.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="documentIndexField.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -70,6 +70,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentIndexFieldInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentIndexFieldInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndexField.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -80,6 +81,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentIndexFieldInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${documentIndexFieldInstance?.title}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndexField.title.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -90,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${documentIndexFieldInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndexField.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -100,6 +103,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentIndexFieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${documentIndexFieldInstance?.xpath}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndexField.xpath.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -110,6 +114,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'publish', 'errors')}">
                                     <g:checkBox name="publish" value="${documentIndexFieldInstance?.publish}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndexField.publish.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

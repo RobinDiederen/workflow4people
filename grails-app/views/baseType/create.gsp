@@ -27,7 +27,7 @@
                                                     
                     
                     
-                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="baseType.list.label" args="[entityName]" /></g:link></span>                		                        
+                     	<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="baseType.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -58,6 +58,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: baseTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${baseTypeInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'baseType.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -68,6 +69,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: baseTypeInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${baseTypeInstance?.description}" />
+
                                     
                                 </td>
                             </tr>

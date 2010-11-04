@@ -78,7 +78,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="document.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="document.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -110,6 +110,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentType', 'errors')}">
                                     <g:select name="documentType.id" from="${org.workflow4people.DocumentType.list()}" optionKey="id" value="${documentInstance?.documentType?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.documentType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -120,6 +121,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentStatus', 'errors')}">
                                     <g:textField name="documentStatus" value="${documentInstance?.documentStatus}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.documentStatus.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -130,6 +132,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentKey', 'errors')}">
                                     <g:textField name="documentKey" value="${documentInstance?.documentKey}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.documentKey.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -140,6 +143,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentInstance, field: 'documentDescription', 'errors')}">
                                     <g:textField name="documentDescription" value="${documentInstance?.documentDescription}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.documentDescription.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -150,6 +154,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'dateCreated', 'errors')}">
                                     <input class="datepicker" type="text" name="dateCreated" value="${formatDate(date:documentInstance?.dateCreated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.dateCreated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -160,6 +165,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'lastUpdated', 'errors')}">
                                     <input class="datepicker" type="text" name="lastUpdated" value="${formatDate(date:documentInstance?.lastUpdated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.lastUpdated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -170,6 +176,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'completionDate', 'errors')}">
                                     <input class="datepicker" type="text" name="completionDate" value="${formatDate(date:documentInstance?.completionDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.completionDate.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -180,6 +187,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'processingDays', 'errors')}">
                                     <g:textField name="processingDays" value="${fieldValue(bean: documentInstance, field: 'processingDays')}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.processingDays.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -190,6 +198,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'user', 'errors')}">
                                     <g:textField name="user" value="${documentInstance?.user}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.user.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -200,6 +209,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'groupId', 'errors')}">
                                     <g:textField name="groupId" value="${documentInstance?.groupId}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.groupId.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -210,6 +220,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentInstance, field: 'cmisFolderObjectId', 'errors')}">
                                     <g:textField name="cmisFolderObjectId" value="${documentInstance?.cmisFolderObjectId}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.cmisFolderObjectId.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -220,6 +231,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentInstance, field: 'cmisFolderUrl', 'errors')}">
                                     <g:textField name="cmisFolderUrl" value="${documentInstance?.cmisFolderUrl}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.cmisFolderUrl.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -230,6 +242,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: documentInstance, field: 'xmlDocument', 'errors')}">
                                     <g:textArea name="xmlDocument" cols="40" rows="5" value="${documentInstance?.xmlDocument}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.xmlDocument.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -240,6 +253,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'form', 'errors')}">
                                     <g:select class="multiselect" name="form" from="${org.workflow4people.Form.list()}" multiple="yes" optionKey="id"  value="${documentInstance?.form}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'document.form.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

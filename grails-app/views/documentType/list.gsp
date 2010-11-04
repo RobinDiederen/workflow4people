@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="documentType.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,documentTypeInstance:documentTypeInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,17 +31,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'documentType.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'documentType.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'documentType.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'documentType.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'documentType.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'documentType.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="descriptionTemplate" title="${message(code: 'documentType.descriptionTemplate.label', default: 'Description Template')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="descriptionTemplate" title="${message(code: 'documentType.descriptionTemplate.label', default: 'Description Template')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="dateCreated" title="${message(code: 'documentType.dateCreated.label', default: 'Date Created')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="dateCreated" title="${message(code: 'documentType.dateCreated.label', default: 'Date Created')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="lastUpdated" title="${message(code: 'documentType.lastUpdated.label', default: 'Last Updated')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="lastUpdated" title="${message(code: 'documentType.lastUpdated.label', default: 'Last Updated')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -61,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'documentType.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentTypeInstance.id}"><g:message default="show" code="documentType.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'documentType.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${documentTypeInstance.id}"><g:message default="show" code="documentType.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentType.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentTypeInstance.id}"><g:message default="edit" code="documentType.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentType.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${documentTypeInstance.id}"><g:message default="edit" code="documentType.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'documentType.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentType.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentTypeInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'documentType.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentType.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentTypeInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

@@ -51,7 +51,7 @@
                                                     
                     
                     
-                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="namespace.list.label" args="[entityName]" /></g:link></span>                		                        
+                     	<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="namespace.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -82,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: namespaceInstance, field: 'prefix', 'errors')}">
                                     <g:textField name="prefix" value="${namespaceInstance?.prefix}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'namespace.prefix.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -92,6 +93,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: namespaceInstance, field: 'uri', 'errors')}">
                                     <g:textField name="uri" value="${namespaceInstance?.uri}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'namespace.uri.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -102,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: namespaceInstance, field: 'filename', 'errors')}">
                                     <g:textField name="filename" value="${namespaceInstance?.filename}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'namespace.filename.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -112,6 +115,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: namespaceInstance, field: 'generateXSDFile', 'errors')}">
                                     <g:checkBox name="generateXSDFile" value="${namespaceInstance?.generateXSDFile}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'namespace.generateXSDFile.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -122,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: namespaceInstance, field: 'includeSchema', 'errors')}">
                                     <g:textField name="includeSchema" value="${namespaceInstance?.includeSchema}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'namespace.includeSchema.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

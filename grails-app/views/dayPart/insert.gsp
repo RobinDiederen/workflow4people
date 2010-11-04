@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'position', 'errors')}">
                                     <g:textField name="position" value="${fieldValue(bean: dayPartInstance, field: 'position')}" />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'dayName', 'errors')}">
                                     <g:select name="dayName" from="${dayPartInstance.constraints.dayName.inList}" value="${dayPartInstance?.dayName}" valueMessagePrefix="dayPart.dayName.value"  />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'fromTime', 'errors')}">
                                     <g:textField name="fromTime" value="${dayPartInstance?.fromTime}" />
+
                                 </td>
                             </tr>
                         
@@ -89,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'toTime', 'errors')}">
                                     <g:textField name="toTime" value="${dayPartInstance?.toTime}" />
+
                                 </td>
                             </tr>
                                                 

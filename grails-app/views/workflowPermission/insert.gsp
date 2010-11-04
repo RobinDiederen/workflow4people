@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'authority', 'errors')}">
                                     <g:select name="authority.id" from="${org.workflow4people.Authority.list()}" optionKey="id" value="${workflowPermissionInstance?.authority?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'role', 'errors')}">
                                     <g:select name="role.id" from="${org.workflow4people.Role.list()}" optionKey="id" value="${workflowPermissionInstance?.role?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'remark', 'errors')}">
                                     <g:textField name="remark" value="${workflowPermissionInstance?.remark}" />
+
                                 </td>
                             </tr>
                         
@@ -89,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'workflow', 'errors')}">
                                     <g:select name="workflow.id" from="${org.workflow4people.WorkflowDefinition.list()}" optionKey="id" value="${workflowPermissionInstance?.workflow?.id}"  />
+
                                 </td>
                             </tr>
                                                 

@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="documentIndexField.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,documentIndexFieldInstance:documentIndexFieldInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,17 +31,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'documentIndexField.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'documentIndexField.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'documentIndexField.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'documentIndexField.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'documentIndexField.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="title" title="${message(code: 'documentIndexField.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'documentIndexField.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'documentIndexField.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="xpath" title="${message(code: 'documentIndexField.xpath.label', default: 'Xpath')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="xpath" title="${message(code: 'documentIndexField.xpath.label', default: 'Xpath')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="publish" title="${message(code: 'documentIndexField.publish.label', default: 'Publish')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="publish" title="${message(code: 'documentIndexField.publish.label', default: 'Publish')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -61,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'documentIndexField.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentIndexFieldInstance.id}"><g:message default="show" code="documentIndexField.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'documentIndexField.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${documentIndexFieldInstance.id}"><g:message default="show" code="documentIndexField.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentIndexField.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentIndexFieldInstance.id}"><g:message default="edit" code="documentIndexField.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentIndexField.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${documentIndexFieldInstance.id}"><g:message default="edit" code="documentIndexField.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'documentIndexField.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentIndexField.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexFieldInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'documentIndexField.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentIndexField.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexFieldInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

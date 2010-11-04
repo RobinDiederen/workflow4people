@@ -86,6 +86,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'publish', 'errors')}">
                                     <g:checkBox name="publish" value="${workflowDefinitionInstance?.publish}" />
+
                                 </td>
                             </tr>
                         
@@ -95,6 +96,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${workflowDefinitionInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -104,6 +106,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${workflowDefinitionInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -113,6 +116,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${workflowDefinitionInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -122,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'dateCreated', 'errors')}">
                                     <input class="datepicker" type="text" name="dateCreated" value="${formatDate(date:workflowDefinitionInstance?.dateCreated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -131,6 +136,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'lastUpdated', 'errors')}">
                                     <input class="datepicker" type="text" name="lastUpdated" value="${formatDate(date:workflowDefinitionInstance?.lastUpdated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -140,6 +146,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'documentType', 'errors')}">
                                     <g:select name="documentType.id" from="${org.workflow4people.DocumentType.list()}" optionKey="id" value="${workflowDefinitionInstance?.documentType?.id}"  />
+
                                 </td>
                             </tr>
                                                 

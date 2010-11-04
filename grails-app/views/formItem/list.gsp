@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="formItem.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,formItemInstance:formItemInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,15 +31,15 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'formItem.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'formItem.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="position" title="${message(code: 'formItem.position.label', default: 'Position')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="position" title="${message(code: 'formItem.position.label', default: 'Position')}" />
                         
                             <th><g:message code="formItem.field.label" default="Field" /></th>
                    	    
-                            <g:sortableColumn params="${filteredParams}" property="baseXpath" title="${message(code: 'formItem.baseXpath.label', default: 'Base Xpath')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="baseXpath" title="${message(code: 'formItem.baseXpath.label', default: 'Base Xpath')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="readonly" title="${message(code: 'formItem.readonly.label', default: 'Readonly')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="readonly" title="${message(code: 'formItem.readonly.label', default: 'Readonly')}" />
                         
                             <th><g:message code="formItem.form.label" default="Form" /></th>
                    	    
@@ -61,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'formItem.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${formItemInstance.id}"><g:message default="show" code="formItem.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'formItem.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${formItemInstance.id}"><g:message default="show" code="formItem.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'formItem.list.edit.help')}" action="edit" params="${filteredParams}" id="${formItemInstance.id}"><g:message default="edit" code="formItem.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'formItem.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${formItemInstance.id}"><g:message default="edit" code="formItem.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'formItem.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'formItem.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${formItemInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'formItem.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'formItem.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${formItemInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

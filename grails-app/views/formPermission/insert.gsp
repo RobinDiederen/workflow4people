@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'formPermission.label', default: 'FormPermission')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title><g:message code="formPermission.insert.title" /></title>
     </head>
     <body>
         
@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formPermissionInstance, field: 'authority', 'errors')}">
                                     <g:select name="authority.id" from="${org.workflow4people.Authority.list()}" optionKey="id" value="${formPermissionInstance?.authority?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formPermissionInstance, field: 'role', 'errors')}">
                                     <g:select name="role.id" from="${org.workflow4people.Role.list()}" optionKey="id" value="${formPermissionInstance?.role?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formPermissionInstance, field: 'remark', 'errors')}">
                                     <g:textField name="remark" value="${formPermissionInstance?.remark}" />
+
                                 </td>
                             </tr>
                                                 

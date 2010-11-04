@@ -78,6 +78,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentTypeInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -87,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${documentTypeInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -96,6 +98,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'descriptionTemplate', 'errors')}">
                                     <g:textField name="descriptionTemplate" value="${documentTypeInstance?.descriptionTemplate}" />
+
                                 </td>
                             </tr>
                         
@@ -105,6 +108,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'dateCreated', 'errors')}">
                                     ${documentTypeInstance.dateCreated}
+
                                 </td>
                             </tr>
                         
@@ -114,6 +118,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'lastUpdated', 'errors')}">
                                     ${documentTypeInstance.lastUpdated}
+
                                 </td>
                             </tr>
                         
@@ -123,6 +128,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'fieldList', 'errors')}">
                                     <g:select name="fieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${documentTypeInstance?.fieldList?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -132,6 +138,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'viewForm', 'errors')}">
                                     <g:select name="viewForm.id" from="${org.workflow4people.Form.list()}" optionKey="id" value="${documentTypeInstance?.viewForm?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -141,6 +148,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'documentIndexField', 'errors')}">
                                     <g:select class="multiselect" name="documentIndexField" from="${org.workflow4people.DocumentIndexField.list(sort:'name')}" multiple="yes" optionKey="id" value="${documentTypeInstance?.documentIndexField}" />
+
                                 </td>
                             </tr>
                                                 

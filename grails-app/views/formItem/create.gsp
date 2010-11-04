@@ -74,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: formItemInstance, field: 'position', 'errors')}">
                                     <g:textField name="position" value="${fieldValue(bean: formItemInstance, field: 'position')}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'formItem.position.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -84,6 +85,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: formItemInstance, field: 'field', 'errors')}">
                                     <g:select name="field.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${formItemInstance?.field?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'formItem.field.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -94,6 +96,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: formItemInstance, field: 'baseXpath', 'errors')}">
                                     <g:textField name="baseXpath" value="${formItemInstance?.baseXpath}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'formItem.baseXpath.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -104,6 +107,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: formItemInstance, field: 'readonly', 'errors')}">
                                     <g:checkBox name="readonly" value="${formItemInstance?.readonly}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'formItem.readonly.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

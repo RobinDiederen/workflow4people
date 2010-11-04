@@ -30,7 +30,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="action.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="action.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: actionInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${actionInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -72,6 +73,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: actionInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${actionInstance?.title}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.title.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -82,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: actionInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${actionInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'action.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

@@ -78,6 +78,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'prefix', 'errors')}">
                                     <g:textField name="prefix" value="${namespaceInstance?.prefix}" />
+
                                 </td>
                             </tr>
                         
@@ -87,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'uri', 'errors')}">
                                     <g:textField name="uri" value="${namespaceInstance?.uri}" />
+
                                 </td>
                             </tr>
                         
@@ -96,6 +98,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'filename', 'errors')}">
                                     <g:textField name="filename" value="${namespaceInstance?.filename}" />
+
                                 </td>
                             </tr>
                         
@@ -105,6 +108,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'generateXSDFile', 'errors')}">
                                     <g:checkBox name="generateXSDFile" value="${namespaceInstance?.generateXSDFile}" />
+
                                 </td>
                             </tr>
                         
@@ -114,6 +118,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'includeSchema', 'errors')}">
                                     <g:textField name="includeSchema" value="${namespaceInstance?.includeSchema}" />
+
                                 </td>
                             </tr>
                         
@@ -123,6 +128,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: namespaceInstance, field: 'importSchema', 'errors')}">
                                     <g:select class="multiselect" name="importSchema" from="${org.workflow4people.Namespace.list(sort:'prefix')}" multiple="yes" optionKey="id" value="${namespaceInstance?.importSchema}" />
+
                                 </td>
                             </tr>
                                                 

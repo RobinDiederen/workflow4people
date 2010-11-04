@@ -133,6 +133,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'fieldPosition', 'errors')}">
                                     <g:textField name="fieldPosition" value="${fieldValue(bean: fieldInstance, field: 'fieldPosition')}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.fieldPosition.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -143,6 +144,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -153,6 +155,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'fieldType', 'errors')}">
                                     <g:select name="fieldType.id" from="${org.workflow4people.FieldType.list()}" optionKey="id" value="${fieldInstance?.fieldType?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.fieldType.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -163,6 +166,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'childFieldList', 'errors')}">
                                     <g:select name="childFieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${fieldInstance?.childFieldList?.id}" noSelection="['null': '']" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.childFieldList.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -173,6 +177,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.description.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -183,6 +188,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'defaultValue', 'errors')}">
                                     <g:textField name="defaultValue" value="${fieldInstance?.defaultValue}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.defaultValue.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -193,6 +199,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldInstance?.label}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.label.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -203,6 +210,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'help', 'errors')}">
                                     <g:textArea name="help" cols="40" rows="5" value="${fieldInstance?.help}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.help.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -213,6 +221,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'alert', 'errors')}">
                                     <g:textArea name="alert" cols="40" rows="5" value="${fieldInstance?.alert}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.alert.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -223,6 +232,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'fieldLength', 'errors')}">
                                     <g:textField name="fieldLength" value="${fieldInstance?.fieldLength}" />
+
                                     
                                 </td>
                             </tr>
@@ -233,6 +243,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'contentText', 'errors')}">
                                     <g:textArea name="contentText" cols="40" rows="5" value="${fieldInstance?.contentText}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.contentText.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -243,6 +254,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'minOccurs', 'errors')}">
                                     <g:textField name="minOccurs" value="${fieldInstance?.minOccurs}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.minOccurs.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -253,6 +265,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'maxOccurs', 'errors')}">
                                     <g:textField name="maxOccurs" value="${fieldInstance?.maxOccurs}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.maxOccurs.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -263,6 +276,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'nillable', 'errors')}">
                                     <g:checkBox name="nillable" value="${fieldInstance?.nillable}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.nillable.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -273,6 +287,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'dependencyExpression', 'errors')}">
                                     <g:textArea name="dependencyExpression" cols="40" rows="5" value="${fieldInstance?.dependencyExpression}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.dependencyExpression.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -283,6 +298,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'readonly', 'errors')}">
                                     <g:checkBox name="readonly" value="${fieldInstance?.readonly}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.readonly.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -293,6 +309,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${fieldInstance?.xpath}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.xpath.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

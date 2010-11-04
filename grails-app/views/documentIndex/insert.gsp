@@ -58,6 +58,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentIndexInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -67,6 +68,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${documentIndexInstance?.value}" />
+
                                 </td>
                             </tr>
                                                 

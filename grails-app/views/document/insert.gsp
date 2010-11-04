@@ -106,6 +106,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentType', 'errors')}">
                                     <g:select name="documentType.id" from="${org.workflow4people.DocumentType.list()}" optionKey="id" value="${documentInstance?.documentType?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -115,6 +116,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentStatus', 'errors')}">
                                     <g:textField name="documentStatus" value="${documentInstance?.documentStatus}" />
+
                                 </td>
                             </tr>
                         
@@ -124,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentKey', 'errors')}">
                                     <g:textField name="documentKey" value="${documentInstance?.documentKey}" />
+
                                 </td>
                             </tr>
                         
@@ -133,6 +136,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'documentDescription', 'errors')}">
                                     <g:textField name="documentDescription" value="${documentInstance?.documentDescription}" />
+
                                 </td>
                             </tr>
                         
@@ -142,6 +146,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'dateCreated', 'errors')}">
                                     <input class="datepicker" type="text" name="dateCreated" value="${formatDate(date:documentInstance?.dateCreated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -151,6 +156,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'lastUpdated', 'errors')}">
                                     <input class="datepicker" type="text" name="lastUpdated" value="${formatDate(date:documentInstance?.lastUpdated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -160,6 +166,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'completionDate', 'errors')}">
                                     <input class="datepicker" type="text" name="completionDate" value="${formatDate(date:documentInstance?.completionDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -169,6 +176,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'processingDays', 'errors')}">
                                     <g:textField name="processingDays" value="${fieldValue(bean: documentInstance, field: 'processingDays')}" />
+
                                 </td>
                             </tr>
                         
@@ -178,6 +186,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'user', 'errors')}">
                                     <g:textField name="user" value="${documentInstance?.user}" />
+
                                 </td>
                             </tr>
                         
@@ -187,6 +196,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'groupId', 'errors')}">
                                     <g:textField name="groupId" value="${documentInstance?.groupId}" />
+
                                 </td>
                             </tr>
                         
@@ -196,6 +206,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'cmisFolderObjectId', 'errors')}">
                                     <g:textField name="cmisFolderObjectId" value="${documentInstance?.cmisFolderObjectId}" />
+
                                 </td>
                             </tr>
                         
@@ -205,6 +216,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'cmisFolderUrl', 'errors')}">
                                     <g:textField name="cmisFolderUrl" value="${documentInstance?.cmisFolderUrl}" />
+
                                 </td>
                             </tr>
                         
@@ -214,6 +226,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'xmlDocument', 'errors')}">
                                     <g:textArea name="xmlDocument" cols="40" rows="5" value="${documentInstance?.xmlDocument}" />
+
                                 </td>
                             </tr>
                         
@@ -223,6 +236,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentInstance, field: 'form', 'errors')}">
                                     <g:select class="multiselect" name="form" from="${org.workflow4people.Form.list()}" multiple="yes" optionKey="id"  value="${documentInstance?.form}" />
+
                                 </td>
                             </tr>
                                                 

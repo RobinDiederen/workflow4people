@@ -31,13 +31,13 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'authority.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'authority.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="authority" title="${message(code: 'authority.authority.label', default: 'Authority')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="authority" title="${message(code: 'authority.authority.label', default: 'Authority')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'authority.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'authority.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="authorityType" title="${message(code: 'authority.authorityType.label', default: 'Authority Type')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="authorityType" title="${message(code: 'authority.authorityType.label', default: 'Authority Type')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -56,13 +56,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'authority.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${authorityInstance.id}"><g:message default="show" code="authority.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'authority.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${authorityInstance.id}"><g:message default="show" code="authority.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'authority.list.edit.help')}" action="edit" params="${filteredParams}" id="${authorityInstance.id}"><g:message default="edit" code="authority.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'authority.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${authorityInstance.id}"><g:message default="edit" code="authority.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'authority.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'authority.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${authorityInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'authority.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'authority.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${authorityInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

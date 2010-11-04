@@ -54,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: baseTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${baseTypeInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -63,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: baseTypeInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${baseTypeInstance?.description}" />
+
                                 </td>
                             </tr>
                                                 

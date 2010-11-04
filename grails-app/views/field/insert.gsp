@@ -129,6 +129,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldPosition', 'errors')}">
                                     <g:textField name="fieldPosition" value="${fieldValue(bean: fieldInstance, field: 'fieldPosition')}" />
+
                                 </td>
                             </tr>
                         
@@ -138,6 +139,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -147,6 +149,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldType', 'errors')}">
                                     <g:select name="fieldType.id" from="${org.workflow4people.FieldType.list()}" optionKey="id" value="${fieldInstance?.fieldType?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -156,6 +159,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'childFieldList', 'errors')}">
                                     <g:select name="childFieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${fieldInstance?.childFieldList?.id}" noSelection="['null': '']" />
+
                                 </td>
                             </tr>
                         
@@ -165,6 +169,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -174,6 +179,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'defaultValue', 'errors')}">
                                     <g:textField name="defaultValue" value="${fieldInstance?.defaultValue}" />
+
                                 </td>
                             </tr>
                         
@@ -183,6 +189,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldInstance?.label}" />
+
                                 </td>
                             </tr>
                         
@@ -192,6 +199,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'help', 'errors')}">
                                     <g:textArea name="help" cols="40" rows="5" value="${fieldInstance?.help}" />
+
                                 </td>
                             </tr>
                         
@@ -201,6 +209,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'alert', 'errors')}">
                                     <g:textArea name="alert" cols="40" rows="5" value="${fieldInstance?.alert}" />
+
                                 </td>
                             </tr>
                         
@@ -210,6 +219,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldLength', 'errors')}">
                                     <g:textField name="fieldLength" value="${fieldInstance?.fieldLength}" />
+
                                 </td>
                             </tr>
                         
@@ -219,6 +229,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'contentText', 'errors')}">
                                     <g:textArea name="contentText" cols="40" rows="5" value="${fieldInstance?.contentText}" />
+
                                 </td>
                             </tr>
                         
@@ -228,6 +239,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'minOccurs', 'errors')}">
                                     <g:textField name="minOccurs" value="${fieldInstance?.minOccurs}" />
+
                                 </td>
                             </tr>
                         
@@ -237,6 +249,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'maxOccurs', 'errors')}">
                                     <g:textField name="maxOccurs" value="${fieldInstance?.maxOccurs}" />
+
                                 </td>
                             </tr>
                         
@@ -246,6 +259,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'nillable', 'errors')}">
                                     <g:checkBox name="nillable" value="${fieldInstance?.nillable}" />
+
                                 </td>
                             </tr>
                         
@@ -255,6 +269,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'dependencyExpression', 'errors')}">
                                     <g:textArea name="dependencyExpression" cols="40" rows="5" value="${fieldInstance?.dependencyExpression}" />
+
                                 </td>
                             </tr>
                         
@@ -264,6 +279,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'readonly', 'errors')}">
                                     <g:checkBox name="readonly" value="${fieldInstance?.readonly}" />
+
                                 </td>
                             </tr>
                         
@@ -273,6 +289,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${fieldInstance?.xpath}" />
+
                                 </td>
                             </tr>
                                                 

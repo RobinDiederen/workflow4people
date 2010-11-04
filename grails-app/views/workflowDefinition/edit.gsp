@@ -58,7 +58,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="workflowDefinition.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="workflowDefinition.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -90,6 +90,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'publish', 'errors')}">
                                     <g:checkBox name="publish" value="${workflowDefinitionInstance?.publish}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.publish.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -100,6 +101,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: workflowDefinitionInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${workflowDefinitionInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -110,6 +112,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: workflowDefinitionInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${workflowDefinitionInstance?.title}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.title.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -120,6 +123,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${workflowDefinitionInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -130,6 +134,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'dateCreated', 'errors')}">
                                     <input class="datepicker" type="text" name="dateCreated" value="${formatDate(date:workflowDefinitionInstance?.dateCreated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.dateCreated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -140,6 +145,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'lastUpdated', 'errors')}">
                                     <input class="datepicker" type="text" name="lastUpdated" value="${formatDate(date:workflowDefinitionInstance?.lastUpdated,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.lastUpdated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -150,6 +156,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowDefinitionInstance, field: 'documentType', 'errors')}">
                                     <g:select name="documentType.id" from="${org.workflow4people.DocumentType.list()}" optionKey="id" value="${workflowDefinitionInstance?.documentType?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowDefinition.documentType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

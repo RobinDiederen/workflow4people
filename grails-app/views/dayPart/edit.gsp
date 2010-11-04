@@ -34,7 +34,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="dayPart.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="dayPart.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'position', 'errors')}">
                                     <g:textField name="position" value="${fieldValue(bean: dayPartInstance, field: 'position')}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'dayPart.position.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'dayName', 'errors')}">
                                     <g:select name="dayName" from="${dayPartInstance.constraints.dayName.inList}" value="${dayPartInstance?.dayName}" valueMessagePrefix="dayPart.dayName.value"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'dayPart.dayName.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'fromTime', 'errors')}">
                                     <g:textField name="fromTime" value="${dayPartInstance?.fromTime}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'dayPart.fromTime.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -96,6 +99,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: dayPartInstance, field: 'toTime', 'errors')}">
                                     <g:textField name="toTime" value="${dayPartInstance?.toTime}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'dayPart.toTime.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: roleInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${roleInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: roleInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${roleInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: roleInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${roleInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -89,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: roleInstance, field: 'roleAction', 'errors')}">
                                     <g:select class="multiselect" name="roleAction" from="${org.workflow4people.Action.list(sort:'name')}" multiple="yes" optionKey="id" value="${roleInstance?.roleAction}" />
+
                                 </td>
                             </tr>
                                                 

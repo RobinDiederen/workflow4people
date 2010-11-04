@@ -78,6 +78,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldListInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -87,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldListInstance?.namespace?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -96,6 +98,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldListInstance?.baseType?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -105,6 +108,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldListInstance?.label}" />
+
                                 </td>
                             </tr>
                         
@@ -114,6 +118,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldListInstance?.description}" />
+
                                 </td>
                             </tr>
                                                 

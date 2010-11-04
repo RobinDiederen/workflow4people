@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="documentIndex.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,documentIndexInstance:documentIndexInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,11 +31,11 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'documentIndex.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'documentIndex.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'documentIndex.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'documentIndex.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="value" title="${message(code: 'documentIndex.value.label', default: 'Value')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="value" title="${message(code: 'documentIndex.value.label', default: 'Value')}" />
                         
                             <th><g:message code="documentIndex.document.label" default="Document" /></th>
                    	    
@@ -53,13 +56,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'documentIndex.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentIndexInstance.id}"><g:message default="show" code="documentIndex.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'documentIndex.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${documentIndexInstance.id}"><g:message default="show" code="documentIndex.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentIndex.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentIndexInstance.id}"><g:message default="edit" code="documentIndex.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'documentIndex.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${documentIndexInstance.id}"><g:message default="edit" code="documentIndex.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'documentIndex.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentIndex.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'documentIndex.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'documentIndex.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentIndexInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

@@ -35,7 +35,7 @@
                                                     
                     
                     
-                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="role.list.label" args="[entityName]" /></g:link></span>                		                        
+                     	<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="role.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: roleInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${roleInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'role.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: roleInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${roleInstance?.title}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'role.title.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: roleInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${roleInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'role.description.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

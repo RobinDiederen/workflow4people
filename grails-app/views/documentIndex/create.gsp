@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: documentIndexInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentIndexInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndex.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -72,6 +73,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: documentIndexInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${documentIndexInstance?.value}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentIndex.value.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

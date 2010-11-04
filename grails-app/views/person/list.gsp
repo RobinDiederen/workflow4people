@@ -31,17 +31,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'person.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'person.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="username" title="${message(code: 'person.username.label', default: 'Username')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="username" title="${message(code: 'person.username.label', default: 'Username')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="userRealName" title="${message(code: 'person.userRealName.label', default: 'User Real Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="userRealName" title="${message(code: 'person.userRealName.label', default: 'User Real Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="familyName" title="${message(code: 'person.familyName.label', default: 'Family Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="familyName" title="${message(code: 'person.familyName.label', default: 'Family Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="givenName" title="${message(code: 'person.givenName.label', default: 'Given Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="givenName" title="${message(code: 'person.givenName.label', default: 'Given Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="email" title="${message(code: 'person.email.label', default: 'Email')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="email" title="${message(code: 'person.email.label', default: 'Email')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -64,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'person.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${personInstance.id}"><g:message default="show" code="person.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'person.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${personInstance.id}"><g:message default="show" code="person.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'person.list.edit.help')}" action="edit" params="${filteredParams}" id="${personInstance.id}"><g:message default="edit" code="person.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'person.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${personInstance.id}"><g:message default="edit" code="person.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'person.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'person.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${personInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'person.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'person.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${personInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

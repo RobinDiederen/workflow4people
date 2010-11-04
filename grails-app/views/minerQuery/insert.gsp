@@ -78,6 +78,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${minerQueryInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -87,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${minerQueryInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -96,6 +98,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${minerQueryInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -105,6 +108,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'explanationMessage', 'errors')}">
                                     <g:textArea name="explanationMessage" cols="40" rows="5" value="${minerQueryInstance?.explanationMessage}" />
+
                                 </td>
                             </tr>
                         
@@ -114,6 +118,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'query', 'errors')}">
                                     <g:textArea name="query" cols="40" rows="5" value="${minerQueryInstance?.query}" />
+
                                 </td>
                             </tr>
                         
@@ -123,6 +128,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'drilldownQuery', 'errors')}">
                                     <g:textArea name="drilldownQuery" cols="40" rows="5" value="${minerQueryInstance?.drilldownQuery}" />
+
                                 </td>
                             </tr>
                         
@@ -132,6 +138,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'drilldownCountQuery', 'errors')}">
                                     <g:textArea name="drilldownCountQuery" cols="40" rows="5" value="${minerQueryInstance?.drilldownCountQuery}" />
+
                                 </td>
                             </tr>
                         
@@ -141,6 +148,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: minerQueryInstance, field: 'calculateTotals', 'errors')}">
                                     <g:checkBox name="calculateTotals" value="${minerQueryInstance?.calculateTotals}" />
+
                                 </td>
                             </tr>
                                                 

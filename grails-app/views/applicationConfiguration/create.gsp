@@ -27,7 +27,7 @@
                                                     
                     
                     
-                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="applicationConfiguration.list.label" args="[entityName]" /></g:link></span>                		                        
+                     	<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="applicationConfiguration.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -58,6 +58,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: applicationConfigurationInstance, field: 'configKey', 'errors')}">
                                     <g:textField name="configKey" value="${applicationConfigurationInstance?.configKey}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'applicationConfiguration.configKey.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -68,6 +69,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: applicationConfigurationInstance, field: 'configValue', 'errors')}">
                                     <g:textField name="configValue" value="${applicationConfigurationInstance?.configValue}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'applicationConfiguration.configValue.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

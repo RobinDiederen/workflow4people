@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featureInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${featureInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featureInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${featureInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featureInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${featureInstance?.description}" />
+
                                 </td>
                             </tr>
                                                 

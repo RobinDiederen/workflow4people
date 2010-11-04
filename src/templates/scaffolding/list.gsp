@@ -66,7 +66,7 @@
                                     if (p.isAssociation()) { %>
                             <th><g:message code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></th>
                    	    <%      } else { %>
-                            <g:sortableColumn params="\${filteredParams}" property="${p.name}" title="\${message(code: '${domainClass.propertyName}.${p.name}.label', default: '${p.naturalName}')}" />
+                            <g:sortableColumn params="\${filteredParams ? filteredParams : ''}" property="${p.name}" title="\${message(code: '${domainClass.propertyName}.${p.name}.label', default: '${p.naturalName}')}" />
                         <%  }   }    %>
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -90,13 +90,13 @@
                         <%  }   }   } %>
                         <td> 
                             <% if (!features?.contains("noShow")) { %>
-                        		<g:link title ="\${message(default: 'Show this item',code: '${domainClass.propertyName}.list.show.help')}" params="\${filteredParams}" action="show" class="awesome small blue button" id="\${${propertyName}.id}"><g:message default="show" code="${domainClass.propertyName}.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="\${message(default: 'Show this item',code: '${domainClass.propertyName}.list.show.help')}" params="\${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="\${${propertyName}.id}"><g:message default="show" code="${domainClass.propertyName}.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	<% } %>
                         	<% if (!features?.contains("noEdit")) { %>
-                            	<g:link class="awesome small blue button" title="\${message(default: 'Modify this item',code: '${domainClass.propertyName}.list.edit.help')}" action="edit" params="\${filteredParams}" id="\${${propertyName}.id}"><g:message default="edit" code="${domainClass.propertyName}.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="\${message(default: 'Modify this item',code: '${domainClass.propertyName}.list.edit.help')}" action="edit" params="\${filteredParams ? filteredParams : ''}" id="\${${propertyName}.id}"><g:message default="edit" code="${domainClass.propertyName}.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             <% } %>
                             <% if (!features?.contains("noDelete")) { %>
-                            	<g:link title="\${message(default: 'Delete this item',code: '${domainClass.propertyName}.list.delete.help')}" class="awesome small red button" onclick="return confirm('\${message(code: '${domainClass.propertyName}.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="\${${propertyName}.id}" params="\${filteredParams}">&times;</g:link></td>
+                            	<g:link title="\${message(default: 'Delete this item',code: '${domainClass.propertyName}.list.delete.help')}" class="awesome small red button" onclick="return confirm('\${message(code: '${domainClass.propertyName}.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="\${${propertyName}.id}" params="\${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                             <% } %>                        
                         </tr>
                     </g:each>

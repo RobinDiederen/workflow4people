@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentIndexFieldInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -75,6 +76,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${documentIndexFieldInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -84,6 +86,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${documentIndexFieldInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -93,6 +96,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'xpath', 'errors')}">
                                     <g:textField name="xpath" value="${documentIndexFieldInstance?.xpath}" />
+
                                 </td>
                             </tr>
                         
@@ -102,6 +106,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentIndexFieldInstance, field: 'publish', 'errors')}">
                                     <g:checkBox name="publish" value="${documentIndexFieldInstance?.publish}" />
+
                                 </td>
                             </tr>
                                                 

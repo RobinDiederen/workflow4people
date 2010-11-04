@@ -30,7 +30,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="holiday.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="holiday.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: holidayInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${holidayInstance?.title}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'holiday.title.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -72,6 +73,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: holidayInstance, field: 'fromDate', 'errors')}">
                                     <input class="datepicker" type="text" name="fromDate" value="${formatDate(date:holidayInstance?.fromDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'holiday.fromDate.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -82,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: holidayInstance, field: 'toDate', 'errors')}">
                                     <input class="datepicker" type="text" name="toDate" value="${formatDate(date:holidayInstance?.toDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'holiday.toDate.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

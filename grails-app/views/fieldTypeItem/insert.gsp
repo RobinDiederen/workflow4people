@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'itemPosition', 'errors')}">
                                     <g:textField name="itemPosition" value="${fieldValue(bean: fieldTypeItemInstance, field: 'itemPosition')}" />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldTypeItemInstance?.label}" />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${fieldTypeItemInstance?.value}" />
+
                                 </td>
                             </tr>
                         
@@ -89,6 +92,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'fieldType', 'errors')}">
                                     <g:select name="fieldType.id" from="${org.workflow4people.FieldType.list()}" optionKey="id" value="${fieldTypeItemInstance?.fieldType?.id}"  />
+
                                 </td>
                             </tr>
                                                 

@@ -50,7 +50,7 @@
                             
                                                     
                                     		
-                		<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="documentType.list.label" args="[entityName]" /></g:link></span>
+                		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="documentType.list.label" args="[entityName]" /></g:link></span>
             			                        
                     
                     <span class="button"><g:actionSubmit class="awesome small blue button" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
@@ -82,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${documentTypeInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.name.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -92,6 +93,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${documentTypeInstance?.description}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -102,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'descriptionTemplate', 'errors')}">
                                     <g:textField name="descriptionTemplate" value="${documentTypeInstance?.descriptionTemplate}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.descriptionTemplate.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -112,6 +115,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'dateCreated', 'errors')}">
                                     ${documentTypeInstance.dateCreated}
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.dateCreated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -122,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'lastUpdated', 'errors')}">
                                     ${documentTypeInstance.lastUpdated}
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.lastUpdated.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -132,6 +137,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'fieldList', 'errors')}">
                                     <g:select name="fieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${documentTypeInstance?.fieldList?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.fieldList.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -142,6 +148,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'viewForm', 'errors')}">
                                     <g:select name="viewForm.id" from="${org.workflow4people.Form.list()}" optionKey="id" value="${documentTypeInstance?.viewForm?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.viewForm.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -152,6 +159,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: documentTypeInstance, field: 'documentIndexField', 'errors')}">
                                     <g:select class="multiselect" name="documentIndexField" from="${org.workflow4people.DocumentIndexField.list(sort:'name')}" multiple="yes" optionKey="id" value="${documentTypeInstance?.documentIndexField}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'documentType.documentIndexField.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>

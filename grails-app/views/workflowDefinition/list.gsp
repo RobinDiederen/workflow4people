@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="workflowDefinition.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,workflowDefinitionInstance:workflowDefinitionInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,17 +31,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'workflowDefinition.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'workflowDefinition.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="publish" title="${message(code: 'workflowDefinition.publish.label', default: 'Publish')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="publish" title="${message(code: 'workflowDefinition.publish.label', default: 'Publish')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'workflowDefinition.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'workflowDefinition.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'workflowDefinition.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="title" title="${message(code: 'workflowDefinition.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'workflowDefinition.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'workflowDefinition.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="dateCreated" title="${message(code: 'workflowDefinition.dateCreated.label', default: 'Date Created')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="dateCreated" title="${message(code: 'workflowDefinition.dateCreated.label', default: 'Date Created')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -61,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'workflowDefinition.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${workflowDefinitionInstance.id}"><g:message default="show" code="workflowDefinition.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'workflowDefinition.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${workflowDefinitionInstance.id}"><g:message default="show" code="workflowDefinition.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'workflowDefinition.list.edit.help')}" action="edit" params="${filteredParams}" id="${workflowDefinitionInstance.id}"><g:message default="edit" code="workflowDefinition.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'workflowDefinition.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${workflowDefinitionInstance.id}"><g:message default="edit" code="workflowDefinition.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'workflowDefinition.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'workflowDefinition.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowDefinitionInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'workflowDefinition.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'workflowDefinition.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${workflowDefinitionInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

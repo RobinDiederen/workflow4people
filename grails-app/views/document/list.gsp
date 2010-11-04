@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="document.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,documentInstance:documentInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -30,11 +33,11 @@
                         
                             <th><g:message code="document.documentType.label" default="Document Type" /></th>
                    	    
-                            <g:sortableColumn params="${filteredParams}" property="documentDescription" title="${message(code: 'document.documentDescription.label', default: 'Document Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="documentDescription" title="${message(code: 'document.documentDescription.label', default: 'Document Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="dateCreated" title="${message(code: 'document.dateCreated.label', default: 'Date Created')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="dateCreated" title="${message(code: 'document.dateCreated.label', default: 'Date Created')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="lastUpdated" title="${message(code: 'document.lastUpdated.label', default: 'Last Updated')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="lastUpdated" title="${message(code: 'document.lastUpdated.label', default: 'Last Updated')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -53,13 +56,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'document.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${documentInstance.id}"><g:message default="show" code="document.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'document.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${documentInstance.id}"><g:message default="show" code="document.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'document.list.edit.help')}" action="edit" params="${filteredParams}" id="${documentInstance.id}"><g:message default="edit" code="document.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'document.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${documentInstance.id}"><g:message default="edit" code="document.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'document.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'document.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'document.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'document.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${documentInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

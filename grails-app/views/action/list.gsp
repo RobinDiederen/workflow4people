@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="action.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,actionInstance:actionInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,13 +31,13 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'action.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'action.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'action.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'action.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'action.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="title" title="${message(code: 'action.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'action.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'action.description.label', default: 'Description')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -53,13 +56,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'action.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${actionInstance.id}"><g:message default="show" code="action.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'action.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${actionInstance.id}"><g:message default="show" code="action.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'action.list.edit.help')}" action="edit" params="${filteredParams}" id="${actionInstance.id}"><g:message default="edit" code="action.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'action.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${actionInstance.id}"><g:message default="edit" code="action.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'action.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'action.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${actionInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'action.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'action.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${actionInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

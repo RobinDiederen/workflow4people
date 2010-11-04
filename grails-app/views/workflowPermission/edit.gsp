@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'authority', 'errors')}">
                                     <g:select name="authority.id" from="${org.workflow4people.Authority.list()}" optionKey="id" value="${workflowPermissionInstance?.authority?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowPermission.authority.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'role', 'errors')}">
                                     <g:select name="role.id" from="${org.workflow4people.Role.list()}" optionKey="id" value="${workflowPermissionInstance?.role?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowPermission.role.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value extrawide ${hasErrors(bean: workflowPermissionInstance, field: 'remark', 'errors')}">
                                     <g:textField name="remark" value="${workflowPermissionInstance?.remark}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'workflowPermission.remark.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -96,6 +99,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: workflowPermissionInstance, field: 'workflow', 'errors')}">
                                     <g:select name="workflow.id" from="${org.workflow4people.WorkflowDefinition.list()}" optionKey="id" value="${workflowPermissionInstance?.workflow?.id}"  />
+
                                                                         
                                 </td>
                             </tr>

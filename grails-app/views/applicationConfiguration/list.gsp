@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="applicationConfiguration.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,applicationConfigurationInstance:applicationConfigurationInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,11 +31,11 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'applicationConfiguration.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'applicationConfiguration.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="configKey" title="${message(code: 'applicationConfiguration.configKey.label', default: 'Config Key')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="configKey" title="${message(code: 'applicationConfiguration.configKey.label', default: 'Config Key')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="configValue" title="${message(code: 'applicationConfiguration.configValue.label', default: 'Config Value')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="configValue" title="${message(code: 'applicationConfiguration.configValue.label', default: 'Config Value')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -49,13 +52,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'applicationConfiguration.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${applicationConfigurationInstance.id}"><g:message default="show" code="applicationConfiguration.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'applicationConfiguration.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${applicationConfigurationInstance.id}"><g:message default="show" code="applicationConfiguration.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'applicationConfiguration.list.edit.help')}" action="edit" params="${filteredParams}" id="${applicationConfigurationInstance.id}"><g:message default="edit" code="applicationConfiguration.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'applicationConfiguration.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${applicationConfigurationInstance.id}"><g:message default="edit" code="applicationConfiguration.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'applicationConfiguration.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'applicationConfiguration.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${applicationConfigurationInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'applicationConfiguration.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'applicationConfiguration.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${applicationConfigurationInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

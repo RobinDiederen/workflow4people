@@ -51,7 +51,7 @@
                                                     
                     
                     
-                     	<span class="menuButton"><g:link  params="${filteredParams}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="fieldList.list.label" args="[entityName]" /></g:link></span>                		                        
+                     	<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="fieldList.list.label" args="[entityName]" /></g:link></span>                		                        
                     
                     <span class="button"><g:submitButton name="create" class="awesome small blue button" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     
@@ -82,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldListInstance?.name}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.name.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -92,6 +93,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldListInstance?.namespace?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.namespace.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -102,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldListInstance?.baseType?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.baseType.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -112,6 +115,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldListInstance?.label}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.label.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -122,6 +126,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldListInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldListInstance?.description}" />
+
                                     
                                 </td>
                             </tr>

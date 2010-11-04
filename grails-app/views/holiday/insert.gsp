@@ -58,6 +58,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: holidayInstance, field: 'title', 'errors')}">
                                     <g:textField name="title" value="${holidayInstance?.title}" />
+
                                 </td>
                             </tr>
                         
@@ -67,6 +68,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: holidayInstance, field: 'fromDate', 'errors')}">
                                     <input class="datepicker" type="text" name="fromDate" value="${formatDate(date:holidayInstance?.fromDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                         
@@ -76,6 +78,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: holidayInstance, field: 'toDate', 'errors')}">
                                     <input class="datepicker" type="text" name="toDate" value="${formatDate(date:holidayInstance?.toDate,format:"yyyy-MM-dd'T'HH:mm:ss")}" />
+
                                 </td>
                             </tr>
                                                 

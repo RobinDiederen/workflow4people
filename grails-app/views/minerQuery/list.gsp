@@ -14,6 +14,9 @@
         
             <span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="minerQuery.new.label"  /></g:link></span>
             
+         	<g:if test="${searchTemplate}" >
+        		<g:render template="${searchTemplate}" model="[entityName:entityName,minerQueryInstance:minerQueryInstance]"/>
+        	</g:if>
         </div>
             
             <g:if test="${flash.message}">
@@ -28,17 +31,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn params="${filteredParams}" property="id" title="${message(code: 'minerQuery.id.label', default: 'Id')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'minerQuery.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="name" title="${message(code: 'minerQuery.name.label', default: 'Name')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'minerQuery.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="title" title="${message(code: 'minerQuery.title.label', default: 'Title')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="title" title="${message(code: 'minerQuery.title.label', default: 'Title')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="description" title="${message(code: 'minerQuery.description.label', default: 'Description')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'minerQuery.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="explanationMessage" title="${message(code: 'minerQuery.explanationMessage.label', default: 'Explanation Message')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="explanationMessage" title="${message(code: 'minerQuery.explanationMessage.label', default: 'Explanation Message')}" />
                         
-                            <g:sortableColumn params="${filteredParams}" property="query" title="${message(code: 'minerQuery.query.label', default: 'Query')}" />
+                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="query" title="${message(code: 'minerQuery.query.label', default: 'Query')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -61,13 +64,13 @@
                         
                         <td> 
                             
-                        		<g:link title ="${message(default: 'Show this item',code: 'minerQuery.list.show.help')}" params="${filteredParams}" action="show" class="awesome small blue button" id="${minerQueryInstance.id}"><g:message default="show" code="minerQuery.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
+                        		<g:link title ="${message(default: 'Show this item',code: 'minerQuery.list.show.help')}" params="${filteredParams ? filteredParams : ''}" action="show" class="awesome small blue button" id="${minerQueryInstance.id}"><g:message default="show" code="minerQuery.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                         	
                         	
-                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'minerQuery.list.edit.help')}" action="edit" params="${filteredParams}" id="${minerQueryInstance.id}"><g:message default="edit" code="minerQuery.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
+                            	<g:link class="awesome small blue button" title="${message(default: 'Modify this item',code: 'minerQuery.list.edit.help')}" action="edit" params="${filteredParams ? filteredParams : ''}" id="${minerQueryInstance.id}"><g:message default="edit" code="minerQuery.list.edit.label"/>&nbsp;&raquo;</g:link>&nbsp;
                             
                             
-                            	<g:link title="${message(default: 'Delete this item',code: 'minerQuery.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'minerQuery.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${minerQueryInstance.id}" params="${filteredParams}">&times;</g:link></td>
+                            	<g:link title="${message(default: 'Delete this item',code: 'minerQuery.list.delete.help')}" class="awesome small red button" onclick="return confirm('${message(code: 'minerQuery.button.delete.confirm.message', default: 'Are you sure?')}');" action="delete" id="${minerQueryInstance.id}" params="${filteredParams ? filteredParams : ''}">&times;</g:link></td>
                                                     
                         </tr>
                     </g:each>

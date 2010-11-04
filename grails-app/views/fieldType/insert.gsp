@@ -138,6 +138,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${fieldTypeInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -147,6 +148,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'namespace', 'errors')}">
                                     <g:select name="namespace.id" from="${org.workflow4people.Namespace.list()}" optionKey="id" value="${fieldTypeInstance?.namespace?.id}" noSelection="['null': '']" />
+
                                 </td>
                             </tr>
                         
@@ -156,6 +158,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'baseType', 'errors')}">
                                     <g:select name="baseType.id" from="${org.workflow4people.BaseType.list()}" optionKey="id" value="${fieldTypeInstance?.baseType?.id}" noSelection="['null': '']" />
+
                                 </td>
                             </tr>
                         
@@ -165,6 +168,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'baseSchemaType', 'errors')}">
                                     <g:textField name="baseSchemaType" value="${fieldTypeInstance?.baseSchemaType}" />
+
                                 </td>
                             </tr>
                         
@@ -174,6 +178,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'description', 'errors')}">
                                     <g:textArea name="description" cols="40" rows="5" value="${fieldTypeInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -183,6 +188,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'defaultValue', 'errors')}">
                                     <g:textField name="defaultValue" value="${fieldTypeInstance?.defaultValue}" />
+
                                 </td>
                             </tr>
                         
@@ -192,6 +198,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldTypeInstance?.label}" />
+
                                 </td>
                             </tr>
                         
@@ -201,6 +208,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'help', 'errors')}">
                                     <g:textArea name="help" cols="40" rows="5" value="${fieldTypeInstance?.help}" />
+
                                 </td>
                             </tr>
                         
@@ -210,6 +218,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'alert', 'errors')}">
                                     <g:textArea name="alert" cols="40" rows="5" value="${fieldTypeInstance?.alert}" />
+
                                 </td>
                             </tr>
                         
@@ -219,6 +228,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'runtimeEditableList', 'errors')}">
                                     <g:checkBox name="runtimeEditableList" value="${fieldTypeInstance?.runtimeEditableList}" />
+
                                 </td>
                             </tr>
                         
@@ -228,6 +238,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'generateSchemaType', 'errors')}">
                                     <g:checkBox name="generateSchemaType" value="${fieldTypeInstance?.generateSchemaType}" />
+
                                 </td>
                             </tr>
                         
@@ -237,6 +248,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'restrictions', 'errors')}">
                                     <g:checkBox name="restrictions" value="${fieldTypeInstance?.restrictions}" />
+
                                 </td>
                             </tr>
                         
@@ -246,6 +258,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'length', 'errors')}">
                                     <g:textField name="length" value="${fieldTypeInstance?.length}" />
+
                                 </td>
                             </tr>
                         
@@ -255,6 +268,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minLength', 'errors')}">
                                     <g:textField name="minLength" value="${fieldTypeInstance?.minLength}" />
+
                                 </td>
                             </tr>
                         
@@ -264,6 +278,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxLength', 'errors')}">
                                     <g:textField name="maxLength" value="${fieldTypeInstance?.maxLength}" />
+
                                 </td>
                             </tr>
                         
@@ -273,6 +288,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'pattern', 'errors')}">
                                     <g:textField name="pattern" value="${fieldTypeInstance?.pattern}" />
+
                                 </td>
                             </tr>
                         
@@ -282,6 +298,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minInclusive', 'errors')}">
                                     <g:textField name="minInclusive" value="${fieldTypeInstance?.minInclusive}" />
+
                                 </td>
                             </tr>
                         
@@ -291,6 +308,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxInclusive', 'errors')}">
                                     <g:textField name="maxInclusive" value="${fieldTypeInstance?.maxInclusive}" />
+
                                 </td>
                             </tr>
                         
@@ -300,6 +318,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'minExclusive', 'errors')}">
                                     <g:textField name="minExclusive" value="${fieldTypeInstance?.minExclusive}" />
+
                                 </td>
                             </tr>
                         
@@ -309,6 +328,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeInstance, field: 'maxExclusive', 'errors')}">
                                     <g:textField name="maxExclusive" value="${fieldTypeInstance?.maxExclusive}" />
+
                                 </td>
                             </tr>
                                                 

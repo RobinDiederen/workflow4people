@@ -62,6 +62,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featurePermissionInstance, field: 'authority', 'errors')}">
                                     <g:select name="authority.id" from="${org.workflow4people.Authority.list()}" optionKey="id" value="${featurePermissionInstance?.authority?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +72,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featurePermissionInstance, field: 'role', 'errors')}">
                                     <g:select name="role.id" from="${org.workflow4people.Role.list()}" optionKey="id" value="${featurePermissionInstance?.role?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -80,6 +82,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: featurePermissionInstance, field: 'remark', 'errors')}">
                                     <g:textField name="remark" value="${featurePermissionInstance?.remark}" />
+
                                 </td>
                             </tr>
                                                 

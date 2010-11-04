@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: featurePermissionInstance, field: 'authority', 'errors')}">
                                     <g:select name="authority.id" from="${org.workflow4people.Authority.list()}" optionKey="id" value="${featurePermissionInstance?.authority?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'featurePermission.authority.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: featurePermissionInstance, field: 'role', 'errors')}">
                                     <g:select name="role.id" from="${org.workflow4people.Role.list()}" optionKey="id" value="${featurePermissionInstance?.role?.id}"  />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'featurePermission.role.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: featurePermissionInstance, field: 'remark', 'errors')}">
                                     <g:textField name="remark" value="${featurePermissionInstance?.remark}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'featurePermission.remark.help',default:'x')}" href="" >?</a>
                                 </td>
                             </tr>

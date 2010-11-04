@@ -66,6 +66,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'itemPosition', 'errors')}">
                                     <g:textField name="itemPosition" value="${fieldValue(bean: fieldTypeItemInstance, field: 'itemPosition')}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldTypeItem.itemPosition.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -76,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldTypeItemInstance, field: 'label', 'errors')}">
                                     <g:textField name="label" value="${fieldTypeItemInstance?.label}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldTypeItem.label.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -86,6 +88,7 @@
                                 </td>
                                 <td valign="top" class="value wide ${hasErrors(bean: fieldTypeItemInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${fieldTypeItemInstance?.value}" />
+
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldTypeItem.value.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
@@ -96,6 +99,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldTypeItemInstance, field: 'fieldType', 'errors')}">
                                     <g:select name="fieldType.id" from="${org.workflow4people.FieldType.list()}" optionKey="id" value="${fieldTypeItemInstance?.fieldType?.id}"  />
+
                                                                         
                                 </td>
                             </tr>

@@ -70,6 +70,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formItemInstance, field: 'position', 'errors')}">
                                     <g:textField name="position" value="${fieldValue(bean: formItemInstance, field: 'position')}" />
+
                                 </td>
                             </tr>
                         
@@ -79,6 +80,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formItemInstance, field: 'field', 'errors')}">
                                     <g:select name="field.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${formItemInstance?.field?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -88,6 +90,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formItemInstance, field: 'baseXpath', 'errors')}">
                                     <g:textField name="baseXpath" value="${formItemInstance?.baseXpath}" />
+
                                 </td>
                             </tr>
                         
@@ -97,6 +100,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: formItemInstance, field: 'readonly', 'errors')}">
                                     <g:checkBox name="readonly" value="${formItemInstance?.readonly}" />
+
                                 </td>
                             </tr>
                                                 
