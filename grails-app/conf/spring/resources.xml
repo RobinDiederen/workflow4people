@@ -32,7 +32,7 @@
 	<!-- jBPM 4.3 style config" --> 
   
     <bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper">
-       <property name="jbpmCfg" value="classpath:jbpm/jbpm.cfg.xml"/>
+       <property name="jbpmCfg" value="jbpm/jbpm.cfg.xml"/>
     </bean>			
 			
 
