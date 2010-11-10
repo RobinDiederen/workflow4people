@@ -19,6 +19,7 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import java.util.ArrayList
 /**
  * Controller for Form domain class
  * 
@@ -137,9 +138,17 @@ class PersonController {
         def personInstance = Person.get(params.id)
         if (personInstance) {
             try {
-                personInstance.authorities.each {
-                    personInstance.removeFromAuthorities(it)
+                //remove all authorities from person
+                def authorities = personInstance.authorities
+                List authorityList = new ArrayList<Authority>();
+                authorities.each {
+                    authorityList.add(it)
                 }
+                authorityList.each { def authority ->
+                    println authority.dump()
+                    personInstance.removeFromAuthorities(authority)
+                }
+                //delete person
                 personInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
                 redirect(action: "list")
