@@ -137,6 +137,9 @@ class PersonController {
         def personInstance = Person.get(params.id)
         if (personInstance) {
             try {
+                personInstance.authorities.each {
+                    personInstance.removeFromAuthorities(it)
+                }
                 personInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
                 redirect(action: "list")
