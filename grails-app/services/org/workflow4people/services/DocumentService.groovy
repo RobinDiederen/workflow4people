@@ -174,7 +174,7 @@ class DocumentService implements InitializingBean {
     		variableMap.put("documentId",documentInstance.id)
     		variableMap.put("user",documentInstance.user)
     		// The home group is the first group that has the type home
-    		def homeGroup=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0];
+    		def homeGroup=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0].name;
     		// Fall back on identity.group.home.default if the user has no home group
     		if (!homeGroup) {
     			homeGroup=ApplicationConfiguration.findByConfigKey('identity.group.home.default').configValue
