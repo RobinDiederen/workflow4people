@@ -174,9 +174,13 @@ class DocumentService implements InitializingBean {
     		variableMap.put("documentId",documentInstance.id)
     		variableMap.put("user",documentInstance.user)
     		// The home group is the first group that has the type home
-    		def homeGroup=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0].name;
-    		// Fall back on identity.group.home.default if the user has no home group
-    		if (!homeGroup) {
+    		def homeGroup = null
+    		def homeGroupInstance=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0]
+    		if (homeGroupInstance) {
+    		    homeGroup = homeGroupInstance.name
+    		}
+    		else {
+    		    // Fall back on identity.group.home.default if the user has no home group
     			homeGroup=ApplicationConfiguration.findByConfigKey('identity.group.home.default').configValue
     		}
     		// Fall back on home if identity.group.home.default does not exist
@@ -284,7 +288,7 @@ class DocumentService implements InitializingBean {
     		  //indexEntry=DocumentIndex.findByNameAndDocument(field.name,documentInstance)
     		  //if (!indexEntry){
     			  indexEntry=new DocumentIndex()
-    		  	  indexEntry.name=field.name  
+    		  	  indexEntry.name=field.name
     			  //indexEntry.document=documentInstance
     			  //indexEntry.addToDocument(documentInstance)
     		  
