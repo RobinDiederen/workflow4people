@@ -42,7 +42,8 @@ class DocumentType {
     static hasMany = [documentIndexField:DocumentIndexField]
     Date dateCreated
     Date lastUpdated
-    @SearchableProperty(index = Index.NOT_ANALYZED, name = "documentType")
+    //@SearchableProperty(index = Index.NOT_ANALYZED, name = "documentType")
+    @SearchableProperty(name = "documentType")
     String name
     String description
     String descriptionTemplate

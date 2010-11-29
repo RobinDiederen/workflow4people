@@ -25,7 +25,7 @@ import org.compass.annotations.*
  * @author Joost Horward
  */
 
-@Searchable(alias = 'Document', analyzer='standard')
+@Searchable(alias = 'Document', analyzer='wfp')
 
 class Document {
 	static searchable=true
@@ -70,20 +70,19 @@ class Document {
     @SearchableProperty
     String documentStatus
     
-    //@SearchableProperty(index = Index.NOT_ANALYZED)
     @SearchableProperty
     String documentKey
     
     @SearchableProperty
     String documentDescription
-    @SearchableProperty(index = Index.NOT_ANALYZED)
+    @SearchableProperty
     Date dateCreated
-    @SearchableProperty(index = Index.NOT_ANALYZED)
+    @SearchableProperty
     Date lastUpdated
-    @SearchableProperty(index = Index.NOT_ANALYZED)
+    @SearchableProperty
     Date completionDate
     
-    //@SearchableProperty(index = Index.NOT_ANALYZED)
+
     @SearchableProperty
     double processingDays    
     

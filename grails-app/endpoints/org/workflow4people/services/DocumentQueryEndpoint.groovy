@@ -86,7 +86,7 @@ class DocumentQueryEndpoint  {
 			case "lucene":
 				if (!querySort) querySort="SCORE"
 				if (!queryOrder) queryOrder="auto"	
-				def queryParams=['offset':(currentPage-1)*maxPageLength,'max':maxPageLength,'sort':querySort,'order':queryOrder,'analyzer':'standard']
+				def queryParams=['offset':(currentPage-1)*maxPageLength,'max':maxPageLength,'sort':querySort,'order':queryOrder,'analyzer':'wfp']
 				
 				def queryResult=documentService.luceneSearch(query,queryParams,userName,userDocumentsOnly);
 				theSize=queryResult.total

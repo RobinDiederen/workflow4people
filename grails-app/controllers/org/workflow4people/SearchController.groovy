@@ -43,7 +43,7 @@ class SearchController {
         	
         	//params.analyzer="standard"
         	//params.analyzer="keywordAnalyzer"
-        	def paramz=[analyzer:"keywordAnalyzer"]
+        	def paramz=[analyzer:"wfp"]
             return [searchResult: searchableService.search(params.q, paramz)]
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]
