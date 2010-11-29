@@ -31,12 +31,34 @@ class DataModelEditorController {
             else { return [ fieldInstance : fieldInstance ] }
         }
     
+	def submitField = {
+			println "Submit Field params: ${params}"			
+			def fieldInstance = Field.get( params.id )
+			fieldInstance.properties = params
+    		render(view:'showField',model:[ fieldInstance : fieldInstance ])
+	}
+	
+	def submitFieldList = {
+			println "Submit FieldList params: ${params}"
+			def fieldListInstance = FieldList.get( params.id )
+			fieldListInstance.properties = params
+    		render(view:'showFieldList',model:[ fieldListInstance : fieldListInstance ])
+	}
     
     def submit = {
-    		println "Hey!"
+    		println "Hey! - we're submitting"
     		def fieldInstance = Field.get( params.id )
-    		render(view:'showField',model:[ fieldInstance : fieldInstance ])
+    		//render(view:'showField',model:[ fieldInstance : fieldInstance ])
     		
+    		//render(contentType:"text/json") { field(id:100,name:'test') }
+    		//render(builder:"json") { field(id:100,name:'test') }
+    		
+    		render (contentType:"text/json") { 
+
+				[id:fieldInstance.id,
+				count:100
+				]
+    		}
     }
     
     def edit = {

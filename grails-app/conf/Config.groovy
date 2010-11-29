@@ -52,7 +52,7 @@ log4j = {
     warn 'org.codehaus.groovy.grails.orm.hibernate' // hibernate integration
     warn   'org.mortbay.log'    
     warn 'grails.app.endpoint.org.workflow4people'
-    debug 'org.jbpm'
+   // debug 'org.jbpm'
     warn 'import org.codehaus.groovy.grails.plugins.springsecurity'
     warn 'org.springframework.security'
     debug 'org.workflow4people'
@@ -74,6 +74,11 @@ springws {
             targetNamespace = 'http://www.workflow4people.org/services'
         }
     }
+}
+
+jquery {
+    sources = 'jquery' // Holds the value where to store jQuery-js files /web-app/js/
+    version = '1.4.2' // The jQuery version in use
 }
 	
 

@@ -2,11 +2,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Data model editor</title>        
+        <title>Data model editor</title>
+                
         <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'jquery.treeview.css',contextPath:pluginContextPath)}" />
+        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'jquery.jstree.css',contextPath:pluginContextPath)}" />
+        
+        
         <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'editor.css',contextPath:pluginContextPath)}" />
-		<%-- <script type="text/javascript" src="/workflow4people/js/jquery/jquery.tree.js" ></script> --%>
-		<g:javascript src="jquery/jquery.tree.js" contextPath="${pluginContextPath}" />
+        
+		
+		<g:javascript src="jquery/jquery.cookie.js" contextPath="${pluginContextPath}" />
+		<g:javascript src="jquery/jquery.hotkeys.js" contextPath="${pluginContextPath}" />
+		
+		<g:javascript src="jquery/jquery.jstree.js" contextPath="${pluginContextPath}" />
+	
 		<g:javascript src="jquery/jquery.cluetip.js" contextPath="${pluginContextPath}" />
 		<g:javascript src="dme/editor.js" contextPath="${pluginContextPath}" />		
     </head>
@@ -14,9 +23,11 @@
 	    <div class="body">
 	    	<div class="flash">
 	    	    <g:if test="${flash.message}">
-	            <div class="message">${flash.message}</div>
+	            <div class="message" style="height:20px;">${flash.message}</div>
+	            <div class="message" style="height:20px;">&nbsp;</div>
 	            </g:if>
 	    	</div>
+	    	<div id="status" style="display:none;position:absolute;left:50px;top:50px;width:100px;border:1px solid #AAA;background-color:#EEE;text-align:center;padding:10px;" ></div>
 	    	<g:formRemote name="editor" update="editpane" url="[action:'submit']">
 	    		<%-- Navigation/edit buttons --%>
 		        <div class="nav" style="padding-left:5px;width:805px;clear:both;">            

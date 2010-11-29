@@ -1,6 +1,8 @@
+			 <div id="dialog" title="Edit fieldlist">
 					
+						<form id="ajaxdialogform">
 					
-					<div id="tabs" style="border:none;"> 
+					<div id="dialogtabs" style="border:none;"> 
 					<ul>						
 							<li>
 								<a href="#details">Details</a>
@@ -103,6 +105,7 @@
                 
                
                </div>
-               
+               </form>
+               </div>
                 
                

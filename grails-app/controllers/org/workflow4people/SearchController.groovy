@@ -41,8 +41,10 @@ class SearchController {
         try {
         	println "Searching for ${params.q}"
         	
-        	params.analyzer="standard"
-            return [searchResult: searchableService.search(params.q, params)]
+        	//params.analyzer="standard"
+        	//params.analyzer="keywordAnalyzer"
+        	def paramz=[analyzer:"keywordAnalyzer"]
+            return [searchResult: searchableService.search(params.q, paramz)]
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]
         }

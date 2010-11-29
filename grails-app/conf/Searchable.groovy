@@ -56,6 +56,9 @@ searchable {
      * Documentation for Compass settings is here: http://www.compass-project.org/docs/2.1.0M2/reference/html/core-settings.html
      */
     compassSettings = ['compass.query.maxClauseCount':'10000','compass.engine.analyzer.standard.type':'org.apache.lucene.analysis.standard.StandardAnalyzer','compass.engine.analyzer.keywordAnalyzer.type':'org.apache.lucene.analysis.KeywordAnalyzer']
+    
+    // Experiment to check behaviour of non-tokenized fields
+    //compassSettings = ['compass.query.maxClauseCount':'10000','compass.engine.analyzer.standard.type':'org.apache.lucene.analysis.KeywordAnalyzer','compass.engine.analyzer.keywordAnalyzer.type':'org.apache.lucene.analysis.KeywordAnalyzer']
 
     /**
      * Default mapping property exclusions

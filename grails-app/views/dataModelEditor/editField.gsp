@@ -1,34 +1,19 @@
-					<g:javascript>
-					$(function() {	
-						$("#saveButton").click(function() {
-							//alert('Click!');
-							$("#editpane").load("/workflow4people/dataModelEditor/showField/${fieldInstance.id}",'',function() {
-	                		$("#tabs").tabs();
-	                		//alert('Click2!');
-	                		});
-						});
-					});
-					
-					</g:javascript>
-					
-					<div id="toolbar" style="background:url('../images/skin/shadow.jpg') repeat-x scroll center bottom #FFFFFF;;border:1px solid #DDD;height:20px;margin-top:5px;margin-bottom:5px;padding:5px;margin-right:5px;">
-					<a id="saveButton" class="awesome small blue button" >save</a>
-					
-					</div>
-					
-					<div id="tabs" style="border:none;"> 
+ <div id="dialog" title="Edit field">
+	<form id="ajaxdialogform">
+			 		
+					<div id="dialogtabs" style="border:none;" > 
 					<ul>						
 							<li>
-								<a href="#details">Details</a>
+								<a href="#dialogdetails">Details</a>
 							</li>
 						
 						<li>
-							<a href="#advanced">Advanced</a>
+							<a href="#dialogadvanced">Advanced</a>
 						</li>
 						
 					</ul>
 					
-					<div id="details">
+					<div id="dialogdetails">
 						<g:hiddenField name="detailType" value="edit"/>
 						<g:hiddenField name="detailClass" value="Field"/>					
 						<g:hiddenField name="detailId" value="${fieldInstance.id}"/>
@@ -48,6 +33,7 @@
                                 <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "fieldPosition")}</td>
                                 
                             </tr>
+                    
                             
                             <tr class="prop null">
                                 <td valign="top" class="name">
@@ -138,22 +124,22 @@
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.contentText.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
-                            
+                   
  
                             
                         </tbody>
                     </table>
                     </div>
                
-               <div id="advanced">
+               <div id="dialogadvanced">
                     <table style="border:none;">
                         <tbody>
                             
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="field.minOccurs" default="Min Occurs" />:</td>                                
-                                <%-- <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "minOccurs")}</td>--%>
+                                
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'minOccurs', 'errors')}">
-                                    <g:textField name="name" value="${fieldInstance?.minOccurs}" />
+                                    <g:textField name="minOccurs" value="${fieldInstance?.minOccurs}" />
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.minOccurs.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                                 
@@ -166,7 +152,13 @@
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="field.maxOccurs" default="Max Occurs" />:</td>
                                 
-                                <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "maxOccurs")}</td>
+                                
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'maxOccurs', 'errors')}">
+                                    <g:textField name="maxOccurs" value="${fieldInstance?.maxOccurs}" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.maxOccurs.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                                
+                                
                                 
                             </tr>
                             
@@ -209,9 +201,9 @@
                         </tbody>
                     </table>
                     </div>
-                
+               
                
                </div>
-               
-                
+          </form>     
+              </div> 
                

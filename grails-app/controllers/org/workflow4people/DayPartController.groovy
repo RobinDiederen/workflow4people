@@ -38,7 +38,7 @@ class DayPartController {
 
     def list = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [dayPartInstanceList: DayPart.list(params), dayPartInstanceTotal: DayPart.count()]
+        [dayPartInstanceList: DayPart.list(params), dayPartInstanceTotal: DayPart.count(),filteredParams:[]]
     }
 
     def create = {

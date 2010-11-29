@@ -34,6 +34,7 @@
 
 .cluetip-default {
   background-color: #ddd;
+  z-index: 2000;
 }
 .cluetip-default #cluetip-outer {
   position: relative;

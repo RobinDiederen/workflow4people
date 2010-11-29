@@ -1,7 +1,7 @@
 .logo {float:left;}
-.nav {float:left;clear:both;}
+.nav {float:left;clear:right;}
 .title { float:left; width:900px}
-.body { margin-top:10px; float:left;width:850px;}
+.body { margin-top:10px; float:left;width:850px;clear:right;}
 .body h1 {float:left;clear:both;}
 //.body div { float:left;}
 
@@ -96,17 +96,17 @@ div.itemlist {margin-top: 10px;}
 
 
 .nav {
-    
     border: 1px solid #ccc;
-    
     margin-bottom: 5px;
     padding: 7px 0px;
-    width: 800px;
+    width:100%;
     
 }
 div.dialog {clear:left;margin-top:10px;width:100%;}
 div.message {clear:left;margin-top:10px; padding:5px 5px 5px 30px;width:auto;}
-}
+div.errors {clear:left;margin-top:10px; padding:5px 5px 5px 5px;width:auto; float:left;}
+
+
 div.buttons {clear:left;margin-top:10px;width:100%;}
 div.paginateButtons {clear:left;margin-top:0px;width:100%;padding:7px 0px;}
 
@@ -175,3 +175,6 @@ div.inner-new-dialog {
 	}
 
 .dialog-table {border:none;}
+
+.wide input { width:300px;}
+.extrawide input { width:600px;}

@@ -1,10 +1,124 @@
-		function setupTree() {
-		        $("a.field").click(function() {        			     
-                	$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'',function() {
-                	$("#tabs").tabs();                	
-                	});
+/*
+ * Data model editor
+ * TEST
+ */
+
+function fieldDialog(field) {
+	 var dialogHTML = $.ajax({
+		  url: "/workflow4people/dataModelEditor/editField/"+field.id,
+		  async: false
+		 }).responseText;
+	 var theDialog=$(dialogHTML).dialog({ 
+		 modal:true,
+		 width:600,
+		 height:400,
+		 buttons: { 
+		 	"Save": function() {
+			 	var formData=$("form#ajaxdialogform").serialize();
+			 	$.post("/workflow4people/dataModelEditor/submitField/"+field.id,formData);
+		 		$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'');
+	 			$("#status").html("saved").fadeIn("slow").fadeOut("slow");
+	
+	 			$( this ).dialog( "close" );
+	        	},
+        	Cancel: function() {
+	        		$( this ).dialog( "close" );
+	        	}
+        	},
+         open: function(event, ui) {           	
+        		$("#dialogtabs").tabs(); 
+        		$("a.help").cluetip({
+        			splitTitle: '|',  
+        			cluezIndex: 2000
+       	    	});
+                      },
+         close: function(event, ui) {      
+                theDialog.dialog("destroy").remove();
+                }
+              });
+	
+		
+	
+}
+
+function flashMessage(message) {
+	$("#status").html(message).fadeIn("slow").fadeOut("slow");
+}
+
+function dmeDialog(item,itemName) {
+	 var dialogHTML = $.ajax({
+		  url: "/workflow4people/dataModelEditor/edit"+itemName+"/"+item.id,
+		  async: false
+		 }).responseText;
+	 var theDialog=$(dialogHTML).dialog({ 
+		 modal:true,
+		 width:600,
+		 height:400,
+		 buttons: { 
+		 	"Save": function() {
+			 	var formData=$("form#ajaxdialogform").serialize();
+			 	$.post("/workflow4people/dataModelEditor/submit"+itemName+"/"+item.id,formData, function(data) 
+			 		{
+			 		
+			 		$("#editpane").html(data);
+			 		$("#tabs").tabs();
+			 	});
+			 	
+	 			flashMessage(itemName+" "+item.id+" saved");
+	
+	 			$( this ).dialog( "close" );
+	        	},
+       	Cancel: function() {
+	        		$( this ).dialog( "close" );
+	        	}
+       	},
+        open: function(event, ui) {           	
+       		$("#dialogtabs").tabs(); 
+       		$("a.help").cluetip({
+       			splitTitle: '|',  
+       			cluezIndex: 2000
+      	    	});
+                     },
+        close: function(event, ui) {      
+               theDialog.dialog("destroy").remove();
+               }
+             });
+	
+		
+	
+}
+
+
+
+
+function setupTree() {
+		        //$("a.field").click(function() {        			     
+                //	$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'',function() {
+                //	$("#tabs").tabs();                	
+                //	});
+                $("a.field").click(function() {
+                		
+                		 var dialogHTML = $.ajax({
+                			  url: "/workflow4people/dataModelEditor/showField/"+this.id,
+                			  async: false
+                			 }).responseText;
+                		$(dialogHTML).dialog(
+                                { modal:true,
+                                    buttons: { "Delete all items": function() {
+                                                                           $( this ).dialog( "close" );
+                                                     },
+                                                       Cancel: function() {
+                                                                   $( this ).dialog( "close" );
+                                                     }
+                                           }
+                                   });
+
+                    	
+                    	//$("#tabs").tabs();                	
+                    	});	
                 	
-        });
+                	
+       
         
         $("a.fieldlist").click(function() {     
                 	$("#editpane").load("/workflow4people/dataModelEditor/showFieldList/"+this.id,'',function() {
@@ -14,9 +128,107 @@
         }
 		
 $(function() {		        
-        $("#treediv").tree({
+	/*
+	$("#treediv").bind("before.jstree", function (e,data) {
+		//move_node
+		 if(data.func === "move_node") {
+			 flashMessage("Before move...");
+		//	 alert("Func:"+data.func+" Args:"+data.args);
+		 }
+		//return true;
+	});
+	*/
+	
+	
+/*	
+	$("#treediv").bind("prepare_move.jstree", function (e,data) {
+		//alert ("Prepping to move...");
+		flashMessage("Prepping to move...");
+	});
+	*/
+	
+	
+	$("#treediv").bind("move_node.jstree", function (e,data) {
+		//alert ("We're moving!");
+		
+		data.rslt.o.each(function (i) {
+			var theId=$(this).attr("id").replace("node_","");
+			var theParent=data.rslt.np.attr("id").replace("node_","");
+			
+			var position=data.rslt.p;
+			
+			flashMessage("We're moving "+theId+" to "+position+" "+data.rslt.cp +" under "+theParent);
+			/*$.ajax({
+				async : false,
+				type: 'POST',
+				url: "./server.php",
+				data : { 
+					"operation" : "move_node", 
+					"id" : $(this).attr("id").replace("node_",""), 
+					"ref" : data.rslt.np.attr("id").replace("node_",""), 
+					"position" : data.rslt.cp + i,
+					"title" : data.rslt.name,
+					"copy" : data.rslt.cy ? 1 : 0
+				},
+				success : function (r) {
+					if(!r.status) {
+						$.jstree.rollback(data.rlbk);
+					}
+					else {
+						$(data.rslt.oc).attr("id", "node_" + r.id);
+						if(data.rslt.cy && $(data.rslt.oc).children("UL").length) {
+							data.inst.refresh(data.inst._get_parent(data.rslt.oc));
+						}
+					}
+					$("#analyze").click();
+				}
+			});*/
+		});
+
+		
+		
+		
+		//flashMessage("We're moving!");
+		
+		
+		
+		
+		
+		
+		
+	});
+	
+	
+	
+	
+        $("#treediv").jstree({
+        //	"plugins" : [ "themes", "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+
+        "plugins" : [  "html_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+ /*
+       "contextmenu" : {
+        	"items" : {
+        	
+        	  "rename" : {
+        		    // The item label
+        		    "label"             : "Rename"
+        }
+           }
         
-        types : {
+        	
+        
+        },	
+        
+        */
+        
+        
+        
+  /*
+        
+        
+        
+        "types" : {
+        	"types": {	        	
 			"default" : {
 				clickable	: true,
 				renameable	: true,
@@ -25,7 +237,7 @@ $(function() {
 				draggable	: true,
 				max_children	: -1,
 				max_depth	: -1,
-				valid_children	: "all",
+				valid_children	: "field",
 	
 					icon : {
 						image : false,
@@ -34,6 +246,14 @@ $(function() {
 				},
 				
 			"field" : {
+					"max_children"	: 0,
+					"select_node"	: true,
+					"open_node"	: true,
+					"close_node"	: true,
+					"create_node"	: true,
+					"delete_node"	: true,
+					"valid_children"	: [""],
+
 				clickable	: true,
 				renameable	: true,
 				deletable	: true,
@@ -47,12 +267,26 @@ $(function() {
 						image : false,
 						position : "-16px 0px"
 					}
-				},
+					
+				}
+				
+	        }
+				
+				, 
 				
 				
 				
 		},
+		/*
+	      "dnd" : {
+            "drag_finish" : function () {
+                alert("DROP");
+            },
+			
 		
+        },
+        */
+		/*
 		callback: {
 		
 		 		"beforemove" : function(NODE, REF_NODE, TYPE, TREE_OBJ) {
@@ -121,6 +355,7 @@ $(function() {
 	   					url: "/workflow4people/dataModelEditor/onmove",
 	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE }
  					}).responseText;
+		 				flashMessage('Moved node '+NODE.id+' to '+REF_NODE.id);
 	 					var rv = eval('(' + t + ')').result	 					
 	 			},
 		 				
@@ -131,6 +366,7 @@ $(function() {
 	   					url: "/workflow4people/dataModelEditor/oncopy",
 	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE }
  					}).responseText;
+		 				flashMessage('Copied node '+NODE.id+' to '+REF_NODE.id);
 	 					var rv = eval('(' + t + ')').result	 					
 		 			// TODO fix _copy id suffix
 		 			// TODO correct id for new leaf node
@@ -141,8 +377,10 @@ $(function() {
 	 			
 	 			
 	 			
- 			}        
+ 			}   */     
         });
+        
+        
         //  Open the show field pane on a single click
         $("a.field").click(function() {        			     
                 	$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'',function() {
@@ -152,11 +390,13 @@ $(function() {
         });
         
         //  Open the edit field pane on a double click        
-        $("a.field").dblclick(function() {        			     
-        	$("#editpane").load("/workflow4people/dataModelEditor/editField/"+this.id,'',function() {
-        	$("#tabs").tabs();                	
-        	$("a.help").cluetip({splitTitle: '|'});
-        	});        	
+        $("a.field").dblclick(function() {
+        	//fieldDialog(this)
+        	dmeDialog(this,'Field');
+        	//$("#editpane").load("/workflow4people/dataModelEditor/editField/"+this.id,'',function() {
+        	//$("#tabs").tabs();                	
+        	//$("a.help").cluetip({splitTitle: '|'});
+        	//});        	
         });
         
         
@@ -168,11 +408,12 @@ $(function() {
         });
         
         //  Open the edit fieldlist pane on a double click
-        $("a.fieldlist").dblclick(function() {             		
-                	$("#editpane").load("/workflow4people/dataModelEditor/editFieldList/"+this.id,'',function() {
-                	$("#tabs").tabs();
-                	$("a.help").cluetip({splitTitle: '|'});
-                	});
+        $("a.fieldlist").dblclick(function() {        
+        	dmeDialog(this,'FieldList');
+                	//$("#editpane").load("/workflow4people/dataModelEditor/editFieldList/"+this.id,'',function() {
+                	//$("#tabs").tabs();
+                	//$("a.help").cluetip({splitTitle: '|'});
+                	//});
         });        
         
         
@@ -185,8 +426,13 @@ $(function() {
         var id=$("#detailId").attr("value");
         var detailClass=$("#detailClass").attr("value");
         var detailType=$("#detailType").attr("value");
-        
+        var theInput
         if (detailType=="edit") {
+        	var inputs=$("input");
+        	for (theInput in inputs) {
+        		alert(theInput.name+':'+theInput.value);
+        	}
+        	$.post("/workflow4people/dataModelEditor/submit")
         	this.innerHTML="edit";
        	} else {
        		this.innerHTML="save";
@@ -229,7 +475,7 @@ $(function() {
        		//jQuery.tree.focused().create(null,-1);
        		//alert('before');
        		//$.tree.focused().rename();
-       		$.tree.focused().create();
+       		$.jstree.focused().create();
        		//alert('after');
        
        });
