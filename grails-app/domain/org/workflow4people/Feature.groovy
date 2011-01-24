@@ -33,6 +33,7 @@ class Feature {
 		name(help:'x',class:'wide')
 		title(help:'x',class:'wide')
 		description(nullable:true,help:'x',class:'extrawide')
+		featurePermission(widget:'insert',display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
 	
 	String toString() {

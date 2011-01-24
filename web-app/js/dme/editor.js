@@ -1,8 +1,77 @@
 /*
  * Data model editor
- * TEST
+ * 
  */
 
+var fieldTypeTree
+var dataModelTree
+var workflowTree
+
+/*
+ * Modal JQuery UI confirmation dialog
+ */
+
+function jqConfirm(message,title,url) {
+	var htmlMessage='<div id="dialog-confirm" title="'+title+'"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>'+message+'</p></div>';
+	
+	var confirmDialog=$(htmlMessage).dialog({
+		resizable: true,
+		width:600,
+		//height:140,
+		modal: true,
+		buttons: {
+			"OK": function() {				
+				alert(url)
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		},
+        close: function(event, ui) {      
+            confirmDialog.remove();
+            }
+        });			
+	
+}
+
+function trim(value) {
+	  value = value.replace(/^\s+/,'');
+	  value = value.replace(/\s+$/,'');
+	  return value;
+	}
+
+
+function refreshTree(id) {
+	if(id) {
+		if (fieldTypeTree.find("#"+id).size()>0) { 
+			fieldTypeTree.jstree("refresh","#"+id)
+		}
+		if (id=="fieldTypeTree") {
+			fieldTypeTree.jstree("refresh",-1)
+		}
+		
+		if (dataModelTree.find("#"+id).size()>0) {
+			dataModelTree.jstree("refresh","#"+id)
+		}
+		
+		if (id=="dataModelTree") {
+			dataModelTree.jstree("refresh",-1)
+		}
+				
+		if (workflowTree.find("#"+id).size()>0) {
+			workflowTree.jstree("refresh","#"+id)
+		}
+		
+		if (id=="workflowTree") {
+			workflowTree.jstree("refresh",-1)
+		}
+		
+		
+	}
+	
+	
+}
 function fieldDialog(field) {
 	 var dialogHTML = $.ajax({
 		  url: "/workflow4people/dataModelEditor/editField/"+field.id,
@@ -41,30 +110,45 @@ function fieldDialog(field) {
 	
 }
 
-function flashMessage(message) {
-	$("#status").html(message).fadeIn("slow").fadeOut("slow");
+function logMessage(message) {
+		var oldmessage=$("#log").html();
+	$("#log").html(oldmessage+'<br />'+message);
+	
 }
 
-function dmeDialog(item,itemName) {
+function dmeDialog(id,itemName,params) {
+	 var urlId=""
+	 if(params) {
+		 urlId=id+'?'+params
+	 } else {
+		 urlId=id
+	 }
+	 
 	 var dialogHTML = $.ajax({
-		  url: "/workflow4people/dataModelEditor/edit"+itemName+"/"+item.id,
+		  url: "/workflow4people/dataModelEditor/edit"+itemName+"/"+urlId,
 		  async: false
 		 }).responseText;
+	 var theWidth=$(dialogHTML).css("width");
 	 var theDialog=$(dialogHTML).dialog({ 
-		 modal:true,
-		 width:600,
-		 height:400,
+		 modal:false,
+
+		 width:theWidth,
+		 //height:400,
 		 buttons: { 
 		 	"Save": function() {
 			 	var formData=$("form#ajaxdialogform").serialize();
-			 	$.post("/workflow4people/dataModelEditor/submit"+itemName+"/"+item.id,formData, function(data) 
+			 	$.post("/workflow4people/dataModelEditor/submit"+itemName+"/"+urlId,formData, function(data) 
 			 		{
-			 		
-			 		$("#editpane").html(data);
-			 		$("#tabs").tabs();
+
+			 		var result=data.result
+			 		logMessage(result.message);
+
+			 		for (i in result.refreshNodes) {
+			 			refreshTree(result.refreshNodes[i])
+			 		}
 			 	});
 			 	
-	 			flashMessage(itemName+" "+item.id+" saved");
+
 	
 	 			$( this ).dialog( "close" );
 	        	},
@@ -81,6 +165,7 @@ function dmeDialog(item,itemName) {
                      },
         close: function(event, ui) {      
                theDialog.dialog("destroy").remove();
+               //theDialog.remove();
                }
              });
 	
@@ -88,297 +173,443 @@ function dmeDialog(item,itemName) {
 	
 }
 
+function generateFormsDialog(node) {	
+	 var id=node[0].id.substring(9)
+	 var dialogHTML = $.ajax({
+		  url: "/workflow4people/workflowDefinition/generate/"+id,
+		  async: false
+		 }).responseText;
+	 var dialogHTML2=$(dialogHTML).find("#dialog")
+	 var theDialog=$(dialogHTML2).dialog({ 
+		 modal:false,
+		 //zIndex:1500,
+		 width:800,
+		 height:500,
+		 buttons: { 
+		 	"Ok": function() {
+	 			$( this ).dialog( "close" );
+	        	},
+      	Cancel: function() {
+	        		$( this ).dialog( "close" );
+	        	}
+      	},
+       open: function(event, ui) {           	
+      		$("#dialogtabs").tabs(); 
+      		$("a.help").cluetip({
+      			splitTitle: '|',  
+      			cluezIndex: 2000
+     	    	});
+                    },
+       close: function(event, ui) {      
+              $("#dialog").stopTime();
+              theDialog.dialog("destroy").remove();
+              //theDialog.remove();
+              }
+            });
+	 $("#dialog").everyTime(500,function(i) {
+			$.getJSON("/workflow4people/workflowDefinition/progress",
+	        function(p){
+	          $("#count").html(p.count);
+	          $("#total").html(p.total);
+	          $("#message").html(p.message);
+	          $("#generatelog").html(p.log);
+	          $("#progressbar").progressbar({
+				value: p.pct
+				});
+			  if (p.completed) {
+			  $("div.title h1").html("Generating forms completed");
+			  }
+	        });
+		});
+	
+}
+
+
+function generateProcessDialog(node) {	
+	 var id=node[0].id.substring(9)
+	 var dialogHTML = $.ajax({
+		  url: "/workflow4people/workflowDefinition/generateProcess/"+id,
+		  async: false
+		 }).responseText;
+	 var dialogHTML2=$(dialogHTML).find("#dialog")
+	 var theDialog=$(dialogHTML2).dialog({ 
+		 modal:false,
+		 //zIndex:1500,
+		 width:800,
+		 height:500,
+		 buttons: { 
+		 "Start": function() {
+	 			//$( this ).dialog( "close" );
+		 		$.getJSON("/workflow4people/workflowDefinition/generateProcessStart/"+id);
+		 
+		 		
+		 		
+		 $("#dialog").everyTime(500,function(i) {
+				$.getJSON("/workflow4people/workflowDefinition/progress",
+		        function(p){
+		          $("#count").html(p.count);
+		          $("#total").html(p.total);
+		          $("#message").html(p.message);
+		          $("#generatelog").html(p.log);
+		          $("#progressbar").progressbar({
+					value: p.pct
+					});
+				  if (p.completed) {
+				  $("div.title h1").html("Generating forms completed");
+				  $("button:contains('Done')").show();
+				  $("button:contains('Cancel')").hide();
+				  $("button:contains('Start') span").html("Again");
+				  }
+		        });
+			});
+		 
+	        	},
+    	"Done": function() {
+	        		$( this ).dialog( "close" );
+	        	},
+     	Cancel: function() {
+	        		$( this ).dialog( "close" );
+	        	}
+     	},
+      open: function(event, ui) {
+     		$("button:contains('Done')").hide();
+     		$("#dialogtabs").tabs(); 
+     		$("a.help").cluetip({
+     			splitTitle: '|',  
+     			cluezIndex: 2000
+    	    	});
+                   },
+      close: function(event, ui) {      
+             $("#dialog").stopTime();
+             theDialog.dialog("destroy").remove();
+             //theDialog.remove();
+             }
+           });
+	 /*
+	 $("#dialog").everyTime(500,function(i) {
+			$.getJSON("/workflow4people/workflowDefinition/progress",
+	        function(p){
+	          $("#count").html(p.count);
+	          $("#total").html(p.total);
+	          $("#message").html(p.message);
+	          $("#generatelog").html(p.log);
+	          $("#progressbar").progressbar({
+				value: p.pct
+				});
+			  if (p.completed) {
+			  $("div.title h1").html("Generating forms completed");
+			  }
+	        });
+		});
+	*/
+}
+
+
+
+
+
+
+function workflowContextMenu( node ) {
+	if (node[0].id.substring(0,9)=="workflow_") {
+	var obj = {
+			
+			"editworkflowproperties" : {
+								"label": 'Edit workflow props',
+								"action" : function( node ) { dmeDialog(node[0].id,'WorkflowDefinition',''); }
+	  						  },
+
+			
+			"editworkflowdiagram" : {
+								"label": 'Edit workflow diagram',
+								"action" : function( node ) { window.open('http://localhost:8080/signaviocore/p/editor?id=root-directory%3B'+node[0].title+'.jpdl.xml','signavio','width=1000,height=700,left=0,top=100,screenX=0,screenY=100') }
+							  },
+
+			"generateforms" : {
+								  "label": 'Generate forms',
+								  "action" : function( node ) { generateFormsDialog(node); }
+							  },
+			"generateprocess" : 	  {
+								"label": 'Generate process',
+								"action" : function( node ) { generateProcessDialog(node) }
+								  },		  
+
+  		    "newform" : {
+								  "label": 'New form',
+								  "action" : function( node ) { dmeDialog("",'Form','workflow.id='+node[0].id.substring(9)); }
+							  },
+
+							  
+							  
+			
+			/*"deletejq" : 	  {
+							"label": 'Delete JQ',
+							"action" : function( node ) { jqConfirm("Do you really want to delete "+trim(node[0].textContent)+" ?","Delete","/workflow4people/dataModelEditorController/deleteNode/"+node[0].id); }
+							  },*/
+			"delete" : {
+									"label": 'Delete',
+									"action" : function( node ) {this.remove(node) }
+								},
+	
+	}
+	
+	
+	return obj; 
+	} else {
+		var obj = {
+				
+
+				"delete" : {
+										"label": 'Delete',
+										"action" : function( node ) {this.remove(node) }
+									},
+		
+		}
+		
+		
+		return obj;		
+		
+		
+	}
+		
+	
+	
+	
+	
+	
+	
+}
 
 
 
 function setupTree() {
-		        //$("a.field").click(function() {        			     
-                //	$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'',function() {
-                //	$("#tabs").tabs();                	
-                //	});
-                $("a.field").click(function() {
-                		
-                		 var dialogHTML = $.ajax({
-                			  url: "/workflow4people/dataModelEditor/showField/"+this.id,
-                			  async: false
-                			 }).responseText;
-                		$(dialogHTML).dialog(
-                                { modal:true,
-                                    buttons: { "Delete all items": function() {
-                                                                           $( this ).dialog( "close" );
-                                                     },
-                                                       Cancel: function() {
-                                                                   $( this ).dialog( "close" );
-                                                     }
-                                           }
-                                   });
-
-                    	
-                    	//$("#tabs").tabs();                	
-                    	});	
-                	
-                	
-       
-        
-        $("a.fieldlist").click(function() {     
-                	$("#editpane").load("/workflow4people/dataModelEditor/showFieldList/"+this.id,'',function() {
-                	$("#tabs").tabs();
-                	});
-        });
+		 
         }
 		
 $(function() {		        
-	/*
-	$("#treediv").bind("before.jstree", function (e,data) {
-		//move_node
-		 if(data.func === "move_node") {
-			 flashMessage("Before move...");
-		//	 alert("Func:"+data.func+" Args:"+data.args);
+	$(".dmeTree").bind("before.jstree", function (e,data) {		
+		
+		if(data.func === "move_node" || data.func === "delete_node" || data.func === "rename_node" ) {
+			if(!data.args[0][0]) {
+				return 
+			}
+			
+			if (data.func==="delete_node") {
+				if (!confirm('Are you sure?')) {
+					e.stopImmediatePropagation();
+					return false;
+					
+				}
+			}
+				
+			
+			var id1=data.args[0][0].id
+			var id2=""
+			if (data.func === "move_node") {
+				var id2=data.args[1][0].id
+			}
+			//var moveType=e.handleObj.type
+			var moveType=data.args[2]
+			
+			var isCopy=data.args[3]
+			logMessage("Before "+data.func +" ... from:#"+id1+" to:#"+id2+" moveType:"+moveType+" copy:"+isCopy);
+			var newName=""
+			if (data.func==="rename_node") {
+				newName=data.args[1]
+			}
+			
+			var jsonobj= {
+					"func":data.func,
+					"id1":id1,
+					"id2":id2,
+					"moveType":moveType,
+					"isCopy":isCopy,
+					"newName":newName					
+			}
+			
+			//var jsonobj2=JSON.stringify(data.args);
+			//alert(jsonobj2);
+			
+			
+			var jsonResponse = $.ajax({
+  			  url: "/workflow4people/dataModelEditor/before/1",
+  			  async: false,
+  			  data: jsonobj,
+  			  type: "POST"
+  			  
+  			 }).responseText;
+			var result=eval('(' + jsonResponse + ')').result;
+		//	alert (result.message)
+			//alert (result.allowed)
+
+			
+			for (i in result.refreshNodes) {
+	 			refreshTree(result.refreshNodes[i])
+	 		}
+			
+			if (result.success) {
+				logMessage(result.message)
+			} else {
+				alert(result.message)
+			}
+		
+			if (result.allowed==false) {
+				e.stopImmediatePropagation();
+				return false;
+			}
+			//fieldTypeTree.jstree("refresh",-1)
+			//dataModelTree.jstree("refresh",-1)
+		
+			
+			// just a test :D
+		//	e.stopImmediatePropagation();
+		//	return false;			
 		 }
-		//return true;
 	});
-	*/
 	
-	
-/*	
-	$("#treediv").bind("prepare_move.jstree", function (e,data) {
-		//alert ("Prepping to move...");
-		flashMessage("Prepping to move...");
-	});
-	*/
-	
-	
-	$("#treediv").bind("move_node.jstree", function (e,data) {
+	$("#modelTree").bind("move_node.jstree", function (e,data) {
 		//alert ("We're moving!");
 		
 		data.rslt.o.each(function (i) {
+		var isCopy=(data.rslt.cy==true)
 			var theId=$(this).attr("id").replace("node_","");
 			var theParent=data.rslt.np.attr("id").replace("node_","");
 			
 			var position=data.rslt.p;
+			if (isCopy) {
+				logMessage("["+i+"] copying "+theId+" to "+position+" "+data.rslt.cp +" under "+theParent);
+			} else {
+				logMessage("["+i+"] moving "+theId+" to "+position+" "+data.rslt.cp +" under "+theParent);
+			}
 			
-			flashMessage("We're moving "+theId+" to "+position+" "+data.rslt.cp +" under "+theParent);
-			/*$.ajax({
-				async : false,
-				type: 'POST',
-				url: "./server.php",
-				data : { 
-					"operation" : "move_node", 
-					"id" : $(this).attr("id").replace("node_",""), 
-					"ref" : data.rslt.np.attr("id").replace("node_",""), 
-					"position" : data.rslt.cp + i,
-					"title" : data.rslt.name,
-					"copy" : data.rslt.cy ? 1 : 0
-				},
-				success : function (r) {
-					if(!r.status) {
-						$.jstree.rollback(data.rlbk);
-					}
-					else {
-						$(data.rslt.oc).attr("id", "node_" + r.id);
-						if(data.rslt.cy && $(data.rslt.oc).children("UL").length) {
-							data.inst.refresh(data.inst._get_parent(data.rslt.oc));
-						}
-					}
-					$("#analyze").click();
-				}
-			});*/
-		});
-
-		
-		
-		
-		//flashMessage("We're moving!");
-		
-		
-		
-		
-		
-		
+			
+		});		
+	});
+	
+	$("#modelTree").bind("delete_node.jstree", function (e,data) {
+		var id=data.rslt.obj[0].id;
+		logMessage("Deleting... "+id);
+		$.post("/workflow4people/dataModelEditor/delete/"+id);
 		
 	});
 	
+	$("#modelTree").bind("create_node.jstree", function (e,data) {		
+		logMessage("Creating... "+data.rslt.obj[0].id);				
+	});
 	
 	
+	$("#modelTree").bind("rename_node.jstree", function (e,data) {
+
+		logMessage("Renaming... "+data.rslt.obj[0].id+" - new name:"+data.rslt.name);
+		data.rslt.obj[0].id="field_XXX"
+	});
 	
-        $("#treediv").jstree({
+		
+    dataModelTree=$("#modelTree").jstree({
         //	"plugins" : [ "themes", "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
 
-        "plugins" : [  "html_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
- /*
-       "contextmenu" : {
-        	"items" : {
-        	
-        	  "rename" : {
-        		    // The item label
-        		    "label"             : "Rename"
-        }
-           }
+        "plugins" : [  "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu","themes" ,"hotkeys"],
         
-        	
-        
-        },	
-        
-        */
-        
-        
-        
-  /*
-        
-        
-        
-        "types" : {
-        	"types": {	        	
-			"default" : {
-				clickable	: true,
-				renameable	: true,
-				deletable	: true,
-				creatable	: true,
-				draggable	: true,
-				max_children	: -1,
-				max_depth	: -1,
-				valid_children	: "field",
-	
-					icon : {
-						image : false,
-						position : false
-					}
-				},
-				
-			"field" : {
-					"max_children"	: 0,
-					"select_node"	: true,
-					"open_node"	: true,
-					"close_node"	: true,
-					"create_node"	: true,
-					"delete_node"	: true,
-					"valid_children"	: [""],
-
-				clickable	: true,
-				renameable	: true,
-				deletable	: true,
-				creatable	: false,
-				draggable	: true,
-				max_children	: -1,
-				max_depth	: -1,
-				valid_children	: {},
-	
-					icon : {
-						image : false,
-						position : "-16px 0px"
-					}
-					
-				}
-				
-	        }
-				
-				, 
-				
-				
-				
-		},
-		/*
-	      "dnd" : {
-            "drag_finish" : function () {
-                alert("DROP");
-            },
-			
-		
+       "crrm" : {
+        	"move.always_copy" : "multitree"
         },
-        */
-		/*
-		callback: {
-		
-		 		"beforemove" : function(NODE, REF_NODE, TYPE, TREE_OBJ) {
-		 			//alert("AAA"+NODE);		 				 			
-					var t=$.ajax({
-			 			async: false,
-	   					type: "POST",
-	   					url: "/workflow4people/dataModelEditor/beforemove/",
-	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE },
-	   					//success: function(returnval){   							
-	   					//	var rv = eval('(' + returnval + ')').result	  ;   				
-	   					//	}
-	   						
- 					}).responseText;
- 					//alert(t);
-	 					var rv = eval('(' + t + ')').result	 		;			
-			 			return rv.returnValue 
-	 			},
-	 			
-	 			"beforemoveadvice" : function(NODE, REF_NODE, TYPE, TREE_OBJ,is_copy) {
- 					//alert("Advice:"+NODE); 			
- 					
-					var t=$.ajax({
-			 			async: false,
-	   					type: "POST",
-	   					url: "/workflow4people/dataModelEditor/beforemoveadvice",
-	   					//data: "",
-	   					dataType: "json",	   					
-	   					//data: {"node_id": NODE.id ,"node_rel":$("#"+NODE.id).attr('rel'),"ref_node_id":REF_NODE.id,"ref_node_rel":$("#"+REF_NODE.id).attr('rel'),"type":TYPE,"tree_obj": ''},
-	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE}, 
-   					    //success: function(returnval){
-   					    //	alert("test returnval:"+returnval);   							
-	   					//	var rv = eval('(' + returnval + ')').result;
-						//	alert("test rv:"+rv);
-	   					//	}
-	   					
-	   					
- 					}).responseText;
- 					
- 					//alert("Done AJAX call for advice");
- 					var rv = eval('(' + t + ')').result
- 					//alert(rv.advice);	 					
-		 			return rv.advice
-	 			},
-	 			
- 				"beforedelete" : function(NODE, REF_NODE, TYPE, TREE_OBJ) {		 				 			
-					var t=$.ajax({
-			 			async: false,
-	   					type: "POST",
-	   					url: "/workflow4people/dataModelEditor/beforedelete",
-	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel') },
-	   					//success: function(returnval){   							
-	   					//	var rv = eval('(' + returnval + ')').result
-	   					//	}
- 					}).responseText;
-	 					var rv = eval('(' + t + ')').result	 					
-			 			return rv.returnValue 
-	 			},
-	 			
- 				"onmove" : function(NODE, REF_NODE, TYPE, TREE_OBJ,RB) {
-		 				 			 
-		 			//alert ('onmove node :'+NODE.id+'\nref node:'+REF_NODE.id+'\nType:'+TYPE);		 			
-		 			var t=$.ajax({
-			 			async: false,
-	   					type: "POST",
-	   					url: "/workflow4people/dataModelEditor/onmove",
-	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE }
- 					}).responseText;
-		 				flashMessage('Moved node '+NODE.id+' to '+REF_NODE.id);
-	 					var rv = eval('(' + t + ')').result	 					
-	 			},
-		 				
-		 		"oncopy" : function(NODE, REF_NODE, TYPE, TREE_OBJ,RB) {		 					 			 
-		 			var t=$.ajax({
-			 			async: false,
-	   					type: "POST",
-	   					url: "/workflow4people/dataModelEditor/oncopy",
-	   					data: { node_id: NODE.id ,node_rel:$("#"+NODE.id).attr('rel'),ref_node_id:REF_NODE.id,ref_node_rel:$("#"+REF_NODE.id).attr('rel'),type:TYPE }
- 					}).responseText;
-		 				flashMessage('Copied node '+NODE.id+' to '+REF_NODE.id);
-	 					var rv = eval('(' + t + ')').result	 					
-		 			// TODO fix _copy id suffix
-		 			// TODO correct id for new leaf node
-		 			// attach onclick handlers to copied nodes
-		 			
-	 			}	
-	 			
-	 			
-	 			
-	 			
- 			}   */     
+ 
+       "contextmenu" : {
+        	
+        
+        	"items": function ( node ) {
+            			var obj = {
+            					/*"deletejq" : {
+            									"label": 'Delete JQ',
+            									"action" : function( node ) { jqConfirm("Do you really want to delete "+trim(node[0].textContent)+" ?","Delete","/workflow4people/dataModelEditorController/deleteNode/"+node[0].id); }
+            								},*/
+								"delete" : {
+            									"label": 'Delete',
+            									"action" : function( node ) {this.remove(node) }
+            								},
+            								
+            			
+            				
+            				
+    					}
+            			
+            			
+            			return obj;
+        			}
+        		
+   		
+        	
+        	
+        	
+        },
+        
+        "json_data" : {
+            "ajax" : {
+                "url" : "/workflow4people/dataModelEditor/fieldJSON",
+                "data" : function (n) {
+                    return { id : n.attr ? n.attr("id") : "" };
+                }
+            }
+        }
+  
+        
+    
         });
+    
+    	workflowTree=$("#workflowTree").jstree({         
+
+        "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+        
+        "json_data" : {
+            "ajax" : {
+                "url" : "/workflow4people/dataModelEditor/workflowJSON",
+                "data" : function (n) {
+                    return { id : n.attr ? n.attr("id") : "" };
+                }
+            }
+        },
+    	
+    	 "contextmenu" : {        	
+        	"items": workflowContextMenu     			
+        }
+    	
+    	
+    	
+    	});  
+    
+    
+        /*
+        $("#workflowTree").jstree({         
+
+            "plugins" : [  "html_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+            
+            "crrm" : {
+        		"move.always_copy" : "multitree"
+        	}
+            
+        });
+*/
+        fieldTypeTree=$("#fieldTypeTree").jstree({         
+
+            "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+            
+            "json_data" : {
+	            "ajax" : {
+	                "url" : "/workflow4people/dataModelEditor/fieldTypeJSON",
+	                "data" : function (n) {
+	                    return { id : n.attr ? n.attr("id") : "" };
+	                }
+	            }
+	        }
+            
+            
+        });
+        
+        
+        
+        
+        
+        
+        
         
         
         //  Open the show field pane on a single click
@@ -389,36 +620,49 @@ $(function() {
                 	
         });
         
-        //  Open the edit field pane on a double click        
-        $("a.field").dblclick(function() {
-        	//fieldDialog(this)
-        	dmeDialog(this,'Field');
-        	//$("#editpane").load("/workflow4people/dataModelEditor/editField/"+this.id,'',function() {
-        	//$("#tabs").tabs();                	
-        	//$("a.help").cluetip({splitTitle: '|'});
-        	//});        	
+        //  Open the edit field dialog on a double click        
+        $("li.field").live("dblclick",function() {
+        	dmeDialog(this.id,'Field','');
+        	return false;
+        });
+               
+        //  Open the edit fieldlist dialog on a double click
+        $("li.fieldlist").live("dblclick",function() {        
+        	dmeDialog(this.id,'FieldList','');
+        	return false;
         });
         
-        
-        //  Open the show fieldlist pane on a single click
-        $("a.fieldlist").click(function() {     
-                	$("#editpane").load("/workflow4people/dataModelEditor/showFieldList/"+this.id,'',function() {
-                	$("#tabs").tabs();
-                	});
+        // 	Open the edit fieldtype dialog on a double click
+        $("li.fieldtype").live("dblclick",function() {        
+        	dmeDialog(this.id,'FieldType','');       
+        	return false;
+        });
+
+        // 	Open the edit form dialog on a double click
+        $("li.form").live("dblclick",function() {        
+        	dmeDialog(this.id,'Form','');
+        	return false;
         });
         
-        //  Open the edit fieldlist pane on a double click
-        $("a.fieldlist").dblclick(function() {        
-        	dmeDialog(this,'FieldList');
-                	//$("#editpane").load("/workflow4people/dataModelEditor/editFieldList/"+this.id,'',function() {
-                	//$("#tabs").tabs();
-                	//$("a.help").cluetip({splitTitle: '|'});
-                	//});
-        });        
+        // 	Open the edit formItem dialog on a double click
+        $("li.formitem").live("dblclick",function() {        
+        	dmeDialog(this.id,'FormItem','');
+        	return false;
+        });
+
         
         
-        $("#outer-treediv").resizable();
-        $("#outer-editpane").resizable();
+        // Open the edit workflowDefinition dialog on a double click
+        $("li.workflow").live("dblclick",function() {        
+        	dmeDialog(this.id,'WorkflowDefinition','');
+        	return false;
+        });
+        
+     
+      //   $("#outer-treediv").resizable();
+      //  $("#outer-editpane").resizable();
+       $(".treepane").resizable();
+        $(".treepane").draggable();
 
        
        $("#editButton").click(function() {

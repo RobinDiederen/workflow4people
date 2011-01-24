@@ -30,6 +30,7 @@ import groovy.lang.Binding;
 class FieldList implements Serializable {
 	def templateService
     static constraints = {
+		parent(help:'x',nullable:true)
     	name(help:'x',class:'wide')    	
     	namespace(help:'x')
     	baseType(help:'x')
@@ -45,7 +46,7 @@ class FieldList implements Serializable {
     
     static transients = ["xpath"]
 	static hasMany = [field : Field]    
-    
+    Field parent
     String name
     Namespace namespace
     BaseType baseType
@@ -54,8 +55,12 @@ class FieldList implements Serializable {
     String xpath
        
     Binding binding() {	
-		groovy.lang.Binding binding = new Binding()
-		binding.fields=Field.findAllByFieldList(this,[sort:'fieldPosition',order:'asc'])
+		groovy.lang.Binding binding = new Binding()		
+		//binding.fields=Field.findAllByFieldList(this,[sort:'fieldPosition',order:'asc'])
+		binding.fields=Field.findAllByParent(this.parent,[sort:'fieldPosition',order:'asc'])
+		// temporary fix
+		binding.field=parent
+		binding.parent=parent
 		binding.name=this.name		
 		binding.fieldList=this		
 		binding.output=""
@@ -65,7 +70,8 @@ class FieldList implements Serializable {
 
     def propertyMissing(String name,args){	
 		if (name.lastIndexOf("Snippet")>0) {
-			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))			
+			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))
+			println "Running fieldList snippet ${snippetName} for fieldList ${this.name}"
 			return templateService.runSnippetTemplate(this,snippetName)			
 		} else {
 			throw new MissingPropertyException(name,Field.class,args)
@@ -89,7 +95,7 @@ class FieldList implements Serializable {
     }
     
     void init() {
-    	storeXPath(namespace.prefix,"/${namespace.prefix}:${name}")
+    //	storeXPath(namespace.prefix,"/${namespace.prefix}:${name}")
     }
 	
 	String toString() {

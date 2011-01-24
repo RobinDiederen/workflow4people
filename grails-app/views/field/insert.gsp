@@ -30,6 +30,10 @@
                     
                         
                             
+                                                    
+                    
+                        
+                            
                             
                             <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.childFieldList?.id}">&laquo;&nbsp; Child Field List ${fieldInstance?.childFieldList?.encodeAsHTML()}</g:link></span>
                             
@@ -39,6 +43,10 @@
                             
                             
                             <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.fieldList?.id}">&laquo;&nbsp; Field List ${fieldInstance?.fieldList?.encodeAsHTML()}</g:link></span>
+                            
+                                                    
+                    
+                        
                             
                                                     
                     
@@ -122,6 +130,16 @@
                 <div class="dialog">
                     <table>
                         <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="parent"><g:message code="field.parent.label" default="Parent" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'parent', 'errors')}">
+                                    <g:select name="parent.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${fieldInstance?.parent?.id}" noSelection="['null': '']" />
+
+                                </td>
+                            </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -279,16 +297,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'readonly', 'errors')}">
                                     <g:checkBox name="readonly" value="${fieldInstance?.readonly}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="xpath"><g:message code="field.xpath.label" default="Xpath" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
-                                    <g:textField name="xpath" value="${fieldInstance?.xpath}" />
 
                                 </td>
                             </tr>

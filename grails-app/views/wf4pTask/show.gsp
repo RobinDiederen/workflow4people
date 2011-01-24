@@ -35,15 +35,15 @@
                             --%>                
                         </tbody>
                     </table>
-                    <div class="buttons">
+                   
+                    
+                </div>
+                 <div class="buttons">
                 	<g:each in="${taskService.getOutcomes(task.id)}" var="outcome" >
                 	<span class="button"><g:actionSubmit class="edit" action="complete" value="${outcome}" /></span>
                     </g:each>                    
                 </div>
                     
-                    
-                </div>
-                
                 <h1>Variables</h1>
                 <div class="list" >
 				    <table>

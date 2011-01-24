@@ -97,7 +97,7 @@ class FindTasksEndpoint implements InitializingBean {
 		def personTaskCount=countTq.count()
 		
 		log.debug "Person task count: ${personTaskCount}"
-                  
+        println "Person task count: ${personTaskCount}"
 		TaskQuery grpTq=taskService.createTaskQuery();
 		grpTq.candidate(request.request.userId.text())
 		grpTq.orderAsc(TaskQuery.PROPERTY_DUEDATE)		
@@ -108,7 +108,7 @@ class FindTasksEndpoint implements InitializingBean {
 		countGrpTq.candidate(request.request.userId.text())		
 		def groupTaskCount=countGrpTq.count()
 		log.debug "Group task count: ${groupTaskCount}"
-		
+		println "Group task count: ${groupTaskCount}"
 		int theSize=Math.max(personTaskCount, groupTaskCount)		
 		int theTotalPages=((theSize -1)/ maxResults) +1		
         
@@ -135,6 +135,9 @@ class FindTasksEndpoint implements InitializingBean {
 						name(theTask.name)
 						id(theTask.id)
 						priority(theTask.priority)
+						
+						// TODO cut this out for speed reasons really need to make it configurable
+						/*
 						form {
 							Execution execution=executionService.findExecutionById(theTask.executionId)
 							def processDefinitionId = execution.getProcessDefinitionId()
@@ -153,7 +156,8 @@ class FindTasksEndpoint implements InitializingBean {
 							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
 							url("${baseUrl}/${processName}/${formName}/${theTask.id}/0")
 						}
-						
+						*/
+						/*
 						def outcomeList = taskService.getOutcomes(theTask.id)				
 						outcomes { outcomeList.each { theOutcome ->							
 								if (theOutcome!='completed') {
@@ -168,7 +172,8 @@ class FindTasksEndpoint implements InitializingBean {
 									value(taskService.getVariable(theTask.id, variableName))
 								}
 							}
-						}						
+						}
+						*/						
 					}
 				}
         		
@@ -189,6 +194,9 @@ class FindTasksEndpoint implements InitializingBean {
 						name(theTask.name)
 						id(theTask.id)
 						priority(theTask.priority)
+
+						// TODO cut this out for speed reasons really need to make it configurable
+						/*
 						form {
 							Execution execution=executionService.findExecutionById(theTask.executionId)
 							def processDefinitionId = execution.getProcessDefinitionId()
@@ -206,6 +214,8 @@ class FindTasksEndpoint implements InitializingBean {
 							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;							
 							url("${baseUrl}/${processName}/${formName}/${theTask.id}/0")
 						}
+						*/
+						/*
 						def outcomeList = taskService.getOutcomes(theTask.id)				
 						outcomes { outcomeList.each { theOutcome ->							
 							if (theOutcome!='completed') {
@@ -220,7 +230,8 @@ class FindTasksEndpoint implements InitializingBean {
 									value(taskService.getVariable(theTask.id, variableName))
 								}
 							}
-						}						
+						}
+						*/				
 					}
 				}
         		

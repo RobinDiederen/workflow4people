@@ -4,7 +4,7 @@
         <meta name="layout" content="main" />
         <title>Manage document index</title>
     </head>
-    <body>s
+    <body>
         <div class="body">
             <g:if test="${flash.message}">
             <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>

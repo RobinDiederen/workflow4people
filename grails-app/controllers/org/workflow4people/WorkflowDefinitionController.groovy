@@ -30,7 +30,7 @@ import groovy.text.*;
 import org.springframework.web.context.request.RequestContextHolder
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.apache.commons.lang.StringUtils
-//import grails.converters.JSON
+import grails.converters.*
 /**
  * Controller for WorkflowDefinition domain class
  * 
@@ -272,6 +272,17 @@ class WorkflowDefinitionController {
     }
     
     def generated = {}
+
+	def generateProcess = {
+	  	    render(view:"formGeneratorStatus")
+    }
+	def generateProcessStart = {
+		templateService.generateProcess(params.id)
+		def res=[]
+		render res as JSON
+	
+	}
+
 	
 
 	def progress = { 
@@ -283,7 +294,7 @@ class WorkflowDefinitionController {
 				percentage=(p.current/p.total)*100
 			}
 			
-			render (contentType:"text/json") { 
+		def response= 
 
 				[total:p.total,
 				count:p.current,
@@ -292,14 +303,17 @@ class WorkflowDefinitionController {
 				log: p.log,
 				completed: p.completed
 				]
-				//)
-			}	
+				
+		render response as JSON		
+			
+			
+			
 			
 			
 			
 		} else {
 			
-			render (contentType:"text/json") { 
+			def response= 
 				[
 				total:0,
 				count:0,
@@ -310,7 +324,7 @@ class WorkflowDefinitionController {
 				
 				]
 			
-				}
+			render response as JSON
 		}
 			
 	}

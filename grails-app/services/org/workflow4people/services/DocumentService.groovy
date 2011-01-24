@@ -125,7 +125,7 @@ class DocumentService implements InitializingBean {
     	    	
     	def documentType= DocumentType.findByName(header.documentType.text());
     	if(!documentType) {
-    		throw new DocumentException("Unknown document type")
+    		throw new DocumentException("Unknown document type:"+header.documentType.text())
     	}
     	documentInstance.documentType=documentType	
     	documentInstance.xmlDocument=xmlDocument
@@ -403,7 +403,7 @@ class DocumentService implements InitializingBean {
     
     def getDocumentIndexFields() {
     	def documentIndexFields=DocumentIndexField.findAllByPublish(true)
-    	documentIndexFields+=[['name':'$/Document/id','title':'Nummer'],['name':'dateCreated','title':'Aanmaak Datum'],['name':'lastUpdated','title':'Bijwerk Datum'],['name':'completionDate','title':'Eind Datum'],['name':'documentType','title':'Document Type'],['name':'documentDescription','title':'Omschrijving'],['name':'user','title':'Gebruiker'],['name':'groupId','title':'Groep'],['name':'status','title':'Status'],['name':'processingDays','title':'Doorlooptijd']]
+    	documentIndexFields+=[['name':'$/Document/id','title':'Nummer'],['name':'dateCreated','title':'Aanmaak Datum'],['name':'lastUpdated','title':'Bijwerk Datum'],['name':'completionDate','title':'Eind Datum'],['name':'documentType','title':'Document Type'],['name':'documentDescription','title':'Omschrijving'],['name':'user','title':'Gebruiker'],['name':'groupId','title':'Groep'],['name':'documentStatus','title':'Status'],['name':'processingDays','title':'Doorlooptijd']]
     	documentIndexFields.sort {it.title}                      
     	                      
 		return documentIndexFields

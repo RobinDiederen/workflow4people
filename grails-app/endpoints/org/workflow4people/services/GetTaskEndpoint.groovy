@@ -55,8 +55,16 @@ class GetTaskEndpoint implements InitializingBean {
 		log.debug("Task id: ${request.request.taskId.text()}")
 		
 		def theTask = taskService.getTask(request.request.taskId.text())
-		if (theTask) {      
-	    def response = { GetTaskResponse(xmlns:namespace) {
+		if (theTask) {
+		
+			Execution execution=executionService.findExecutionById(theTask.executionId)
+			def theProcessDefinitionId = execution.getProcessDefinitionId()
+			ProcessDefinitionQuery pdQuery=repositoryService.createProcessDefinitionQuery()    	   
+			pdQuery.processDefinitionId(theProcessDefinitionId)			
+			def processDefinition = pdQuery.uniqueResult() 			
+			def theProcessName=processDefinition.name
+	    
+		def response = { GetTaskResponse(xmlns:namespace) {
 			task ('xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance') {
 				assignee(theTask.assignee)
 				description(theTask.description)
@@ -70,14 +78,8 @@ class GetTaskEndpoint implements InitializingBean {
 				name(theTask.name)
 				id(theTask.id)
 				priority(theTask.priority)
-				form {
-							Execution execution=executionService.findExecutionById(theTask.executionId)
-							def processDefinitionId = execution.getProcessDefinitionId()
+				form {							
 							
-							ProcessDefinitionQuery pdQuery=repositoryService.createProcessDefinitionQuery()    	   
-							pdQuery.processDefinitionId(processDefinitionId)			
-							def processDefinition = pdQuery.uniqueResult() 			
-							def processName=processDefinition.name
 													
 							def formName=executionService.getVariable(theTask.executionId, "formName")
 							if (formName?.size()<1) formName=theTask.name
@@ -86,11 +88,14 @@ class GetTaskEndpoint implements InitializingBean {
 							// TODO needs to be configurable
 							
 							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
-							url("${baseUrl}/${processName}/${formName}/${theTask.id}/0")
+							url("${baseUrl}/${theProcessName}/${formName}/${theTask.id}/0")
+							//url("${baseUrl}/taskForm/${theTask.id}/0")
+							name(theTask.formResourceName ? theTask.formResourceName : theTask.name)
 						}
 				
 				
-				
+				processDefinitionId (theProcessDefinitionId)
+				processName(theProcessName)
 				def outcomeList = taskService.getOutcomes(theTask.id)				
 				outcomes { outcomeList.each { theOutcome ->
 						if (theOutcome!='completed') {

@@ -43,13 +43,14 @@ class Form implements Serializable {
     }
 	static belongsTo = [workflow: WorkflowDefinition]
     static hasMany = [formItem : FormItem]                  
-    
+   //	static fetchMode = [formAction: 'eager']
+
     String name
     String title
     String description
     String explanationMessage
     String confirmationMessage
-    String template
+    String template="task"
     Action formAction
     
     def getFieldList() {
@@ -72,6 +73,7 @@ class Form implements Serializable {
 		return templateService.runGenericSnippetTemplate("Form",snippetName,model)
 	}
 	
-	
+
+
     
 }

@@ -33,6 +33,8 @@
                         
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'field.id.label', default: 'Id')}" />
                         
+                            <th><g:message code="field.parent.label" default="Parent" /></th>
+                   	    
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="fieldPosition" title="${message(code: 'field.fieldPosition.label', default: 'Field Position')}" />
                         
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'field.name.label', default: 'Name')}" />
@@ -40,8 +42,6 @@
                             <th><g:message code="field.fieldType.label" default="Field Type" /></th>
                    	    
                             <th><g:message code="field.childFieldList.label" default="Child Field List" /></th>
-                   	    
-                            <th><g:message code="field.fieldList.label" default="Field List" /></th>
                    	    
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -52,6 +52,8 @@
                         
                             <td><g:link action="show" id="${fieldInstance.id}">${fieldValue(bean: fieldInstance, field: "id")}</g:link></td>
                         
+                            <td>${fieldValue(bean: fieldInstance, field: "parent")}</td>
+                        
                             <td>${fieldValue(bean: fieldInstance, field: "fieldPosition")}</td>
                         
                             <td>${fieldValue(bean: fieldInstance, field: "name")}</td>
@@ -59,8 +61,6 @@
                             <td>${fieldValue(bean: fieldInstance, field: "fieldType")}</td>
                         
                             <td>${fieldValue(bean: fieldInstance, field: "childFieldList")}</td>
-                        
-                            <td>${fieldValue(bean: fieldInstance, field: "fieldList")}</td>
                         
                         <td> 
                             

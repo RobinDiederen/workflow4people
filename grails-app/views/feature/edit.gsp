@@ -92,24 +92,6 @@
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'feature.description.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="featurePermission"><g:message code="feature.featurePermission.label" default="Feature Permission" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: featureInstance, field: 'featurePermission', 'errors')}">
-                                    
-<ul>
-<g:each in="${featureInstance?.featurePermission?}" var="f">
-    <li><g:link controller="featurePermission" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="featurePermission" action="create" params="['feature.id': featureInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'featurePermission.label', default: 'FeaturePermission')])}</g:link>
-
-
-                                                                        
-                                </td>
-                            </tr>
                                                 
                         </tbody>
                     </table>

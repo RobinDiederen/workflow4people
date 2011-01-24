@@ -13,7 +13,12 @@ class UrlMappings {
 			  
 		  }
 	  }
-
+	  /*
+	  "/" {
+		  controller=""
+	      action="auth"
+	  }
+*/
 	  /*
 	  "400"(controller:"error",action: "error") // bad request
 	  "401"(controller:"error",action: "unauthorized") // unauthorized

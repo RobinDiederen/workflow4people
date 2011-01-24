@@ -32,6 +32,10 @@
                     
                         
                             
+                                                    
+                    
+                        
+                            
                             
                             <span class="menuButton"><g:link class="awesome small blue button"  controller="fieldList" action="show" id="${fieldInstance?.childFieldList?.id}">&laquo;&nbsp; ${fieldInstance?.childFieldList?.encodeAsHTML()}</g:link></span>
                             
@@ -41,6 +45,10 @@
                             
                             
                             <span class="menuButton"><g:link class="awesome small blue button"  controller="fieldList" action="show" id="${fieldInstance?.fieldList?.id}">&laquo;&nbsp; ${fieldInstance?.fieldList?.encodeAsHTML()}</g:link></span>
+                            
+                                                    
+                    
+                        
                             
                                                     
                     
@@ -133,6 +141,17 @@
                          
                             
                             <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "id")}</td>
+                            
+						
+                        </tr>
+                    
+                        <tr class="prop">
+                         
+                            
+                            <td valign="top" class="name"><g:message code="field.parent.label" default="Parent" /></td>
+                         
+                            
+                           	<td valign="top" class="value"><g:link controller="field" action="show" id="${fieldInstance?.parent?.id}">${fieldInstance?.parent?.encodeAsHTML()}</g:link></td>
                             
 						
                         </tr>
@@ -330,15 +349,12 @@
 						
                         </tr>
                     
-                        <tr class="prop extrawide">
+                        <tr class="prop">
                          
-                            
-                            <td valign="top" class="name"><g:message code="field.xpath.label" default="Xpath" /></td>
+                        </tr>
+                    
+                        <tr class="prop">
                          
-                            
-                            <td valign="top" class="value extrawide">${fieldInstance.xpath}</td>
-                            
-						
                         </tr>
                     
                         <tr class="prop">
@@ -376,6 +392,14 @@
             
             
             
+                        
+                            
+                                                    
+                    
+                        
+                            
+                                                    
+                    
                         
                             
                                                     

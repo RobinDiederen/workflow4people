@@ -4,77 +4,77 @@
 		<meta name='layout' content='main' />
 		<title>Login</title>
 <style type='text/css' media='screen'>
-#login {
-	margin:15px 0px; padding:0px;
-	text-align:center;
-}
-#login .inner {
-	width:260px;
-	margin:0px auto;
-	text-align:left;
-	padding:10px;
-	border:1px solid #68A;
-	background-color:#EEF;
-}
-#login .inner .fheader {
-	padding:0px;margin:6px 0px 6px 0;color:#2e3741;font-size:14px;font-weight:bold;
-}
-#login .inner .cssform p{
-	clear: left;
-	margin: 0;
-	padding: 0px 0 0px 0;
-	padding-left: 105px;	
-	margin-bottom: 10px;	
-}
-#login .inner .cssform input[type='text']{ 
-	width: 120px;
-}
-#login .inner .cssform label{
-	font-weight: bold;
-	float: left;
-	margin-left: -105px; 
-	width: 100px;
-}
-#login .inner .login_message {color:red;}
-#login .inner .text_ {width:120px;}
-#login .inner .chk {height:12px;}
 
+#login {
+	display: block; z-index: 1001; outline: 0px none; position: absolute; height: auto; width: 300px; top: 100px; left: 679px;
+}
+
+#login  input[type='text'|type='password']{ 
+	width: 120px;	
+}
+
+#login .login_message {color:red;}
+#login .text_ {width:120px;}
+#login .chk {height:12px;}
+.layout-table {border:none;}
 </style>
+
+
+<script type='text/javascript'>
+/*
+(function(){
+	document.loginform.username.focus();
+})();
+*/
+</script>
+
+        <jq:jquery>
+        $( "#login" ).show( "slide", function() {
+        $("#username").focus();
+        }
+        );
+                
+        </jq:jquery>
+
+
 	</head>
-	<body>
-	<div class="body">
-		<div id='login' class="dialog">
-			<div class='inner'>
+	<body onload="document.loginform.username.focus();">
+	
+		<div id='login' class="ui-dialog ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" >
+
 			<g:if test='${flash.message}'>
 				<div class='login_message'>${flash.message}</div>
 			</g:if>
-			<div class='fheader'>Please Login:</div>
+			<div class='faheader ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix'>
+			<span id="ui-dialog-title-dialog" class="ui-dialog-title" >Please login:</span></div>
 			<form action='${request.contextPath}/j_spring_security_check' method='POST' id='loginForm' class='cssform'>
-				<p>
-					<label for='j_username'>Login ID</label>
-					<input type='text' class='text_' name='j_username' id='j_username'  />
-				</p>
-				<p>
-					<label for='j_password'>Password</label>
-					<input type='password' class='text_' name='j_password' id='j_password' />
-				</p>
-				<p>
-					<label for='remember_me'>Remember me</label>
-					<input type='checkbox' class='chk' id='remember_me' name='_spring_security_remember_me'/>
-				</p>
-				<p>
-					<input class='awesome small blue button' type='submit' value='Login' />
-				</p>
+			<table class="layout-table">
+				<tr>
+					<td>Username</td>
+					<td><input type='text' class='text_' name='j_username' id='j_username'  /></td>
+					
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type='password' class='text_' name='j_password' id='j_password' /></td>
+					
+				</tr>
+				
+				<tr>
+					<td>Remember me</td>
+					<td><input type='checkbox' class='chk' id='remember_me' name='_spring_security_remember_me'/></td>
+					
+				</tr>
+				
+				
+				<tr><td>
+					<input class='button submit' type='submit' value='Login &raquo;' />					
+					</td>
+				</tr>
+				</table>
 			</form>
-			</div>
+	
 		</div>
-<script type='text/javascript'>
-<!--
-(function(){
-	document.forms['loginForm'].elements['j_username'].focus();
-})();
-// -->
-</script>
-</div>
+
 	</body>
 </html>

@@ -33,6 +33,8 @@
                         
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="id" title="${message(code: 'fieldList.id.label', default: 'Id')}" />
                         
+                            <th><g:message code="fieldList.parent.label" default="Parent" /></th>
+                   	    
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="name" title="${message(code: 'fieldList.name.label', default: 'Name')}" />
                         
                             <th><g:message code="fieldList.namespace.label" default="Namespace" /></th>
@@ -40,8 +42,6 @@
                             <th><g:message code="fieldList.baseType.label" default="Base Type" /></th>
                    	    
                             <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="label" title="${message(code: 'fieldList.label.label', default: 'Label')}" />
-                        
-                            <g:sortableColumn params="${filteredParams ? filteredParams : ''}" property="description" title="${message(code: 'fieldList.description.label', default: 'Description')}" />
                         
                         <th class="action"><g:message default="Action" code="default.list.action.label" /></th>
                         </tr>
@@ -52,6 +52,8 @@
                         
                             <td><g:link action="show" id="${fieldListInstance.id}">${fieldValue(bean: fieldListInstance, field: "id")}</g:link></td>
                         
+                            <td>${fieldValue(bean: fieldListInstance, field: "parent")}</td>
+                        
                             <td>${fieldValue(bean: fieldListInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: fieldListInstance, field: "namespace")}</td>
@@ -59,8 +61,6 @@
                             <td>${fieldValue(bean: fieldListInstance, field: "baseType")}</td>
                         
                             <td>${fieldValue(bean: fieldListInstance, field: "label")}</td>
-                        
-                            <td>${fieldValue(bean: fieldListInstance, field: "description")}</td>
                         
                         <td> 
                             

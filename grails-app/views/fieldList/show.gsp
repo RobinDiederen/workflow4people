@@ -50,6 +50,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
                 		<span class="menuButton"><g:link params="${filteredParams ? filteredParams : ''}" class="awesome small blue button" action="list">&laquo;&nbsp;<g:message code="fieldList.list.label" args="[entityName]" /></g:link></span>
                     
 				    
@@ -81,6 +85,17 @@
                          
                             
                             <td valign="top" class="value">${fieldValue(bean: fieldListInstance, field: "id")}</td>
+                            
+						
+                        </tr>
+                    
+                        <tr class="prop">
+                         
+                            
+                            <td valign="top" class="name"><g:message code="fieldList.parent.label" default="Parent" /></td>
+                         
+                            
+                           	<td valign="top" class="value"><g:link controller="field" action="show" id="${fieldListInstance?.parent?.id}">${fieldListInstance?.parent?.encodeAsHTML()}</g:link></td>
                             
 						
                         </tr>
@@ -179,6 +194,10 @@
             
             
             
+                        
+                            
+                                                    
+                    
                         
                             
                                                     

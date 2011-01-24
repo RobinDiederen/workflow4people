@@ -104,7 +104,7 @@ class TemplateConfigDelegate
 	  msg "Processing workflow..."
 	  total=1
       current=1
-	  model = [ 'workflowDefinitionInstance' : workflowDefinition ]
+	  model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition ]
 	  closure.workflow=workflowDefinition
 	  closure()
 	  mlog "Processing workflow completed"
@@ -120,7 +120,7 @@ class TemplateConfigDelegate
   	  	msg "Processing form ${form.name} ..."
   		closure.formName=form.name
   		closure.form=form
-  	  	model = [ 'workflowDefinitionInstance' : workflowDefinition, 'formInstance':form,'form':form ]
+  	  	model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition, 'formInstance':form,'form':form ]
   	    closure()
   	  	mlog "Procesed form ${form.name}"
   	  	current++
@@ -167,7 +167,7 @@ class TemplateConfigDelegate
 	mlog "Processing namespaces completed"
   }
   
-  def template(String theTemplatePath,String theOutputPath) {
+  def template(String theTemplatePath,String theOutputPath,options=[]) {
 	mlog "- Running template ${templatePath+theTemplatePath}"
 	
 	// Make the target directory tree if it doesn't exist
@@ -177,7 +177,19 @@ class TemplateConfigDelegate
 		def outputDir= new File(fullOutputPath.substring(0, lastSlashIndex))
   		outputDir.mkdirs() 
 	}	
-	new File(fullOutputPath).write(templateService.runTemplate(templatePath+theTemplatePath, model))
+	def s=templateService.runTemplate(templatePath+theTemplatePath, model)
+	if (!options.contains("noPretty")) {
+		//disabled it for now
+		//s=templateService.prettyPrint(s)
+	}
+	if (!options.contains("noReplace")) {
+		s=s.replace("<f:","<g:");
+		s=s.replace("</f:","</g:");
+		s=s.replace('*{',"\${");
+		
+	}
+	
+	new File(fullOutputPath).write(s)
 	}
 
 def methodMissing(String name, args) {

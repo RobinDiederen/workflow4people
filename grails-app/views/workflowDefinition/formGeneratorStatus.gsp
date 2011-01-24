@@ -13,7 +13,7 @@
           $("#count").html(p.count);
           $("#total").html(p.total);
           $("#message").html(p.message);
-          $("#log").html(p.log);
+          $("#generatelog").html(p.log);
           $("#progressbar").progressbar({
 			value: p.pct
 			});
@@ -34,7 +34,8 @@
     		<div class="message">${flash.message}</div>
   		</g:if>
   
-  		<div class="dialog" id="dialog">  		
+  		<div class="dialog" id="dialog">  
+  		<form>		
 		<table>
 			<tbody>
 			
@@ -62,13 +63,13 @@
 				
 				<tr class="prop">                            
 					<td valign="top" class="name">Log</td>
-					<td valign="top" class="value" ><div id="log" style="height:200px;overflow:scroll;">[log]</div></td>
+					<td valign="top" class="value" ><div id="generatelog" style="height:200px;overflow:scroll;">[log]</div></td>
 				</tr>
 				
 								
 			</tbody>
   		</table>
-  		
+  		</form>
   		
   			
   		</div>

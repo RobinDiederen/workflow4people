@@ -104,16 +104,6 @@
                     
                         <tr class="prop">
                          
-                            
-                            <td valign="top" class="name"><g:message code="feature.featurePermission.label" default="Feature Permission" /></td>
-                         
-                            
-                            <!-- manyToOne and oneToMany are shown again -->
-  							<td valign="top" class="value"><g:link controller="featurePermission" action="show" id="${featureInstance?.featurePermission?.id}">${featureInstance?.featurePermission?.encodeAsHTML()}</g:link></td>                            
-
-
-                            
-						
                         </tr>
                     
                     </tbody>
@@ -169,6 +159,8 @@
                             	<tr><td><b><g:message code="featurePermission.list.name.label" /></b></td><td>
                             	
                             	
+                            	<g:link title ="${message(code: 'featurePermission.list.create.help')}" class="awesome small blue button" controller="featurePermission" action="create" params="['feature.id': featureInstance?.id]"><g:message code="featurePermission.list.new.label" />&nbsp;&raquo;</g:link>
+                            	
                             	
                             	</td></tr>
                             	
@@ -176,14 +168,20 @@
                             	
                             	
                                 
-                                <g:each in="${org.workflow4people.FeaturePermission.findAllByFeature(featureInstance,[sort:'null',order:'null'])}" var="f">
+                                <g:each in="${org.workflow4people.FeaturePermission.findAllByFeature(featureInstance,[sort:'authority',order:'asc'])}" var="f">
                                 
                                 <tr id="position-${f.id}">
                                 <td>${f?.encodeAsHTML()}</td>
                                 	<td>
                                 	
+                                	<g:link title ="${message(code: 'featurePermission.list.show.help')}" class="awesome small blue button" controller="featurePermission" action="show" id="${f.id}"><g:message code="featurePermission.list.show.label" />&nbsp;&raquo;</g:link>&nbsp;
                                 	
                                 	
+                                	<g:link title ="${message(code: 'featurePermission.list.edit.help')}" class="awesome small blue button" controller="featurePermission" action="edit" id="${f.id}"><g:message code="featurePermission.list.edit.label" />&nbsp;&raquo;</g:link>&nbsp;
+                                	
+                                	
+                                	
+                                	<g:link title ="${message(code: 'featurePermission.list.delete.help')}" class="awesome small red button" controller="featurePermission" action="delete" id="${f.id}" onclick="return confirm('${message(code: 'featurePermission.button.delete.confirm.message', default: 'Are you sure?')}');">X</g:link></td>
                                 	
                            
                                 </tr>

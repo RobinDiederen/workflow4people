@@ -1,4 +1,4 @@
-<plugin name='wfp' version='0.6.11' grailsVersion='1.3.5 &gt; *'>
+<plugin name='wfp' version='0.6.11' grailsVersion='1.2.1 &gt; *'>
   <author>Your name</author>
   <title>Plugin summary/headline</title>
   <description>\
@@ -90,28 +90,40 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.GetDocumentIndexFieldsEndpoint</resource>
     <resource>org.workflow4people.services.GetFeaturesEndpoint</resource>
     <resource>org.workflow4people.services.GetMinerParametersEndpoint</resource>
+    <resource>org.workflow4people.services.GetRequestFormsEndpoint</resource>
     <resource>org.workflow4people.services.GetTaskEndpoint</resource>
     <resource>org.workflow4people.services.GetUserDetailsEndpoint</resource>
+    <resource>org.workflow4people.services.GetWorkflowDefinitionsEndpoint</resource>
     <resource>org.workflow4people.services.HasAccessToFormEndpoint</resource>
     <resource>org.workflow4people.services.MinerDrilldownEndpoint</resource>
     <resource>org.workflow4people.services.MinerQueryEndpoint</resource>
     <resource>org.workflow4people.services.StartProcessInstanceEndpoint</resource>
     <resource>org.workflow4people.services.StoreDocumentEndpoint</resource>
     <resource>org.workflow4people.services.TakeTaskEndpoint</resource>
+    <resource>org.workflow4people.services.TaskQueryEndpoint</resource>
     <resource>org.workflow4people.services.BusinessCalendarService</resource>
     <resource>org.workflow4people.services.CmisService</resource>
     <resource>org.workflow4people.services.DocumentService</resource>
     <resource>org.workflow4people.services.EchoService</resource>
     <resource>org.workflow4people.services.FormGeneratorService</resource>
+    <resource>org.workflow4people.services.FormService</resource>
     <resource>org.workflow4people.services.MinerService</resource>
     <resource>org.workflow4people.services.SecurityService</resource>
     <resource>org.workflow4people.services.SetDueDateService</resource>
     <resource>org.workflow4people.services.SoapService</resource>
     <resource>org.workflow4people.services.TemplateService</resource>
     <resource>org.workflow4people.services.Wf4pConfigService</resource>
+    <resource>org.workflow4people.services.WorkflowDefinitionService</resource>
     <resource>org.workflow4people.FormTagLib</resource>
     <resource>org.workflow4people.WformTagLib</resource>
   </resources>
-  <dependencies />
+  <dependencies>
+    <plugin name='acegi' version='0.5.2' />
+    <plugin name='jquery' version='1.4.3.2' />
+    <plugin name='springws' version='0.5.0.1' />
+    <plugin name='searchable' version='0.5.5' />
+    <plugin name='background-thread' version='1.6' />
+    <plugin name='jetty' version='1.2-SNAPSHOT' />
+  </dependencies>
   <behavior />
 </plugin>

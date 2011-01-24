@@ -30,6 +30,9 @@ import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine
 import groovy.text.*;
 import org.springframework.web.context.request.RequestContextHolder
 
+import java.io.*;
+
+import org.w3c.tidy.Tidy
 
 public class TemplateService implements  ApplicationContextAware {
     	
@@ -72,6 +75,11 @@ public class TemplateService implements  ApplicationContextAware {
     	groovyPagesTemplateEngine.setApplicationContext(applicationContext)
     	groovyPagesTemplateEngine.setServletContext(servletContext)
     	groovyPagesTemplateEngine.setClassLoader(applicationContext.getClassLoader())
+    	
+    	//TODO make this configurable
+    	groovyPagesTemplateEngine.reloadEnabled=true
+    	groovyPagesTemplateEngine.cacheResources=false
+    	
     	
     	Template t = groovyPagesTemplateEngine.createTemplate(gspFile)
     	StringWriter writer = new StringWriter();
@@ -178,21 +186,90 @@ public class TemplateService implements  ApplicationContextAware {
   	  			templateConfigDelegate.current=100	  	       
   	  			templateConfigDelegate.completed=true
   	  		} catch (Exception e) {
-  	  			templateConfigDelegate.msg "An error has occurred"
+  	  			templateConfigDelegate.msg "An error has occurred: ${e.message}"
   	  			templateConfigDelegate.mlog e.message
   	  		}
   	        
 	  	  	
   	  	});
      }
+	 
+	 def getFormTemplateNames(){
+			def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
+	  	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
+			  templatePath+='/'
+	  	  	}
+	  	  	def dir = new File(templatePath+'form')
+	  	  	def templateNames=[]
+	  	  	dir.eachFile { file ->
+	  	  		if (file.name.endsWith(".gsp")) {	  	  			
+	  	  			templateNames+=file.name.replace(".gsp","")
+	  	  		}
+	  	  	}
+	  	  	return templateNames
+	 }
+	 
 	
+
+	 def generateProcess(def workflowDefinitionId) {			
+	  		def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
+	  	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
+			  templatePath+='/'
+	  	  	}
+	  	  	
+	    	def outputPath=ApplicationConfiguration.findByConfigKey('process.template.outputPath').configValue;  	  	
+	  	  	def templateText=new File(templatePath+"process-template.conf").text
+	  	  	
+	  	  	backgroundService.execute("Generating process ...", {
+	  	  		
+	  	        def servletContext2  = ServletContextHolder.getServletContext()
+	  	        def applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext2)
+	  	        def requestAttributes = GrailsWebUtil.bindMockWebRequest(applicationContext)
+	  	        
+	  	        def servletContext = requestAttributes.request.servletContext
+	  	        def request = requestAttributes.request
+	  	  			  	  		
+				def workflowDefinitionInstance = WorkflowDefinition.get( workflowDefinitionId )
+
+	  	  		templateConfigDelegate = new TemplateConfigDelegate(this,workflowDefinitionInstance,templatePath,outputPath)
+	  	  	
+	  	  		def template=new GroovyShell().evaluate(templateText)
+
+	  	  		log.debug "Generating process ..."
+	  	  		template.delegate=templateConfigDelegate
+	  	  		try {
+	  	  			template()
+	  	  			templateConfigDelegate.msg "Processing completed"
+	  	  			templateConfigDelegate.total=100
+	  	  			templateConfigDelegate.current=100	  	       
+	  	  			templateConfigDelegate.completed=true
+	  	  		} catch (Exception e) {
+	  	  			templateConfigDelegate.msg "An error has occurred: ${e.message}"
+	  	  			templateConfigDelegate.mlog e.message
+	  	  		}
+	  	        
+		  	  	
+	  	  	});
+	     }
+
+	 
+	 
 	 
 	 def getProgress() {
 		 
 			return templateConfigDelegate?.progress
 		 
 		}
-		
+	
+	 def prettyPrint(String inputHTML) {
+		 Tidy tidy = new Tidy();
+         
+         tidy.setXHTML(true);       
+		 ByteArrayOutputStream xhtmlByteOutStream = new ByteArrayOutputStream();             
+		 tidy.parse(new ByteArrayInputStream(inputHTML.getBytes()),xhtmlByteOutStream);
+		 return xhtmlByteOutStream.toString()
+		 
+	}
 	
     
 

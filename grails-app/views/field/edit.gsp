@@ -32,6 +32,10 @@
                     
                         
                             
+                                                    
+                    
+                        
+                            
                             
                             <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.childFieldList?.id}">&laquo;&nbsp; ${fieldInstance?.childFieldList?.encodeAsHTML()}</g:link></span>
                             
@@ -41,6 +45,10 @@
                             
                             
                             <span class="menuButton"><g:link class="awesome small blue button" controller="fieldList" action="show" id="${fieldInstance?.fieldList?.id}">&laquo;&nbsp; ${fieldInstance?.fieldList?.encodeAsHTML()}</g:link></span>
+                            
+                                                    
+                    
+                        
                             
                                                     
                     
@@ -126,6 +134,17 @@
                 <div class="dialog">
                     <table>
                         <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="parent"><g:message code="field.parent.label" default="Parent" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'parent', 'errors')}">
+                                    <g:select name="parent.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${fieldInstance?.parent?.id}" noSelection="['null': '']" />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.parent.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -300,17 +319,6 @@
                                     <g:checkBox name="readonly" value="${fieldInstance?.readonly}" />
 
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.readonly.help',default:'x')}" href="" >?</a>                                    
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop extrawide">
-                                <td valign="top" class="name">
-                                  <label for="xpath"><g:message code="field.xpath.label" default="Xpath" /></label>
-                                </td>
-                                <td valign="top" class="value extrawide ${hasErrors(bean: fieldInstance, field: 'xpath', 'errors')}">
-                                    <g:textField name="xpath" value="${fieldInstance?.xpath}" />
-
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.xpath.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                                                 

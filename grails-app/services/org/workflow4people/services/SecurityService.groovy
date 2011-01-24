@@ -40,26 +40,26 @@ class SecurityService {
     	def hasAccess=false
     	
     	Person.withTransaction {
-    	Person user=Person.findByUsername(username)
-    	def workflow=WorkflowDefinition.findByName(workflowName)
-    	def form
-    	if(formName) {
-    		form=Form.findByWorkflowAndName(workflow,formName)
-    	}
+    		Person user=Person.findByUsername(username)
+    		def workflow=WorkflowDefinition.findByName(workflowName)
+    		def form
+    		if(formName) {
+    			form=Form.findByWorkflowAndName(workflow,formName)
+    		}
     	
     	
-    	if(form) {
-    	user.authorities.each { authority ->
-			def fpa=FormPermission.findAllByAuthorityAndForm(authority,form)
-			fpa.each { fp ->
-				fp.role?.roleAction?.each { roleAction -> 
-					if (action==roleAction.name) {
-						hasAccess=true
-						return true
+    		if(form) {
+    			user.authorities.each { authority ->
+    			def fpa=FormPermission.findAllByAuthorityAndForm(authority,form)
+				fpa.each { fp ->
+					fp.role?.roleAction?.each { roleAction -> 
+						if (action==roleAction.name) {
+							hasAccess=true
+							return true
+						}
 					}
-				}
+    			}
 			}
-    	}
     	}
     	
     	user.authorities.each { authority ->

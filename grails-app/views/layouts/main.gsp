@@ -1,20 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-    	<!-- This is main.gsp in wfp-meander -->
+    	<!-- This is main.gsp in wfp -->
         <title><g:layoutTitle default="workflow4people" /></title>
-        <%-- Standard Grails scaffolding style--%>
-        
-        <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'main.css',contextPath:'',plugin:'wfp')}" />
-        
-        <%-- Workflow4people style --%>
-        <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css/redmond',file:'jquery-ui-1.8.6.custom.css',contextPath:'',plugin:'wfp')}" />        
+                
+        <%-- css from used modules --%>
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'js/jquery/themes/default',file:'style.css',contextPath:'',plugin:'wfp')}" />
-        <style type="text/css">/* TREE LAYOUT */ .tree ul { margin:0 0 0 5px; padding:0 0 0 0; list-style-type:none; } .tree li { display:block; min-height:18px; line-height:18px; padding:0 0 0 15px; margin:0 0 0 0; /* Background fix */ clear:both; } .tree li ul { display:none; } .tree li a, .tree li span { display:inline-block;line-height:16px;height:16px;color:black;white-space:nowrap;text-decoration:none;padding:1px 4px 1px 4px;margin:0; } .tree li a:focus { outline: none; } .tree li a input, .tree li span input { margin:0;padding:0 0;display:inline-block;height:12px !important;border:1px solid white;background:white;font-size:10px;font-family:Verdana; } .tree li a input:not([class="xxx"]), .tree li span input:not([class="xxx"]) { padding:1px 0; } /* FOR DOTS */ .tree .ltr li.last { float:left; } .tree > ul li.last { overflow:visible; } /* OPEN OR CLOSE */ .tree li.open ul { display:block; } .tree li.closed ul { display:none !important; } /* FOR DRAGGING */ #jstree-dragged { position:absolute; top:-10px; left:-10px; margin:0; padding:0; } #jstree-dragged ul ul ul { display:none; } #jstree-marker { padding:0; margin:0; line-height:5px; font-size:1px; overflow:hidden; height:5px; position:absolute; left:-45px; top:-30px; z-index:1000; background-color:transparent; background-repeat:no-repeat; display:none; } #jstree-marker.marker { width:45px; background-position:-32px top; } #jstree-marker.marker_plus { width:5px; background-position:right top; } /* BACKGROUND DOTS */ .tree li li { overflow:hidden; } .tree > .ltr > li { display:table; } /* ICONS */ .tree ul ins { display:inline-block; text-decoration:none; width:16px; height:16px; } .tree .ltr ins { margin:0 4px 0 0px; } </style>
-              
+        <%-- Workflow4people style --%>
+		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />
+		<%-- Theme style --%>
+		<link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'roller-theme.css',contextPath:'',plugin:'wfp')}" />
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'theme.css',contextPath:'',plugin:'wfp')}" />
+                      
         <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico',contextPath:'',plugin:'wfp')}" type="image/x-icon" />
         
         
@@ -34,7 +33,7 @@
         
         <g:javascript src="jquery/ui.multiselect.js"  contextPath="" plugin="wfp" />
         <jq:jquery>
- 
+ 		
             $(".step").addClass("awesome small blue button");
             $(".currentStep").addClass("awesome small red button");
             $(".nextLink").addClass("awesome small blue button");
@@ -47,6 +46,7 @@
             $("a.process").addClass("awesome small blue button");
             
             /*
+            
             $(".step").button();
             $(".currentStep").button();
             $(".nextLink").button();
@@ -58,8 +58,8 @@
             $("input.delete").button();
             $("a.process").button();  
             $(".awesome").button();
-          */
-            
+          
+            */
             
             
         	<%-- Helper for the left menu, when clicking a li the enclosed a's href  will be called --%>
@@ -93,94 +93,99 @@
 		<g:layoutHead />
 	</head>
     <body>
-    	<div class="masthead" style="border-bottom:1px solid #CCC;float:left;padding-bottom:5px;">
-        	<div id="spinner" class="spinner" style="display:none;">
-            	<img src="${createLinkTo(dir:'images',file:'spinner.gif',contextPath:'',plugin:'wfp')}" alt="Spinner" />
-        	</div>	
-       		<div id="logo" class="logo"><a href="${createLinkTo(dir:'',contextPath:'')}"><img src="${createLinkTo(dir:'images',file:'wf4p-150x100.png',contextPath:'')}" alt="Workflow4people" /></a></div>
-        	<div class="title"><h1><g:layoutTitle default="Workflow4people" /></h1>
-        	<h3 style="float:right"><g:loggedInUserInfo field="username"/></h3>
-        	</div>        		   
-     	</div>
-     	        
+     <div id="main-toolbar" >
+    	<span id="menu-toolbar">
+    		<a href="/workflow4people/" title="Home|Go to the home screen" class="action home help" >&nbsp;</a>
+    	</span>
+    	
+    	<span id="user-toolbar" style="float:right;">    		    		
+    		<g:isLoggedIn><g:loggedInUserInfo field="username"/><g:link title="logout" class="logout action" controller="logout">&nbsp;</g:link></g:isLoggedIn>
+    	</span>
+    
+    	</div>
+    
+     	        		   
+     	   <div class="page-body" >       
 	    <div class="wf4p-menu">
 	      <ul>	
 	      <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">      
 	        <li>Workflow</li>	        	        
 	        <ul>	        
-	          <li><g:link controller="wf4pTask" action="list">All Tasks</g:link></li>
-	          <li><g:link controller="wf4pTask" action="userlist">Tasks by user</g:link></li>
-        	  <li><g:link controller="wf4pTask" action="grouplist">Group tasks</g:link></li>
-	          <li><g:link controller="wf4pProcessDefinition" action="list">Process Definitions</g:link></li>
+	          <li class="menu-icon menu-alltasks"><g:link controller="wf4pTask" action="list">All Tasks</g:link></li>
+	          <li class="menu-icon mytasks"><g:link controller="wf4pTask" action="userlist">Tasks by user</g:link></li>
+        	  <li class="menu-icon grouptasks" ><g:link controller="wf4pTask" action="grouplist">Group tasks</g:link></li>
+	          <li class="menu-icon processdefinitions" ><g:link controller="wf4pProcessDefinition" action="list">Process Def's</g:link></li>
           	</ul>
           	
           	</g:ifAnyGranted>
           	<g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
            <li>XML Documents</li>
            <ul>
-   	          <li><g:link controller="document" action="list">XML documents</g:link></li>
+   	          <li class="menu-icon xmldocuments" ><g:link controller="document" action="list">XML documents</g:link></li>
    	          <g:ifAnyGranted role="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
-   	          <li><g:link controller="documentType" action="list">Types</g:link></li>
-   	          <li><g:link controller="documentIndexField" action="list">Index fields</g:link></li>
-   	          <li><g:link controller="minerQuery" action="list">Miner Query</g:link></li>
-   	          <li><g:link controller="namespace">Namespaces</g:link></li>
+   	          <li  class="menu-icon menu-types"><g:link controller="documentType" action="list">Types</g:link></li>
+   	          <li class="menu-icon menu-index-fields"><g:link controller="documentIndexField" action="list">Index fields</g:link></li>
+   	          <li class="menu-icon miner"><g:link controller="minerQuery" action="list">Miner Query</g:link></li>
+   	          <li  class="menu-icon menu-namespaces"><g:link controller="namespace">Namespaces</g:link></li>
    	          </g:ifAnyGranted>  	             
 	        </ul>
 	        </g:ifAnyGranted>
 	        <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	       <li>Search</li>
            <ul>
-   	          <li><g:link controller="search" action="index">Lucene search</g:link></li>   	            	            
-    	      <li><g:link controller="index" action="index">Manage index</g:link></li>
+   	          <li class="menu-icon menu-search"><g:link controller="search" action="index">Lucene search</g:link></li>   	            	            
+    	      <li class="menu-icon menu-manage-index"><g:link controller="index" action="index">Manage index</g:link></li>
 	        </ul>
 	        </g:ifAnyGranted>
 	        <g:ifAnyGranted role="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
 	        <li>Forms</li>
 	        <ul>
-	          <li><g:link controller="workflowDefinition">Workflow</g:link></li>
-	          <li><g:link controller="dataModelEditor">Data model</g:link></li>
-	          <%-- <li><g:link controller="form">Forms</g:link></li> --%>
+	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow</g:link></li>
+	          <li class="menu-icon menu-datamodel"><g:link controller="dataModelEditor">Data model</g:link></li>
 	          
-	          <li><g:link controller="fieldList">Field Lists</g:link></li>
-	          <%-- <li><g:link controller="field">Fields</g:link></li> --%>
-	          <li><g:link controller="fieldType">Field Types</g:link></li>
-	          <li><g:link controller="baseType">Base Types</g:link></li>
-	          <%-- <li><g:link controller="fieldTypeItem">Field Type items</g:link></li> --%>	          
+	          
+	          <li  class="menu-icon menu-fieldlist"><g:link controller="fieldList">Field Lists</g:link></li>
+	          
+	          <li  class="menu-icon menu-fieldtype"><g:link controller="fieldType">Field Types</g:link></li>
+	          <li  class="menu-icon menu-basetype"><g:link controller="baseType">Base Types</g:link></li>
+	          	          
 	        </ul>
 	        </g:ifAnyGranted>
 	        <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	        <li>Calendar</li>
 	        <ul>
-	          <li><g:link controller="dayPart" action="list" >Day parts</g:link></li>
-	          <li><g:link controller="holiday" action="list" >Holidays</g:link></li>
+	          <li class="menu-icon dayparts"><g:link controller="dayPart" action="list" >Day parts</g:link></li>
+	          <li class="menu-icon holidays"><g:link controller="holiday" action="list" >Holidays</g:link></li>
 	        </ul>
 	        </g:ifAnyGranted>
 	        
 	        <g:ifAnyGranted role="ROLE_WF4P_USER_ADMIN,ROLE_WF4P_ADMIN">
 	        <li>User Admin</li>
 	        <ul>
-	          <li><g:link controller="person" action="list" >Users</g:link></li>
-	          <li><g:link controller="authority" action="list" >Groups</g:link></li>
-	          <li><g:link controller="role" action="list" >Roles</g:link></li>
-	          <li><g:link controller="action" action="list" >Actions</g:link></li>
-	          <li><g:link controller="feature" action="list" >Features</g:link></li>
+	          <li class="menu-icon menu-users"><g:link controller="person" action="list" >Users</g:link></li>
+	          <li class="menu-icon menu-groups"><g:link controller="authority" action="list" >Groups</g:link></li>
+	          <li class="menu-icon menu-roles"><g:link controller="role" action="list" >Roles</g:link></li>
+	          <li class="menu-icon menu-action"><g:link controller="action" action="list" >Actions</g:link></li>
+	          <li class="menu-icon menu-feature"><g:link controller="feature" action="list" >Features</g:link></li>
 	          
-	          <li><g:link controller="applicationConfiguration" action="list" >Configuration</g:link></li>
-	          <li><g:link controller="status">Status</g:link></li>
+	          <li class="menu-icon configuration"><g:link controller="applicationConfiguration" action="list" >Configuration</g:link></li>
+	          <li class="menu-icon status"><g:link controller="status" action="status">Status</g:link></li>
 	        </ul>
 	        </g:ifAnyGranted>
 	        <li>Login</li>
         	<ul>
         		<g:isNotLoggedIn>
-          			<li><g:link controller="login">Login</g:link></li>
+          			<li class="menu-icon menu-login"><g:link controller="login">Login</g:link></li>
           		</g:isNotLoggedIn>
           		<g:isLoggedIn>
-          			<li><g:link controller="logout">Logout</g:link></li>
+          			<li class="menu-icon menu-logout"><g:link controller="logout">Logout</g:link></li>
           		</g:isLoggedIn>          
         	</ul>
 	        
 	      </ul>	      
 	    </div>
+
     	 <g:layoutBody />
+    	 	    </div>
     </body>	
 </html>

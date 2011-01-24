@@ -29,16 +29,17 @@ class Field {
 	//static transients = ["xpath"]
 	static belongsTo = [fieldList: FieldList]	
     static constraints = {
+		parent(help:'x',nullable:true)
 		fieldPosition(help:'x')
 		name(help:'x',class:'wide')
 		fieldType(help:'x')
 		childFieldList(nullable:true,display:true,help:'x')		
-		fieldList(display:false)
+		fieldList(nullable:true,display:false)
 				
-		description(size:0..50000,help:'x')
+		description(nullable:true,size:0..50000,help:'x')
     	
     	defaultValue(nullable:true,help:'x',class:'wide')
-    	label(help:'x',class:'wide')
+    	label(nullable:true,help:'x',class:'wide')
     	help(nullable:true,size:0..50000,help:'x')
 	    alert(nullable:true,size:0..50000,help:'x')
 	    fieldLength(nullable:true)
@@ -49,13 +50,13 @@ class Field {
 	    
 	    minOccurs(nullable:true,help:'x')
 	    maxOccurs(nullable:true,help:'x')
-	    nillable(help:'x')
-	    
-	    // Determines dependency of this field on another field
-	    //dependsOn(nullable:true,help:'x')
-	    //dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
-	    //dependencyParameter(nullable:true,help:'x')
-	    //customDependencyExpression(nullable:true,size:0..50000,help:'x')
+		    nillable(nullable:true,help:'x')
+		    
+		    // Determines dependency of this field on another field
+		    //dependsOn(nullable:true,help:'x')
+		    //dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
+		    //dependencyParameter(nullable:true,help:'x')
+		    //customDependencyExpression(nullable:true,size:0..50000,help:'x')
 	    dependencyExpression(nullable:true,size:0..50000,help:'x')
 	    
     	readonly(help:'x')
@@ -69,7 +70,12 @@ class Field {
     int fieldPosition
     
     /**
-     * The position of this field in the list of data elements
+     * The parent of this field
+     */
+    Field parent
+    
+    /**
+     * The type of this field
      */
     FieldType fieldType
 
@@ -113,7 +119,7 @@ class Field {
     String dependencyExpression
     
     // Transient field
-    String xpath
+   // String xpath
     
     String toString() {
 		
@@ -159,20 +165,25 @@ class Field {
 		return "${fieldList.namespace.prefix}:${getFieldProperty('name')}"
 	}
 	
+	def getBinding() {
+		return binding()
+	}
+	
 	
 	Binding binding() {
 		
 		groovy.lang.Binding binding = new Binding()		
 		
 		binding.name=getFieldProperty('name');
-		binding.namespacePrefix=fieldList.namespace.prefix
-		binding.prefixedName="${fieldList.namespace.prefix}:${binding.name}"
-		
+		binding.namespacePrefix=namespacePrefix
+		binding.prefixedName="${namespacePrefix}:${name}"		
 		
 		binding.label = getFieldProperty('label')
 		binding.help=getFieldProperty('help')			
 		binding.alert=getFieldProperty('alert')		
-		binding.fieldLength=getFieldProperty('fieldLength')				
+		binding.fieldLength=getFieldProperty('fieldLength')
+		binding.minLength=fieldType.minLength ? fieldType.minLength : ""
+		binding.maxLength=fieldType.maxLength ? fieldType.maxLength : ""
 		binding.defaultValue = getFieldProperty('defaultValue')
 		
 		binding.fieldTypeName=fieldType.name
@@ -180,28 +191,124 @@ class Field {
 		
 		binding.occurrence=""
 		if (minOccurs?.size()>0) binding.occurrence+=" minOccurs=\"${minOccurs}\""
-		if (maxOccurs?.size()>0) binding.occurrence+=" maxOccurs=\"${maxOccurs}\""	
+		if (maxOccurs?.size()>0) binding.occurrence+=" maxOccurs=\"${maxOccurs}\""
+			
 		binding.xpath=xpath
+		binding.gpath=gpath
+		binding.listGpath=listGpath
+		
+		binding.gpathExpr=gpathExpr
+		binding.listGpathExpr=listGpathExpr
+		
 		binding.field=this
-		binding.prefix=fieldList.namespace.prefix
+		binding.prefix=namespacePrefix
 		binding.output=""
-		if (childFieldList) {			
-			binding.fields=Field.findAllByFieldList(childFieldList,[sort:'fieldPosition',order:'asc'])
-			binding.childFieldListName=childFieldList.name
-			if (binding.label.size()<1) label=childFieldList.label
-			// flooding everything below with xpath
-			log.debug("Storing xpath prefix ${fieldList.namespace.prefix} and xpath ${this.xpath} in ${childFieldList.name}")
-			childFieldList.storeXPath(fieldList.namespace.prefix, this.xpath)
-		}
 		
-		// Yes. we need to do this for the xpath, too. It will always stop at the field though
-		// It will never reach the FieldType because the lowest level field always has its' xpath value filled.
-		binding.xpath=getFieldProperty('xpath')
+		binding.fields=Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+		binding.children=Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+		binding.hasChildren=Field.countByParent(this)>0		
 		
-		println "XPATH: ${binding.xpath}"
 		return binding
 	}
 	
+	def getGpath() {
+		def indexString=""
+		if (maxOccurs?.length()>0) {
+			indexString="[${name}Index]"
+		}
+		
+		if (parent) {
+			return parent.readGpath(0) ?  "${parent.readGpath(0)}.${name}${indexString}" : "${name}${indexString}" 
+			//return "${parent.readGpath(0)}.${name}${indexString}"
+		} else {
+			//return "${name}${indexString}"
+			return ""
+		}		
+	}
+	
+	
+	// Gpath with the last brackets missing so it refers to the entire list 
+	def getListGpath() {				
+		if (parent) {
+			//return "${parent.readGpath(0)}.${name}"
+			return parent.readGpath(0) ? "${parent.readGpath(0)}.${name}" : "${name}"
+		} else {
+			//return "${name}"
+			return ""
+		}		
+	}
+	
+	// GPath with expressions in the square brackets
+	def getGpathExpr() {
+		return gpath.replace('[','[${').replace(']','}]')
+	}
+	
+	def getListGpathExpr() {
+		return listGpath.replace('[','[${').replace(']','}]')
+	}
+	
+	
+	
+	def readGpath(int depth) {
+		def indexString=""
+			if (maxOccurs?.length()>0) {
+				indexString="[${name}Index]"
+		}
+			
+		
+		if (depth<30) {
+			depth++
+			if (parent) {
+				//return "${parent.readGpath(depth)}.${name}${indexString}"
+				return parent.readGpath(depth) ? "${parent.readGpath(depth)}.${name}${indexString}" : "${name}${indexString}"
+			} else {
+				//return "${name}${indexString}"
+				return ""
+			}		
+		} else {
+			return "GPath nested too deep!"
+		}
+	}
+	
+	
+	
+	
+	def getXpath() {
+		if (parent) {
+			return "${parent.readXpath(0)}/${namespacePrefix}:${name}"
+		} else {
+			//return "/${namespacePrefix}:${name}"
+			return ""
+			
+		}		
+	}
+	
+	def readXpath(int depth) {
+		if (depth<30) {
+			depth++
+			if (parent) {			
+				return "${parent.readXpath(depth)}/${namespacePrefix}:${name}"
+			} else {
+				//return "/${namespacePrefix}:${name}"
+				return ""	
+			}
+		} else {
+			return "XPath Nested too deep!"
+		}
+	}
+	
+	
+	def getNamespacePrefix() {		
+			if (this.fieldList) {
+				return fieldList?.namespace?.prefix 
+			} else {
+				if (parent) {
+					return parent.namespacePrefix
+				} else {
+					"error"
+				}
+			}
+	}
 	void storeXPath(String prefix,String theXPath){
 		//xpath=theXPath+"/${prefix}:${name}"
     	xpath=theXPath
@@ -214,6 +321,7 @@ class Field {
 	def propertyMissing(String name,args){	
 		if (name.lastIndexOf("Snippet")>0) {
 			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))
+			println "Running field snippet ${snippetName} for field ${this.name}"
 			//TODO make this more generic so that it works for all snippets that have an existing readonly variant
 			// and defaults to the indicated snippet if the readonly version doesn't exist
 			if((readonly) && (snippetName=="form")) {
@@ -225,19 +333,8 @@ class Field {
 		}
 			
 	}
-	// This should have been done using methodMissing so we would have xxxSnippet([]) calls for every type of snippet
-	// But methodMissing doesn't work on Domain classes.
-	/*
-	def sectionSnippet(extraModel){
-		
-		
-		def snippetName="section"
-		if(readonly) {
-			snippetName="readonlySection"
-		}
-		return templateService.runSnippetTemplate(this,snippetName,extraModel)			
-	}
-	*/
+
+	
 	def runSnippet(String snippetName,def model=[:]) {
 		return templateService.runSnippetTemplate(this,snippetName,model)
 	}

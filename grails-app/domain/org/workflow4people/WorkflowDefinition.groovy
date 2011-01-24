@@ -40,7 +40,16 @@ class WorkflowDefinition implements Serializable {
     	form(display:false,sortable:false,sort:'name',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
-    
+
+	/* For some reason, setting:
+	 * static fetchMode = [form: 'eager',documentType:'eager']
+	 * only works for form, and the mapping below works for both form and documentType
+	 * The eager loading is here because otherwise the GetWorkflowDefinitions webservice fails.
+	 */
+      static mapping ={     
+             form lazy: false
+             documentType lazy: false
+      }
     
     String name
     String title

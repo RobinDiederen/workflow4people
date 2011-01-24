@@ -32,12 +32,14 @@ class FormItem {
     static constraints = {
     	position(help:'x')
     	field(help:'x')
+    	snippet(nullable:true,help:'x',class:'wide')
     	baseXpath(nullable:true,help:'x',class:'extrawide')
     	readonly(help:'x')
     	form(display:false)
     }
     int position
     Field field
+    String snippet="formItem"
     String baseXpath="/"
     boolean readonly=false
     

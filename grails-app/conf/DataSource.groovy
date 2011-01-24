@@ -8,6 +8,7 @@ hibernate {
     cache.use_second_level_cache=true
     cache.use_query_cache=true    
     cache.provider_class='net.sf.ehcache.hibernate.EhCacheProvider'
+    max_fetch_depth=5
 }
 // environment specific settings
 environments {

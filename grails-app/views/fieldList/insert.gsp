@@ -48,6 +48,10 @@
                             
                                                     
                     
+                        
+                            
+                                                    
+                    
                 		<span class="menuButton">&laquo;&nbsp;<g:link class="awesome small blue button" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
             			<span class="menuButton"><g:link class="awesome small blue button" action="create"><g:message code="default.new.label" args="[entityName]" />&nbsp;+</g:link></span>                        
                     
@@ -71,6 +75,16 @@
                 <div class="dialog">
                     <table>
                         <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="parent"><g:message code="fieldList.parent.label" default="Parent" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'parent', 'errors')}">
+                                    <g:select name="parent.id" from="${org.workflow4people.Field.list()}" optionKey="id" value="${fieldListInstance?.parent?.id}" noSelection="['null': '']" />
+
+                                </td>
+                            </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">

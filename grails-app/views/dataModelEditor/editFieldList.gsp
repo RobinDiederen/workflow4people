@@ -2,109 +2,85 @@
 					
 						<form id="ajaxdialogform">
 					
-					<div id="dialogtabs" style="border:none;"> 
-					<ul>						
-							<li>
-								<a href="#details">Details</a>
-							</li>
-						
-						
-						
-					</ul>
 					
-					<div id="details">
-					<g:hiddenField name="detailType" value="show"/>
-					<g:hiddenField name="detailClass" value="FieldList"/>					
-					<g:hiddenField name="detailId" value="${fieldListInstance.id}"/>
-					
-                     <table style="border:none">
-                    <tbody>
+                    <table>
+                        <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="parent"><g:message code="fieldList.parent.label" default="Parent" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'parent', 'errors')}">
+                                    <g:select name="parent.id" from="${org.workflow4people.Field.findAll([sort:'name',order:'asc'])}" optionKey="id" value="${fieldListInstance?.parent?.id}" noSelection="['null': '']" />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.parent.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop wide">
+                                <td valign="top" class="name">
+                                  <label for="name"><g:message code="fieldList.name.label" default="Name" /></label>
+                                </td>
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${fieldListInstance?.name}" />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.name.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="namespace"><g:message code="fieldList.namespace.label" default="Namespace" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'namespace', 'errors')}">
+                                    <g:select name="namespace.id" from="${org.workflow4people.Namespace.findAll([sort:'prefix',order:'asc'])}" optionKey="id" value="${fieldListInstance?.namespace?.id}"  />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.namespace.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="baseType"><g:message code="fieldList.baseType.label" default="Base Type" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'baseType', 'errors')}">
+                                    <g:select name="baseType.id" from="${org.workflow4people.BaseType.findAll([sort:'name',order:'asc'])}" optionKey="id" value="${fieldListInstance?.baseType?.id}"  />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.baseType.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop wide">
+                                <td valign="top" class="name">
+                                  <label for="label"><g:message code="fieldList.label.label" default="Label" /></label>
+                                </td>
+                                <td valign="top" class="value wide ${hasErrors(bean: fieldListInstance, field: 'label', 'errors')}">
+                                    <g:textField name="label" value="${fieldListInstance?.label}" />
+
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'fieldList.label.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="description"><g:message code="fieldList.description.label" default="Description" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldListInstance, field: 'description', 'errors')}">
+                                    <g:textArea name="description" cols="40" rows="5" value="${fieldListInstance?.description}" />
+
+                                                                        
+                                </td>
+                            </tr>
+                                                
+                        </tbody>
+                    </table>
                     
-                        <tr class="prop">
-                         
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@11e44f0[name=id,type=class java.lang.Long,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=null -->
-                            <td valign="top" class="name"><g:message code="fieldList.id.label" default="Id" /></td>
-                         
-                            
-                            <td valign="top" class="value">${fieldValue(bean: fieldListInstance, field: "id")}</td>
-                            
-						
-                        </tr>
                     
-                        <tr class="prop">                        
-                            <td valign="top" class="name">
-                            	<g:message code="fieldList.name.label" default="Name" />
-                           	</td>
-                            <td valign="top" class="value null">
-                         		<g:textField name="name" value="${fieldListInstance?.name}" />
-								<a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.name.help',default:'x')}" href="" >?</a>
-                            </td>                            
-                        </tr>
-                    
-                        <tr class=" nullprop">
-                         
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@438e9e9[name=namespace,type=class org.workflow4people.Namespace,persistent=true,optional=false,association=true,bidirectional=false,association-type=one-to-one] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@3484c229[class org.workflow4people.FieldList,namespace,class org.workflow4people.Namespace,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@77e72cae[false]}] -->
-                            <td valign="top" class="name"><g:message code="fieldList.namespace.label" default="Namespace" /></td>
-                         
-                            
-                           	<td valign="top" class="value"><g:link controller="namespace" action="show" id="${fieldListInstance?.namespace?.id}">${fieldListInstance?.namespace?.encodeAsHTML()}</g:link></td>
-                            
-						
-                        </tr>
-                    
-                        <tr class=" nullprop">
-                         
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@7ff5376c[name=baseType,type=class org.workflow4people.BaseType,persistent=true,optional=false,association=true,bidirectional=false,association-type=one-to-one] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@3c09d515[class org.workflow4people.FieldList,baseType,class org.workflow4people.BaseType,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@2984747e[false]}] -->
-                            <td valign="top" class="name"><g:message code="fieldList.baseType.label" default="Base Type" /></td>
-                         
-                            
-                           	<td valign="top" class="value"><g:link controller="baseType" action="show" id="${fieldListInstance?.baseType?.id}">${fieldListInstance?.baseType?.encodeAsHTML()}</g:link></td>
-                            
-						
-                        </tr>
-                    
-                        <tr class=" nullprop">
-                         
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@36fc117d[name=label,type=class java.lang.String,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@5ee041be[class org.workflow4people.FieldList,label,class java.lang.String,{nullable=org.codehaus.groovy.grails.validation.NullableConstraint@54fc519b[false]}] -->
-                            <td valign="top" class="name"><g:message code="fieldList.label.label" default="Label" /></td>
-                         
-                            
-                            <td valign="top" class="value null">${fieldValue(bean: fieldListInstance, field: "label")}</td>
-                            
-						
-                        </tr>
-                    
-                        <tr class=" nullprop">
-                         
-                            <!-- p=org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty@151c2b4[name=description,type=class java.lang.String,persistent=true,optional=false,association=false,bidirectional=false,association-type=<null>] cp=org.codehaus.groovy.grails.validation.ConstrainedProperty@1ec5b819[class org.workflow4people.FieldList,description,class java.lang.String,{size=org.codehaus.groovy.grails.validation.SizeConstraint@46b98117[0..50000], nullable=org.codehaus.groovy.grails.validation.NullableConstraint@3cca3147[false]}] -->
-                            <td valign="top" class="name"><g:message code="fieldList.description.label" default="Description" /></td>
-                         
-                            
-                            <td valign="top" class="value null">${fieldValue(bean: fieldListInstance, field: "description")}</td>
-                            
-						
-                        </tr>
-                    
-                        <tr class=" nullprop">
-                         
-                        </tr>
-                    
-                        <tr class="prop">
-                         
-                        </tr>
-                    
-                        <tr class="prop">
-                         
-                        </tr>
-                    
-                    </tbody>
-                </table>
-                    </div>
                
              
                 
                
-               </div>
+     
                </form>
                </div>
                 

@@ -1,12 +1,400 @@
-.logo {float:left;}
-.nav {float:left;clear:right;}
-.title { float:left; width:900px}
-.body { margin-top:10px; float:left;width:850px;clear:right;}
-.body h1 {float:left;clear:both;}
-//.body div { float:left;}
+html * {
+    margin: 0;
+    /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
+}
+
+/* GENERAL */
+
+.spinner {
+    padding: 5px;
+    position: absolute;
+    right: 0;
+}
+
+body {
+    background: #fff;
+    color: #333;
+    font: 10px verdana, arial, helvetica, sans-serif;
+}
+
+a:link, a:visited, a:hover {
+    color: #666;
+    font-weight: bold;
+    text-decoration: none;
+} 
+
+h1 {
+    color: #006dba;
+    font-weight: normal;
+    font-size: 16px;
+    margin: .8em 0 .3em 0;
+}
+
+ul {
+    padding-left: 15px;	
+}
+
+.body {
+ /*  float: left; */
+    margin: 0 15px 10px 15px;
+}
+
+/* NAVIGATION MENU */
+
+.nav {
+    background: #fff url(theme/images/skin/shadow.jpg) bottom repeat-x;
+    border: 1px solid #ccc;
+    border-style: solid none solid none;	
+    margin-top: 5px;
+    /*padding: 7px 12px;*/
+}
+
+.menuButton {
+    font-size: 10px;
+    padding: 0 5px;
+}
+.menuButton a {
+    color: #333;
+    padding: 4px 6px;
+}
+.menuButton a.home {
 
 
-div.list {float:left;width:100%;margin-top:10px;margin-bottom:0px;paddding:0px;border:1px solid #CCC;}
+    color: #333;
+    padding-left: 25px;
+}
+.menuButton a.list {
+
+    color: #333;
+    padding-left: 25px;
+}
+.menuButton a.create {
+
+    color: #333;
+    padding-left: 25px;
+}
+
+/* MESSAGES AND ERRORS */
+
+.message {
+    background: #f3f8fc url(theme/images/skin/information.png) 8px 50% no-repeat;
+    border: 1px solid #b2d1ff;
+    color: #006dba;
+    margin: 10px 0 5px 0;
+    padding: 5px 5px 5px 30px
+}
+
+div.errors {
+    background: #fff3f3;
+    border: 1px solid red;
+    color: #cc0000;
+    margin: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
+}
+div.errors ul {
+    list-style: none;
+    padding: 0;	
+}
+div.errors li {
+	background: url(theme/images/skin/exclamation.png) 8px 0% no-repeat;
+    line-height: 16px;
+    padding-left: 30px;
+}
+
+td.errors select {
+    border: 1px solid red;
+}
+td.errors input {
+    border: 1px solid red;
+}
+
+
+/* ex main.css tables */
+
+table {
+    border: 1px solid #ccc;
+    width: 100%
+}
+tr {
+    border: 0;
+}
+td, th { 
+    font: 11px verdana, arial, helvetica, sans-serif;
+    line-height: 12px;
+    padding: 5px 6px;
+    text-align: left;
+    vertical-align: top;
+}
+th {
+    background: #fff url(theme/images/skin/shadow.jpg);
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 17px;
+    padding: 2px 6px;
+}
+th a:link, th a:visited, th a:hover {
+    color: #333;
+    display: block;
+    font-size: 10px;
+    text-decoration: none;
+    width: 100%;
+}
+th.asc a, th.desc a {
+    background-position: right;
+    background-repeat: no-repeat;
+}
+th.asc a {
+    background-image: url(theme/images/skin/sorted_asc.gif);
+}
+th.desc a {
+    background-image: url(theme/images/skin/sorted_desc.gif);
+}
+
+.odd {
+    background: #f7f7f7;
+}
+.even {
+    background: #fff;
+}
+
+/* LIST */
+
+.list table {
+    border-collapse: collapse;
+}
+.list th, .list td {
+    border-left: 1px solid #ddd;
+}
+.list th:hover, .list tr:hover {
+    background: #b2d1ff;
+}
+
+/* PAGINATION */
+
+.paginateButtons {
+    background: #fff url(theme/images/skin/shadow.jpg) bottom repeat-x;
+    border: 1px solid #ccc;
+    border-top: 0;
+    color: #666;
+    font-size: 10px;
+    overflow: hidden;
+    padding: 10px 3px;
+}
+/* div.paginateButtons {clear: both;}*/
+.paginateButtons a {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-color: #ccc #aaa #aaa #ccc;
+    color: #666;
+    margin: 0 3px;
+    padding: 2px 6px;
+}
+.paginateButtons span {
+    padding: 2px 3px;
+}
+
+/* main.css dialog */
+/* DIALOG */
+
+.dialog table {
+    padding: 5px 0;
+}
+
+.prop {
+    padding: 5px;
+}
+.prop .name {
+    text-align: left;
+    width: 15%;
+    white-space: nowrap;
+}
+.prop .value {
+    text-align: left;
+    width: 85%;
+}
+
+/* ACTION BUTTONS */
+
+.buttons {
+    background: #fff url(theme/images/skin/shadow.jpg) bottom repeat-x;
+    border: 1px solid #ccc;
+    color: #666;
+    font-size: 10px;
+    margin-top: 5px;
+    /* overflow: hidden;*/
+    padding-top: 2px;
+    padding-bottom:4px;
+    
+}
+
+.buttons input {
+    background: #fff;
+    border: 0;
+    color: #333;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 3px;
+    overflow: visible;
+    padding: 2px 6px;
+}
+.buttons input.delete {
+    /* background: transparent url(theme/images/skin/database_delete.png) 5px 50% no-repeat; */
+    padding-left: 28px;
+}
+.buttons input.edit {
+    /* background: transparent url(theme/images/skin/database_edit.png) 5px 50% no-repeat; */
+    padding-left: 28px;
+}
+.buttons input.save {
+    /* background: transparent url(theme/images/skin/database_save.png) 5px 50% no-repeat; */
+    padding-left: 28px;
+}
+
+
+
+
+
+
+
+/* Ex main.css from Forms */
+html * {
+    margin: 0;
+    /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
+    font-size:11px;
+}
+body {
+    background: #fff;
+    color: #333;
+    font: 10px verdana, arial, helvetica, sans-serif;
+    
+}
+a:link, a:visited, a:hover {
+    color: #666;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul {
+    padding-left: 15px;
+}
+
+.body {
+    //float: left;
+    margin: 0 15px 10px 15px;
+    width:800px;
+  // margin-left:200px;
+}
+h1 {
+    color: #68A;
+    font-weight: bold;
+    font-size: 16px;
+    margin: .8em 0 .3em 0;
+    margin-left:175px;
+}
+
+
+
+.error {color: red;}
+.action {min-height:16px; padding:2px 0 2px 13px;background-repeat:no-repeat;}
+
+.action-delete {background-image:url("theme/icons/actions/16/list-remove.png");}
+.action-insert {background-image:url("theme/icons/actions/16/list-add.png");}
+
+div.wf4p-menu {float:left;width:175px;clear:left;}
+div.wf4p-menu ul li {display:block;border-bottom:1px solid #888;margin-left:0px;height:20px;}
+div.wf4p-menu ul li {font-size:12px;font-weight:bold;color:#68A;}
+div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
+div.wf4p-menu ul ul li {font-size:10px;font-weight:bold;color:#666;}
+
+
+
+
+// Fix dataTable header icons
+
+.ui-state-default .ui-icon {
+    background-image: url("images/ui-icons_6da8d5_256x240.png");
+}
+jquery...tom.css (line 95)
+.ui-icon-carat-2-n-s {
+    background-position: -128px 0;
+}
+jquery...tom.css (line 110)
+.ui-icon {
+    background-image: url("images/ui-icons_469bdd_256x240.png");
+    height: 16px;
+    width: 16px;
+}
+
+.DataTables_sort_wrapper .ui-icon { float:right;}
+.dataTables_filter { float: right;}
+.dataTables_length { width:200px;float:left;}
+
+div.body {width:auto;}
+
+.home { background-image: url("theme/icons/actions/16/gohome.png" ) !important; background-position: 0px 0px !important; }
+.logout { background-image: url("theme/icons/actions/16/gnome-logout.png" ) !important; background-position: 0px 0px !important; }
+#main-toolbar {border:1px solid #888;background-color:#888;height:20px;margin-bottom:10px;}
+.page-body {width:100%;float:left;}
+div.datatable {width:100%;float:left;}
+
+.menu-icon { background-position: 0px 2px; background-repeat:no-repeat; padding:2px 2px 2px 24px;}
+.menu-alltasks { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.mytasks { background-image: url("theme/icons/stock/16/stock_person.png"); }
+.grouptasks { background-image: url("theme/icons/stock/16/stock_people.png");}
+.processdefinitions { background-image: url("theme/icons/mimetypes/16/gnome-mime-text-x-python.png");}
+
+.xmldocuments { background-image: url("theme/icons/mimetypes/16/application-xml.png");}
+.menu-types { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-index-fields { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-namespaces { background-image: url("theme/icons/actions/16/document-properties.png"); }
+
+.menu-search { background-image: url("theme/icons/actions/16/search.png");}
+.menu-manage-index { background-image: url("theme/icons/actions/16/document-properties.png"); }
+
+.menu-workflowdefinition { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-datamodel { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-fieldlist { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-fieldtype { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-basetype { background-image: url("theme/icons/actions/16/document-properties.png"); }
+
+.dayparts { background-image: url("theme/icons/mimetypes/16/vcalendar.png");}
+.holidays { background-image: url("theme/icons/mimetypes/16/vcalendar.png");}
+
+.menu-users { background-image: url("theme/icons/stock/16/stock_person.png"); }
+.menu-groups { background-image: url("theme/icons/stock/16/stock_people.png");}
+.menu-roles { background-image: url("theme/icons/stock/16/stock_people.png");}
+
+
+.menu-action { background-image: url("theme/icons/emblems/16/emblem-ubuntuone-synchronized.png");}
+.menu-feature { background-image: url("theme/icons/emblems/16/emblem-ubuntuone-synchronized.png");}
+.configuration { background-image: url("theme/icons/categories/16/configuration_section.png");}
+.status { background-image: url("theme/icons/status/16/dialog-info.png");}
+
+
+.myforms { background-image: url("theme/icons/stock/16/stock_person.png"); }
+.mygroupforms { background-image: url("theme/icons/stock/16/stock_people.png"); }
+.advancedsearch { background-image: url("theme/icons/actions/16/stock_search.png"); }
+.miner { background-image: url("theme/icons/categories/16/applications-development.png"); }
+.formicon { background-image: url("theme/icons/categories/16/applications-publishing.png"); }
+.menu-login { background-image: url("theme/icons/stock/16/stock_person.png"); }
+.menu-logout { background-image: url("theme/icons/actions/16/gnome-logout.png"); }
+
+
+/* ---- end main.css --- */
+
+
+
+
+.logo {}
+.nav { width:auto;margin-left:175px;}
+.title { }
+.body { margin-top:10px; }
+/*.body h1 {float:left;clear:both;} */
+/*.body div { float:left;} */
+
+
+div.list {width:auto;margin-left:175px;margin-top:10px;margin-bottom:0px;paddding:0px;border:1px solid #CCC;}
 div.statuslist {width:940px;}
 
 .list table {padding:0px;margin-right:0px;border:none;margin-left:0px;}
@@ -15,18 +403,18 @@ div.statuslist {width:940px;}
 .list tr th + th {border-left: 1px solid #CCC;}
 div#editpane {margin-left:10px;}
 
-div.buttons { width:100%; }
+div.buttons {margin-left:175px;}
 .buttons input.start {
-    background: transparent url(../images/skin/database_edit.png) 5px 50% no-repeat;
+    background: transparent url(theme/images/skin/database_edit.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
 
 .buttons input.stop {
-    background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
+    background: transparent url(theme/images/skin/database_save.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
 .buttons input.cancel {
-    background: transparent url(../images/skin/database_delete.png) 5px 50% no-repeat;
+    background: transparent url(theme/images/skin/database_delete.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
 
@@ -35,7 +423,7 @@ div.main-menu { float:left;clear:both;
 }
 div.main-menu div {
 	
-    background: transparent url(../images/skin/main-menu-item.png) 10px 0px no-repeat;
+    background: transparent url(theme/images/skin/main-menu-item.png) 10px 0px no-repeat;
     height:64px;
     padding-left:96px;
     padding-top:16px;
@@ -46,45 +434,45 @@ div.main-menu div {
 }
 div.main-menu div:hover {border-left:8px solid grey; background-color:#eeeeee;}
 
-div.tasks {background: transparent url(../images/skin/tasks.png) 10px 0px no-repeat !important;}
-div.flows {background: transparent url(../images/skin/processes.png) 10px 0px no-repeat !important;}
+div.tasks {background: transparent url(theme/images/skin/tasks.png) 10px 0px no-repeat !important;}
+div.flows {background: transparent url(theme/images/skin/processes.png) 10px 0px no-repeat !important;}
 
 tr.total td {border-top:2px solid #ddd;   font-weight: bold; border-left:0px;}
-span.user {background: transparent url(../images/skin/preferences-user-information.png) 5px 50% no-repeat; padding-left:24px;}
-span.logout {background: transparent url(../images/skin/system-log-out.png) 5px 50% no-repeat;padding-left:24px;}
+span.user {background: transparent url(theme/images/skin/preferences-user-information.png) 5px 50% no-repeat; padding-left:24px;}
+span.logout {background: transparent url(theme/images/skin/system-log-out.png) 5px 50% no-repeat;padding-left:24px;}
 
 .menuButton a.new {
-    background: url(../images/skin/new-icon.png) center left no-repeat;
+    background: url(theme/images/skin/new-icon.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
 
 .menuButton a.filter {
-    background: url(../images/skin/filter-icon.png) center left no-repeat;
+    background: url(theme/images/skin/filter-icon.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
 
 .menuButton a.instances {
-/*    background: url(../images/skin/list-icon.png) center left no-repeat; */
+/*    background: url(theme/images/skin/list-icon.png) center left no-repeat; */
     color: #333;
     padding-left: 25px;
 }
 
 .menuButton a.processes {
-   /* background: url(../images/skin/list-icon.png) center left no-repeat; */
+   /* background: url(theme/images/skin/list-icon.png) center left no-repeat; */
     color: #333;
     padding-left: 25px;
 }
 
 .menuButton a.process {
-/*    background: url(../images/skin/list-icon.png) center left no-repeat; */
+/*    background: url(theme/images/skin/list-icon.png) center left no-repeat; */
     color: #333;
     padding-left: 25px;
 }
 
 .menuButton a.back {
-    background: url(../images/skin/back.png) center left no-repeat;
+    background: url(theme/images/skin/back.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
@@ -99,27 +487,29 @@ div.itemlist {margin-top: 10px;}
     border: 1px solid #ccc;
     margin-bottom: 5px;
     padding: 7px 0px;
-    width:100%;
+   /* width:100%;*/
     
 }
-div.dialog {clear:left;margin-top:10px;width:100%;}
-div.message {clear:left;margin-top:10px; padding:5px 5px 5px 30px;width:auto;}
-div.errors {clear:left;margin-top:10px; padding:5px 5px 5px 5px;width:auto; float:left;}
+div.dialog {margin-left:175px;width:auto;margin-top:10px;}
+div.message {margin-left:175px;width:auto;margin-top:10px; padding:5px 5px 5px 30px;width}
+div.errors {margin-left:175px;width:auto;margin-top:10px; padding:5px 5px 5px 5px;}
 
-
-div.buttons {clear:left;margin-top:10px;width:100%;}
-div.paginateButtons {clear:left;margin-top:0px;width:100%;padding:7px 0px;}
-
+/*
+div.buttons {margin-left:175px;width:auto;margin-top:10px;}
+*/
+div.paginateButtons {margin-top:0px;padding:7px 0px;margin-left:175px;}
+/*
 h1 { font-weight: bold;color:#68A;}
 div.title h1 {margin-left:20px;margin-top:30px;} 
 div.masthead {margin-bottom:5px;}
-
+*/
+/*
 div.wf4p-menu {float:left;width:150px;clear:left;}
 div.wf4p-menu ul li {display:block;border-bottom:1px solid #888;margin-left:0px;height:20px;}
 div.wf4p-menu ul li {font-size:12px;font-weight:bold;color:#68A;}
 div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
 div.wf4p-menu ul ul li {font-size:10px;font-weight:bold;color:#666;}
-
+*/
 
 a.step, span.currentStep { margin-left:3px;margin-right:3px;}
 div.paging {margin-top: 10px;}
@@ -156,7 +546,7 @@ div.dialog-buttons {
     border: 1px solid #ccc;
     width: 100%;
     margin-bottom: 5px;
-    background:url("../images/skin/shadow.jpg") repeat-x scroll center bottom     
+    background:url("theme/images/skin/shadow.jpg") repeat-x scroll center bottom     
 }
 
 div.inner-dialog-buttons {
@@ -178,3 +568,37 @@ div.inner-new-dialog {
 
 .wide input { width:300px;}
 .extrawide input { width:600px;}
+
+.editor {margin-left:175px;width:auto;}
+
+li.jstree-default a {font-weight:normal;}
+
+
+
+
+/* TREE LAYOUT */ 
+.tree ul { margin:0 0 0 5px; padding:0 0 0 0; list-style-type:none; }
+.tree li { display:block; min-height:18px; line-height:18px; padding:0 0 0 15px; margin:0 0 0 0;
+/* Background fix */ clear:both; }
+.tree li ul { display:none; }
+.tree li a, .tree li span { display:inline-block;line-height:16px;height:16px;color:black;white-space:nowrap;text-decoration:none;padding:1px 4px 1px 4px;margin:0; }
+.tree li a:focus { outline: none; }
+.tree li a input, 
+.tree li span input { margin:0;padding:0 0;display:inline-block;height:12px !important;border:1px solid white;background:white;font-size:10px;font-family:Verdana; }
+.tree li a input:not([class="xxx"]), .tree li span input:not([class="xxx"]) { padding:1px 0; }
+/* FOR DOTS */ 
+.tree .ltr li.last { float:left; }
+.tree > ul li.last { overflow:visible; }
+/* OPEN OR CLOSE */ 
+.tree li.open ul { display:block; }
+.tree li.closed ul { display:none !important; }
+/* FOR DRAGGING */ #jstree-dragged { position:absolute; top:-10px; left:-10px; margin:0; padding:0; }
+#jstree-dragged ul ul ul { display:none; }
+#jstree-marker { padding:0; margin:0; line-height:5px; font-size:1px; overflow:hidden; height:5px; position:absolute; left:-45px; top:-30px; z-index:1000; background-color:transparent; background-repeat:no-repeat; display:none; }
+#jstree-marker.marker { width:45px; background-position:-32px top; }
+#jstree-marker.marker_plus { width:5px; background-position:right top; }
+/* BACKGROUND DOTS */ 
+.tree li li { overflow:hidden; }
+.tree > .ltr > li { display:table; }
+/* ICONS */ .tree ul ins { display:inline-block; text-decoration:none; width:16px; height:16px; }
+.tree .ltr ins { margin:0 4px 0 0px; }

@@ -64,7 +64,7 @@ class WformTagLib {
 	})
 	}
 	
-	def modelTree = { attrs ->
+	def oldModelTree = { attrs ->
 	  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
 	  Field.findAllByFieldList(attrs.fieldList,[sort:'fieldPosition',order:'asc']).each({
 	  if (it.childFieldList){
@@ -81,6 +81,26 @@ class WformTagLib {
 	})
 		
 	}
+	
+	def modelTree = { attrs ->
+	  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
+	if(attrs.field) {
+	  Field.findAllByParent(attrs.field,[sort:'fieldPosition',order:'asc']).each({
+      def hasChildFields=Field.countByParent(it)>0
+	  if (hasChildFields && (it.parent!=null) && (it.parent!=it)){
+		    out << "<li rel=\"field\" class=\"open field\" id=\"field_${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name}</a>\n"
+		    out << "<ul>"
+			def lattrs = [field:it]
+			modelTree.call(lattrs)
+			out << "</ul></li>"
+		}
+		else {
+			out << "<li rel=\"field\" class=\"field\" id=\"field_${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name}</a></li>\n"
+		}
+	})
+	}
+	}
+	
 	
 }
 

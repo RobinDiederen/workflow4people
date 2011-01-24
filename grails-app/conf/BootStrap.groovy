@@ -3,7 +3,6 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 class BootStrap {
 
      def init = { servletContext ->
-     
     println "Bootstrap"
     println "Authority count:  	${org.workflow4people.Authority.count()}"
      // workaround for GRAILS-4580
@@ -41,8 +40,8 @@ class BootStrap {
      	org.workflow4people.Role.get(-1)
      	org.workflow4people.WorkflowDefinition.get(-1)
      	org.workflow4people.WorkflowPermission.get(-1)
-     
      }
+
      def destroy = {
      }
 } 

@@ -50,18 +50,18 @@
                                   <label for="fieldType"><g:message code="field.fieldType.label" default="Field Type" /></label>
                                 </td>
                                 <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'fieldType', 'errors')}">
-                                    <g:select name="fieldType.id" from="${org.workflow4people.FieldType.list()}" optionKey="id" value="${fieldInstance?.fieldType?.id}"  />
+                                    <g:select name="fieldType.id" from="${org.workflow4people.FieldType.findAll([sort:'name',order:'asc'])}" optionKey="id" value="${fieldInstance?.fieldType?.id}"  />
                                     <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.fieldType.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
                             <tr class="prop null">
                                 <td valign="top" class="name">
-                                  <label for="childFieldList"><g:message code="field.childFieldList.label" default="Child Field List" /></label>
+                                  <label for="childFieldList"><g:message code="field.fieldList.label" default="Field List" /></label>
                                 </td>
-                                <td valign="top" class="value null ${hasErrors(bean: fieldInstance, field: 'childFieldList', 'errors')}">
-                                    <g:select name="childFieldList.id" from="${org.workflow4people.FieldList.list()}" optionKey="id" value="${fieldInstance?.childFieldList?.id}" noSelection="['null': '']" />
-                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.childFieldList.help',default:'x')}" href="" >?</a>                                    
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'fieldList', 'errors')}">
+                                    <g:select name="fieldList.id" from="${org.workflow4people.FieldList.findAll([sort:'name',order:'asc'])}" optionKey="id" value="${fieldInstance?.fieldList?.id}" noSelection="['null': '-']" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.fieldList.help',default:'x')}" href="" >?</a>                                    
                                 </td>
                             </tr>
                         
@@ -197,6 +197,18 @@
                                 <td valign="top" class="value">${fieldValue(bean: fieldInstance, field: "xpath")}</td>
                                 
                             </tr>
+                            
+                             <tr class="prop null">
+                                <td valign="top" class="name">
+                                  <label for="parent"><g:message code="field.parent.label" default="Parent" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: fieldInstance, field: 'parent', 'errors')}">
+                                    <g:select name="parent.id" from="${org.workflow4people.Field.findAll([sort:'name',order:'asc'])}" optionKey="id" value="${fieldInstance?.parent?.id}" noSelection="['null': '-']" />
+                                    <a tabindex="9999" class="awesome small blue help button" title="${message(code:'field.parent.help',default:'x')}" href="" >?</a>                                    
+                                </td>
+                            </tr>
+                            
+                            
                             
                         </tbody>
                     </table>
