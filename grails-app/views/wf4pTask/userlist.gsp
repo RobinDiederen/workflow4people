@@ -8,7 +8,9 @@
 <div class="body">
   
   <g:if test="${flash.message}">
-  <div class="message">${flash.message}</div>
+    <div class="message">
+    <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
+    </div>
   </g:if>
    
   
@@ -27,15 +29,12 @@
 				          <th>Task</th>
 				          <th>Name</th>
 				          <th>Execution</th>
-				          <%-- TODO bring this back when descriptions are supported 
 				          <th>Description</th>
-				          --%>
-				          
 				          <th>Priority</th>
 				          <th>Assignee</th>
 				          <th>Create&nbsp;time</th>
 				          <th>Due&nbsp;date</th>
-				          <th>Details</th>
+				          <th>Action</th>
 				        </tr>
 				      </thead>
 				      <tbody>
@@ -46,24 +45,24 @@
 				          
 			             <td>${taskInstance.name}</td>
 			             <td>${taskInstance.executionId}</td>
-			             <%-- TODO bring this back when descriptions are supported 
 				          <td>${taskInstance.description}</td>
-				          --%>
 				          <td>${taskInstance.priority}</td>
 				          <td>${taskInstance.assignee}</td>
-				          <td>${taskInstance.createTime}</td> 
+				          <td>${taskInstance.createTime}</td>
 				          <td>${taskInstance.duedate}</td>
-				          <td><g:link controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">Details&nbsp;&gt;&gt;&gt;</g:link></td>				          
+				          <td>
+			                <g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId: taskInstance.id, previousAction: 'userlist']">show&nbsp;&raquo;</g:link>
+			                <g:link class="awesome small blue button" controller="wf4pTask" action="reassign" params="[taskId: taskInstance.id, previousAction: 'userlist']">reassign&nbsp;&raquo;</g:link>
+				          </td>
 				        </tr>
 				        </g:each>
 				      </tbody>
 				    </table>
 				</div>
 
-               <div class="paginateButtons">
+                <div class="paginateButtons">
                 	<g:paginate total="${taskTotal}" />
             	</div>
-
 				
   </div>
 </body>

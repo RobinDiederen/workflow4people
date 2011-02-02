@@ -27,14 +27,12 @@
 				          <th>Task</th>
 				          <th>Name</th>
 				          <th>Execution</th>
-				          <%-- TODO bring this back when descriptions are supported 
 				          <th>Description</th>
-				          --%>
 				          <th>Priority</th>
 				          <th>Assignee</th>
 				          <th>Create&nbsp;time</th>
 				          <th>Due&nbsp;date</th>
-				          <th>Details</th>
+				          <th>Action</th>
 				        </tr>
 				      </thead>
 				      <tbody>
@@ -44,15 +42,14 @@
 				          <td>${taskInstance.id}</td>
 				          <td>${taskInstance.name}</td>
 				          <td>${taskInstance.executionId}</td>
-			             <%-- TODO bring this back when descriptions are supported 
 				          <td>${taskInstance.description}</td>
-				          --%>
 				          <td>${taskInstance.priority}</td>
 				          <td>${taskInstance.assignee}</td>
 				          <td>${taskInstance.createTime}</td> 
 				          <td>${taskInstance.duedate}</td>
-
-				          <td><g:link controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">Details&nbsp;&gt;&gt;&gt;</g:link></td>				          
+				          <td>
+			                <g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">show&nbsp;&raquo;</g:link>
+				          </td>
 				        </tr>
 				        </g:each>
 				      </tbody>
