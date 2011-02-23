@@ -21,6 +21,8 @@ package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import org.jbpm.api.*
 import org.springframework.beans.factory.InitializingBean
+import grails.converters.*
+
 /**
  * Controller for WfpProcessDefinition
  * 
@@ -223,6 +225,43 @@ class Wf4pProcessDefinitionController implements InitializingBean{
 	        redirect(action:'show',params:params)
 	    }
 	
+    
+    // AJAX action for update the process definition with the process file
+    
+    def updateProcess = {
+    	println "AAAAA"    	
+    	def processDefinitionPath=ApplicationConfiguration.findByConfigKey('process.template.outputPath').configValue;
+    	def returnMessage="Process ${params.id} updated"
+    	def success=true
+    	try {
+    		def wfd=WorkflowDefinition.findByName(params.id)
+    		def f=new File ("${processDefinitionPath}/${params.id}.jpdl.xml")
+    		if (wfd.processDefinitionDate==new Date(f.lastModified())) {
+    			success=false
+    			returnMessage="Process is already up to date!"
+    		} else {
+    		
+    			def deployment=repositoryService.createDeployment().addResourceFromFile(f)
+    			deployment.setName("${params.id}.jpdl.xml")
+    			def deploymentId=deployment.deploy()
+    			//wfd=WorkflowDefinition.findByName(params.id)
+    			wfd.processDefinitionDate=new Date(f.lastModified())
+    			wfd.save(failOnError:true)
+    		}
+    	} catch (Exception e) {
+    		returnMessage = e.message
+    		success=false
+    	}
+        
+		def result = [
+		              	returnValue:success,
+			            message:returnMessage ,
+			            id:params.id,			            	
+			            refreshNodes:""
+			         ]              
+        def res=[result:result]
+        render res as JSON		
+    }
 	    
 	
 

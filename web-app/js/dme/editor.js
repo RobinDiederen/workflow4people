@@ -35,6 +35,64 @@ function jqConfirm(message,title,url) {
 	
 }
 
+
+/*
+ * Modal JQuery UI confirmation dialog
+ */
+
+function updateProcessDefinition(node) {
+	var htmlMessage='<div id="dialog-confirm" title="Update process definition"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Update process definition '+node[0].title+' ?<br />This will update the runtime engine process definition for this workflow.</p><p>&nbsp;</p><p id="returnMessage"></p></div>';
+	//node[0].title+'.jpdl.xml'
+	var updDialog=$(htmlMessage).dialog({
+		resizable: true,
+		width:600,
+		//height:140,
+		modal: true,
+		buttons: {
+			"Update": function() {				
+			//alert ("test");
+				var res=$.getJSON("/workflow4people/wf4pProcessDefinition/updateProcess/"+node[0].title, function (json) {
+					//alert(json.message);
+					$("#returnMessage").html(json.result.message);
+					if (json.result.returnValue) {
+						$("button:contains('Done')").show();
+						$("button:contains('Update')").hide();
+					    $("button:contains('Cancel')").hide();
+					    $("button:contains('Again')").hide();
+					} else {
+						$("button:contains('Update') span").html("Again");
+					}
+					
+				});
+				
+				//$("button:contains('Done')").show();
+				//$("button:contains('Update')").hide();
+			//	$("button:contains('Cancel')").hide();
+				//$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			},
+			
+			"Done": function() {
+				$( this ).dialog( "close" );
+			}
+			
+		},
+		
+		open: function(event, ui) {
+     		$("button:contains('Done')").hide();
+			},
+        
+		
+        close: function(event, ui) {      
+            updDialog.remove();
+            }
+        });			
+	
+}
+
+
 function trim(value) {
 	  value = value.replace(/^\s+/,'');
 	  value = value.replace(/\s+$/,'');
@@ -331,7 +389,13 @@ function workflowContextMenu( node ) {
 			"generateprocess" : 	  {
 								"label": 'Generate process',
 								"action" : function( node ) { generateProcessDialog(node) }
-								  },		  
+								  },
+			"updateprocessdef" : 	  {
+								"label": 'Update process def',
+								"action" : function( node ) { updateProcessDefinition(node) }
+	   	    },		  
+					  
+								  
 
   		    "newform" : {
 								  "label": 'New form',

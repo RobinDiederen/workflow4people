@@ -191,8 +191,8 @@ class DocumentService implements InitializingBean {
     		
     		variableMap.put("group",homeGroup)
     		
-			processInstance = executionService.startProcessInstanceByKey(header.documentType.text(),variableMap)
-			
+			//processInstance = executionService.startProcessInstanceByKey(header.documentType.text(),variableMap)
+			processInstance = executionService.startProcessInstanceByKey(header.workflowName.text(),variableMap)
 			// Store the document again, now with the processInstanceId in it.
 			document.header.processInstanceId=processInstance.id
 			document.header.documentId=documentInstance.id

@@ -133,7 +133,7 @@ class DataModelEditorController {
 				
 			workflowDefinitionInstance.properties = params
 			def theRefreshNodes=["workflowTree"]
-			workflowDefinitionInstance.save()
+			workflowDefinitionInstance.save(failOnError:true)
 			
 			// for new workflows, add the request and show form automatically
 			if (!params.id) {

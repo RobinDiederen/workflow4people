@@ -34,11 +34,12 @@ class WorkflowDefinition implements Serializable {
     	title(help:'x',class:'wide')
         description(size:0..50000,help:'x')	
         version(help:'x')
-        dateCreated(nullable:true,help:'x')
-        lastUpdated(nullable:true,help:'x')
+        dateCreated(nullable:true,edit:false,help:'x')
+        lastUpdated(nullable:true,edit:false,help:'x')
         documentType(help:'x')
     	form(display:false,sortable:false,sort:'name',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     	workflowPermission(display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
+    	processDefinitionDate(edit:false,nullable:true,help:'x')
     }
 
 	/* For some reason, setting:
@@ -62,7 +63,7 @@ class WorkflowDefinition implements Serializable {
     int version
     Date dateCreated
     Date lastUpdated
-    
+    Date processDefinitionDate
     boolean publish
 
 	String toString() {
