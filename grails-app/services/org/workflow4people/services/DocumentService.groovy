@@ -74,189 +74,134 @@ class DocumentService implements InitializingBean {
 		binding.document=document
 		return binding
 	}
-	
-
-    //TODO make sure original user is preserved in XML when overwriting
-    
+	   
     
     def storeDocument(document) throws DocumentException {
     	def theDocumentId
-    	//def theDocumentIndexId
-    	def hackProcessId=null
-    	def hackDueDate=null
     	
     	Document.withTransaction { status ->
-    	def header=document.header
-    	log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
-    	def outputBuilder = new StreamingMarkupBuilder()
+    		def header=document.header
+    		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
+    		def outputBuilder = new StreamingMarkupBuilder()
 
-    	String xmlDocument = outputBuilder.bind{
-    		// Only needed if you want <?xml etc. at the top of the XML document
-    		// mkp.xmlDeclaration()
-    		mkp.yield document 
-    	}	
-    	def documentInstance
-    	// If the document ID is known, store the document over the existing one
-    	// If the document ID is not known, store a new instance, and start a new workflow
+    		String xmlDocument = outputBuilder.bind{
+    			// Only needed if you want <?xml etc. at the top of the XML document
+    			// mkp.xmlDeclaration()
+    			mkp.yield document 
+    		}	
+    		def documentInstance
+    		// If the document ID is known, store the document over the existing one
+    		// If the document ID is not known, store a new instance, and start a new workflow
     	
-    	
-    	
-    	def startProcess=false
-    	ProcessInstance processInstance=null
-    	if (header.documentId?.text().size()>0) {    		
-    		def theId=header.documentId.text().asType(Integer)	
-    		if (header.taskOutcome?.text().size()>0) {
-    			// find the process instance, part of the duedate hack
-    			//processInstance=executionService.findExecutionById(taskService.getTask(header.taskId.text()).getExecutionId()).getProcessInstance()
-    			
-    			//taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
-    		}   
-    		documentInstance=Document.get(theId)
-    		def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
-    		document.header.user=olddocument.header.user
-    		document.header.group=olddocument.header.user.group    		
+    		def startProcess=false
+    		ProcessInstance processInstance=null
+    		
+    		
+    		if (header.documentId?.text().size()>0) {    		
+    			def theId=header.documentId.text().asType(Integer)
+    		// Pushed down to make it transaction aware	
+    		//	if (header.taskOutcome?.text().size()>0) {    			
+    		//		taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
+    		//	}   
+    			// For an existing document, the owner remains the owner.
+    			documentInstance=Document.get(theId)
+    			def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
+    			document.header.user=olddocument.header.user
+    			document.header.group=olddocument.header.user.group    		
 
-    	} else {    		
-    		documentInstance = new Document()
-        	documentInstance.user=header.user.name
-        	documentInstance.groupId=header.group
-    		startProcess=true    		
-		}
-    	    	
-    	def documentType= DocumentType.findByName(header.documentType.text());
-    	if(!documentType) {
-    		throw new DocumentException("Unknown document type:"+header.documentType.text())
-    	}
-    	documentInstance.documentType=documentType	
-    	documentInstance.xmlDocument=xmlDocument
-
-    	documentInstance.documentStatus=header.documentStatus
-		//return new GroovyShell(binding()).evaluate("\""+documentType.descriptionTemplate+"\"")		
-
-    	documentInstance.save(failonError:true)
-
-    	documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
-    	
-    	if (cmisService.enabled) {
-    		println "Creating case ${documentInstance.id}"
-    		def cmisObjectId=cmisService.createCase(documentInstance.id)
-    	
-    		documentInstance.cmisFolderObjectId=cmisObjectId
-    	    		
-    		documentInstance.cmisFolderUrl=cmisService.caseFolderUrl(documentInstance)
-    		println "The folder url is ${documentInstance.cmisFolderUrl}"
-    	} else {
-    		println "CMIS disabled, skipping case folder creation"
-    	}
+			} else {
+				// For a new document, the requestor becomes the owner
+				documentInstance = new Document()
+				documentInstance.user=header.user.name
+				documentInstance.groupId=header.group
+				startProcess=true    		
+			}
+    	    
+    		def documentType= DocumentType.findByName(header.documentType.text());
+    		if(!documentType) {
+    			throw new DocumentException("Unknown document type:"+header.documentType.text())
+    		}
+    		documentInstance.documentType=documentType	
+    		documentInstance.xmlDocument=xmlDocument
+    		documentInstance.documentStatus=header.documentStatus
 		
-    	documentInstance.save(failonError:true)
+    		documentInstance.save(failOnError:true)
+    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
+    		
+    		createCaseFolder(documentInstance)		
+    		documentInstance.save(failOnError:true)
     	
-    	if (header.documentId?.text().size()>0) {    		
-    		def theId=header.documentId.text().asType(Integer)	
-    		if (header.taskOutcome?.text().size()>0) {
-    			// find the process instance, part of the duedate hack
-    			processInstance= executionService.findExecutionById(taskService.getTask(header.taskId.text()).getExecutionId()).getProcessInstance()
-    			//OpenExecution executionInstance = (OpenExecution) executionService.findExecutionById(taskService.getTask(header.taskId.text()))    				
-    			//processInstance = (OpenProcessInstance) executionInstance.getExecutionId().getProcessInstance()
-    			taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
-    		}   
+    		// Get the document again because it might have changed
+    		// In particular at the start of the process the jPDL can change the document
+    		
+    		documentInstance=Document.get(documentInstance.id)
+    		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
+    		header=document.header
+    		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
+    	
+	    	if (startProcess) {
+	    		LinkedHashMap variableMap = new LinkedHashMap()    							
+	    		variableMap.put("documentId",documentInstance.id)
+	    		variableMap.put("user",documentInstance.user)
+	    		variableMap.put("group",getHomeGroup(documentInstance))
+	    		
+				processInstance = executionService.startProcessInstanceByKey(header.workflowName.text(),variableMap)
+				// Store the document again, now with the processInstanceId in it.
+				document.header.processInstanceId=processInstance.id
+				document.header.documentId=documentInstance.id
+				documentInstance.xmlDocument=outputBuilder.bind { mkp.yield document }
+	    		documentInstance.save(failOnError:true)        					
+	    	}
+    		
+    		if ((header.taskId?.text().size()>0) && (header.taskOutcome?.text().size()>0)) {    			
+				taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
+			}   
+    		
+    	
+    		indexDocument(documentInstance)
 
-    	} 
-    	// Get the document again because it might have changed
-    	def did=documentInstance.id
-    	documentInstance=Document.get(did)
-    	document = new XmlSlurper().parseText(documentInstance.xmlDocument)
-    	header=document.header
-    	log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
-    	
-    	if (startProcess) {
-    		LinkedHashMap variableMap = new LinkedHashMap()    							
-    		variableMap.put("documentId",documentInstance.id)
-    		variableMap.put("user",documentInstance.user)
-    		// The home group is the first group that has the type home
-    		def homeGroup = null
-    		def homeGroupInstance=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0]
-    		if (homeGroupInstance) {
-    		    homeGroup = homeGroupInstance.name
-    		}
-    		else {
-    		    // Fall back on identity.group.home.default if the user has no home group
-    			homeGroup=ApplicationConfiguration.findByConfigKey('identity.group.home.default').configValue
-    		}
-    		// Fall back on home if identity.group.home.default does not exist
-    		
-    		if (!homeGroup) {
-    			homeGroup="home"
-    		}
-    		
-    		variableMap.put("group",homeGroup)
-    		
-			//processInstance = executionService.startProcessInstanceByKey(header.documentType.text(),variableMap)
-			processInstance = executionService.startProcessInstanceByKey(header.workflowName.text(),variableMap)
-			// Store the document again, now with the processInstanceId in it.
-			document.header.processInstanceId=processInstance.id
-			document.header.documentId=documentInstance.id
-			documentInstance.xmlDocument=outputBuilder.bind { mkp.yield document }
-    		documentInstance.save()        					
-    	}
-    	
-    	//Duedate hack
-    	
-    	if (processInstance) {
-    		log.debug "Duedate hack #1"
-    		hackProcessId=processInstance.id
-    		//def pi=executionService.findProcessInstanceById(processInstance.id)
-    		log.debug "Duedate hack #2"
-    		if (executionService.findProcessInstanceById(processInstance.id)) {
-    			def processDueDate = executionService.getVariable(processInstance.id,"processDueDate")
-    			log.debug "Duedate hack #3"
-    		
-    			//def dueDate = pi.getVariable("processDueDate")
-    			def dueDate = executionService.getVariable(processInstance.id,"processDueDate")
-    			def theDueDate=dueDate?dueDate:processDueDate
-				hackDueDate=theDueDate
-    			log.debug("Not setting the due date to  ... ${theDueDate}")
-    			log.debug("The process instance is ${processInstance}")
-    		
-    			if (theDueDate) {
-    				taskService.createTaskQuery().processInstanceId(processInstance.id).list().each { task ->
-    					log.debug "Setting the due date of task ${task}"
-    					task.setDuedate(theDueDate)
-    			}
-    		}
-		}	
-    		
-    	}
-    	
-    	indexDocument(documentInstance)
-    	 
-    	       	
-    	theDocumentId=documentInstance.id
-    	//documentInstance.id
+    		//theDocumentId=documentInstance.id
+    		documentInstance.id
 	  } // withTransaction
     	
-    	/*Document.withTransaction {    		
-    		def di=Document.get(theDocumentId)
-    		searchableService.index(di)
-    	}*/
-    	
-    	if (hackProcessId) {
-    		log.debug("Hack #2")
-    		if (hackDueDate) {
-    			taskService.createTaskQuery().processInstanceId(hackProcessId).list().each { task ->
-    				log.debug "Setting the due date of task ${task}"
-    				task.setDuedate(hackDueDate)
-    				taskService.saveTask(task)
-    			}
-    		}
-    		
-    		
-    	}
-    	
-    	
-    	theDocumentId 
     }
     
+    
+    def getHomeGroup(def documentInstance) {
+
+		def homeGroup = null
+		def homeGroupInstance=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0]
+		if (homeGroupInstance) {
+		    homeGroup = homeGroupInstance.name
+		}
+		else {
+		    // Fall back on identity.group.home.default if the user has no home group
+			homeGroup=ApplicationConfiguration.findByConfigKey('identity.group.home.default').configValue
+		}
+		// Fall back on home if identity.group.home.default does not exist
+		
+		if (!homeGroup) {
+			homeGroup="home"
+		}
+		return homeGroup
+    }
+    
+    
+    def createCaseFolder(def documentInstance) {
+	    if (cmisService.enabled) {
+			println "Creating case ${documentInstance.id}"
+			def cmisObjectId=cmisService.createCase(documentInstance.id)
+		
+			documentInstance.cmisFolderObjectId=cmisObjectId
+		    		
+			documentInstance.cmisFolderUrl=cmisService.caseFolderUrl(documentInstance)
+			println "The folder url is ${documentInstance.cmisFolderUrl}"
+		} else {
+			println "CMIS disabled, skipping case folder creation"
+		}
+    }
+
+
     def indexDocument(Document documentInstance){
     	
     	def builder = domFactory.newDocumentBuilder()
