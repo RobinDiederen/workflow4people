@@ -24,6 +24,8 @@ import org.jbpm.api.task.*;
 import org.jbpm.api.*;
 import org.jbpm.api.identity.*
 import org.springframework.beans.factory.InitializingBean;
+import groovy.xml.StreamingMarkupBuilder
+
 /**
  * Controller for WfpTask domain class
  * 
@@ -37,6 +39,7 @@ class Wf4pTaskController implements InitializingBean {
 	def repositoryService
 	TaskService taskService
 	IdentityService identityService
+	def documentService
 	
 	void afterPropertiesSet() {
 		executionService=processEngine.getExecutionService()
@@ -100,22 +103,20 @@ class Wf4pTaskController implements InitializingBean {
 	
 	def userlist = {
 				
-				def userList=identityService.findUsers().sort({it.familyName+it.givenName})
-				if(!params.userId){
-					params.userId=userList[0].getId()
-				}
-				def taskTotal = taskService.createTaskQuery().assignee(params.userId).count()
-				
-				
-				params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-				params.offset = params.offset ? params.offset?.toInteger():0
-				
-				def personalTaskList=taskService.createTaskQuery().assignee(params.userId).orderDesc(TaskQuery.PROPERTY_CREATEDATE).page(params.offset,params.max).list()
-								
-				
-				["personalTaskList":personalTaskList,"taskService":taskService,"userList":userList,params:params,taskTotal:taskTotal]
-			
+		def userList=identityService.findUsers().sort({it.familyName+it.givenName})
+		if(!params.userId){
+			params.userId=userList[0].getId()
 		}
+		def taskTotal = taskService.createTaskQuery().assignee(params.userId).count()
+		
+		params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
+		params.offset = params.offset ? params.offset?.toInteger():0
+		
+		def personalTaskList=taskService.createTaskQuery().assignee(params.userId).orderDesc(TaskQuery.PROPERTY_CREATEDATE).page(params.offset,params.max).list()
+		
+		["personalTaskList":personalTaskList,"taskService":taskService,"userList":userList,params:params,taskTotal:taskTotal]
+			
+	}
     
 	def grouplist = {
 			
@@ -135,8 +136,135 @@ class Wf4pTaskController implements InitializingBean {
 			["groupTaskList":groupTaskList,"taskService":taskService,"userList":userList,params:params,taskTotal:taskTotal]
 		
 	}
-
-    
-    
+	
+    def reassign = {
+	    
+	    if (params.taskId) {
+	    
+	        def taskInstance = taskService.getTask(params.taskId)
+	        
+            if (!taskInstance) {
+                flash.message = "task.not.found"
+                flash.args = [params.taskId]
+                flash.defaultMessage = "Task not found with id ${params.taskId}"
+                redirect(action: (params.previousAction == "userlist" ? params.previousAction : "list"))
+                return
+            }
+            else if (!taskInstance.assignee) {
+                flash.message = "task.can.not.be.reassigned"
+                flash.args = [params.taskId]
+                flash.defaultMessage = "Task with id ${params.taskId} can not be reassigned"
+                redirect(action: (params.previousAction == "userlist" ? params.previousAction : "list"))
+                return
+            }
+            else {
+                def currentAssignee = identityService.findUserById(taskInstance.assignee)
+                def groupName = taskService.getVariable(params.taskId, "group")
+                if (groupName) {
+                    def group = Authority.findByAuthority(groupName)
+                    def userList = group.getPeople().sort({it.familyName+it.givenName})
+                    return [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList]
+                }
+                else {
+                    flash.message = "task.has.invalid.group"
+                    flash.args = [params.taskId]
+                    flash.defaultMessage = "Task with id ${params.taskId} has an invalid group variable"
+                    redirect(action: (params.previousAction == "userlist" ? params.previousAction : "list"))
+                    return
+                }
+            }
+            
+        }
+        else {
+            flash.message = "task.not.found"
+            flash.args = [params.taskId]
+            flash.defaultMessage = "Task not found with id ${params.taskId}"
+            redirect(action: (params.previousAction == "userlist" ? params.previousAction : "list"))
+        }
+	    
+	}
+	
+	def doreassign = {
+	    
+	    def taskInstance = taskService.getTask(params.taskId)
+	    
+	    if (taskInstance && taskInstance.assignee) {
+	        
+            def currentAssignee = identityService.findUserById(taskInstance.assignee)
+	        //def userList = identityService.findUsers().sort({it.familyName+it.givenName})
+	        
+	        def groupId = taskService.getVariable(params.taskId, "group")
+	        if (!groupId) {
+                flash.message = "group.not.found"
+                flash.args = [params.taskId]
+                flash.defaultMessage = "Group variable not found for task id ${params.taskId}"
+                render(view: "reassign", model: [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList])
+                return
+	        }
+            def group = Authority.findByAuthority(groupId)
+            def userList = group.getPeople().sort({it.familyName+it.givenName})
+	        
+	        if (params.taskVersion) {
+	            def taskVersion = params.taskVersion.toInteger()
+	            if (taskInstance.dbversion > taskVersion) {
+	                
+	                flash.message = "task.optimistic.locking.failure"
+                    flash.args = [params.taskId]
+                    flash.defaultMessage = "Another user has updated this Task while you were editing"
+                    render(view: "reassign", model: [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList])
+                    return
+                }
+            }
+            
+	        def reassignTo = identityService.findUserById(params.reassignTo)
+	        params.reassignTo = (params.reassignTo == "" ? null : params.reassignTo)
+	        
+	        if (/*(!params.reassignTo || */reassignTo/*)*/ && params.reassignTo != taskInstance.assignee) {
+	        
+	            try {
+	                //if (!params.reassignTo) {
+                    //    if (!groupId) {
+                    //        flash.message = "group.not.found"
+                    //        flash.args = [params.taskId]
+                    //        flash.defaultMessage = "Group variable not found for task id ${params.taskId}"
+                    //        render(view: "reassign", model: [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList])
+                    //        return
+                    //    }
+	                ///    taskService.addTaskParticipatingGroup(params.taskId, groupId, Participation.CANDIDATE) 
+	                //}
+	                
+	                executionService.setVariable(taskInstance.getExecutionId(), "user", params.reassignTo)
+	                
+	                taskService.assignTask(params.taskId, params.reassignTo)
+	                
+	                flash.message = "task.reassigned"
+                    flash.args = [params.taskId]
+                    flash.defaultMessage = "Task ${params.taskId} has been reassigned to ${params.reassignTo ? params.reassignTo : 'the group ' + groupId}"
+                    redirect(action: "show", params: [taskId: params.taskId])
+	            }
+	            catch (Exception e) {
+	                flash.message = "task.exception"
+                    flash.args = [params.taskId]
+                    flash.defaultMessage = "An error occurred while reassigning the task (${e.getMessage()})"
+                    render(view: "reassign", model: [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList])
+	            }
+	        
+	        }
+	        else {
+                flash.message = "task.reassignTo.invalid"
+                flash.args = [params.taskId]
+                flash.defaultMessage = "The user you selected is invalid"
+                render(view: "reassign", model: [taskInstance: taskInstance, currentAssignee: currentAssignee, userList: userList])
+                return
+	        }	        
+	    }
+	    else {
+            flash.message = "task.not.found"
+            flash.args = [params.taskId]
+            flash.defaultMessage = "Task not found with id ${params.taskId}"
+            redirect(action: "list")
+	    }
+	    
+	}
     
 }

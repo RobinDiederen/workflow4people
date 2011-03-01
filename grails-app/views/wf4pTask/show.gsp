@@ -18,32 +18,38 @@
                 <g:hiddenField name="taskId" value="${task?.id}" />                                
                 <div class="dialog">
                     <table>
-                        <tbody>                        
+                        <tbody>
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="task.id" default="Task id" />:</td>                                
                                 <td valign="top" class="value">${fieldValue(bean: task, field: "id")}</td>                                
-                            </tr>                            
+                            </tr>
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="task.name" default="Task name" />:</td>                                
                                 <td valign="top" class="value">${fieldValue(bean: task, field: "name")}</td>                                
                             </tr>
-                            <%-- TODO put this back when jBPM starts to support persistance of this field                            
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="task.description" default="Description" />:</td>                                
                                 <td valign="top" class="value">${fieldValue(bean: task, field: "description")}</td>                                
-                            </tr>            
-                            --%>                
+                            </tr>
                         </tbody>
                     </table>
                    
                     
                 </div>
                  <div class="buttons">
+                    <g:if test="${task.assignee}">
+                	<span class="button"><g:actionSubmit class="edit" action="reassign" params="[taskId: task.id, previousAction: 'show']" value="Reassign&nbsp;&raquo;" /></span>
+                	</g:if>
+                </div>
+                
+                
+                <h1>Available process actions</h1>
+                 <div class="buttons">
                 	<g:each in="${taskService.getOutcomes(task.id)}" var="outcome" >
                 	<span class="button"><g:actionSubmit class="edit" action="complete" value="${outcome}" /></span>
-                    </g:each>                    
+                    </g:each>
                 </div>
-                    
+                
                 <h1>Variables</h1>
                 <div class="list" >
 				    <table>
