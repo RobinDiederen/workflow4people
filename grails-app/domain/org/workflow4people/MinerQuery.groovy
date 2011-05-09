@@ -27,6 +27,7 @@
 package org.workflow4people
 
 class MinerQuery {
+	static listProperties=['id','name','title','description','query']
 	static constraints = {
     	name(class:'wide',help:'x')
     	title(class:'wide',help:'x')

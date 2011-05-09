@@ -18,6 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.*
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 
@@ -29,15 +31,24 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN','ROLE_WF4P_DEVELOPER'])
 class DocumentController {
+	def listService
 
     def index = { redirect(action: "list", params: params) }
 
     // the save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def list = {
+    def oldlist = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
         [documentInstanceList: Document.list(params), documentInstanceTotal: Document.count()]
+    }
+    def list = {
+    	
+    	render (view:'/datatable/list', model:[dc:Document,controllerName:'document',request:request])
+    }
+    
+    def jsonlist = {
+    	render listService.jsonlist(Document,params,request) as JSON	
     }
 
     def create = {

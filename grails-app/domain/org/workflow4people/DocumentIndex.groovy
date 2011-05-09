@@ -20,6 +20,8 @@ package org.workflow4people
 
 import org.compass.annotations.*
 class DocumentIndex {
+    static listProperties=['id','name','value']
+
 	static belongsTo=[document:Document]
     static constraints = {
     	name(help:'x')

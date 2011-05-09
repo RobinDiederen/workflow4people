@@ -24,7 +24,7 @@ package org.workflow4people
  * @author Joost Horward
  */
 class Namespace {
-	
+	static listProperties=['id','prefix','uri','filename','generateXSDFile','includeSchema','importSchema']
 	static hasMany = [importSchema:Namespace]
 	
     static constraints = {

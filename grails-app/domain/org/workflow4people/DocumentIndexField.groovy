@@ -23,6 +23,7 @@ package org.workflow4people
  * @author Joost Horward
  */
 class DocumentIndexField {
+	static listProperties=['id','name','title','xpath','publish']
     static constraints = {
     	name(help:'x',class:'extrawide')
     	title(help:'x',class:'extrawide')

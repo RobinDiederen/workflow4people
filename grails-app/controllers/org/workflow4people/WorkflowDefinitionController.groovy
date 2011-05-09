@@ -38,7 +38,7 @@ import grails.converters.*
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class WorkflowDefinitionController {
-	
+	def listService
 	def wf4pConfigService
 	def formGeneratorService
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
@@ -51,9 +51,19 @@ class WorkflowDefinitionController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [ save:'POST', update:'POST']
 
-    def list = {
+    def llist = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ workflowDefinitionInstanceList: WorkflowDefinition.list( params ), workflowDefinitionInstanceTotal: WorkflowDefinition.count(),filteredParams:'' ]
+    }
+	
+
+	def list = {
+	
+    	render (view:'/datatable/list', model:[dc:WorkflowDefinition,controllerName:'workflowDefinition',request:request])
+	}
+	    
+	def jsonlist = {
+		render listService.jsonlist(WorkflowDefinition,params,request) as JSON	
     }
 
     def show = {

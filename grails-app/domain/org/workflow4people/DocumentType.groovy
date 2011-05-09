@@ -28,6 +28,8 @@ import org.compass.annotations.*
 import java.util.Date;
 @Searchable(root = false)
 class DocumentType {
+    static listProperties=['id','name','description','dateCreated','lastUpdated']
+
     static constraints = {
     	name(help:'x')
     	description(help:'x')

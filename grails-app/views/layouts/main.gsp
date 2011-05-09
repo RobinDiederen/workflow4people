@@ -8,8 +8,11 @@
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
+    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',contextPath:'')}" />
+	
         <%-- Workflow4people style --%>
-		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />
+		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />	
+	
 		<%-- Theme style --%>
 		<link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'roller-theme.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'theme.css',contextPath:'',plugin:'wfp')}" />
@@ -26,7 +29,8 @@
                  
         <g:javascript src="jquery/jquery-ui-1.8.custom.min.js" contextPath="" plugin="wfp" />
         <g:javascript src="jquery/jquery.timers-1.2.js"  contextPath="" plugin="wfp" />
-        <g:javascript src="jquery/jquery.cluetip.js"  contextPath="" plugin="wfp" />
+        <g:javascript src="jquery/jquery.cluetip-patched.js"  contextPath="" plugin="wfp" />
+        <g:javascript src="jquery/jquery.dataTables.js"  contextPath="" />
         
         <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
         <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>
@@ -70,7 +74,7 @@
          	// Initialize date picker input elements
          	$(".datepicker").datepicker({ dateFormat: "yyyy-MM-dd'T'HH:mm:ss" , changeMonth: true, changeYear:true});
           	
-          	$("a.confirm").click(function(){
+          	$("a.confirm").live("click",function(){
           	return confirm('Are you sure?')
           	});
           	
@@ -93,6 +97,7 @@
 		<g:layoutHead />
 	</head>
     <body>
+    
      <div id="main-toolbar" >
     	<span id="menu-toolbar">
     		<a href="/workflow4people/" title="Home|Go to the home screen" class="action home help" >&nbsp;</a>
@@ -105,8 +110,11 @@
     	</div>
     
      	        		   
-     	   <div class="page-body" >       
+     	   <div class="page-body" >
+     	          
 	    <div class="wf4p-menu">
+	    <div id="topleft-logo" class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr table-title">
+	    <h1>workflow<span class="red">4</span>people</h1></div>
 	      <ul>	
 	      <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">      
 	        <li>Workflow</li>	        	        

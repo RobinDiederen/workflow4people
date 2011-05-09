@@ -19,6 +19,7 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 /**
  * Controller for MinerQuery domain class
@@ -26,15 +27,25 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  * @author Joost Horward
  */
 class MinerQueryController {
-
+	def listService
+	
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def list = {
+    def llist = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
         [minerQueryInstanceList: MinerQuery.list(params), minerQueryInstanceTotal: MinerQuery.count()]
+    }
+	
+	def list = {
+    	
+    	render (view:'/datatable/list', model:[dc:MinerQuery,controllerName:'minerQuery',request:request])
+    }
+    
+    def jsonlist = {
+    	render listService.jsonlist(MinerQuery,params,request) as JSON	
     }
 
     def create = {

@@ -18,6 +18,7 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 
 /**
@@ -26,15 +27,23 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  * @author Joost Horward
  */
 class NamespaceController {
-
+	def listService
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def list = {
+    def llist = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
         [namespaceInstanceList: Namespace.list(params), namespaceInstanceTotal: Namespace.count()]
+    }
+	def list = {
+    	
+    	render (view:'/datatable/list', model:[dc:Namespace,controllerName:'namespace',request:request])
+    }
+    
+    def jsonlist = {
+    	render listService.jsonlist(Namespace,params,request) as JSON	
     }
 
     def create = {

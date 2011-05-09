@@ -159,6 +159,7 @@ class Wf4pTaskController implements InitializingBean {
             }
             else {
                 def currentAssignee = identityService.findUserById(taskInstance.assignee)
+                // TODOD this should be the task group, and if it doesn't exist there should be no error but the full list of users.
                 def groupName = taskService.getVariable(params.taskId, "group")
                 if (groupName) {
                     def group = Authority.findByAuthority(groupName)

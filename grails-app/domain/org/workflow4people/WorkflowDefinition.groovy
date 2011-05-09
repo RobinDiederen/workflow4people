@@ -26,6 +26,8 @@ package org.workflow4people
  */
 
 class WorkflowDefinition implements Serializable {
+	static listProperties=['id','publish','name','title','description','version','dateCreated','lastUpdated']
+	                     	                       
 	static hasMany = [form : Form,workflowPermission:WorkflowPermission]	
 	
     static constraints = {

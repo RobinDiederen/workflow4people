@@ -29,7 +29,7 @@ import org.compass.annotations.*
 
 class Document {
 	static searchable=true
-    static listProperties=['documentDescription','documentType','dateCreated','lastUpdated']
+    static listProperties=['id','documentDescription','documentType','dateCreated','lastUpdated']
 
     static constraints = {    	    
     	    documentType(help:'x')
