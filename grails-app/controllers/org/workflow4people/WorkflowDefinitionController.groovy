@@ -51,12 +51,6 @@ class WorkflowDefinitionController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [ save:'POST', update:'POST']
 
-    def llist = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ workflowDefinitionInstanceList: WorkflowDefinition.list( params ), workflowDefinitionInstanceTotal: WorkflowDefinition.count(),filteredParams:'' ]
-    }
-	
-
 	def list = {
 	
     	render (view:'/datatable/list', model:[dc:WorkflowDefinition,controllerName:'workflowDefinition',request:request])

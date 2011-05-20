@@ -26,6 +26,8 @@
 package org.workflow4people
 
 class Role {
+	static listProperties=['id','name','title','description']
+	
 	String name
 	String title
 	String description

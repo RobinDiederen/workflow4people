@@ -26,6 +26,9 @@ package org.workflow4people
  */
 
 class ApplicationConfiguration {
+	
+	static listProperties=['id','configKey','configValue']
+	
 	static features = []
     static constraints = {
     	configKey(class:'extrawide',help:'x')

@@ -47,6 +47,7 @@ import org.jbpm.api.identity.*;
 
 class Authority {
 
+	static listProperties=['id','authority','description','authorityType']
 	static hasMany = [people: Person]
 
 	/** description */

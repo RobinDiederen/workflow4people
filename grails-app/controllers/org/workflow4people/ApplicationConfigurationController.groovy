@@ -18,6 +18,8 @@
  */
 
 package org.workflow4people
+import grails.converters.JSON;
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 /** Application configuration controller
@@ -28,16 +30,26 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN'])
 class ApplicationConfigurationController {
+	
+	def listService
 
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [applicationConfigurationInstanceList: ApplicationConfiguration.list(params), applicationConfigurationInstanceTotal: ApplicationConfiguration.count()]
-    }
+    //def list = {
+    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+    //    [applicationConfigurationInstanceList: ApplicationConfiguration.list(params), applicationConfigurationInstanceTotal: ApplicationConfiguration.count()]
+    //}
+	
+	def list = {
+		render (view:'/datatable/list', model:[dc:ApplicationConfiguration,controllerName:'applicationConfiguration',request:request])
+	}
+		
+	def jsonlist = {
+		render listService.jsonlist(ApplicationConfiguration,params,request) as JSON
+	}
 
     def create = {
         def applicationConfigurationInstance = new ApplicationConfiguration()

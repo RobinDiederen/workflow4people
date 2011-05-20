@@ -19,6 +19,9 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+
+import grails.converters.JSON;
+
 import java.util.ArrayList
 /**
  * Controller for Form domain class
@@ -31,15 +34,25 @@ class PersonController {
     static allowedMethods = [save: "POST", update: "POST"]
                              
     def authenticateService
+	
+	def listService
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [personInstanceList: Person.list(params), personInstanceTotal: Person.count(), searchTemplate: "/person/search"]
-    }
+    //def list = {
+    //    params.max = Math.min(params.max ? params.int('max') : 10, 100)
+    //    [personInstanceList: Person.list(params), personInstanceTotal: Person.count(), searchTemplate: "/person/search"]
+    //}
+	
+	def list = {
+		render (view:'/datatable/list', model:[dc:Person,controllerName:'person',request:request,bFilter: true])
+	}
+	
+	def jsonlist = {
+		render listService.jsonlist(Person,params,request,"username") as JSON
+	}
 
     def search = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)

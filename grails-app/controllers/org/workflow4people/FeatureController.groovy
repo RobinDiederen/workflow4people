@@ -18,6 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.JSON;
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_USER_ADMIN'])
 /**
@@ -27,15 +29,25 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  */
 class FeatureController {
 
+	def listService
+	
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [featureInstanceList: Feature.list(params), featureInstanceTotal: Feature.count()]
-    }
+    //def list = {
+    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+    //    [featureInstanceList: Feature.list(params), featureInstanceTotal: Feature.count()]
+    //}
+	
+	def list = {
+		render (view:'/datatable/list', model:[dc:Feature,controllerName:'feature',request:request])
+	}
+		
+	def jsonlist = {
+		render listService.jsonlist(Feature,params,request) as JSON
+	}
 
     def create = {
         def featureInstance = new Feature()

@@ -1,5 +1,7 @@
 package org.workflow4people.services
 
+import org.apache.commons.lang.WordUtils
+
 class ListService {
 	
 	def wf4pConfigService
@@ -9,7 +11,11 @@ class ListService {
 
     }
     
-    def jsonlist(dc,params,request) {
+	def jsonlist(dc,params,request) {
+		return jsonlist(dc,params,request, null)
+	}
+	
+    def jsonlist(dc,params,request,filterColumnName) {
         	def title=dc.getName();
         	title=title.replaceAll (".*\\.", "")
         	def propName=title[0].toLowerCase()+title.substring(1)
@@ -17,10 +23,20 @@ class ListService {
             def columns=dc.listProperties
             def sortName=columns[new Integer(params.iSortCol_0)]
      		sortName=sortName? sortName:columns[0]
-    		def documentList=dc.list([max:params.iDisplayLength,offset:params.iDisplayStart,order:params.sSortDir_0,sort:sortName])
-    		
+			 
+			def documentList
+			def iTotalDisplayRecords
+			if (filterColumnName && params.sSearch) {
+				def filterMethod = "findAllBy"+WordUtils.capitalize(filterColumnName)+"Like"
+				iTotalDisplayRecords=dc."$filterMethod"(params.sSearch+"%").size()
+				documentList=dc."$filterMethod"(params.sSearch+"%", [max:params.iDisplayLength,offset:params.iDisplayStart,order:params.sSortDir_0,sort:sortName])
+			} else {
+				documentList=dc.list([max:params.iDisplayLength,offset:params.iDisplayStart,order:params.sSortDir_0,sort:sortName])
+				iTotalDisplayRecords = dc.count()
+			}
+
     		def aaData=[]
-                documentList.each { doc ->
+            documentList.each { doc ->
         		def inLine=[]
         		columns.each { 	            			   
         			//inLine += "${fieldValue(bean: doc, field: it)}"
@@ -31,8 +47,8 @@ class ListService {
         		def aaLine=[inLine]
         		aaData+=(aaLine)
     		}
-    			
-    		def json = [sEcho:params.sEcho,iTotalRecords:dc.count(),iTotalDisplayRecords:dc.count(),aaData:aaData]
+
+    		def json = [sEcho:params.sEcho,iTotalRecords:dc.count(),iTotalDisplayRecords:iTotalDisplayRecords,aaData:aaData]
         	return json
         }
     

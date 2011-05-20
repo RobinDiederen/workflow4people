@@ -25,6 +25,9 @@ package org.workflow4people
  * @author Joost Horward
  */
 class Action {
+	
+	static listProperties=['id','name','title','description']
+	
 	String name
 	String title
 	String description
