@@ -26,6 +26,8 @@ package org.workflow4people
  */
 class Holiday {
 
+	static listProperties=['id','title','fromDate','toDate']
+	
     static constraints = {
     	title(help:'x',class:'wide')
     	fromDate(help:'x')
