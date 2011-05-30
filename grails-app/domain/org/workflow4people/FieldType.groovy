@@ -29,6 +29,9 @@ import org.workflow4people.services.*;
 
 class FieldType {
 	def templateService
+	
+	static listProperties=['id','name','namespace','baseType','baseSchemaType','description']
+	
 	static hasMany = [fieldTypeItem : FieldTypeItem]    
 	static constraints = {
 		name(help:'x',class:'wide')
