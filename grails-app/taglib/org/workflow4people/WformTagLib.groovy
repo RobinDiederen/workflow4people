@@ -29,7 +29,7 @@ package org.workflow4people
 import org.codehaus.groovy.grails.commons.* 
 class WformTagLib {
 	
-	static namespace = 'w'
+	static namespace = 'wf'
 		
 	def treeList = { attrs ->
 		  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
@@ -302,7 +302,38 @@ class WformTagLib {
 		out << """<table><tbody>"""	
 		out << body()
 		out << "</tbody></table>"
-}
+	}
+	
+	def detailTable = { attrs ->	
+		out << """<div class="detailTable">
+                            <table><tr>"""
+			attrs.domainClass.listProperties.each { propertyName ->
+				def domainClass = new DefaultGrailsDomainClass( attrs.domainClass)
+
+				def domainPropertyName=domainClass.getName()
+				def property=domainClass.getPropertyByName(propertyName)
+				def naturalName=property.naturalName;
+			
+				out << """<th>${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</th>"""
+			}
+		out << "</tr>"
+		
+		def listElements=org.workflow4people.DocumentIndex.findAllByDocument (attrs.object,[sort:'id',order:'asc'])
+		listElements.each { listElement ->
+			out <<"""<tr>"""
+			attrs.domainClass.listProperties.each { propertyName -> 
+				out <<"""<td>${fieldValue(bean: listElement, field: propertyName)}</td>"""
+			}
+			out <<"""</tr>"""
+		}
+		
+		
+		
+		out <<"""</table>"""
+	
+	}
+	
+	
 	
 	
 }
