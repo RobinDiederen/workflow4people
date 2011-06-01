@@ -1,3 +1,5 @@
 @CHARSET "UTF-8";
 
-.help { background-image:url("icons/actions/16/help-contents.png"); }
+.help { background-image:url("icons/actions/16/help-contents.png");
+		cursor:help;
+		}

@@ -36,7 +36,16 @@ class DataModelEditorController {
                 flash.message = "Field not found with id ${params.id}"
                 redirect(action:list)
             }
-            else { return [ fieldInstance : fieldInstance ] }
+            else { 
+            	// find top level
+            	def f= fieldInstance
+            	while (f.parent!=null && f.parent !=f) {
+            		f=f.parent
+            	}
+            	def fieldsInSameTree=f.getDescendants().sort{it.toString()}
+            	
+            	return [ fieldInstance : fieldInstance,fieldsInSameTree:fieldsInSameTree] 
+	         }
         }
 	
 	def submitField = {

@@ -81,7 +81,7 @@
           	$.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/'});
 			$(".multiselect").multiselect();
 			//$('#switcher').themeswitcher();
-			$("a.help").cluetip({splitTitle: '|'});
+			$(".help").cluetip({splitTitle: '|'});
 			
 			// Sortable lists
 			$(".sortable").sortable({

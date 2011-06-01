@@ -53,11 +53,11 @@ class Field {
 		    nillable(nullable:true,help:'x')
 		    
 		    // Determines dependency of this field on another field
-		    //dependsOn(nullable:true,help:'x')
-		    //dependencyType(nullable:true,inList:['true','false','empty','nonempty','exist','nonexist','gt','lt','eq','ne'],help:'x')	    	
-		    //dependencyParameter(nullable:true,help:'x')
+		dependsOn(nullable:true,help:'x')
+		dependencyType(nullable:true,inList:['true','false','empty','nonempty','gt','lt','eq','ne'],help:'x')	    	
+		dependencyParameter(nullable:true,help:'x')
 		    //customDependencyExpression(nullable:true,size:0..50000,help:'x')
-	    dependencyExpression(nullable:true,size:0..50000,help:'x')
+	    //dependencyExpression(nullable:true,size:0..50000,help:'x')
 	    
     	readonly(help:'x')
 	   // securitylevelRead(nullable:true,help:'x')
@@ -112,11 +112,11 @@ class Field {
     boolean nillable=false
     
     // Arranges conditional showing of this field
-    //Field dependsOn
-    //String dependencyType
-    //String dependencyParameter
+    Field dependsOn
+    String dependencyType
+    String dependencyParameter
     //String customDependencyExpression
-    String dependencyExpression
+    //String dependencyExpression
     
     // Transient field
    // String xpath
@@ -184,6 +184,15 @@ class Field {
 		binding.fieldLength=getFieldProperty('fieldLength')
 		binding.minLength=fieldType.minLength ? fieldType.minLength : ""
 		binding.maxLength=fieldType.maxLength ? fieldType.maxLength : ""
+		
+		binding.minInclusive=fieldType.minInclusive ? fieldType.minInclusive : ""
+		binding.maxInclusive=fieldType.maxInclusive ? fieldType.maxInclusive : ""
+			
+		binding.minExclusive=fieldType.minExclusive ? fieldType.minExclusive : ""
+		binding.maxExclusive=fieldType.maxExclusive ? fieldType.maxExclusive : ""
+			
+		binding.pattern=fieldType.pattern ? fieldType.pattern : ""	
+			
 		binding.defaultValue = getFieldProperty('defaultValue')
 		
 		binding.fieldTypeName=fieldType.name
@@ -339,7 +348,17 @@ class Field {
 		return templateService.runSnippetTemplate(this,snippetName,model)
 	}
 	
+	def getDependencySource() {
+		return Field.findByDependsOn(this)!=null
+	}
 	
-	
+	def getDescendants() {
+		def fields=[]
+		Field.findAllByParent(this).each { field ->
+			fields+=field
+	        fields+=field.getDescendants()
+		}
+		return fields
+	}
 	
 }

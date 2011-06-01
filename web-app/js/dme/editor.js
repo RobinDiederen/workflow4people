@@ -154,7 +154,7 @@ function fieldDialog(field) {
         	},
          open: function(event, ui) {           	
         		$("#dialogtabs").tabs(); 
-        		$("a.help").cluetip({
+        		$(".help").cluetip({
         			splitTitle: '|',  
         			cluezIndex: 2000
        	    	});
@@ -216,7 +216,7 @@ function dmeDialog(id,itemName,params) {
        	},
         open: function(event, ui) {           	
        		$("#dialogtabs").tabs(); 
-       		$("a.help").cluetip({
+       		$(".help").cluetip({
        			splitTitle: '|',  
        			cluezIndex: 2000
       	    	});
@@ -253,7 +253,7 @@ function generateFormsDialog(node) {
       	},
        open: function(event, ui) {           	
       		$("#dialogtabs").tabs(); 
-      		$("a.help").cluetip({
+      		$(".help").cluetip({
       			splitTitle: '|',  
       			cluezIndex: 2000
      	    	});
@@ -332,7 +332,7 @@ function generateProcessDialog(node) {
       open: function(event, ui) {
      		$("button:contains('Done')").hide();
      		$("#dialogtabs").tabs(); 
-     		$("a.help").cluetip({
+     		$(".help").cluetip({
      			splitTitle: '|',  
      			cluezIndex: 2000
     	    	});
@@ -752,14 +752,14 @@ $(function() {
         	//alert("Going for the display!");
        			$("#editpane").load("/workflow4people/dataModelEditor/showField/"+id,'',function() {
        				$("#tabs").tabs();
-       				$("a.help").cluetip({splitTitle: '|'});
+       				$(".help").cluetip({splitTitle: '|'});
        			});
        		} else {
        			//alert("Going for the editor for "+id);
        			$("#editpane").load("/workflow4people/dataModelEditor/editField/"+id,'',function() {
        				//alert("Okay, we're in!");	       		
        				$("#tabs").tabs();
-       				$("a.help").cluetip({splitTitle: '|'});
+       				$(".help").cluetip({splitTitle: '|'});
        			});
        		}
      	}
@@ -767,7 +767,7 @@ $(function() {
      	if(detailClass=="FieldList") {
        		$("#editpane").load("/workflow4people/dataModelEditor/editFieldList/"+id,'',function() {
        			$("#tabs").tabs();
-       			$("a.help").cluetip({splitTitle: '|'});
+       			$(".help").cluetip({splitTitle: '|'});
        		});
      	}
      	

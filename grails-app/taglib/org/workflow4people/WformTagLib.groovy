@@ -26,9 +26,10 @@
  * @author Joost Horward
  */
 package org.workflow4people
+import org.codehaus.groovy.grails.commons.* 
 class WformTagLib {
 	
-	static namespace = 'wform'
+	static namespace = 'w'
 		
 	def treeList = { attrs ->
 		  // a simple attrs.fieldList.field.each would not work - it gets the elements in the wrong order
@@ -100,6 +101,208 @@ class WformTagLib {
 	})
 	}
 	}
+	
+	def row = { attrs,body ->
+		def object=attrs.object;
+		def domainPropertyName=object.getClass().getName()
+		def domainClass = new DefaultGrailsDomainClass( object.class )
+		domainPropertyName=domainClass.propertyName
+		def propertyName=attrs.propertyName;
+		def property=domainClass.getPropertyByName(propertyName)
+		def naturalName=property.naturalName;
+
+		
+		
+		out <<"""<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName}">
+				<td valign="top" class="name">
+        		<label for="name">${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</label>
+        		</td>
+        		<td valign="top" class="value null ${hasErrors(bean: domainClass, field: propertyName, 'errors')}">
+				"""
+		out << body()
+		
+		out << """&nbsp;
+        	<span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span>                
+			</td></tr>"""		
+	
+
+		
+
+	
+	}
+	
+	
+	def textField = { attrs ->
+		
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			
+			
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":			
+					"""${g.textField(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}")}"""
+					break		
+			}
+		}
+	}
+	
+	def date = { attrs ->
+	
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			
+			
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":			
+					"""${g.textField(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",class:'datepicker')}"""
+					break		
+			}
+		}
+	}
+	
+	
+	def textArea = { attrs ->	
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":			
+					"""${g.textArea(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",cols:40,rows:5)}"""
+					break		
+			}
+		}
+	}
+	
+	def checkBox = { attrs ->
+	
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":			
+					"""${g.checkBox(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}")}"""
+					break		
+			}
+		}
+	}
+	
+	
+	def domainObject = { attrs ->
+	
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":
+					def optionValues=[]
+					def domainClass = new DefaultGrailsDomainClass( attrs.object.class )
+					def property=domainClass.getPropertyByName(attrs.propertyName)
+					if (attrs.from) {
+                    	optionValues=attrs.from
+                    } else {
+                    	//optionValues= attrs.object."${attrs.propertyName}".class.findAll([sort:'name',order:'asc'])
+                    	optionValues= property.getType().findAll([sort:'name',order:'asc'])
+                    }
+					
+					
+					
+					def value=attrs.object."${attrs.propertyName}"
+					def valueId=value ? value.id : null
+											
+					if (property.isOptional())
+						"""${g.select(name:attrs.propertyName+'.id',value:valueId,from:optionValues,optionKey:'id',noSelection:['null': '-'] )}"""
+					else
+						"""${g.select(name:attrs.propertyName+'.id',value:valueId,from:optionValues,optionKey:'id')}"""
+					break		
+			}
+		}
+	}
+	
+	def select = { attrs ->
+	
+		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			switch(attrs.mode) {			
+				case "show":							
+					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+					break
+				
+				case "edit":					
+					def domainClass = new DefaultGrailsDomainClass( attrs.object.class )
+					def property=domainClass.getPropertyByName(attrs.propertyName)
+					
+                    def cp = domainClass.constrainedProperties[attrs.propertyName]
+                                                               
+                    def optionValues=[]
+                    if (attrs.from) {
+                    	optionValues=attrs.from
+                    } else {
+                    	optionValues=attrs.object.constraints."${attrs.propertyName}".inList
+                    }
+					
+					if (property.isOptional())
+						"""${g.select(name:attrs.propertyName+'.id',value:attrs.object."${attrs.propertyName}",from:optionValues,noSelection:['null': '-'] )}"""
+					else
+						"""${g.select(name:attrs.propertyName+'.id',value:attrs.object."${attrs.propertyName}",from:optionValues)}"""
+					break		
+			}
+		}
+	}
+	
+	
+	def tabs = { attrs,body ->
+	
+		out << """<div id="dialogtabs" > 
+			<ul>"""
+			def names=attrs.names.split(",")
+			for (name in names) {
+				out <<"""
+				<li>
+					<a href="#dialog${name}">${name}</a>
+				</li>
+				"""
+			}
+		out <<"""</ul>"""
+		out << body()
+		out << "</div>"
+	}
+
+	def tab = { attrs,body ->
+	
+	out << """<div id="dialog${attrs.name}">		
+			<table ><tbody>"""
+		
+	out << body()
+	out << "</tbody></table></div>"
+}
+
+	
+	def form = { attrs,body ->
+	
+		out << """<div id="dialog" title="${attrs.title}">
+		<form id="ajaxdialogform">"""
+		
+		out << body()
+		out << "</form></div>"
+	}
+
+	def table = { attrs,body ->
+	
+		out << """<table><tbody>"""	
+		out << body()
+		out << "</tbody></table>"
+}
 	
 	
 }
