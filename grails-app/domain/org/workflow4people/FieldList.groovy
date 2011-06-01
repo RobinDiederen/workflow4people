@@ -29,6 +29,9 @@ import groovy.lang.Binding;
 
 class FieldList implements Serializable {
 	def templateService
+	
+	static listProperties=['id','parent','name','namespace','baseType','label']
+	
     static constraints = {
 		parent(help:'x',nullable:true)
     	name(help:'x',class:'wide')    	

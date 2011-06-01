@@ -19,6 +19,8 @@
  */
 
 package org.workflow4people
+import grails.converters.JSON;
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 /**
@@ -31,15 +33,25 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class AuthorityController {
 
     static allowedMethods = [save: "POST", update: "POST"]
+	
+	def listService
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [authorityInstanceList: Authority.list(params), authorityInstanceTotal: Authority.count()]
-    }
+    //def list = {
+    //    params.max = Math.min(params.max ? params.int('max') : 10, 100)
+    //    [authorityInstanceList: Authority.list(params), authorityInstanceTotal: Authority.count()]
+    //}
+	
+	def list = {
+		render (view:'/datatable/list', model:[dc:Authority,controllerName:'authority',request:request,bFilter: true])
+	}
+	
+	def jsonlist = {
+		render listService.jsonlist(Authority,params,request,"authority") as JSON
+	}
 
     def create = {
         def authorityInstance = new Authority()

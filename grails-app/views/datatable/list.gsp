@@ -5,21 +5,23 @@
 		<jqui:resources theme="smoothness" />
         <title><g:message code="${controllerName}.list.title" default="${controllerName}.list.title" /></title>
         <jq:jquery>
-    
+
 		$('#datatable').dataTable( {
 		//"sDom": '<"toolbar">frtip',
 		"bProcessing": true,
 		"bServerSide": true,		
 		"sAjaxSource": "${resource(dir:controllerName,file:'jsonlist')}",
 		"sPaginationType": "full_numbers",
-		"bFilter": false,
+		"bFilter": ${bFilter ? true : false},
 		"bJQueryUI": true,
 		"aoColumnDefs": [ 
 			{ "bSortable": false, "aTargets": [ ${dc.listProperties.size()} ] }
 		]
 		
-		
-	} );
+		} );
+	
+	
+	
 	////$("div.datatable div.fg-toolbar div.datatable_length").prepend('<div style="float:left;height:20px;">test</div>');
 	$("div.datatable div.fg-toolbar div#datatable_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><a href="${request.contextPath}/${controllerName}/create">New</a></span>&nbsp;');
         </jq:jquery>       
@@ -40,7 +42,7 @@
 		<g:each in="${dc.listProperties}" var="property">
 	 	<th><g:message code="${controllerName}.${property}.label" default="${controllerName}.${property}.label" /></th>		
 		</g:each>
-		<th>Actions</th>
+		<th width="50px">Actions</th>
 
 		</tr>
 	</thead>

@@ -24,6 +24,8 @@ package org.workflow4people
  */
 class DayPart {
 
+	static listProperties=['id','position','dayName','fromTime','toTime']
+	
     static constraints = {
     	position(help:'x')
     	dayName(inList:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],help:'x')

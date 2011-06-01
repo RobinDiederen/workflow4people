@@ -18,6 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.JSON;
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 import org.codehaus.groovy.grails.commons.ApplicationHolder
@@ -31,16 +33,26 @@ import org.apache.commons.lang.StringUtils
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class FieldListController {
     
+	def listService
+	
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save:'POST', update:'POST']
 
-    def list = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ fieldListInstanceList: FieldList.list( params ), fieldListInstanceTotal: FieldList.count() ]
-    }
+//    def list = {
+//        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
+//        [ fieldListInstanceList: FieldList.list( params ), fieldListInstanceTotal: FieldList.count() ]
+//    }
 
+	def list = {
+		render (view:'/datatable/list', model:[dc:FieldList,controllerName:'fieldList',request:request])
+	}
+	
+	def jsonlist = {
+		render listService.jsonlist(FieldList,params,request) as JSON
+	}
+	
     def show = {
         def fieldListInstance = FieldList.get( params.id )
 

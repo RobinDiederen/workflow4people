@@ -24,6 +24,9 @@ package org.workflow4people
  * @author Joost Horward
  */
 class Feature {
+	
+	static listProperties=['id','name','title','description']
+	
 	static hasMany=[featurePermission:FeaturePermission]
 	String name
 	String title
