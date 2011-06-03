@@ -28,8 +28,10 @@ class DataModelEditorController {
     
     
     def editField = {
-			def id=params.id.split("_")[1]
-
+			def id=params.id
+            if (params.id.contains("_")){
+				id=params.id.split("_")[1]
+			}
             def fieldInstance = Field.get( id )
 
             if(!fieldInstance) {
@@ -50,7 +52,11 @@ class DataModelEditorController {
 	
 	def submitField = {
 			println "Submit Field params: ${params}"
-			def id=params.id.split("_")[1]
+			def id=params.id
+			if (id.contains("_")) {
+				id=params.id.split("_")[1]
+			}
+			                            
 			def fieldInstance = Field.get(id )
 			fieldInstance.properties = params
     	//	render(view:'showField',model:[ fieldInstance : fieldInstance ])
@@ -92,7 +98,11 @@ class DataModelEditorController {
 			def id
 			def formInstance
 			if(params.id) {
-				id=params.id.split("_")[1]
+				if (params.id.contains("_")){
+					id=params.id.split("_")[1]
+				} else {
+					id=params.id
+				}
 				formInstance = Form.get(id )
 			} else {
 				formInstance=new Form()

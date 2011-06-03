@@ -6,7 +6,7 @@
         <title><g:message code="${controllerName}.list.title" default="${controllerName}.list.title" /></title>
         <jq:jquery>
 
-		$('#datatable').dataTable( {
+		listDatatable=$('#datatable').dataTable( {
 		//"sDom": '<"toolbar">frtip',
 		"bProcessing": true,
 		"bServerSide": true,		
@@ -63,7 +63,7 @@
 	</tfoot>
 </table>
 </div>   
-    
+    <div id="statusmessage" style="margin:auto;text-align:center;">...</div>
     
     </div>
     

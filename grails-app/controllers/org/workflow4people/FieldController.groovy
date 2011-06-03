@@ -122,6 +122,21 @@ class FieldController {
         }
     }
     
+    def dialog = {
+        def fieldInstance = Field.get( params.id )
+
+        if(!fieldInstance) {
+            flash.message = "Field not found with id ${params.id}"
+            redirect(action:list)
+        }
+        else {
+            return [ fieldInstance : fieldInstance ]
+        }
+    }
+    
+    
+    
+    
     /*
      * This will insert a field under the currently selected field
      */

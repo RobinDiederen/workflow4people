@@ -411,6 +411,11 @@
                             
                             </tbody>
                             </table>
+                            
+                            <wf:detailTable property="document" object="${documentInstance}" domainClass="${org.workflow4people.DocumentIndex}" >
+                            
+                            
+                            </wf:detailTable>
                             </div>
                                                     
                     

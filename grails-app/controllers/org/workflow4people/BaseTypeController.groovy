@@ -97,6 +97,41 @@ class BaseTypeController {
             return [baseTypeInstance: baseTypeInstance]
         }
     }
+	
+	def dialog = {
+        def baseTypeInstance = BaseType.get(params.id)
+        if (!baseTypeInstance) {
+            flash.message = "baseType.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "BaseType not found with id ${params.id}"
+            redirect(action: "list")
+        }
+        else {
+            return [baseTypeInstance: baseTypeInstance]
+        }
+    }
+	
+	def submitdialog = {
+		println "Submit params: ${params}"
+		def id=params.id
+		def baseTypeInstance = BaseType.get(params.id )
+		baseTypeInstance.properties = params
+        
+        def theRefreshNodes=null
+		                     
+		def result = [
+		              	returnValue:true,
+		              	message:"baseType #${params.id} : ${baseTypeInstance.name} updated" ,
+		              	id:params.id,
+		              	name: baseTypeInstance.name,	
+		              	refreshNodes:theRefreshNodes
+		              ]              
+         def res=[result:result]
+         render res as JSON
+		
+	}
+	
+	
 
     def update = {
         def baseTypeInstance = BaseType.get(params.id)

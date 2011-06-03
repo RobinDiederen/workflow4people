@@ -183,9 +183,10 @@ function dmeDialog(id,itemName,params) {
 	 }
 	 
 	 var dialogHTML = $.ajax({
-		  url: "/workflow4people/dataModelEditor/edit"+itemName+"/"+urlId,
+		  url: wfp.baseUrl+"/dataModelEditor/edit"+itemName+"/"+urlId,
 		  async: false
 		 }).responseText;
+	 
 	 var theWidth=$(dialogHTML).css("width");
 	 var theDialog=$(dialogHTML).dialog({ 
 		 modal:false,
@@ -194,8 +195,9 @@ function dmeDialog(id,itemName,params) {
 		 //height:400,
 		 buttons: { 
 		 	"Save": function() {
-			 	var formData=$("form#ajaxdialogform").serialize();
-			 	$.post("/workflow4people/dataModelEditor/submit"+itemName+"/"+urlId,formData, function(data) 
+			 	//var formData=$("form#ajaxdialogform").serialize();
+			 	var formData=theDialog.find("form").serialize();
+			 	$.post(wfp.baseUrl+"/dataModelEditor/submit"+itemName+"/"+urlId,formData, function(data) 
 			 		{
 
 			 		var result=data.result
@@ -214,9 +216,10 @@ function dmeDialog(id,itemName,params) {
 	        		$( this ).dialog( "close" );
 	        	}
        	},
-        open: function(event, ui) {           	
-       		$("#dialogtabs").tabs(); 
-       		$(".help").cluetip({
+        open: function(event, ui) { 
+       		$(this).find(".dialogtabs").tabs();
+       		$(this).find('.detailTable').dataTable({"bJQueryUI": true ,"sPaginationType": "full_numbers" });
+       		$(this).find(".help").cluetip({
        			splitTitle: '|',  
        			cluezIndex: 2000
       	    	});

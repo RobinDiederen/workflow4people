@@ -26,6 +26,10 @@
         --%>
         
         <g:javascript src="jquery/jquery-1.4.2.js" plugin="wfp" />
+        <g:javascript>
+        	var wfp={};
+        	wfp.baseUrl="${request.contextPath}";
+        </g:javascript>
                  
         <g:javascript src="jquery/jquery-ui-1.8.custom.min.js" contextPath="" plugin="wfp" />
         <g:javascript src="jquery/jquery.timers-1.2.js"  contextPath="" plugin="wfp" />
@@ -36,6 +40,8 @@
         <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>
         
         <g:javascript src="jquery/ui.multiselect.js"  contextPath="" plugin="wfp" />
+        <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
+        
         <jq:jquery>
  		
             $(".step").addClass("awesome small blue button");
@@ -91,6 +97,12 @@
 			   }
 			
 			});
+          	
+          	
+           $('.detailTable').dataTable({"bJQueryUI": true
+           ,"sPaginationType": "full_numbers"} );		
+		
+		
           	
           	
         </jq:jquery>

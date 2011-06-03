@@ -27,6 +27,7 @@ import org.workflow4people.services.*;
 
 class Field {
 	//static transients = ["xpath"]
+    static listProperties=['id','name','description']
 	static belongsTo = [fieldList: FieldList]	
     static constraints = {
 		parent(help:'x',nullable:true)

@@ -43,7 +43,7 @@ class ListService {
         			inLine +=doc."${it}".toString()
         		}	            		
         		def baseUrl=request.contextPath
-        		inLine+="<a class='list-action-button ui-state-default' href='${baseUrl}/${propName}/show/${doc.id}'>show</a>&nbsp;<a class='list-action-button ui-state-default' href='${baseUrl}/${propName}/edit/${doc.id}'>edit</a>&nbsp;<a class='list-action-button ui-state-default confirm' href='${baseUrl}/${propName}/delete/${doc.id}' title='Delete this item' >&times;</a>"
+        		inLine+="""<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'${propName}','')">dialog</span>&nbsp;<a class="list-action-button ui-state-default" href="${baseUrl}/${propName}/show/${doc.id}">show</a>&nbsp;<a class="list-action-button ui-state-default" href="${baseUrl}/${propName}/edit/${doc.id}">edit</a>&nbsp;<a class="list-action-button ui-state-default confirm" href="${baseUrl}/${propName}/delete/${doc.id}" title="Delete this item" >&times;</a>"""
         		def aaLine=[inLine]
         		aaData+=(aaLine)
     		}

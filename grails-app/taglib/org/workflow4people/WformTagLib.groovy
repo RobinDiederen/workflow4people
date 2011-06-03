@@ -263,13 +263,15 @@ class WformTagLib {
 	
 	def tabs = { attrs,body ->
 	
-		out << """<div id="dialogtabs" > 
+		out << """<div id="dialogtabs" class="dialogtabs" > 
 			<ul>"""
+			def prefix="dialog_"+attrs.object.getClass().getName()+"_"+attrs.object.id+"_"
+			prefix=prefix.replace(".","_")
 			def names=attrs.names.split(",")
 			for (name in names) {
 				out <<"""
 				<li>
-					<a href="#dialog${name}">${name}</a>
+					<a href="#${prefix}${name}">${name}</a>
 				</li>
 				"""
 			}
@@ -279,8 +281,9 @@ class WformTagLib {
 	}
 
 	def tab = { attrs,body ->
-	
-	out << """<div id="dialog${attrs.name}">		
+	def prefix="dialog_"+attrs.object.getClass().getName()+"_"+attrs.object.id+"_"
+	prefix=prefix.replace(".","_")
+	out << """<div id="${prefix}${attrs.name}">		
 			<table ><tbody>"""
 		
 	out << body()
@@ -290,7 +293,7 @@ class WformTagLib {
 	
 	def form = { attrs,body ->
 	
-		out << """<div id="dialog" title="${attrs.title}">
+		out << """<div aid="dialog" title="${attrs.title}">
 		<form id="ajaxdialogform">"""
 		
 		out << body()
@@ -304,32 +307,45 @@ class WformTagLib {
 		out << "</tbody></table>"
 	}
 	
-	def detailTable = { attrs ->	
-		out << """<div class="detailTable">
-                            <table><tr>"""
-			attrs.domainClass.listProperties.each { propertyName ->
-				def domainClass = new DefaultGrailsDomainClass( attrs.domainClass)
+	def detailTable = { attrs ->
+		
+		def domainClass = new DefaultGrailsDomainClass( attrs.domainClass)
 
-				def domainPropertyName=domainClass.getName()
+		def domainPropertyName=domainClass.getPropertyName()
+		out << """<div>
+                            <table id="detailTable1" class="detailTable"><thead><tr>"""
+			attrs.domainClass.listProperties.each { propertyName ->
+
 				def property=domainClass.getPropertyByName(propertyName)
 				def naturalName=property.naturalName;
 			
 				out << """<th>${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</th>"""
 			}
-		out << "</tr>"
+		out << "<th>Actions</th></tr></thead><tbody>"
 		
-		def listElements=org.workflow4people.DocumentIndex.findAllByDocument (attrs.object,[sort:'id',order:'asc'])
+		//def listElements=org.workflow4people.DocumentIndex.findAllByDocument (attrs.object,[sort:'id',order:'asc'])
+		def objectDomainClass = new DefaultGrailsDomainClass( attrs.object.class )
+		
+		def propName=attrs.property		
+		propName=propName[0].toUpperCase()+propName.substring(1)
+		
+		//def finder="findAllBy"+objectDomainClass.name
+		def finder="findAllBy"+propName
+		
+		def listElements=attrs.domainClass."${finder}" (attrs.object,[sort:'id',order:'asc'])
+		print "LIST"
 		listElements.each { listElement ->
+			print "LISTELEMENT: ${listElement}"
 			out <<"""<tr>"""
 			attrs.domainClass.listProperties.each { propertyName -> 
 				out <<"""<td>${fieldValue(bean: listElement, field: propertyName)}</td>"""
 			}
-			out <<"""</tr>"""
+    		def baseUrl=request.contextPath
+
+			out <<"""<td><a class='list-action-button ui-state-default' href='${baseUrl}/${domainPropertyName}/show/field_12'>show</a>&nbsp;<span class='list-action-button ui-state-default' onclick="dmeDialog(${listElement.id},'Field','');return false;" >edit</span>&nbsp;<a class='list-action-button ui-state-default confirm' href='${baseUrl}/${domainPropertyName}/delete/${listElement.id}' title='Delete this item' >&times;</aa></td></tr>"""
 		}
 		
-		
-		
-		out <<"""</table>"""
+		out <<"""</tbody></table>"""
 	
 	}
 	

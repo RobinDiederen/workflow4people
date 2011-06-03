@@ -1,7 +1,7 @@
  <div id="dialog" title="Edit field type">
 	<form id="ajaxdialogform">
 			 		
-					<div id="dialogtabs" style="border:none;" > 
+					<div id="dialogtabs" class="dialogtabs" style="border:none;" > 
 					<ul>						
 							<li>
 								<a href="#dialogdetails">Details</a>

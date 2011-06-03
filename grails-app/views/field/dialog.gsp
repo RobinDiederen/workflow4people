@@ -29,6 +29,4 @@
 			<wf:domainObject object="${fieldInstance}" propertyName="parent" mode="show" />
 		</wf:tab>
 	</wf:tabs>
-	
-	
 </wf:form>
