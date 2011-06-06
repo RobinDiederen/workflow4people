@@ -32,16 +32,13 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class ApplicationConfigurationController {
 	
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+	 // the submitdialog and delete actions only accept POST requests
+	    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-    //def list = {
-    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-    //    [applicationConfigurationInstanceList: ApplicationConfiguration.list(params), applicationConfigurationInstanceTotal: ApplicationConfiguration.count()]
-    //}
 	
 	def list = {
 		render (view:'/datatable/list', model:[dc:ApplicationConfiguration,controllerName:'applicationConfiguration',request:request])
@@ -50,7 +47,13 @@ class ApplicationConfigurationController {
 	def jsonlist = {
 		render listService.jsonlist(ApplicationConfiguration,params,request) as JSON
 	}
-
+	
+	def dialog = { return dialogService.edit(ApplicationConfiguration,params) }
+	
+	def submitdialog = { render dialogService.submit(ApplicationConfiguration,params) as JSON }
+	
+	def delete = { render dialogService.delete(ApplicationConfiguration,params) as JSON }
+	
     def create = {
         def applicationConfigurationInstance = new ApplicationConfiguration()
         applicationConfigurationInstance.properties = params
@@ -127,7 +130,7 @@ class ApplicationConfigurationController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def applicationConfigurationInstance = ApplicationConfiguration.get(params.id)
         if (applicationConfigurationInstance) {
             try {

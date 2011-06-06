@@ -31,13 +31,14 @@ import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN'])
 class DocumentIndexController {
 	def listService
+	def dialogService
 
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
+                             
     def list = {    	
     	render (view:'/datatable/list', model:[dc:DocumentIndex,controllerName:'documentIndex',request:request])
     }
@@ -46,6 +47,11 @@ class DocumentIndexController {
     	render listService.jsonlist(DocumentIndex,params,request) as JSON	
     }
 
+	def dialog = { return dialogService.edit(DocumentIndex,params) }
+	
+	def submitdialog = { render dialogService.submit(DocumentIndex,params) as JSON }
+	
+	def delete = { render dialogService.delete(DocumentIndex,params) as JSON }
 
     def create = {
         def documentIndexInstance = new DocumentIndex()
@@ -123,7 +129,7 @@ class DocumentIndexController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def documentIndexInstance = DocumentIndex.get(params.id)
         if (documentIndexInstance) {
             try {

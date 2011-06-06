@@ -28,15 +28,13 @@ import grails.converters.*
  */
 class NamespaceController {
 	def listService
+	def dialogService
+	
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+    // the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-    def llist = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [namespaceInstanceList: Namespace.list(params), namespaceInstanceTotal: Namespace.count()]
-    }
 	def list = {
     	
     	render (view:'/datatable/list', model:[dc:Namespace,controllerName:'namespace',request:request])
@@ -45,6 +43,15 @@ class NamespaceController {
     def jsonlist = {
     	render listService.jsonlist(Namespace,params,request) as JSON	
     }
+	
+		
+	def dialog = { return dialogService.edit(Namespace,params) }
+	
+	def submitdialog = { render dialogService.submit(Namespace,params) as JSON }
+	
+	def delete = { render dialogService.delete(Namespace,params) as JSON }
+	
+	
 
     def create = {
         def namespaceInstance = new Namespace()
@@ -122,7 +129,7 @@ class NamespaceController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def namespaceInstance = Namespace.get(params.id)
         if (namespaceInstance) {
             try {

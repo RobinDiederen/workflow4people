@@ -113,16 +113,14 @@ class WformTagLib {
 
 		
 		
-		out <<"""<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName}">
+		out <<"""<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName} ${attrs.class}">
 				<td valign="top" class="name">
         		<label for="name">${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</label>
         		</td>
-        		<td valign="top" class="value null ${hasErrors(bean: domainClass, field: propertyName, 'errors')}">
-				"""
+        		<td valign="top" class="value ${attrs.class}">"""
 		out << body()
 		
-		out << """&nbsp;
-        	<span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span>                
+		out << """</td><td>&nbsp;<span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span>                
 			</td></tr>"""		
 	
 
@@ -134,7 +132,7 @@ class WformTagLib {
 	
 	def textField = { attrs ->
 		
-		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+		out << row ("class":attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
 			
 			
 			switch(attrs.mode) {			
@@ -143,7 +141,7 @@ class WformTagLib {
 					break
 				
 				case "edit":			
-					"""${g.textField(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}")}"""
+					"""${g.textField(name:attrs.propertyName,value:fieldValue(bean: attrs.object, field: attrs.propertyName))}"""
 					break		
 			}
 		}
@@ -160,7 +158,8 @@ class WformTagLib {
 					break
 				
 				case "edit":			
-					"""${g.textField(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",class:'datepicker')}"""
+					def dateValue="${formatDate(date:attrs.object."${attrs.propertyName}",format:"yyyy-MM-dd")}" 
+					"""${g.textField(name:attrs.propertyName,value:dateValue,class:'datepicker')}"""
 					break		
 			}
 		}
@@ -213,7 +212,10 @@ class WformTagLib {
                     	optionValues=attrs.from
                     } else {
                     	//optionValues= attrs.object."${attrs.propertyName}".class.findAll([sort:'name',order:'asc'])
-                    	optionValues= property.getType().findAll([sort:'name',order:'asc'])
+                    	if (attrs.sort)
+                    		optionValues= property.getType().findAll([sort:attrs.sort,order:'asc'])
+                    	else 
+                    		optionValues= property.getType().findAll([sort:'name',order:'asc'])
                     }
 					
 					
@@ -233,6 +235,13 @@ class WformTagLib {
 	def select = { attrs ->
 	
 		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+			def multiple = attrs.multiple ? attrs.multiple : "no"
+			def cssClass=attrs.class ? attrs.class : ""
+			multiple=""
+			def optionKey = attrs.optionKey ? attrs.optionKey : null
+			multiple=null
+			optionKey=""	
+			
 			switch(attrs.mode) {			
 				case "show":							
 					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
@@ -251,16 +260,22 @@ class WformTagLib {
                     	optionValues=attrs.object.constraints."${attrs.propertyName}".inList
                     }
 					
-					if (property.isOptional())
-						"""${g.select(name:attrs.propertyName+'.id',value:attrs.object."${attrs.propertyName}",from:optionValues,noSelection:['null': '-'] )}"""
-					else
-						"""${g.select(name:attrs.propertyName+'.id',value:attrs.object."${attrs.propertyName}",from:optionValues)}"""
+					def opts=[name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",from:optionValues,noSelection:['null': '-']]
+					if (attrs["class"]) opts.put("class",attrs["class"])
+					if (attrs["optionKey"]) opts.put("optionKey",attrs["optionKey"])
+					if (attrs["multiple"]) opts.put("multiple",attrs["multiple"])
+					if (property.isOptional()) {
+						// yes. ''  for strings, null for int's
+						opts.put("noSelection",['': '-'])
+					}
+					"""${g.select(opts)}"""						
 					break		
 			}
 		}
 	}
-	
-	
+/*
+	<g:select class="multiselect" name="importSchema" from="${org.workflow4people.Namespace.list(sort:'prefix')}" multiple="yes" optionKey="id" value="${namespaceInstance?.importSchema}" />
+	*/
 	def tabs = { attrs,body ->
 	
 		out << """<div id="dialogtabs" class="dialogtabs" > 
@@ -292,9 +307,10 @@ class WformTagLib {
 
 	
 	def form = { attrs,body ->
-	
+		
 		out << """<div aid="dialog" title="${attrs.title}">
-		<form id="ajaxdialogform">"""
+		<form class="ajaxdialogform">
+		<div class="errors" style="display:none;"></div>"""
 		
 		out << body()
 		out << "</form></div>"
@@ -342,7 +358,7 @@ class WformTagLib {
 			}
     		def baseUrl=request.contextPath
 
-			out <<"""<td><a class='list-action-button ui-state-default' href='${baseUrl}/${domainPropertyName}/show/field_12'>show</a>&nbsp;<span class='list-action-button ui-state-default' onclick="dmeDialog(${listElement.id},'Field','');return false;" >edit</span>&nbsp;<a class='list-action-button ui-state-default confirm' href='${baseUrl}/${domainPropertyName}/delete/${listElement.id}' title='Delete this item' >&times;</aa></td></tr>"""
+			out <<"""<td><span class='list-action-button ui-state-default' onclick="formDialog(${listElement.id},'${domainPropertyName}','');return false;" >edit</span></td></tr>"""
 		}
 		
 		out <<"""</tbody></table>"""

@@ -24,7 +24,9 @@ package org.workflow4people
  * @author Joost Horward
  */
 class FeaturePermission {
+	static listProperties=['id','authority','role','remark']
 	static belongsTo=[feature:Feature]
+	                  
 	Authority authority
 	Role role
 	String remark

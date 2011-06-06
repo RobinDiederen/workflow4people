@@ -19,6 +19,9 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.converters.JSON;
+
+
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_USER_ADMIN'])
 
 /**
@@ -27,16 +30,35 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  * @author Joost Horward
  */
 class FeaturePermissionController {
+	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
+ // the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
+                             
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [featurePermissionInstanceList: FeaturePermission.list(params), featurePermissionInstanceTotal: FeaturePermission.count()]
-    }
+		render (view:'/datatable/list', model:[dc:FeaturePermission,controllerName:'featurePermission',request:request])
+	}
+		
+	def jsonlist = {
+		render listService.jsonlist(FeaturePermission,params,request) as JSON
+	}
+
+                             
+    //def list = {
+    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+    //    [featurePermissionInstanceList: FeaturePermission.list(params), featurePermissionInstanceTotal: FeaturePermission.count()]
+    //}
+    
+    
+    
+	def dialog = { return dialogService.edit(FeaturePermission,params) }
+	
+	def submitdialog = { render dialogService.submit(FeaturePermission,params) as JSON }
+	
+	def delete = { render dialogService.delete(FeaturePermission,params) as JSON }
 
     def create = {
         def featurePermissionInstance = new FeaturePermission()
@@ -114,7 +136,7 @@ class FeaturePermissionController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def featurePermissionInstance = FeaturePermission.get(params.id)
         if (featurePermissionInstance) {
             try {

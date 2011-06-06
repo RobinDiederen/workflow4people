@@ -30,16 +30,12 @@ import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN','ROLE_WF4P_DEVELOPER'])
 class DocumentIndexFieldController {
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
-    def llist = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [documentIndexFieldInstanceList: DocumentIndexField.list(params), documentIndexFieldInstanceTotal: DocumentIndexField.count()]
-    }
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
 	def list = {
     	
@@ -50,106 +46,10 @@ class DocumentIndexFieldController {
     	render listService.jsonlist(DocumentIndexField,params,request) as JSON	
     }
 	
+	def dialog = { return dialogService.edit(DocumentIndexField,params) }
 	
+	def submitdialog = { render dialogService.submit(DocumentIndexField,params) as JSON }
+	
+	def delete = { render dialogService.delete(DocumentIndexField,params) as JSON }
 
-    def create = {
-        def documentIndexFieldInstance = new DocumentIndexField()
-        documentIndexFieldInstance.properties = params
-        return [documentIndexFieldInstance: documentIndexFieldInstance]
-    }
-
-    def save = {
-        def documentIndexFieldInstance = new DocumentIndexField(params)
-        if (!documentIndexFieldInstance.hasErrors() && documentIndexFieldInstance.save()) {
-            flash.message = "documentIndexField.created"
-            flash.args = [documentIndexFieldInstance.id]
-            flash.defaultMessage = "DocumentIndexField ${documentIndexFieldInstance.id} created"
-            redirect(action: "show", id: documentIndexFieldInstance.id)
-        }
-        else {
-            render(view: "create", model: [documentIndexFieldInstance: documentIndexFieldInstance])
-        }
-    }
-
-    def show = {
-        def documentIndexFieldInstance = DocumentIndexField.get(params.id)
-        if (!documentIndexFieldInstance) {
-            flash.message = "documentIndexField.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentIndexField not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [documentIndexFieldInstance: documentIndexFieldInstance]
-        }
-    }
-
-    def edit = {
-        def documentIndexFieldInstance = DocumentIndexField.get(params.id)
-        if (!documentIndexFieldInstance) {
-            flash.message = "documentIndexField.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentIndexField not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [documentIndexFieldInstance: documentIndexFieldInstance]
-        }
-    }
-
-    def update = {
-        def documentIndexFieldInstance = DocumentIndexField.get(params.id)
-        if (documentIndexFieldInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (documentIndexFieldInstance.version > version) {
-                    
-                    documentIndexFieldInstance.errors.rejectValue("version", "documentIndexField.optimistic.locking.failure", "Another user has updated this DocumentIndexField while you were editing")
-                    render(view: "edit", model: [documentIndexFieldInstance: documentIndexFieldInstance])
-                    return
-                }
-            }
-            documentIndexFieldInstance.properties = params
-            if (!documentIndexFieldInstance.hasErrors() && documentIndexFieldInstance.save()) {
-                flash.message = "documentIndexField.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentIndexField ${params.id} updated"
-                redirect(action: "show", id: documentIndexFieldInstance.id)
-            }
-            else {
-                render(view: "edit", model: [documentIndexFieldInstance: documentIndexFieldInstance])
-            }
-        }
-        else {
-            flash.message = "documentIndexField.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentIndexField not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def documentIndexFieldInstance = DocumentIndexField.get(params.id)
-        if (documentIndexFieldInstance) {
-            try {
-                documentIndexFieldInstance.delete()
-                flash.message = "documentIndexField.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentIndexField ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "documentIndexField.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentIndexField ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "documentIndexField.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentIndexField not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
 }

@@ -47,6 +47,9 @@ public class DateEditor extends PropertyEditorSupport{
 			setValue(null)
 		} else {
 			def locale = new Locale('nl')
+			if (!value.contains('T')) {
+				value+="T00:00:00"
+			}
 			def df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 			
 			df.parse(value)            

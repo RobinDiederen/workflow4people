@@ -34,16 +34,12 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class DayPartController {
 	
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
-//    def list = {
-//        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-//        [dayPartInstanceList: DayPart.list(params), dayPartInstanceTotal: DayPart.count(),filteredParams:[]]
-//    }
+    // the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
 	def list = {
 		render (view:'/datatable/list', model:[dc:DayPart,controllerName:'dayPart',request:request])
@@ -52,105 +48,11 @@ class DayPartController {
 	def jsonlist = {
 		render listService.jsonlist(DayPart,params,request) as JSON
 	}
-
-    def create = {
-        def dayPartInstance = new DayPart()
-        dayPartInstance.properties = params
-        return [dayPartInstance: dayPartInstance]
-    }
-
-    def save = {
-        def dayPartInstance = new DayPart(params)
-        if (!dayPartInstance.hasErrors() && dayPartInstance.save()) {
-            flash.message = "dayPart.created"
-            flash.args = [dayPartInstance.id]
-            flash.defaultMessage = "DayPart ${dayPartInstance.id} created"
-            redirect(action: "show", id: dayPartInstance.id)
-        }
-        else {
-            render(view: "create", model: [dayPartInstance: dayPartInstance])
-        }
-    }
-
-    def show = {
-        def dayPartInstance = DayPart.get(params.id)
-        if (!dayPartInstance) {
-            flash.message = "dayPart.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DayPart not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [dayPartInstance: dayPartInstance]
-        }
-    }
-
-    def edit = {
-        def dayPartInstance = DayPart.get(params.id)
-        if (!dayPartInstance) {
-            flash.message = "dayPart.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DayPart not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [dayPartInstance: dayPartInstance]
-        }
-    }
-
-    def update = {
-        def dayPartInstance = DayPart.get(params.id)
-        if (dayPartInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (dayPartInstance.version > version) {
-                    
-                    dayPartInstance.errors.rejectValue("version", "dayPart.optimistic.locking.failure", "Another user has updated this DayPart while you were editing")
-                    render(view: "edit", model: [dayPartInstance: dayPartInstance])
-                    return
-                }
-            }
-            dayPartInstance.properties = params
-            if (!dayPartInstance.hasErrors() && dayPartInstance.save()) {
-                flash.message = "dayPart.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "DayPart ${params.id} updated"
-                redirect(action: "show", id: dayPartInstance.id)
-            }
-            else {
-                render(view: "edit", model: [dayPartInstance: dayPartInstance])
-            }
-        }
-        else {
-            flash.message = "dayPart.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DayPart not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def dayPartInstance = DayPart.get(params.id)
-        if (dayPartInstance) {
-            try {
-                dayPartInstance.delete()
-                flash.message = "dayPart.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DayPart ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "dayPart.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DayPart ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "dayPart.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DayPart not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
+	
+	def dialog = { return dialogService.edit(DayPart,params) }
+	
+	def submitdialog = { render dialogService.submit(DayPart,params) as JSON }
+	
+	def delete = { render dialogService.delete(DayPart,params) as JSON }
+	
 }

@@ -32,11 +32,12 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN','ROLE_WF4P_DEVELOPER'])
 class DocumentController {
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def oldlist = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
@@ -51,6 +52,12 @@ class DocumentController {
     	render listService.jsonlist(Document,params,request) as JSON	
     }
 
+	def dialog = { return dialogService.edit(Document,params) }
+	
+	def submitdialog = { render dialogService.submit(Document,params) as JSON }
+	
+	def delete = { render dialogService.delete(Document,params) as JSON }
+	
     def create = {
         def documentInstance = new Document()
         documentInstance.properties = params
@@ -127,7 +134,7 @@ class DocumentController {
         }
     }
 
-    def delete = {
+    def xdelete = {
     	log.debug "deleting ..."
         def documentInstance = Document.get(params.id)
         if (documentInstance) {

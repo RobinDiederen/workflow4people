@@ -28,7 +28,7 @@ class BaseType {
 	static listProperties=['id','name','description']
 	
     static constraints = {
-        name(help:'x',class:'wide')    
+        name(blank: false,help:'x',class:'wide')    
         description(size:0..50000,class:'wide')
     }
     /**

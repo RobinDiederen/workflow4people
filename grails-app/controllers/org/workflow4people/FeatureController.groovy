@@ -30,16 +30,13 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class FeatureController {
 
 	def listService
+	def dialogService
 	
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
-    //def list = {
-    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-    //    [featureInstanceList: Feature.list(params), featureInstanceTotal: Feature.count()]
-    //}
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
+  
 	
 	def list = {
 		render (view:'/datatable/list', model:[dc:Feature,controllerName:'feature',request:request])
@@ -54,6 +51,12 @@ class FeatureController {
         featureInstance.properties = params
         return [featureInstance: featureInstance]
     }
+	
+	def dialog = { return dialogService.edit(Feature,params) }
+	
+	def submitdialog = { render dialogService.submit(Feature,params) as JSON }
+	
+	def delete = { render dialogService.delete(Feature,params) as JSON }
 
     def save = {
         def featureInstance = new Feature(params)
@@ -125,7 +128,7 @@ class FeatureController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def featureInstance = Feature.get(params.id)
         if (featureInstance) {
             try {

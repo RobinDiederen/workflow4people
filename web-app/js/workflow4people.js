@@ -56,10 +56,11 @@ function formDialog(id,controllerName,params) {
 		 urlId=id+'?'+params
 	 } else {
 		 urlId=id
-	 }
+	 }	 
+	 theUrl=wfp.baseUrl+'/'+controllerName+'/dialog/'+urlId	 	
 	 
 	 var dialogHTML = $.ajax({
-		  url: wfp.baseUrl+'/'+controllerName+'/dialog/'+urlId,
+		  url: theUrl,
 		  async: false
 		 }).responseText;
 	 
@@ -75,19 +76,33 @@ function formDialog(id,controllerName,params) {
 			 		{
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
-			 		listDatatable.fnDraw(false);
-			 	});
-			 	
-
-	
-	 			$( this ).dialog( "close" );
-	        	},
+			 		if (urlId) {
+			 			listDatatable.fnDraw(false);
+			 		} else {
+			 			listDatatable.fnPageChange( 'last' );
+			 			//listDatatable.fnDraw(true);
+			 		}
+			 		if(result.success){
+				 		theDialog.dialog("close");
+				 	} else  {
+				 		for (key in result.errorFields) {
+				 			var errorField=result.errorFields[key]
+				 			$("#"+errorField).parent().addClass("errors")				 			
+				 		}
+				 		theDialog.find("div.errors").html(result.message)
+				 		theDialog.find("div.errors").show();				 		
+				 	}			 		
+			 	});			 	
+        	},
        	Cancel: function() {
 	        		$( this ).dialog( "close" );
 	        	}
        	},
         open: function(event, ui) { 
+         	// Initialize date picker input elements
+       		$(this).find(".datepicker").datepicker({ dateFormat: "yy-mm-dd" , changeMonth: true, changeYear:true});
        		$(this).find(".dialogtabs").tabs();
+       		$(this).find(".multiselect").multiselect();
        		$(this).find('.detailTable').dataTable({"bJQueryUI": true ,"sPaginationType": "full_numbers" });
        		$(this).find(".help").cluetip({
        			splitTitle: '|',  
@@ -96,10 +111,52 @@ function formDialog(id,controllerName,params) {
                      },
         close: function(event, ui) {      
                theDialog.dialog("destroy").remove();
-               //theDialog.remove();
-               }
-             });
+             }
+         });
 }
+
+
+function deleteDialog(id,controllerName,params) {
+	 var urlId=""
+	 if(params) {
+		 urlId=id+'?'+params
+	 } else {
+		 urlId=id
+	 }
+	 
+	 var dialogHTML = '<div "title="Confirm delete"><form><div class="errors" style="display:none;"></div><div>Are you sure you want to delete '+controllerName+' '+id+' ?</div></form></div>'	 
+	 
+	 var theDialog=$(dialogHTML).dialog({ 
+		 modal:false,
+		 width:400,
+		 height:100,
+		 buttons: { 
+		 	"Delete": function(e) {
+			 	var formData=theDialog.find("form").serialize();
+			 	$.post(wfp.baseUrl+"/"+controllerName+"/delete/"+urlId,formData, function(data) 
+			 		{
+			 		var result=data.result			 		
+			 		$("#statusmessage").html(result.message);
+			 		listDatatable.fnDraw(false);
+			 		
+			 		if(result.success){
+				 		theDialog.dialog("close");
+				 	} else  {				 		
+				 		theDialog.find("div.errors").html(result.message)
+				 		theDialog.find("div.errors").show();				 		
+				 	}			 		
+			 	});			 	
+       	},
+      	Cancel: function() {
+	        		$( this ).dialog( "close" );
+	        	}
+      	},
+       close: function(event, ui) {      
+              theDialog.dialog("destroy").remove();
+            }
+        });
+}
+
 		
 $(function() {		        
 

@@ -32,19 +32,14 @@ import grails.converters.*
 class DocumentTypeController {
 	
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-    def llist = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [documentTypeInstanceList: DocumentType.list(params), documentTypeInstanceTotal: DocumentType.count()]
-    }
-    
-    def list = {
-    	
+    def list = {    	
     	render (view:'/datatable/list', model:[dc:DocumentType,controllerName:'documentType',request:request])
     }
     
@@ -52,104 +47,10 @@ class DocumentTypeController {
     	render listService.jsonlist(DocumentType,params,request) as JSON	
     }
 
-    def create = {
-        def documentTypeInstance = new DocumentType()
-        documentTypeInstance.properties = params
-        return [documentTypeInstance: documentTypeInstance]
-    }
-
-    def save = {
-        def documentTypeInstance = new DocumentType(params)
-        if (!documentTypeInstance.hasErrors() && documentTypeInstance.save()) {
-            flash.message = "documentType.created"
-            flash.args = [documentTypeInstance.id]
-            flash.defaultMessage = "DocumentType ${documentTypeInstance.id} created"
-            redirect(action: "show", id: documentTypeInstance.id)
-        }
-        else {
-            render(view: "create", model: [documentTypeInstance: documentTypeInstance])
-        }
-    }
-
-    def show = {
-        def documentTypeInstance = DocumentType.get(params.id)
-        if (!documentTypeInstance) {
-            flash.message = "documentType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [documentTypeInstance: documentTypeInstance]
-        }
-    }
-
-    def edit = {
-        def documentTypeInstance = DocumentType.get(params.id)
-        if (!documentTypeInstance) {
-            flash.message = "documentType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [documentTypeInstance: documentTypeInstance]
-        }
-    }
-
-    def update = {
-        def documentTypeInstance = DocumentType.get(params.id)
-        if (documentTypeInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (documentTypeInstance.version > version) {
-                    
-                    documentTypeInstance.errors.rejectValue("version", "documentType.optimistic.locking.failure", "Another user has updated this DocumentType while you were editing")
-                    render(view: "edit", model: [documentTypeInstance: documentTypeInstance])
-                    return
-                }
-            }
-            documentTypeInstance.properties = params
-            if (!documentTypeInstance.hasErrors() && documentTypeInstance.save()) {
-                flash.message = "documentType.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentType ${params.id} updated"
-                redirect(action: "show", id: documentTypeInstance.id)
-            }
-            else {
-                render(view: "edit", model: [documentTypeInstance: documentTypeInstance])
-            }
-        }
-        else {
-            flash.message = "documentType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentType not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def documentTypeInstance = DocumentType.get(params.id)
-        if (documentTypeInstance) {
-            try {
-                documentTypeInstance.delete()
-                flash.message = "documentType.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentType ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "documentType.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "DocumentType ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "documentType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "DocumentType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
+	def dialog = { return dialogService.edit(DocumentType,params) }
+	
+	def submitdialog = { render dialogService.submit(DocumentType,params) as JSON }
+	
+	def delete = { render dialogService.delete(DocumentType,params) as JSON }
+	
 }

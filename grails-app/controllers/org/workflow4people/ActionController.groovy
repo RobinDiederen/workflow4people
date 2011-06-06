@@ -34,17 +34,13 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class ActionController {
 
 	def listService
+	def dialogService
 	
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-    //def list = {
-    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-    //    [actionInstanceList: Action.list(params), actionInstanceTotal: Action.count()]
-    //}
-	
 	def list = {
 		render (view:'/datatable/list', model:[dc:Action,controllerName:'action',request:request])
 	}
@@ -52,105 +48,11 @@ class ActionController {
 	def jsonlist = {
 		render listService.jsonlist(Action,params,request) as JSON
 	}
-
-    def create = {
-        def actionInstance = new Action()
-        actionInstance.properties = params
-        return [actionInstance: actionInstance]
-    }
-
-    def save = {
-        def actionInstance = new Action(params)
-        if (!actionInstance.hasErrors() && actionInstance.save()) {
-            flash.message = "action.created"
-            flash.args = [actionInstance.id]
-            flash.defaultMessage = "Action ${actionInstance.id} created"
-            redirect(action: "show", id: actionInstance.id)
-        }
-        else {
-            render(view: "create", model: [actionInstance: actionInstance])
-        }
-    }
-
-    def show = {
-        def actionInstance = Action.get(params.id)
-        if (!actionInstance) {
-            flash.message = "action.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Action not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [actionInstance: actionInstance]
-        }
-    }
-
-    def edit = {
-        def actionInstance = Action.get(params.id)
-        if (!actionInstance) {
-            flash.message = "action.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Action not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [actionInstance: actionInstance]
-        }
-    }
-
-    def update = {
-        def actionInstance = Action.get(params.id)
-        if (actionInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (actionInstance.version > version) {
-                    
-                    actionInstance.errors.rejectValue("version", "action.optimistic.locking.failure", "Another user has updated this Action while you were editing")
-                    render(view: "edit", model: [actionInstance: actionInstance])
-                    return
-                }
-            }
-            actionInstance.properties = params
-            if (!actionInstance.hasErrors() && actionInstance.save()) {
-                flash.message = "action.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "Action ${params.id} updated"
-                redirect(action: "show", id: actionInstance.id)
-            }
-            else {
-                render(view: "edit", model: [actionInstance: actionInstance])
-            }
-        }
-        else {
-            flash.message = "action.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Action not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def actionInstance = Action.get(params.id)
-        if (actionInstance) {
-            try {
-                actionInstance.delete()
-                flash.message = "action.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Action ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "action.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Action ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "action.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Action not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
+    
+	def dialog = { return dialogService.edit(Action,params) }
+	
+	def submitdialog = { render dialogService.submit(Action,params) as JSON }
+	
+	def delete = { render dialogService.delete(Action,params) as JSON }
+    
 }

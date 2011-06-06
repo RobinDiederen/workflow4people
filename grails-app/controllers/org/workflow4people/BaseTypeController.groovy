@@ -34,158 +34,21 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class BaseTypeController {
 	
 	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
-
-//    def list = {
-//        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-//        [baseTypeInstanceList: BaseType.list(params), baseTypeInstanceTotal: BaseType.count()]
-//    }
+    // the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
-	def list = {
-		render (view:'/datatable/list', model:[dc:BaseType,controllerName:'baseType',request:request])
-	}
+	def list = { render (view:'/datatable/list', model:[dc:BaseType,controllerName:'baseType',request:request]) }
 	
-	def jsonlist = {
-		render listService.jsonlist(BaseType,params,request) as JSON
-	}
-
-    def create = {
-        def baseTypeInstance = new BaseType()
-        baseTypeInstance.properties = params
-        return [baseTypeInstance: baseTypeInstance]
-    }
-
-    def save = {
-        def baseTypeInstance = new BaseType(params)
-        if (!baseTypeInstance.hasErrors() && baseTypeInstance.save()) {
-            flash.message = "baseType.created"
-            flash.args = [baseTypeInstance.id]
-            flash.defaultMessage = "BaseType ${baseTypeInstance.id} created"
-            redirect(action: "show", id: baseTypeInstance.id)
-        }
-        else {
-            render(view: "create", model: [baseTypeInstance: baseTypeInstance])
-        }
-    }
-
-    def show = {
-        def baseTypeInstance = BaseType.get(params.id)
-        if (!baseTypeInstance) {
-            flash.message = "baseType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "BaseType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [baseTypeInstance: baseTypeInstance]
-        }
-    }
-
-    def edit = {
-        def baseTypeInstance = BaseType.get(params.id)
-        if (!baseTypeInstance) {
-            flash.message = "baseType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "BaseType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [baseTypeInstance: baseTypeInstance]
-        }
-    }
+	def jsonlist = { render listService.jsonlist(BaseType,params,request) as JSON }
 	
-	def dialog = {
-        def baseTypeInstance = BaseType.get(params.id)
-        if (!baseTypeInstance) {
-            flash.message = "baseType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "BaseType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [baseTypeInstance: baseTypeInstance]
-        }
-    }
+	def dialog = { return dialogService.edit(BaseType,params) }
 	
-	def submitdialog = {
-		println "Submit params: ${params}"
-		def id=params.id
-		def baseTypeInstance = BaseType.get(params.id )
-		baseTypeInstance.properties = params
-        
-        def theRefreshNodes=null
-		                     
-		def result = [
-		              	returnValue:true,
-		              	message:"baseType #${params.id} : ${baseTypeInstance.name} updated" ,
-		              	id:params.id,
-		              	name: baseTypeInstance.name,	
-		              	refreshNodes:theRefreshNodes
-		              ]              
-         def res=[result:result]
-         render res as JSON
-		
-	}
+	def submitdialog = { render dialogService.submit(BaseType,params) as JSON }
 	
+	def delete = { render dialogService.delete(BaseType,params) as JSON }
 	
-
-    def update = {
-        def baseTypeInstance = BaseType.get(params.id)
-        if (baseTypeInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (baseTypeInstance.version > version) {
-                    
-                    baseTypeInstance.errors.rejectValue("version", "baseType.optimistic.locking.failure", "Another user has updated this BaseType while you were editing")
-                    render(view: "edit", model: [baseTypeInstance: baseTypeInstance])
-                    return
-                }
-            }
-            baseTypeInstance.properties = params
-            if (!baseTypeInstance.hasErrors() && baseTypeInstance.save()) {
-                flash.message = "baseType.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "BaseType ${params.id} updated"
-                redirect(action: "show", id: baseTypeInstance.id)
-            }
-            else {
-                render(view: "edit", model: [baseTypeInstance: baseTypeInstance])
-            }
-        }
-        else {
-            flash.message = "baseType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "BaseType not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def baseTypeInstance = BaseType.get(params.id)
-        if (baseTypeInstance) {
-            try {
-                baseTypeInstance.delete()
-                flash.message = "baseType.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "BaseType ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "baseType.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "BaseType ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "baseType.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "BaseType not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
 }

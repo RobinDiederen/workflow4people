@@ -59,6 +59,11 @@ class DataModelEditorController {
 			                            
 			def fieldInstance = Field.get(id )
 			fieldInstance.properties = params
+			//fieldInstance.dependencyType=null
+			println "dependencyType:"+fieldInstance.dependencyType
+			println g.renderErrors(bean:fieldInstance)
+			fieldInstance.save(failOnError:true)
+			
     	//	render(view:'showField',model:[ fieldInstance : fieldInstance ])
 			def theRefreshNodes=fieldInstance.parent?.id ?  ["field_${fieldInstance.parent.id}"] : ["dataModelTree"]
 			

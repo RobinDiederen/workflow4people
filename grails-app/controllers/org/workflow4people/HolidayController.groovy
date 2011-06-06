@@ -30,24 +30,26 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class HolidayController {
 
 	def listService
+	def dialogService
 	
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+    // the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-//    def list = {
-//        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-//        [holidayInstanceList: Holiday.list(params), holidayInstanceTotal: Holiday.count()]
-//    }
-
-	def list = {
+    def list = {
 		render (view:'/datatable/list', model:[dc:Holiday,controllerName:'holiday',request:request])
 	}
 	
 	def jsonlist = {
 		render listService.jsonlist(Holiday,params,request) as JSON
 	}
+	
+	def dialog = { return dialogService.edit(Holiday,params) }
+	
+	def submitdialog = { render dialogService.submit(Holiday,params) as JSON }
+	
+	def delete = { render dialogService.delete(Holiday,params) as JSON }
 	
     def create = {
         def holidayInstance = new Holiday()
@@ -125,7 +127,7 @@ class HolidayController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def holidayInstance = Holiday.get(params.id)
         if (holidayInstance) {
             try {

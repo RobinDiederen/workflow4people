@@ -23,7 +23,7 @@
 	
 	
 	////$("div.datatable div.fg-toolbar div.datatable_length").prepend('<div style="float:left;height:20px;">test</div>');
-	$("div.datatable div.fg-toolbar div#datatable_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><a href="${request.contextPath}/${controllerName}/create">New</a></span>&nbsp;');
+	$("div.datatable div.fg-toolbar div#datatable_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',null)">New</span></span>&nbsp;');
         </jq:jquery>       
     </head>
     

@@ -32,9 +32,12 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_USER_ADMIN'])
 class AuthorityController {
 
-    static allowedMethods = [save: "POST", update: "POST"]
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
+	
 	
 	def listService
+	def dialogService
 
     def index = {
         redirect(action: "list", params: params)
@@ -52,89 +55,10 @@ class AuthorityController {
 	def jsonlist = {
 		render listService.jsonlist(Authority,params,request,"authority") as JSON
 	}
-
-    def create = {
-        def authorityInstance = new Authority()
-        authorityInstance.properties = params
-        return [authorityInstance: authorityInstance]
-    }
-
-    def save = {
-        def authorityInstance = new Authority(params)
-        if (authorityInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'authority.label', default: 'Authority'), authorityInstance.id])}"
-            redirect(action: "show", id: authorityInstance.id)
-        }
-        else {
-            render(view: "create", model: [authorityInstance: authorityInstance])
-        }
-    }
-
-    def show = {
-        def authorityInstance = Authority.get(params.id)
-        if (!authorityInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            [authorityInstance: authorityInstance]
-        }
-    }
-
-    def edit = {
-        def authorityInstance = Authority.get(params.id)
-        if (!authorityInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [authorityInstance: authorityInstance]
-        }
-    }
-
-    def update = {
-        def authorityInstance = Authority.get(params.id)
-        if (authorityInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (authorityInstance.version > version) {
-                    
-                    authorityInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'authority.label', default: 'Authority')] as Object[], "Another user has updated this Authority while you were editing")
-                    render(view: "edit", model: [authorityInstance: authorityInstance])
-                    return
-                }
-            }
-            authorityInstance.properties = params
-            if (!authorityInstance.hasErrors() && authorityInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'authority.label', default: 'Authority'), authorityInstance.id])}"
-                redirect(action: "show", id: authorityInstance.id)
-            }
-            else {
-                render(view: "edit", model: [authorityInstance: authorityInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-            redirect(action: "list")
-        }
-    }
-
-    def delete = {
-        def authorityInstance = Authority.get(params.id)
-        if (authorityInstance) {
-            try {
-                authorityInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'authority.label', default: 'Authority'), params.id])}"
-            redirect(action: "list")
-        }
-    }
+    
+    def dialog = { return dialogService.edit(Authority,params) }
+	
+	def submitdialog = { render dialogService.submit(Authority,params) as JSON }
+	
+	def delete = { render dialogService.delete(Authority,params) as JSON }
 }
