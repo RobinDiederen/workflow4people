@@ -28,7 +28,7 @@
 package org.workflow4people
 import org.codehaus.groovy.grails.commons.* 
 class WformTagLib {
-	
+	def dialogService
 	static namespace = 'wf'
 		
 	def treeList = { attrs ->
@@ -167,7 +167,7 @@ class WformTagLib {
 	
 	
 	def textArea = { attrs ->	
-		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+		out << row (class:attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
 			switch(attrs.mode) {			
 				case "show":							
 					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
@@ -179,6 +179,27 @@ class WformTagLib {
 			}
 		}
 	}
+	
+	def xml = { attrs ->	
+	out << row (class:attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
+		switch(attrs.mode) {			
+			case "show":
+				def xmltext=attrs.object."${attrs.propertyName}"
+				//return xmltext
+				String s = dialogService.prettyPrint(xmltext)
+				return "<textarea cols=\"80\" rows=\"25\">"+s.encodeAsHTML()+"</textarea>"
+				//return g.formatValue(s)
+				//return s
+				//"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
+				break
+			
+			case "edit":			
+				"""${g.textArea(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",cols:40,rows:5)}"""
+				break		
+		}
+	}
+	}
+	
 	
 	def checkBox = { attrs ->
 	
@@ -342,25 +363,26 @@ class WformTagLib {
 		//def listElements=org.workflow4people.DocumentIndex.findAllByDocument (attrs.object,[sort:'id',order:'asc'])
 		def objectDomainClass = new DefaultGrailsDomainClass( attrs.object.class )
 		
+		
 		def propName=attrs.property		
 		propName=propName[0].toUpperCase()+propName.substring(1)
 		
 		//def finder="findAllBy"+objectDomainClass.name
 		def finder="findAllBy"+propName
-		
-		def listElements=attrs.domainClass."${finder}" (attrs.object,[sort:'id',order:'asc'])
-		print "LIST"
-		listElements.each { listElement ->
-			print "LISTELEMENT: ${listElement}"
-			out <<"""<tr>"""
-			attrs.domainClass.listProperties.each { propertyName -> 
-				out <<"""<td>${fieldValue(bean: listElement, field: propertyName)}</td>"""
+		if (attrs.object.id) {
+			def listElements=attrs.domainClass."${finder}" (attrs.object,[sort:'id',order:'asc'])
+			print "LIST"
+			listElements.each { listElement ->
+				print "LISTELEMENT: ${listElement}"
+				out <<"""<tr>"""
+				attrs.domainClass.listProperties.each { propertyName -> 
+					out <<"""<td>${fieldValue(bean: listElement, field: propertyName)}</td>"""
+				}
+	    		def baseUrl=request.contextPath
+	
+				out <<"""<td><span class='list-action-button ui-state-default' onclick="formDialog(${listElement.id},'${domainPropertyName}','');return false;" >edit</span></td></tr>"""
 			}
-    		def baseUrl=request.contextPath
-
-			out <<"""<td><span class='list-action-button ui-state-default' onclick="formDialog(${listElement.id},'${domainPropertyName}','');return false;" >edit</span></td></tr>"""
 		}
-		
 		out <<"""</tbody></table>"""
 	
 	}

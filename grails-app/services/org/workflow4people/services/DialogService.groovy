@@ -1,5 +1,7 @@
 package org.workflow4people.services
 import org.codehaus.groovy.grails.commons.* 
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
 
 class DialogService {
 
@@ -10,6 +12,9 @@ class DialogService {
     def edit(domainClass,params) {
 		def domainClassInstance
 		if (params.id && params.id !='null') {
+		    if (params.id.contains("_")){
+				params.id=params.id.split("_")[1]
+		    }
 			domainClassInstance = domainClass.get(params.id)
 		} else {
 			domainClassInstance = domainClass.newInstance()			
@@ -41,6 +46,9 @@ class DialogService {
     		def id=params.id
     		def domainClassInstance
     		if (params.id && params.id != 'null') {
+    		    if (params.id.contains("_")){
+    					params.id=params.id.split("_")[1]
+    			}
     			domainClassInstance = domainClass.get(params.id )
     		} else 
     		{
@@ -111,6 +119,18 @@ class DialogService {
          return res    		
 	}
 
-	
+	def prettyPrint(String inputXml) {
+	     Source xmlInput = new StreamSource(new StringReader(inputXml));
+	     StreamResult xmlOutput = new StreamResult(new StringWriter());
+
+	      // Configure transformer
+	     Transformer transformer = TransformerFactory.newInstance().newTransformer(); // An identity transformer
+	     
+	     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	     transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	     transformer.transform(xmlInput, xmlOutput);
+	     return xmlOutput.getWriter().toString()
+	    	     
+	}
 
 }

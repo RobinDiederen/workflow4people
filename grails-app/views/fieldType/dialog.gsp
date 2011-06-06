@@ -20,7 +20,8 @@
 		</wf:tab>
 		<wf:tab name="List" object="${fieldTypeInstance}">
 			<wf:checkBox object="${fieldTypeInstance}" propertyName="runtimeEditableList" mode="edit" />
-			<wf:detailTable property="fieldType" object="${fieldTypeInstance}" domainClass="${org.workflow4people.FieldTypeItem}" />	    	
+		<wf:detailTable property="fieldType" object="${fieldTypeInstance}" domainClass="${org.workflow4people.FieldTypeItem}" />
+			    	
 		</wf:tab>
 		
 		<wf:tab name="Advanced" object="${fieldTypeInstance}">

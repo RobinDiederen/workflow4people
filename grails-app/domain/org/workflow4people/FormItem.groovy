@@ -28,7 +28,10 @@ import groovy.lang.Binding;
 
 class FormItem {
 	def templateService
+	
 	static belongsTo = [form: Form]
+   	static listProperties=['id','position','form','field','readonly']
+
     static constraints = {
     	position(help:'x')
     	field(help:'x')

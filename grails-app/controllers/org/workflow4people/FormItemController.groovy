@@ -19,6 +19,8 @@
  */
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.converters.JSON;
+
 /**
  * Controller for FormItem domain class
  * 
@@ -26,6 +28,8 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class FormItemController {
+	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
@@ -33,9 +37,20 @@ class FormItemController {
     static allowedMethods = [save: "POST", update: "POST"]
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [formItemInstanceList: FormItem.list(params), formItemInstanceTotal: FormItem.count()]
-    }
+		render (view:'/datatable/list', model:[dc:FormItem,controllerName:'formItem',request:request])
+	}
+	
+	def jsonlist = {
+		render listService.jsonlist(FormItem,params,request) as JSON
+	}
+	
+	def dialog = { return dialogService.edit(FormItem,params) }
+	
+	def submitdialog = { render dialogService.submit(FormItem,params) as JSON }
+	
+	def delete = { render dialogService.delete(FormItem,params) as JSON }
+    
+    
 
     def create = {
         def formItemInstance = new FormItem()
@@ -144,7 +159,7 @@ class FormItemController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def formItemInstance = FormItem.get(params.id)
         if (formItemInstance) {
             try {

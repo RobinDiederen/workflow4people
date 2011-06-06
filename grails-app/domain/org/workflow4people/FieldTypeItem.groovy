@@ -26,6 +26,8 @@ package org.workflow4people
  */
 class FieldTypeItem {
 	static belongsTo = [fieldType:FieldType]	
+   	static listProperties=['id','itemPosition','label','value']
+
     static constraints = {
     	itemPosition(help:'x')
     	label(help:'x',class:'wide')

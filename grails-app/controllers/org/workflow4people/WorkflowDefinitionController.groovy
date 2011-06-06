@@ -39,6 +39,7 @@ import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class WorkflowDefinitionController {
 	def listService
+	def dialogService
 	def wf4pConfigService
 	def formGeneratorService
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
@@ -48,8 +49,8 @@ class WorkflowDefinitionController {
     
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [ save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
 	def list = {
 	
@@ -59,7 +60,13 @@ class WorkflowDefinitionController {
 	def jsonlist = {
 		render listService.jsonlist(WorkflowDefinition,params,request) as JSON	
     }
-
+	
+	def dialog = { return dialogService.edit(WorkflowDefinition,params) }
+	
+	def submitdialog = { render dialogService.submit(WorkflowDefinition,params) as JSON }
+	
+	def delete = { render dialogService.delete(WorkflowDefinition,params) as JSON }
+	
     def show = {
         def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
 
@@ -113,7 +120,7 @@ class WorkflowDefinitionController {
     }    
 
     
-    def delete = {
+    def xdelete = {
         def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
         if(workflowDefinitionInstance) {
             try {

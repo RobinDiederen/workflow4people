@@ -566,6 +566,8 @@ div.inner-new-dialog {
 .wide input { width:300px;}
 .extrawide input { width:600px;}
 
+td.xmldoc { width:320px !important;overflow:scroll;}
+
 .editor {width:auto;}
 
 li.jstree-default a {font-weight:normal;}

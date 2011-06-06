@@ -30,16 +30,13 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 class FieldTypeController {
     
 	def listService
+	def dialogService
 	
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [ save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
-//    def list = {
-//        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-//        [ fieldTypeInstanceList: FieldType.list( params ), fieldTypeInstanceTotal: FieldType.count() ]
-//    }
 	
 	def list = {
 		render (view:'/datatable/list', model:[dc:FieldType,controllerName:'fieldType',request:request])
@@ -48,6 +45,13 @@ class FieldTypeController {
 	def jsonlist = {
 		render listService.jsonlist(FieldType,params,request) as JSON
 	}
+	
+	def dialog = { return dialogService.edit(FieldType,params) }
+	
+	def submitdialog = { render dialogService.submit(FieldType,params) as JSON }
+	
+	def delete = { render dialogService.delete(FieldType,params) as JSON }
+	
 
     def show = {
         def fieldTypeInstance = FieldType.get( params.id )
@@ -59,7 +63,7 @@ class FieldTypeController {
         else { return [ fieldTypeInstance : fieldTypeInstance ] }
     }
 
-    def delete = {
+    def xdelete = {
         def fieldTypeInstance = FieldType.get( params.id )
         if(fieldTypeInstance) {
             try {
