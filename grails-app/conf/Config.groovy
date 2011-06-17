@@ -81,4 +81,26 @@ jquery {
     version = '1.4.2' // The jQuery version in use
 }
 	
-
+security {
+	grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+	
+	grails.plugins.springsecurity.useSecurityEventListener = true
+	grails.plugins.springsecurity.active = true
+	grails.plugins.springsecurity.password.algorithm = "SHA"
+	
+	grails.plugins.springsecurity.userLookup.userDomainClassName = "org.workflow4people.Person"
+	grails.plugins.springsecurity.authority.className = "org.workflow4people.Authority"
+	grails.plugins.springsecurity.userLookup.passwordPropertyName = "passwd"
+	
+	grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = true
+    grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = false
+    grails.plugins.springsecurity.ldap.context.server = "ldap://domaincontroller:389"
+    grails.plugins.springsecurity.ldap.context.managerDn = "administrator"
+    grails.plugins.springsecurity.ldap.context.managerPassword = "adminpw"
+    grails.plugins.springsecurity.ldap.search.base = "dc=dc1,dc=dc2"
+    grails.plugins.springsecurity.ldap.search.filter = "(sAMAccountName={0})"
+    grails.plugins.springsecurity.ldap.search.searchSubtree = true
+    grails.plugins.springsecurity.ldap.authorities.groupSearchBase = "dc=dc1,dc=dc2"
+    grails.plugins.springsecurity.ldap.ldap.authorities.groupSearchFilter = "member={0}"
+    grails.plugins.springsecurity.ldap.auth.useAuthPassword = true
+}

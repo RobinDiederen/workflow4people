@@ -18,7 +18,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 import org.workflow4people.services.*
 /**
  * Controller for Index domain class

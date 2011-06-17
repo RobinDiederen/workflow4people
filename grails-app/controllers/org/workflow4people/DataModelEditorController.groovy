@@ -1,6 +1,6 @@
 package org.workflow4people
 import grails.converters.*
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class DataModelEditorController {

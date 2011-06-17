@@ -18,14 +18,21 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
-import org.grails.plugins.springsecurity.service.AuthenticateService
 
+import org.springframework.security.*
+import org.springframework.security.authentication.AccountExpiredException
+import org.springframework.security.authentication.CredentialsExpiredException
+import org.springframework.security.authentication.DisabledException
+import org.springframework.security.authentication.LockedException
+import org.springframework.security.core.context.SecurityContextHolder as SCH
+import org.springframework.security.web.WebAttributes
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.AuthenticationTrustResolverImpl
-import org.springframework.security.DisabledException
-import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.ui.AbstractProcessingFilter
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import grails.converters.JSON
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Login controller
@@ -37,7 +44,8 @@ class LoginController {
 	/**
 	 * Dependency injection for the authentication service.
 	 */
-	def authenticateService
+	//def authenticateService
+	def springSecurityService
 
 	/**
 	 * Dependency injection for OpenIDConsumer.
@@ -74,7 +82,7 @@ class LoginController {
 
 		String view
 		String postUrl
-		def config = authenticateService.securityConfig.security
+		def config = SpringSecurityUtils.securityConfig.security
 		if (config.useOpenId) {
 			view = 'openIdAuth'
 			postUrl = "${request.contextPath}/login/openIdAuthenticate"
@@ -95,6 +103,7 @@ class LoginController {
 	 * Form submit action to start an OpenID authentication.
 	 */
 	def openIdAuthenticate = {
+		/* Todo: re-enabled this part
 		String openID = params['j_username']
 		try {
 			String returnToURL = RedirectUtils.buildRedirectUrl(
@@ -106,6 +115,7 @@ class LoginController {
 			log.error "Consumer error: $e.message", e
 			redirect url: openIDAuthenticationProcessingFilter.authenticationFailureUrl
 		}
+		*/
 	}
 
 	// Login page (function|json) for Ajax access.
@@ -183,11 +193,11 @@ class LoginController {
 	 * Check if logged in.
 	 */
 	private boolean isLoggedIn() {
-		return authenticateService.isLoggedIn()
+		return springSecurityService.isLoggedIn()
 	}
 
 	private boolean isAjax() {
-		return authenticateService.isAjax(request)
+		return springSecurityService.isAjax(request)
 	}
 
 	/** cache controls */

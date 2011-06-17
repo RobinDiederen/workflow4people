@@ -20,7 +20,7 @@
 package org.workflow4people
 import grails.converters.JSON;
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.apache.commons.lang.StringUtils

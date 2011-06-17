@@ -9,8 +9,11 @@
 
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
 	 	<property name="hibernate.format_sql">true</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
-		<property name="hibernate.connection.datasource">java:comp/env/jdbc/wf4p</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost/wf4p</property>
+        <property name="hibernate.connection.username">dev</property>
+        <property name="hibernate.connection.password">dev</property>
      	<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.format_sql">true</property>
 		<mapping resource="jbpm.repository.hbm.xml" />

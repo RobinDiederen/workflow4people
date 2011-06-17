@@ -18,10 +18,14 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people.services
-import org.workflow4people.*;
+import org.workflow4people.*
 import org.grails.plugins.springsecurity.service.*
 import org.springframework.security.*;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.*
+import org.springframework.security.context.SecurityContextHolder
+
 
 /**
  * Security service class
@@ -31,7 +35,6 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
  */
 
 class SecurityService {
-	AuthenticateService authenticateService
 	AuthenticationManager authenticationManager
 
     boolean transactional = true
@@ -98,10 +101,37 @@ class SecurityService {
     
     def authenticate(String username, String password) {
     	try {
-    	  def token = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password))
-    	} catch (AuthenticationException authenticationException) {
+    	  def tempToken = new UsernamePasswordAuthenticationToken(username, password)
+    	  def token = authenticationManager.authenticate(tempToken)
+    	} catch (AuthenticationServiceException e) {
+    		println "Exception was: " + e
+    		return false    	
+    	} catch (DisabledException e) {
+    		println "Exception was: " + e
+    		return false	
+       	} catch (LockedException  e) {
+    		println "Exception was: " + e
+    		return false	
+       	} catch (BadCredentialsException e) {
+    		println "Exception was: " + e
+    		return false	
+       	} catch (AccountExpiredException e) {
+    		println "Exception was: " + e
+    		return false	
+    	} catch (CredentialsExpiredException e) {
+    		println "Exception was: " + e
+    		return false    	
+    	} catch (DisabledException e) {
+    		println "Exception was: " + e
+    		return false    	
+    	} catch (ProviderNotFoundException e) {
+    		println "Exception was: " + e
     		return false
+    	} catch (Throwable e) {
+    		println "Exception was: " + e + e.getStackTrace()
+    		return false    	
     	}
+    	
     	return true    	
     }
     
