@@ -13,6 +13,7 @@
 			<wf:textArea object="${workflowDefinitionInstance}" propertyName="description" mode="edit" />
 	        
 	        <wf:domainObject object="${workflowDefinitionInstance}" propertyName="documentType" mode="edit" />
+    	    <wf:domainObject object="${workflowDefinitionInstance}" propertyName="workflowEngine" mode="edit" />
 	        	    		
 		</wf:tab>
 		<wf:tab name="Forms" object="${workflowDefinitionInstance}">

@@ -61,6 +61,20 @@ class WorkflowDefinitionController {
 		render listService.jsonlist(WorkflowDefinition,params,request) as JSON	
     }
 	
+	def listwithworkflows = {
+		render (view:'/datatable/list', model:[dc:Workflow,controllerName:'workflow',request:request,jsonlist:'jsonlistwithworkflows'])
+	}
+		
+	def jsonlistwithworkflows = {
+		//def actions = { doc -> "lalala ${doc.id}"}
+		def baseUrl=request.contextPath
+		def actions= {  doc -> """<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'workflowDefinition','')">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${doc.id},'workflowDefinition','')">x</span>""" }
+		render listService.jsonlist(Workflow,params,request,null,actions) as JSON
+	}
+	
+	
+	
+	
 	def dialog = { return dialogService.edit(WorkflowDefinition,params) }
 	
 	def submitdialog = { render dialogService.submit(WorkflowDefinition,params) as JSON }

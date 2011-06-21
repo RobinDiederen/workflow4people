@@ -19,7 +19,9 @@
  */
 
 package org.workflow4people.services
+import org.workflow4people.*;
 
+/*
 import org.jbpm.api.ProcessInstanceQuery;
 import org.jbpm.api.RepositoryService;
 import org.jbpm.api.TaskService;
@@ -28,7 +30,9 @@ import org.jbpm.api.ExecutionService;
 import org.jbpm.api.task.*;
 import org.jbpm.pvm.internal.session.*;
 import org.jbpm.api.*
+
 import org.springframework.beans.factory.InitializingBean;
+*/
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import groovy.xml.StreamingMarkupBuilder
 
@@ -38,32 +42,33 @@ import groovy.xml.StreamingMarkupBuilder
  * If taskId is used as the search key, the taskId is echoed into the document's header so it is ready to submit a task result 
  * @author Joost Horward
  */
-class GetDocumentEndpoint  implements InitializingBean{
+class GetDocumentEndpoint {
 
-	def processEngine
-	TaskService taskService
-	ExecutionService executionService
-	RepositoryService repositoryService
 	
-	void afterPropertiesSet() {
-		executionService=processEngine.getExecutionService()
-		repositoryService=processEngine.getRepositoryService()
-		taskService=processEngine.getTaskService()
-	}
-
+	def workflowService
+	def sessionFactory
+	
 	def static namespace = "http://www.workflow4people.org/services"
 	
 	def documentService
 	
 	def invoke = { request ->
-		log.debug "Processing StoreDocument service request ${request.name()}"
+		Document.withTransaction {
+			
+			def hibSession = sessionFactory.currentSession
+			
+		log.debug "Processing GetDocument service request ${request.name()}"
 		def documentId
 		def taskId=""
 		if (request.request.documentId.text().size()>0) {
 		  documentId = request.request.documentId.text().asType(Long)
 		} else {
 		  taskId = request.request.taskId.text()
-		  documentId = taskService.getVariable(taskId, "documentId").asType(Long)
+		  def task=workflowService.getTask(taskId)
+		  task=hibSession.merge(task)
+		  	
+		  documentId=task.workflow.document.id
+		  
 		}
 		def xmlDocument=documentService.getDocument(documentId)
 		xmlDocument.header.taskId=taskId
@@ -73,5 +78,6 @@ class GetDocumentEndpoint  implements InitializingBean{
 			}		
 		}
 		return response
+		}
     }
 }

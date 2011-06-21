@@ -10,7 +10,7 @@
 		//"sDom": '<"toolbar">frtip',
 		"bProcessing": true,
 		"bServerSide": true,		
-		"sAjaxSource": "${resource(dir:controllerName,file:'jsonlist')}",
+		"sAjaxSource": "${resource(dir:controllerName,file: jsonlist ? jsonlist :'jsonlist')}",
 		"sPaginationType": "full_numbers",
 		"bFilter": ${bFilter ? true : false},
 		"bJQueryUI": true,

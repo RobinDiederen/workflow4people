@@ -20,8 +20,7 @@
 package org.workflow4people
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
-import grails.converters.JSON;
-
+import grails.converters.*
 import java.util.ArrayList
 /**
  * Controller for Form domain class
@@ -36,15 +35,11 @@ class PersonController {
     def authenticateService
 	
 	def listService
+	def dialogService
 
     def index = {
         redirect(action: "list", params: params)
     }
-
-    //def list = {
-    //    params.max = Math.min(params.max ? params.int('max') : 10, 100)
-    //    [personInstanceList: Person.list(params), personInstanceTotal: Person.count(), searchTemplate: "/person/search"]
-    //}
 	
 	def list = {
 		render (view:'/datatable/list', model:[dc:Person,controllerName:'person',request:request,bFilter: true])
@@ -53,6 +48,59 @@ class PersonController {
 	def jsonlist = {
 		render listService.jsonlist(Person,params,request,"username") as JSON
 	}
+    
+    def dialog = { return dialogService.edit(Person,params) }
+	
+	def xsubmitdialog = { render dialogService.submit(Person,params) as JSON }
+    
+    
+    def submitdialog = {
+    	def res
+    	def personInstance
+    	
+    	if (params.id!=null && params.id!="null" ) {
+    		personInstance = Person.get(params.id)
+    	} else { 
+    		personInstance = new Person()
+    		personInstance.properties = params
+    	}
+	         if (personInstance) {	
+	            def oldPassword = personInstance.passwd
+	 			Authority[] currentPersonAuth = personInstance.getAuthorities()
+	             personInstance.properties = params
+	             if (!params.passwd.equals(oldPassword)) {
+	     			personInstance.passwd = authenticateService.encodePassword(params.passwd)     			    			
+	     		 }
+	             res= dialogService.submit(Person,params,personInstance)
+	             println "RESULT: ${res.result.success}"
+	             if (res.result.success) {
+	 				currentPersonAuth.each { Authority currentAuthority -> 
+	 					def deletePersonAuthority = true
+	 					personInstance.getAuthorities().each { Authority newAuthority ->
+	 						if (currentAuthority.getId() == newAuthority.getId()) {
+	 							deletePersonAuthority = false;
+	 						}
+	 					}
+	 					if (deletePersonAuthority) {
+	 						currentAuthority.removeFromPeople(personInstance)
+	 					}
+	 				}
+	
+	             }
+      
+         }
+	         render res as JSON
+     } 
+    	 
+    
+    
+
+    
+    
+    
+    
+	def newdelete = { render dialogService.delete(Namespace,params) as JSON }
+
 
     def search = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
@@ -147,7 +195,7 @@ class PersonController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def personInstance = Person.get(params.id)
         if (personInstance) {
             try {
@@ -176,4 +224,57 @@ class PersonController {
             redirect(action: "list")
         }
     }
+    
+    
+    
+    def delete = {
+        def personInstance = Person.get(params.id)
+        def res
+        if (personInstance) {
+            try {
+                //remove all authorities from person
+                def authorities = personInstance.authorities
+                List authorityList = new ArrayList<Authority>();
+                authorities.each {
+                    authorityList.add(it)
+                }
+                authorityList.each { def authority ->
+                    println authority.dump()
+                    personInstance.removeFromAuthorities(authority)
+                }
+                //delete person                
+                res=dialogService.delete(Person,params)
+            }
+            catch (org.springframework.dao.DataIntegrityViolationException e) {
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
+            	def result = [
+      		              	success:false,
+      		              	message:message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id]) ,
+      		              	id:params.id,
+      		              	name: personInstance.username,	
+      		              	refreshNodes:null,
+      		              	errorFields:[]
+      		              ]              
+                 res=[result:result]
+            }            
+        }
+        else {
+        	def result = [
+    		              	success:false,
+    		              	message:message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id]),
+    		              	id:params.id,
+    		              	name: personInstance.username,	
+    		              	refreshNodes:null,
+    		              	errorFields:[]
+    		              ]              
+               res=[result:result]        	
+        }        
+    	render res as JSON
+
+    }
+    
+    
+    
+    
+    
 }

@@ -94,7 +94,7 @@ class DocumentService implements InitializingBean {
     		// If the document ID is not known, store a new instance, and start a new workflow
     	
     		def startProcess=false
-    		ProcessInstance processInstance=null
+    		//ProcessInstance processInstance=null
     		
     		
     		if (header.documentId?.text().size()>0) {    		
@@ -138,23 +138,44 @@ class DocumentService implements InitializingBean {
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
     		header=document.header
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
-    	
+    	/*
 	    	if (startProcess) {
+	    	
 	    		LinkedHashMap variableMap = new LinkedHashMap()    							
 	    		variableMap.put("documentId",documentInstance.id)
 	    		variableMap.put("user",documentInstance.user)
 	    		variableMap.put("group",getHomeGroup(documentInstance))
 	    		
 				processInstance = executionService.startProcessInstanceByKey(header.workflowName.text(),variableMap)
+			
+	    		
 				// Store the document again, now with the processInstanceId in it.
 				document.header.processInstanceId=processInstance.id
 				document.header.documentId=documentInstance.id
 				documentInstance.xmlDocument=outputBuilder.bind { mkp.yield document }
 	    		documentInstance.save(failOnError:true)        					
-	    	}
+			}*/
+    		
+    		if (startProcess) {
+    			println "starting process by creating a workflow domain object"
+    			def workflow=new Workflow()
+	    		workflow.document=documentInstance
+	    		def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
+	    		workflow.workflowDefinition=workflowDefinition
+	    		workflow.name=workflowDefinition.name
+	    		workflow.priority=0
+	    		workflow.externalId="1"
+	    		workflow.workflowEngine=workflowDefinition.workflowEngine
+	    		workflow.save(failOnError:true)
+	    		println "Done."
+    		}
     		
     		if ((header.taskId?.text().size()>0) && (header.taskOutcome?.text().size()>0)) {    			
-				taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
+				//taskService.completeTask(header.taskId.text(),header.taskOutcome.text())
+				def id = new java.lang.Long(header.taskId?.text())
+				def task=Task.get(id)
+				task.outcome=header.taskOutcome?.text()
+				task.save(failOnError:true)
 			}   
     		
     	
@@ -273,6 +294,7 @@ class DocumentService implements InitializingBean {
     	
     	return xmlDocument
     }
+    
     // Just save the xml, nothing smart going on here ...
     def setDocument(document) {  	
     	def theId=document.header.documentId.text().asType(Long)

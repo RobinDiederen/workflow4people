@@ -131,10 +131,19 @@
 	      <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">      
 	        <li>Workflow</li>	        	        
 	        <ul>	        
+	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition" action="list">Workflow Def</g:link></li>
+	          <li class="menu-icon workflows"><g:link controller="workflow" action="list">Workflows</g:link></li>
+        	  <li class="menu-icon tasks" ><g:link controller="task" action="list">Tasks</g:link></li>
+          	</ul>
+          	<li>Engines</li>
+          	<ul>
+          	<li class="menu-icon jbpm">jBPM</li>	        	        
+	        <ul>	        
 	          <li class="menu-icon menu-alltasks"><g:link controller="wf4pTask" action="list">All Tasks</g:link></li>
 	          <li class="menu-icon mytasks"><g:link controller="wf4pTask" action="userlist">Tasks by user</g:link></li>
         	  <li class="menu-icon grouptasks" ><g:link controller="wf4pTask" action="grouplist">Group tasks</g:link></li>
 	          <li class="menu-icon processdefinitions" ><g:link controller="wf4pProcessDefinition" action="list">Process Def's</g:link></li>
+          	</ul>
           	</ul>
           	
           	</g:ifAnyGranted>
@@ -160,7 +169,7 @@
 	        <g:ifAnyGranted role="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
 	        <li>Forms</li>
 	        <ul>
-	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow</g:link></li>
+	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow Def</g:link></li>
 	          <li class="menu-icon menu-datamodel"><g:link controller="dataModelEditor">Data model</g:link></li>
 	          
 	          
@@ -187,7 +196,7 @@
 	          <li class="menu-icon menu-roles"><g:link controller="role" action="list" >Roles</g:link></li>
 	          <li class="menu-icon menu-action"><g:link controller="action" action="list" >Actions</g:link></li>
 	          <li class="menu-icon menu-feature"><g:link controller="feature" action="list" >Features</g:link></li>
-	          
+	          <li class="menu-icon menu-feature"><g:link controller="workflowEngine" action="list" >Engines</g:link></li>
 	          <li class="menu-icon configuration"><g:link controller="applicationConfiguration" action="list" >Configuration</g:link></li>
 	          <li class="menu-icon status"><g:link controller="status" action="status">Status</g:link></li>
 	        </ul>

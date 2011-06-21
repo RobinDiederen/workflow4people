@@ -89,7 +89,7 @@ Sent by JBoss jBPM
 ]]></text>
 		</mail-template>
 		<hibernate-configuration>
-			<cfg resource="jbpm.hibernate.cfg.xml" />
+			<cfg resource="jbpm.hibernate.cfg.xml" />					
 		</hibernate-configuration>
 		<hibernate-session-factory />
 	</process-engine-context>

@@ -81,4 +81,4 @@ jquery {
     version = '1.4.2' // The jQuery version in use
 }
 	
-
+grails.scan.interval=20000

@@ -338,11 +338,17 @@ div.body {width:auto;}
 .page-body {width:100%;float:left;}
 div.datatable {width:100%;float:left;}
 
+.workflows { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.tasks { background-image: url("theme/icons/actions/16/document-properties.png"); }
+
 .menu-icon { background-position: 0px 2px; background-repeat:no-repeat; padding:2px 2px 2px 24px;}
 .menu-alltasks { background-image: url("theme/icons/actions/16/document-properties.png"); }
 .mytasks { background-image: url("theme/icons/stock/16/stock_person.png"); }
 .grouptasks { background-image: url("theme/icons/stock/16/stock_people.png");}
 .processdefinitions { background-image: url("theme/icons/mimetypes/16/gnome-mime-text-x-python.png");}
+
+
+.jbpm { background-image: url("theme/icons/engine/jbpm.png"); }
 
 .xmldocuments { background-image: url("theme/icons/mimetypes/16/application-xml.png");}
 .menu-types { background-image: url("theme/icons/actions/16/document-properties.png"); }
@@ -352,7 +358,7 @@ div.datatable {width:100%;float:left;}
 .menu-search { background-image: url("theme/icons/actions/16/search.png");}
 .menu-manage-index { background-image: url("theme/icons/actions/16/document-properties.png"); }
 
-.menu-workflowdefinition { background-image: url("theme/icons/actions/16/document-properties.png"); }
+.menu-workflowdefinition { background-image: url("theme/icons/mimetypes/16/gnome-mime-text-x-python.png");}
 .menu-datamodel { background-image: url("theme/icons/actions/16/document-properties.png"); }
 .menu-fieldlist { background-image: url("theme/icons/actions/16/document-properties.png"); }
 .menu-fieldtype { background-image: url("theme/icons/actions/16/document-properties.png"); }
@@ -379,6 +385,10 @@ div.datatable {width:100%;float:left;}
 .formicon { background-image: url("theme/icons/categories/16/applications-publishing.png"); }
 .menu-login { background-image: url("theme/icons/stock/16/stock_person.png"); }
 .menu-logout { background-image: url("theme/icons/actions/16/gnome-logout.png"); }
+
+
+
+
 
 
 /* ---- end main.css --- */
