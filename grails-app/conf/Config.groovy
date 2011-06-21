@@ -82,7 +82,7 @@ jquery {
 }
 	
 security {
-	grails.plugins.springsecurity.providerNames = ['ldapAuthProvider','daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+	grails.plugins.springsecurity.providerNames = [/*'ldapAuthProvider', */'daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 	
 	grails.plugins.springsecurity.useSecurityEventListener = true
 	grails.plugins.springsecurity.active = true
@@ -92,6 +92,7 @@ security {
 	grails.plugins.springsecurity.authority.className = "org.workflow4people.Authority"
 	grails.plugins.springsecurity.userLookup.passwordPropertyName = "passwd"
 	
+	grails.plugins.springsecurity.ldap.active = false
 	grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles = true
     grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles = false
     grails.plugins.springsecurity.ldap.context.server = "ldap://domaincontroller:389"
