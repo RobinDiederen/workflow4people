@@ -1,9 +1,10 @@
 package org.workflow4people
 
-import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
-import org.grails.plugins.springsecurity.service.AuthenticateService
+//import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
+//import org.grails.plugins.springsecurity.service.AuthenticateService
+import org.springframework.security.*;
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 import java.text.*;
 import java.util.*;
 

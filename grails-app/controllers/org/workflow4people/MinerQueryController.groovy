@@ -18,7 +18,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 /**

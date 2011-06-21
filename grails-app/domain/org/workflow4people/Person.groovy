@@ -47,7 +47,9 @@ class Person  {
 	/** description */
 	String description = ''
 
-	
+    boolean accountExpired
+    boolean accountLocked
+    boolean passwordExpired	
 
 	static constraints = {
 		username(blank: false, unique: true,help:'x',class:'wide')
@@ -58,7 +60,10 @@ class Person  {
 		emailShow(help:'x')
 		enabled(help:'x')
 		passwd(blank: false,password:true,show:false,help:'x',class:'wide')
-		authorities(nullable:true,help:'x',sortable:true,selectSort:'authority')		
+		authorities(nullable:true,help:'x',sortable:true,selectSort:'authority')
+		accountExpired(nullable: false)
+		accountLocked(nullable: false)
+		passwordExpired(nullable: false)		
 	}
 			
 	String toString() {

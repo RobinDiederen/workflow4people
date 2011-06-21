@@ -116,7 +116,7 @@
     	</span>
     	
     	<span id="user-toolbar" style="float:right;">    		    		
-    		<g:isLoggedIn><g:loggedInUserInfo field="username"/><g:link title="logout" class="logout action" controller="logout">&nbsp;</g:link></g:isLoggedIn>
+    		<sec:ifLoggedIn><sec:loggedInUserInfo field="username"/><g:link title="logout" class="logout action" controller="logout">&nbsp;</g:link></sec:ifLoggedIn>
     	</span>
     
     	</div>
@@ -128,7 +128,7 @@
 	    <div id="topleft-logo" class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr table-title">
 	    <h1>workflow<span class="red">4</span>people</h1></div>
 	      <ul>	
-	      <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">      
+	      <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">      
 	        <li>Workflow</li>	        	        
 	        <ul>	        
 	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition" action="list">Workflow Def</g:link></li>
@@ -146,27 +146,27 @@
           	</ul>
           	</ul>
           	
-          	</g:ifAnyGranted>
-          	<g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
+          	</sec:ifAnyGranted>
+          	<sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
            <li>XML Documents</li>
            <ul>
    	          <li class="menu-icon xmldocuments" ><g:link controller="document" action="list">XML documents</g:link></li>
-   	          <g:ifAnyGranted role="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
+   	          <sec:ifAnyGranted roles="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
    	          <li  class="menu-icon menu-types"><g:link controller="documentType" action="list">Types</g:link></li>
    	          <li class="menu-icon menu-index-fields"><g:link controller="documentIndexField" action="list">Index fields</g:link></li>
    	          <li class="menu-icon miner"><g:link controller="minerQuery" action="list">Miner Query</g:link></li>
    	          <li  class="menu-icon menu-namespaces"><g:link controller="namespace">Namespaces</g:link></li>
-   	          </g:ifAnyGranted>  	             
+   	          </sec:ifAnyGranted>  	             
 	        </ul>
-	        </g:ifAnyGranted>
-	        <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
+	        </sec:ifAnyGranted>
+	        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	       <li>Search</li>
            <ul>
    	          <li class="menu-icon menu-search"><g:link controller="search" action="index">Lucene search</g:link></li>   	            	            
     	      <li class="menu-icon menu-manage-index"><g:link controller="index" action="index">Manage index</g:link></li>
 	        </ul>
-	        </g:ifAnyGranted>
-	        <g:ifAnyGranted role="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
+	        </sec:ifAnyGranted>
+	        <sec:ifAnyGranted roles="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
 	        <li>Forms</li>
 	        <ul>
 	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow Def</g:link></li>
@@ -179,16 +179,16 @@
 	          <li  class="menu-icon menu-basetype"><g:link controller="baseType">Base Types</g:link></li>
 	          	          
 	        </ul>
-	        </g:ifAnyGranted>
-	        <g:ifAnyGranted role="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
+	        </sec:ifAnyGranted>
+	        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	        <li>Calendar</li>
 	        <ul>
 	          <li class="menu-icon dayparts"><g:link controller="dayPart" action="list" >Day parts</g:link></li>
 	          <li class="menu-icon holidays"><g:link controller="holiday" action="list" >Holidays</g:link></li>
 	        </ul>
-	        </g:ifAnyGranted>
+	        </sec:ifAnyGranted>
 	        
-	        <g:ifAnyGranted role="ROLE_WF4P_USER_ADMIN,ROLE_WF4P_ADMIN">
+	        <sec:ifAnyGranted roles="ROLE_WF4P_USER_ADMIN,ROLE_WF4P_ADMIN">
 	        <li>User Admin</li>
 	        <ul>
 	          <li class="menu-icon menu-users"><g:link controller="person" action="list" >Users</g:link></li>
@@ -200,15 +200,15 @@
 	          <li class="menu-icon configuration"><g:link controller="applicationConfiguration" action="list" >Configuration</g:link></li>
 	          <li class="menu-icon status"><g:link controller="status" action="status">Status</g:link></li>
 	        </ul>
-	        </g:ifAnyGranted>
+	        </sec:ifAnyGranted>
 	        <li>Login</li>
         	<ul>
-        		<g:isNotLoggedIn>
+        		<sec:ifNotLoggedIn>
           			<li class="menu-icon menu-login"><g:link controller="login">Login</g:link></li>
-          		</g:isNotLoggedIn>
-          		<g:isLoggedIn>
+          		</sec:ifNotLoggedIn>
+          		<sec:ifLoggedIn>
           			<li class="menu-icon menu-logout"><g:link controller="logout">Logout</g:link></li>
-          		</g:isLoggedIn>          
+          		</sec:ifLoggedIn>          
         	</ul>
 	        
 	      </ul>	      
