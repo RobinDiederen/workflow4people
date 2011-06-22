@@ -11,14 +11,8 @@ class ListService {
     def serviceMethod() {
 
     }
-    
-	// complete
-	def jsonlist(dc,params,request) {
-		return jsonlist(dc,params,request, null)
-	}
-	
-	// with filter
-    def jsonlist(dc,params,request, filterColumnName) {
+
+    def jsonlist(dc,params,request,filterColumnName=null,actions=null) {
         	def title=dc.getName();
         	title=title.replaceAll (".*\\.", "")
         	def propName=title[0].toLowerCase()+title.substring(1)
@@ -65,9 +59,11 @@ class ListService {
         			inLine +=doc."${it}".toString()
         		}	            		
         		def baseUrl=request.contextPath
-        		//inLine+="""<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'${propName}',{ refresh : '${detailTableId}'})">dialog</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${doc.id},'${propName}',{ refresh : '${detailTableId}'})">delete</span>&nbsp;<a class="list-action-button ui-state-default" href="${baseUrl}/${propName}/show/${doc.id}">show</a>&nbsp;<a class="list-action-button ui-state-default" href="${baseUrl}/${propName}/edit/${doc.id}">edit</a>&nbsp;<a class="list-action-button ui-state-default confirm" href="${baseUrl}/${propName}/delete/${doc.id}" title="Delete this item" >&times;</a>"""
-				inLine+="""<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'${propName}',{ refresh : '${detailTableId}'})">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${doc.id},'${propName}',{ refresh : '${detailTableId}'})">&times;</span>"""
-				def aaLine=[inLine]
+        		if(!actions) {
+        			actions= { dok -> """<span class="list-action-button ui-state-default" onclick="formDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'})">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'})">&times;</span>""" }
+        		}
+        		inLine+=actions(doc)
+        		def aaLine=[inLine]
         		aaData+=(aaLine)
     		}
 

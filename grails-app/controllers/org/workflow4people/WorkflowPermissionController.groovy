@@ -18,7 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
+import grails.converters.*
 /**
  * Controller for WorkflowPermission domain class
  * 
@@ -27,16 +28,28 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_USER_ADMIN','ROLE_WF4P_DEVELOPER'])
 
 class WorkflowPermissionController {
+	def dialogService
+	def listService
 
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST"]
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [workflowPermissionInstanceList: WorkflowPermission.list(params), workflowPermissionInstanceTotal: WorkflowPermission.count()]
+    	
+    	render (view:'/datatable/list', model:[dc:WorkflowPermission,controllerName:'workflowPermission',request:request])
+	}
+	    
+	def jsonlist = {
+		render listService.jsonlist(WorkflowPermission,params,request) as JSON	
     }
+	
+	def dialog = { return dialogService.edit(WorkflowPermission,params) }
+	
+	def submitdialog = { render dialogService.submit(WorkflowPermission,params) as JSON }
+	
+	def delete = { render dialogService.delete(WorkflowPermission,params) as JSON }
 
     def create = {
         def workflowPermissionInstance = new WorkflowPermission()
@@ -114,7 +127,7 @@ class WorkflowPermissionController {
         }
     }
 
-    def delete = {
+    def xdelete = {
         def workflowPermissionInstance = WorkflowPermission.get(params.id)
         if (workflowPermissionInstance) {
             try {

@@ -18,7 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
+import grails.converters.JSON;
 /**
  * Controller for Form domain class
  * 
@@ -26,17 +27,37 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class FormController {
-    
+	def listService
+	def dialogService
+	def templateService
+	
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [ save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def list = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ formInstanceList: Form.list( params ), formInstanceTotal: Form.count() ]
-    }
-
+		render (view:'/datatable/list', model:[dc:Form,controllerName:'form',request:request])
+	}
+	
+	def jsonlist = {
+		render listService.jsonlist(Form,params,request) as JSON
+	}
+	
+	def dialog = { 
+		def model= dialogService.edit(Form,params)
+		model['formTemplateNames']=templateService.formTemplateNames
+		if (!model['formInstance'].id) {
+			model['formInstance'].formAction=Action.findByName('handle')
+		}
+		return model
+	}
+		
+	def submitdialog = { render dialogService.submit(Form,params) as JSON }
+	
+	def delete = { render dialogService.delete(Form,params) as JSON }
+    
+    
     def show = {
         def formInstance = Form.get( params.id )
 
@@ -50,7 +71,7 @@ class FormController {
     /**
      * Renders the XForm representation of this form
      */
-    
+    /*
     def xform = {
         def formInstance = Form.get( params.id )
         
@@ -83,7 +104,7 @@ class FormController {
     
     
 
-    def delete = {
+    def xdelete = {
         def formInstance = Form.get( params.id )
         if(formInstance) {
             try {
@@ -163,4 +184,5 @@ class FormController {
             render(view:'create',model:[formInstance:formInstance])
         }
     }
+    */
 }

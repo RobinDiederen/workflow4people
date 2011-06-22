@@ -27,6 +27,7 @@
 package org.workflow4people
 
 class WorkflowPermission {
+	static listProperties=['id','authority','role','remark']
 	static belongsTo=[workflow:WorkflowDefinition]
 	                  
 	Authority authority

@@ -28,7 +28,7 @@
 package org.workflow4people
 import org.codehaus.groovy.grails.commons.* 
 class WformTagLib {
-	
+	def dialogService
 	static namespace = 'wf'
 		
 	def treeList = { attrs ->
@@ -167,7 +167,7 @@ class WformTagLib {
 	
 	
 	def textArea = { attrs ->	
-		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+		out << row (class:attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
 			switch(attrs.mode) {			
 				case "show":							
 					"""${fieldValue(bean: attrs.object, field: attrs.propertyName)}"""
@@ -179,6 +179,23 @@ class WformTagLib {
 			}
 		}
 	}
+	
+	def xml = { attrs ->	
+	out << row (class:attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
+		switch(attrs.mode) {			
+			case "show":
+				def xmltext=attrs.object."${attrs.propertyName}"
+				String s = dialogService.prettyPrint(xmltext)
+				return "<textarea cols=\"80\" rows=\"25\">"+s.encodeAsHTML()+"</textarea>"
+				break
+			
+			case "edit":			
+				"""${g.textArea(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",cols:40,rows:5)}"""
+				break		
+		}
+	}
+	}
+	
 	
 	def checkBox = { attrs ->
 	
@@ -348,7 +365,6 @@ class WformTagLib {
 				out << """<th>${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</th>"""
 			}
 		out << "<th>Actions</th></tr></thead><tbody>"
-		
 		out <<"""</tbody></table>"""
 	
 	}

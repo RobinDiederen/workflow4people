@@ -1,12 +1,13 @@
 package org.workflow4people
 import grails.converters.*
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class DataModelEditorController {
 
 	def grailsApplication
 	def templateService
+	def dialogService
 	
     def index = { 
     		render(view:'editor')
@@ -24,8 +25,6 @@ class DataModelEditorController {
             }
             else { return [ fieldInstance : fieldInstance ] }
         }
-    
-    
     
     def editField = {
 			def id=params.id
@@ -81,7 +80,7 @@ class DataModelEditorController {
 			
 	}
 	
-	def editForm = {
+	def xeditForm = {
 			def formInstance
 			if (params.id) {
 				def id=params.id.split("_")[1]
@@ -98,7 +97,17 @@ class DataModelEditorController {
             else { return [ formInstance : formInstance, formTemplateNames:templateService.formTemplateNames ] }
         }
 	
-	def submitForm = {
+	def editForm= {			
+		def model= dialogService.edit(Form,params)
+		model['formTemplateNames']=templateService.formTemplateNames
+		if (!model['formInstance'].id) {
+			model['formInstance'].formAction=Action.findByName('handle')
+		}
+		return model
+	}
+	
+	
+	def xsubmitForm = {
 			println "Submit Form params: ${params}"
 			def id
 			def formInstance
@@ -127,7 +136,22 @@ class DataModelEditorController {
              render res as JSON			
 	}
 	
-	def editWorkflowDefinition = {
+	def submitForm = {		     
+	    println "Submit Form params: ${params}"        
+	    def result =  dialogService.submit(Form,params)
+	    def wfid
+	    if (params.workflow?.id) {
+	    	wfid=params.workflow?.id
+	    } else {
+	    	def formInstance = Form.get(params.id)	    	
+	    	wfid=formInstance.workflow.id
+	    } 
+	    result['result']['refreshNodes']=["workflow_${wfid}"]
+        render result as JSON
+	}
+	
+	
+	def xeditWorkflowDefinition = {
 			def id
 			def workflowDefinitionInstance
 			if (params.id) {
@@ -143,6 +167,11 @@ class DataModelEditorController {
             }
             else { return [ workflowDefinitionInstance : workflowDefinitionInstance ] }
         }
+	
+	def editWorkflowDefinition = {
+			def model= dialogService.edit(WorkflowDefinition,params) 
+			render(view:'/workflowDefinition/dialog',model:model)
+	}
 	
 	def submitWorkflowDefinition = {
 			println "Submit WorkflowDefinition params: ${params}"
@@ -199,7 +228,7 @@ class DataModelEditorController {
 	}
 
 
-	def editFormItem = {
+	def xeditFormItem = {
 			def id=params.id.split("_")[1]
 
             def formItemInstance = FormItem.get( id )
@@ -211,7 +240,14 @@ class DataModelEditorController {
             else { return [ formItemInstance : formItemInstance ] }
         }
 	
-	def submitFormItem = {
+	def editFormItem = {
+			def model= dialogService.edit(FormItem,params) 
+			render(view:'/formItem/dialog',model:model)
+	}
+			
+	
+	
+	def xsubmitFormItem = {
 			println "Submit FormItem params: ${params}"
 			def id=params.id.split("_")[1]
 			def formItemInstance = FormItem.get(id )
@@ -228,120 +264,55 @@ class DataModelEditorController {
              def res=[result:result]
              render res as JSON			
 	}
+	
+	def submitFormItem = {
+		     
+        println "Submit FormItem params: ${params}"        
+        def result =  dialogService.submit(FormItem,params)
+        
+        def formid
+	    if (params.form?.id) {
+	    	wfid=params.form?.id
+	    } else {
+	    	def formItemInstance = FormItem.get(params.id)	    	
+	    	formid=formItemInstance.form.id
+	    } 
+	    result['result']['refreshNodes']=["form_${formid}"]
+        render result as JSON
+        
+	}
 
 	
+	def editFieldType = { 			
+			def model= dialogService.edit(FieldType,params) 
+			render(view:'/fieldType/dialog',model:model)
+	}
 	
 	
-	
-	
-	def editFieldType = {
-			def id
-			def fieldTypeInstance
-			if (params.id) {
-				id=params.id.split("_")[1]
-				fieldTypeInstance = FieldType.get( id )
-			} else {
-				fieldTypeInstance=new FieldType()
-			}
-			
-            if(!fieldTypeInstance) {
-                flash.message = "FieldType not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ fieldTypeInstance : fieldTypeInstance ] }
-        }
-	
+    
 	def submitFieldType = {
-			println "Submit FieldType params: ${params}"
-			
-			def id
-			def fieldTypeInstance			
-			if (params.id) {
-				id=params.id.split("_")[1]
-				fieldTypeInstance = FieldType.get(id )
-			} else {
-				fieldTypeInstance = new FieldType()
-			}
-			
-			
-			fieldTypeInstance.properties = params
-			fieldTypeInstance.save()
-			
-			//def theRefreshNodes=["${params.id}"]
-            def theRefreshNodes=["fieldTypeTree"]                     
-			def result = [
-			              	returnValue:true,
-			              	message:"fieldType #${fieldTypeInstance.id} : ${fieldTypeInstance.name} updated" ,
-			              	id:params.id,
-			              	name: fieldTypeInstance.name,	
-			              	refreshNodes:theRefreshNodes
-			              ]
-            def res=[result:result]
-            render res as JSON
+		println "Submit FieldType params: ${params}"
+     	def result =  dialogService.submit(FieldType,params)
+
+        result['result']['refreshNodes']=["fieldTypeTree"]
+        render result as JSON
 	}
-    
 	
-	
-	def submitFieldList = {
-			println "Submit FieldList params: ${params}"
-			
-			def id
-			def fieldListInstance			
-			if (params.id) {
-				id=params.id.split("_")[1]
-				fieldListInstance = FieldList.get(id )
-			} else {
-				fieldListInstance = new FieldList()
-			}
+    def submitFieldList = {
 
-			
-			fieldListInstance.properties = params
-			fieldListInstance.save()
-			
-			def theRefreshNodes=["fieldListTree"]
- 			def result = [
-			              	returnValue:true,
-			              	message:"fieldList #${fieldListInstance.id} : ${fieldListInstance.name} updated" ,
-			              	id:params.id,
-			              	name: fieldListInstance.name,	
-			              	refreshNodes:theRefreshNodes
-			              ]
-	         def res=[result:result]
-	         render res as JSON
-	
+	    println "Submit FieldList params: ${params}"
+	    def result =  dialogService.submit(FieldList,params)
+
+	    result['result']['refreshNodes']=["fieldListTree"]
+        render result as JSON	
 	}
-          
-    def showFieldList = {
-			def id=params.id.split("_")[1]
-
-            def fieldListInstance = FieldList.get( id )
-
-            if(!fieldListInstance) {
-                flash.message = "FieldList not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ fieldListInstance : fieldListInstance ] }
-        }
-
+	
 	def editFieldList = {
-			
-			def id
-			def fieldListInstance
-			if (params.id) {
-				id=params.id.split("_")[1]
-				fieldListInstance = FieldList.get( id )
-			} else {
-				fieldListInstance=new FieldList()
-			}
-			
-			
-            if(!fieldListInstance) {
-                flash.message = "FieldList not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ fieldListInstance : fieldListInstance ] }
-        }    
-    
+			def model= dialogService.edit(FieldList,params) 
+			render(view:'/fieldList/dialog',model:model)			
+    } 
+	
+	
     def onmove = {
     		println "We have a move. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
     		println params

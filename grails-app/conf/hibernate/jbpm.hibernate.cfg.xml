@@ -9,7 +9,8 @@
 
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
 	 	<property name="hibernate.format_sql">true</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.connection.datasource">java:comp/env/jdbc/wf4p</property>
      	<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.format_sql">true</property>
@@ -18,6 +19,23 @@
 		<mapping resource="jbpm.history.hbm.xml" />
 		<mapping resource="jbpm.task.hbm.xml" />
 		<mapping resource="jbpm.identity.hbm.xml" />
+		
+		
+		<event type="post-commit-insert">
+		
+            	<listener class="org.workflow4people.Jbpm4EventListener"/>
+            	 <!-- 
+            	<listener class="org.hibernate.event.def.DefaultLoadEventListener"/>
+            	 -->
+       	</event>
+       	<event type="post-commit-update">		
+            	<listener class="org.workflow4people.Jbpm4EventListener"/>
+       	</event>
+       	<event type="post-commit-delete">		
+            	<listener class="org.workflow4people.Jbpm4EventListener"/>
+       	</event>
+       	
+		
 
 	</session-factory>
 </hibernate-configuration>

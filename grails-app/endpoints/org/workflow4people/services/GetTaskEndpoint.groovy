@@ -25,95 +25,72 @@
  */
 package org.workflow4people.services
 
-import org.jbpm.api.ProcessInstanceQuery;
-import org.jbpm.api.RepositoryService;
-import org.jbpm.api.TaskService;
-import org.jbpm.api.Execution;
-import org.jbpm.api.ExecutionService;
-import org.jbpm.api.task.*;
-import org.jbpm.pvm.internal.session.*;
-import org.jbpm.api.*
 import org.springframework.beans.factory.InitializingBean;
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 
+import org.springframework.orm.hibernate3.SessionFactoryUtils
+import org.springframework.orm.hibernate3.SessionHolder
 
-class GetTaskEndpoint implements InitializingBean {
+
+
+class GetTaskEndpoint {
 	def processEngine
-	TaskService taskService
-	ExecutionService executionService
-	RepositoryService repositoryService
+	def workflowService
 	
-	void afterPropertiesSet() {
-		executionService=processEngine.getExecutionService()
-		repositoryService=processEngine.getRepositoryService()
-		taskService=processEngine.getTaskService()
-	}
+	def sessionFactory
+		
 	def static namespace = "http://www.workflow4people.org/services" 
 	
 	def invoke = { request ->
 		log.debug("Processing GetTask service request ${request.name()}")
 		log.debug("Task id: ${request.request.taskId.text()}")
+		def theTask = workflowService.getTask(request.request.taskId.text())
+
 		
-		def theTask = taskService.getTask(request.request.taskId.text())
 		if (theTask) {
 		
-			Execution execution=executionService.findExecutionById(theTask.executionId)
-			def theProcessDefinitionId = execution.getProcessDefinitionId()
-			ProcessDefinitionQuery pdQuery=repositoryService.createProcessDefinitionQuery()    	   
-			pdQuery.processDefinitionId(theProcessDefinitionId)			
-			def processDefinition = pdQuery.uniqueResult() 			
-			def theProcessName=processDefinition.name
+
 	    
 		def response = { GetTaskResponse(xmlns:namespace) {
+			org.workflow4people.Task.withTransaction {
+				
+				def hibSession = sessionFactory.currentSession
+				theTask=hibSession.merge(theTask)
 			task ('xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance') {
 				assignee(theTask.assignee)
+				
 				description(theTask.description)
-				createDate("${theTask.createTime.format('yyyy-MM-dd')}T${theTask.createTime.format('HH:mm:ss')}")
-				if (theTask.duedate) {
-					dueDate("${theTask.duedate.format('yyyy-MM-dd')}T${theTask.duedate.format('HH:mm:ss')}")
+				createDate("${theTask.dateCreated.format('yyyy-MM-dd')}T${theTask.dateCreated.format('HH:mm:ss')}")
+				if (theTask.dueDate) {
+					dueDate("${theTask.dueDate.format('yyyy-MM-dd')}T${theTask.dueDate.format('HH:mm:ss')}")
 				} else {
 					dueDate('xsi:nil':'true')
 				}
-				executionId(theTask.executionId)
+				executionId(theTask.workflow.id)
 				name(theTask.name)
 				id(theTask.id)
 				priority(theTask.priority)
-				form {							
-							
-													
-							def formName=executionService.getVariable(theTask.executionId, "formName")
-							if (formName?.size()<1) formName=theTask.name
-							
-							def formId=executionService.getVariable(theTask.executionId, "formId")
-							// TODO needs to be configurable
-							
-							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
-							url("${baseUrl}/${theProcessName}/${formName}/${theTask.id}/0")
-							//url("${baseUrl}/taskForm/${theTask.id}/0")
-							name(theTask.formResourceName ? theTask.formResourceName : theTask.name)
+				form {
+							def formName=theTask.form.name
+							if (formName?.size()<1) formName=theTask.name							
+							url("http://www.wedontcareabouttheurlanymore.org")				
+							name(theTask.form.name)
 						}
+				processDefinitionId (theTask.workflow.workflowDefinition.id)				 
+				processName(theTask.workflow.workflowDefinition.name)
 				
-				
-				processDefinitionId (theProcessDefinitionId)
-				processName(theProcessName)
-				def outcomeList = taskService.getOutcomes(theTask.id)				
-				outcomes { outcomeList.each { theOutcome ->
+				def outcomeList = theTask.transitions.split(",")				
+				outcomes { outcomeList.each { theOutcome ->							
 						if (theOutcome!='completed') {
-						outcome(theOutcome)
+							outcome(theOutcome)
 						}
 					}
 				}
-				def variableNameList = taskService.getVariableNames(theTask.id)				
-				variables { variableNameList.each { variableName ->							
-						variable {
-							name(variableName)
-							value(taskService.getVariable(theTask.id, variableName))
-						}
-					}
-				}						
+								
 			}
-		}
+		  }
 	    }
+		}
 	    return response
 		} else
 			throw new Exception("Task not found")        		

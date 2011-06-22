@@ -18,7 +18,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 
 import java.io.StringWriter;
@@ -39,6 +39,7 @@ import grails.converters.*
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class WorkflowDefinitionController {
 	def listService
+	def dialogService
 	def wf4pConfigService
 	def formGeneratorService
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
@@ -48,8 +49,8 @@ class WorkflowDefinitionController {
     
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [ save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
 	def list = {
 	
@@ -59,7 +60,27 @@ class WorkflowDefinitionController {
 	def jsonlist = {
 		render listService.jsonlist(WorkflowDefinition,params,request) as JSON	
     }
-
+	
+	def listwithworkflows = {
+		render (view:'/datatable/list', model:[dc:Workflow,controllerName:'workflow',request:request,jsonlist:'jsonlistwithworkflows'])
+	}
+		
+	def jsonlistwithworkflows = {
+		//def actions = { doc -> "lalala ${doc.id}"}
+		def baseUrl=request.contextPath
+		def actions= {  doc -> """<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'workflowDefinition','')">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${doc.id},'workflowDefinition','')">x</span>""" }
+		render listService.jsonlist(Workflow,params,request,null,actions) as JSON
+	}
+	
+	
+	
+	
+	def dialog = { return dialogService.edit(WorkflowDefinition,params) }
+	
+	def submitdialog = { render dialogService.submit(WorkflowDefinition,params) as JSON }
+	
+	def delete = { render dialogService.delete(WorkflowDefinition,params) as JSON }
+	
     def show = {
         def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
 
@@ -113,7 +134,7 @@ class WorkflowDefinitionController {
     }    
 
     
-    def delete = {
+    def xdelete = {
         def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
         if(workflowDefinitionInstance) {
             try {

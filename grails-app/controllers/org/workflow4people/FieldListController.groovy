@@ -20,7 +20,7 @@
 package org.workflow4people
 import grails.converters.JSON;
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.apache.commons.lang.StringUtils
@@ -34,11 +34,13 @@ import org.apache.commons.lang.StringUtils
 class FieldListController {
     
 	def listService
+	def dialogService
 	
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
+
 
 //    def list = {
 //        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
@@ -52,6 +54,17 @@ class FieldListController {
 	def jsonlist = {
 		render listService.jsonlist(FieldList,params,request) as JSON
 	}
+	
+	def dialog = { return dialogService.edit(FieldList,params) }
+	
+	def submitdialog = { render dialogService.submit(FieldList,params) as JSON }
+	
+	def delete = { render dialogService.delete(FieldList,params) as JSON }
+	
+	
+	
+	
+	
 	
     def show = {
         def fieldListInstance = FieldList.get( params.id )
@@ -74,7 +87,7 @@ class FieldListController {
     }
 
 
-    def delete = {
+    def xdelete = {
         def fieldListInstance = FieldList.get( params.id )
         if(fieldListInstance) {
             try {

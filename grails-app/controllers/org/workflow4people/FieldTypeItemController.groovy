@@ -19,8 +19,7 @@
  */
 package org.workflow4people
 import grails.converters.JSON;
-
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 /**
  * Controller for FieldTypeItem domain class
  * 
@@ -62,106 +61,4 @@ class FieldTypeItemController {
         else { return [ fieldTypeItemInstance : fieldTypeItemInstance ] }
     }
 
-    def xdelete = {
-        def fieldTypeItemInstance = FieldTypeItem.get( params.id )
-        if(fieldTypeItemInstance) {
-            try {
-            	def fieldType=fieldTypeItemInstance.fieldType
-                fieldTypeItemInstance.delete(flush:true)
-                flash.message = "FieldTypeItem ${params.id} deleted"
-                fieldType.renumberItems()
-   	            redirect(controller:'fieldType',action:'show',id:fieldType.id)
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "FieldTypeItem ${params.id} could not be deleted"
-                redirect(action:show,id:params.id)
-            }
-        }
-        else {
-            flash.message = "FieldTypeItem not found with id ${params.id}"
-            redirect(action:list)
-        }
-    }
-
-    def edit = {
-        def fieldTypeItemInstance = FieldTypeItem.get( params.id )
-
-        if(!fieldTypeItemInstance) {
-            flash.message = "FieldTypeItem not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else {
-            return [ fieldTypeItemInstance : fieldTypeItemInstance ]
-        }
-    }
-
-    def update = {
-        def fieldTypeItemInstance = FieldTypeItem.get( params.id )
-        if(fieldTypeItemInstance) {
-            if(params.version) {
-                def version = params.version.toLong()
-                if(fieldTypeItemInstance.version > version) {
-                    
-                    fieldTypeItemInstance.errors.rejectValue("version", "fieldTypeItem.optimistic.locking.failure", "Another user has updated this FieldTypeItem while you were editing.")
-                    render(view:'edit',model:[fieldTypeItemInstance:fieldTypeItemInstance])
-                    return
-                }
-            }
-            fieldTypeItemInstance.properties = params
-            if(!fieldTypeItemInstance.hasErrors() && fieldTypeItemInstance.save()) {
-                flash.message = "FieldTypeItem ${params.id} updated"
-                redirect(action:show,id:fieldTypeItemInstance.id)
-            }
-            else {
-                render(view:'edit',model:[fieldTypeItemInstance:fieldTypeItemInstance])
-            }
-        }
-        else {
-            flash.message = "FieldTypeItem not found with id ${params.id}"
-            redirect(action:list)
-        }
-    }
-
-    def create = {
-        def fieldTypeItemInstance = new FieldTypeItem()
-        fieldTypeItemInstance.properties = params
-        return ['fieldTypeItemInstance':fieldTypeItemInstance]
-    }
-    
-    def insert = {
-        def fieldTypeItemInstance = new FieldTypeItem()
-        fieldTypeItemInstance.properties = params
-        return ['fieldTypeItemInstance':fieldTypeItemInstance]
-    }
-    
-    def insertsave = {
-        def fieldTypeItemInstance = new FieldTypeItem(params)
-        fieldTypeItemInstance.fieldType.fieldTypeItem.each {
-        	def itFieldTypeItemInstance = FieldTypeItem.get(it.id)
-        	if (itFieldTypeItemInstance.itemPosition>fieldTypeItemInstance.itemPosition) {
-        		itFieldTypeItemInstance.itemPosition=itFieldTypeItemInstance.itemPosition+1
-        		itFieldTypeItemInstance.save()
-        	}
-        }
-        fieldTypeItemInstance.itemPosition=fieldTypeItemInstance.itemPosition+1
-        if(!fieldTypeItemInstance.hasErrors() && fieldTypeItemInstance.save()) {
-            flash.message = "FieldTypeItem ${fieldTypeItemInstance.id} created"            
-            redirect(controller:'fieldType',action:'show',id:fieldTypeItemInstance.fieldType.id)
-        }
-        else {
-            render(view:'create',model:[fieldTypeItemInstance:fieldTypeItemInstance])
-        }
-    }
-        
-
-    def save = {
-        def fieldTypeItemInstance = new FieldTypeItem(params)
-        if(!fieldTypeItemInstance.hasErrors() && fieldTypeItemInstance.save()) {
-            flash.message = "FieldTypeItem ${fieldTypeItemInstance.id} created"
-                redirect(controller:'fieldType',action:'show',id:fieldTypeItemInstance.fieldType.id)
-        }
-        else {
-            render(view:'create',model:[fieldTypeItemInstance:fieldTypeItemInstance])
-        }
-    }
 }

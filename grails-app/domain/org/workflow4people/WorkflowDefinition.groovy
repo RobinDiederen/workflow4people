@@ -61,6 +61,7 @@ class WorkflowDefinition implements Serializable {
     
     
     DocumentType documentType
+    WorkflowEngine workflowEngine
     
     int version
     Date dateCreated

@@ -1,5 +1,5 @@
 <wf:form title="Document">
-	<wf:tabs names="Details,XML" object="${documentInstance}">		
+	<wf:tabs names="Details,XML,Index" object="${documentInstance}">		
 		<wf:tab name="Details" object="${documentInstance}">		     
 			<wf:textField object="${documentInstance}" propertyName="id" mode="show" />                            
 	        <wf:domainObject object="${documentInstance}" propertyName="documentType" mode="edit" />
@@ -23,7 +23,11 @@
 	           		
 		</wf:tab>
 		<wf:tab name="XML" object="${documentInstance}">
-			<wf:textArea object="${documentInstance}" propertyName="xmlDocument" mode="show" />	        
+			<wf:xml object="${documentInstance}" propertyName="xmlDocument" mode="show" class="xmldoc"/>	        
 		</wf:tab>
+		<wf:tab name="Index" object="${documentInstance}">
+			<wf:detailTable property="document" object="${documentInstance}" domainClass="${org.workflow4people.DocumentIndex}" />	    		
+		</wf:tab>
+		
 	</wf:tabs>
 </wf:form>

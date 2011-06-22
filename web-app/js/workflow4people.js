@@ -63,6 +63,11 @@ function formDialog(id,controllerName,params) {
 		  cache: false
 		 }).responseText;
 	 
+	 var formelements=$(dialogHTML).find('form')
+	 if (formelements.length==0) {
+		 window.location.reload()
+	 } else {
+	 
 	 var theWidth=$(dialogHTML).css("width");
 	 
 	 var theDialog=$(dialogHTML).dialog({ 
@@ -127,6 +132,8 @@ function formDialog(id,controllerName,params) {
                theDialog.dialog("destroy").remove();
              }
          });
+	 
+	 }
 }
 
 

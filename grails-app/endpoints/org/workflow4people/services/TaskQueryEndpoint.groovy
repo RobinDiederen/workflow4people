@@ -21,14 +21,6 @@
 
 package org.workflow4people.services
 
-import org.jbpm.api.ProcessInstanceQuery;
-import org.jbpm.api.RepositoryService;
-import org.jbpm.api.TaskService;
-import org.jbpm.api.Execution;
-import org.jbpm.api.ExecutionService;
-import org.jbpm.api.task.*;
-import org.jbpm.pvm.internal.session.*;
-import org.jbpm.api.*
 import org.springframework.beans.factory.InitializingBean;
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.workflow4people.*;
@@ -40,129 +32,79 @@ import org.workflow4people.*;
  * SOAP service that returns a list of tasks for a given user
  * @author Joost Horward
  */
-class TaskQueryEndpoint implements InitializingBean {
-	def processEngine
-	TaskService taskService
-	ExecutionService executionService
-	RepositoryService repositoryService
-	
-	void afterPropertiesSet() {
-		executionService=processEngine.getExecutionService()
-		repositoryService=processEngine.getRepositoryService()
-		taskService=processEngine.getTaskService()
-	}
-	
-	def createTaskQuery (request) {
-		TaskQuery tq=taskService.createTaskQuery();
-		
-		if (request.request.activityName.text()) {
-			tq.assignee(request.request.activityName.text())
-		}
-		
-		if (request.request.assignee.text()) {
-			tq.assignee(request.request.assignee.text())
-		}
-		
-		if (request.request.candidate.text()) {
-			tq.candidate(request.request.candidate.text())
-		}
-		
-		if (request.request.suspended.text()=="true") {
-			tq.suspended()
-		}
-		
-		if (request.request.suspended.text()=="false") {
-			tq.notSuspended()
-		}
-		
-		if (request.request.orderAsc.text()) {
-			println "ASC"
-			tq.orderAsc(request.request.orderAsc.text())
-		}
-		
-		if (request.request.orderDesc.text()) {
-			println "DESC"
-			tq.orderDesc(request.request.orderDesc.text())
-		}
-		
-		
-		
-		if (request.request.processDefinitionId.text()) {
-			tq.processDefinitionId(request.request.processDefinitionId.text())
-		}
-		
-		if (request.request.processInstanceId.text()) {
-			tq.processInstanceId(request.request.processInstanceId.text())
-		}
-		
-		if (request.request.unassigned.text()=="true") {
-			println "UNASSIGNED"
-			tq.unassigned()
-		}
-		
-		return tq
-	}
-	
+class TaskQueryEndpoint {
+	def workflowService
+	def sessionFactory
 
 	def static namespace = "http://www.workflow4people.org/services"
 		
 	
 	def invoke = { request ->
 	
-		
-		// Make sure we have an open session
-		Document.withTransaction { status ->
-	
 		log.debug("Processing TaskQuery service request ${request.name()}")
 		log.debug("User id: ${request.request.userId.text()}")
+	
+		def params=[:]
 		
-		TaskQuery tq =createTaskQuery(request)
-
-		if (request.request.firstResult.text() && request.request.maxResults.text()) {			
-			//tq.page(new Integer(request.request.firstResult.text()),new Integer(request.request.maxResults.text()))			
-		}
-		def theTaskList=tq.list()
-		// Poor man's pagination, the one in Hibernate doesn't work properly with JBPM somehow
-		if (request.request.firstResult.text() && request.request.maxResults.text()) {
-			int first=new Integer(request.request.firstResult.text())
-			int last=first+new Integer(request.request.maxResults.text())-1
-			def tl=[]
-			for (i in first..last) {
-				if (theTaskList[i]) {
-					tl+=theTaskList[i]
-				}
-			}
-			theTaskList=tl
-				
+		if (request.request.firstResult.text()) params["offset"]=request.request.firstResult.text()		
+		
+		if (request.request.maxResults.text()) params["max"]=request.request.maxResults.text()
+		
+		if (request.request.orderAsc.text()) {			
+			println "ASC"			
+			params+=[sort:request.request.orderAsc.text(),order:"asc"]
 		}
 		
+		if (request.request.orderDesc.text()) {
+			println "DESC"			
+			params+=[sort:request.request.orderDesc.text(),order:"desc"]
+		}
 		
-		log.debug "The count"
+		def res 
+		if (request.request.assignee.text()) {
+			res=workflowService.findTasksByUser(request.request.assignee.text(),params)
+		}
 		
-		TaskQuery countTq =createTaskQuery(request)
+		if (request.request.candidate.text()) {
+			println "CANDIDATE: ${request.request.candidate.text()}"
+			res=workflowService.findTasksByCandidate(request.request.candidate.text(),params)
+		}
 		
-		def taskCount=countTq.count()
 		
-		println "TASKCOUNT: ${taskCount}"
+		
+		
+		
+		
+		//def res=workflowService.findTasksByUser(request.request.userId.text(),params)
+		def theTaskList=res.taskList
+		def theTaskCount=res.taskCount
 		
 	    def response =  { TaskQueryResponse(xmlns:namespace) {
-	    	
+	    	org.workflow4people.Task.withTransaction{
+	    		def hibSession = sessionFactory.currentSession
+				
 			taskList {
 				theTaskList.each { theTask ->
-				
+						theTask=hibSession.merge(theTask)
 				
 					task('xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance') {
 						
-						activityName(theTask.activityName)						
+						activityName(theTask.name)						
 						assignee(theTask.assignee)
+						
 						description(theTask.description)
-						createDate("${theTask.createTime.format('yyyy-MM-dd')}T${theTask.createTime.format('HH:mm:ss')}")
-						if (theTask.duedate) {
-							dueDate("${theTask.duedate.format('yyyy-MM-dd')}T${theTask.duedate.format('HH:mm:ss')}")
+						
+						createDate("${theTask.dateCreated.format('yyyy-MM-dd')}T${theTask.dateCreated.format('HH:mm:ss')}")
+						
+						if (theTask.dueDate) {
+							dueDate("${theTask.dueDate.format('yyyy-MM-dd')}T${theTask.dueDate.format('HH:mm:ss')}")
 						} else {
 							dueDate('xsi:nil':'true')
 						}
-						executionId(theTask.executionId)
+						
+						executionId(theTask?.workflow?.id)
+						
+						
 						name(theTask.name)
 						id(theTask.id)
 						priority(theTask.priority)
@@ -171,11 +113,13 @@ class TaskQueryEndpoint implements InitializingBean {
 							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
 
 							url("${baseUrl}/taskForm/${theTask.id}/0")
-							name(theTask.formResourceName ? theTask.formResourceName : theTask.name)
+							name(theTask.form?.name)
 						}
 						
+						
+						
 						if (request.request.returnOutcomes.text()=="true") {
-							def outcomeList = taskService.getOutcomes(theTask.id)				
+							def outcomeList = theTask.transitions.split(",")				
 							outcomes { outcomeList.each { theOutcome ->							
 									if (theOutcome!='completed') {
 										outcome(theOutcome)
@@ -184,6 +128,8 @@ class TaskQueryEndpoint implements InitializingBean {
 							}
 						}
 						
+						
+						/*
 						if (request.request.returnVariables.text()=="true") {
 							def variableNameList = taskService.getVariableNames(theTask.id)				
 							variables { variableNameList.each { variableName ->							
@@ -193,20 +139,22 @@ class TaskQueryEndpoint implements InitializingBean {
 									}
 								}
 							}
-						}						
+						}
+						*/						
 					}
 				}
         		
         	}	
-	    	total(taskCount)
+	    	total(theTaskCount)
 
         	}
+	    }
 		}
 		return response
 
 		}
 
 		// withTransaction
-		}
+		
 		
     }

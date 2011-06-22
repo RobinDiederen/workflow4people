@@ -20,7 +20,7 @@
 package org.workflow4people
 import grails.converters.*
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 
 
 /**

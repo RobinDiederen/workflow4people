@@ -20,7 +20,7 @@
 package org.workflow4people
 import grails.converters.JSON;
 
-import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.Secured
 /**
  * Controller for Field Type domain class
  * 
@@ -34,9 +34,10 @@ class FieldTypeController {
 	
     def index = { redirect(action:list,params:params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [ save:'POST', update:'POST']
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
+	
 	def list = {
 		render (view:'/datatable/list', model:[dc:FieldType,controllerName:'fieldType',request:request])
 	}

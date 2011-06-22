@@ -29,6 +29,7 @@ import groovy.lang.Binding;
  */
 class Form implements Serializable {
 	def templateService
+	static listProperties=['id','name','title','workflow',]
     static constraints = {
     	name(help:'x',class:'wide')
     	title(help:'x',class:'wide')
