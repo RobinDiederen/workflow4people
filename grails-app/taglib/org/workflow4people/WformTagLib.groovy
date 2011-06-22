@@ -307,11 +307,10 @@ class WformTagLib {
 
 	
 	def form = { attrs,body ->
-		
-		out << """<div aid="dialog" title="${attrs.title}">
+		def width = attrs.width ? attrs.width : "600px";		
+		out << """<div aid="dialog" style="width:${width};" title="${attrs.title}">
 		<form class="ajaxdialogform">
 		<div class="errors" style="display:none;"></div>"""
-		
 		out << body()
 		out << "</form></div>"
 	}
@@ -328,8 +327,19 @@ class WformTagLib {
 		def domainClass = new DefaultGrailsDomainClass( attrs.domainClass)
 
 		def domainPropertyName=domainClass.getPropertyName()
+		
+		//attrs.domainClass = detail class name
+		//attrs.object      = master object
+		//attrs.property    = property that links detail with the master
+		
+		def prefix="detailTable_"+attrs.domainClass
+		prefix=prefix.replace(".","_")
+		prefix=prefix.replace("class ","")
+		
+		def optionalParams = '?objectId='+attrs.object.id+'&objectClass='+attrs.object.getClass().getName()+'&property='+attrs.property
+		def jsonUrl='/'+domainPropertyName+'/jsonlist'+optionalParams
 		out << """<div>
-                            <table id="detailTable1" class="detailTable"><thead><tr>"""
+					<table id="${prefix}" class="detailTable" jsonUrl=${jsonUrl}><thead><tr>"""
 			attrs.domainClass.listProperties.each { propertyName ->
 
 				def property=domainClass.getPropertyByName(propertyName)
@@ -338,28 +348,6 @@ class WformTagLib {
 				out << """<th>${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</th>"""
 			}
 		out << "<th>Actions</th></tr></thead><tbody>"
-		
-		//def listElements=org.workflow4people.DocumentIndex.findAllByDocument (attrs.object,[sort:'id',order:'asc'])
-		def objectDomainClass = new DefaultGrailsDomainClass( attrs.object.class )
-		
-		def propName=attrs.property		
-		propName=propName[0].toUpperCase()+propName.substring(1)
-		
-		//def finder="findAllBy"+objectDomainClass.name
-		def finder="findAllBy"+propName
-		
-		def listElements=attrs.domainClass."${finder}" (attrs.object,[sort:'id',order:'asc'])
-		print "LIST"
-		listElements.each { listElement ->
-			print "LISTELEMENT: ${listElement}"
-			out <<"""<tr>"""
-			attrs.domainClass.listProperties.each { propertyName -> 
-				out <<"""<td>${fieldValue(bean: listElement, field: propertyName)}</td>"""
-			}
-    		def baseUrl=request.contextPath
-
-			out <<"""<td><span class='list-action-button ui-state-default' onclick="formDialog(${listElement.id},'${domainPropertyName}','');return false;" >edit</span></td></tr>"""
-		}
 		
 		out <<"""</tbody></table>"""
 	

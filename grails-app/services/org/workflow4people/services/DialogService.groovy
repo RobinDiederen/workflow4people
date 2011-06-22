@@ -89,11 +89,11 @@ class DialogService {
         def resultMessage
         try { 
         	domainClassInstance.delete()
-        	resultMessage="${domainClassName} #${params.id} : ${domainClassInstance.name} deleted"
+        	resultMessage="${domainClassName} #${params.id} : ${domainClassInstance} deleted"
         	
         } catch (Exception e ){
         	successFlag=false
-        	resultMessage="${domainClassName} #${params.id} : ${domainClassInstance.name} not deleted"
+        	resultMessage="${domainClassName} #${params.id} : ${domainClassInstance} not deleted"
         }
 		
 		
@@ -103,7 +103,7 @@ class DialogService {
 		              	success:successFlag,
 		              	message:resultMessage ,
 		              	id:params.id,
-		              	name: domainClassInstance.name,	
+		              	name: domainClassInstance,	
 		              	refreshNodes:theRefreshNodes,
 		              	errorFields:theErrorFields
 		              ]              

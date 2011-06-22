@@ -301,12 +301,20 @@ h1 {
 .action-delete {background-image:url("theme/icons/actions/16/list-remove.png");}
 .action-insert {background-image:url("theme/icons/actions/16/list-add.png");}
 
-div.wf4p-menu {float:left;width:175px;clear:left;}
-div.wf4p-menu ul li {display:block;border-bottom:1px solid #888;margin-left:0px;height:20px;}
-div.wf4p-menu ul li {font-size:12px;font-weight:bold;color:#68A;}
-div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
-div.wf4p-menu ul ul li {font-size:10px;font-weight:bold;color:#666;}
+/*div.wf4p-menu {float:left;width:175px;clear:left;}*/
+/*div.wf4p-menu ul li {display:block;border-bottom:1px solid #888;margin-left:0px;height:20px;}*/
+/*div.wf4p-menu ul li {font-size:12px;font-weight:bold;color:#68A;}*/
+/*div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}*/
+/*div.wf4p-menu ul ul li {font-size:10px;font-weight:bold;color:#666;}*/
 
+div.wf4p-menu { float: left; width: 175px; }
+div.wf4p-menu ul {list-style-type: none;}
+div.wf4p-menu ul li {display:block;min-height:20px;font-weight:bold;color:#68A;}
+div.wf4p-menu ul li div {padding: 5px 0;font-size:12px;}
+div.wf4p-menu ul ul {border-top:1px solid #888;}
+div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
+div.wf4p-menu ul ul li {font-weight:bold;color:#666;border-bottom:1px solid #888;}
+div.wf4p-menu ul ul li a {font-size:10px;}
 
 
 
@@ -335,7 +343,7 @@ div.body {width:auto;}
 .home { background-image: url("theme/icons/actions/16/gohome.png" ) !important; background-position: 0px 0px !important; }
 .logout { background-image: url("theme/icons/actions/16/gnome-logout.png" ) !important; background-position: 0px 0px !important; }
 #main-toolbar {border:1px solid #888;background-color:#888;height:20px;margin-bottom:10px;}
-.page-body {width:100%;float:left;}
+/*.page-body {width:100%;float:left;}*/
 div.datatable {width:100%;float:left;}
 
 .menu-icon { background-position: 0px 2px; background-repeat:no-repeat; padding:2px 2px 2px 24px;}
@@ -605,7 +613,10 @@ li.jstree-default a {font-weight:normal;}
 .dataTables_filter { float: right;}
 .dataTables_length { width:200px;float:left;}
 
-/* div.datatable {width:100%;float:left;} */
+/* div.datatable {width:100%;float:left;}*/
+/*div.body {width:auto; border:1px dotted red;margin:0px;}*/
+/*div.body { margin: 0 25px 10px 200px; }*/
+/*.page-body {width:100%;float:left;}*/
 div.body {width:auto;}
 .page-body {width:100%;float:left;}
 

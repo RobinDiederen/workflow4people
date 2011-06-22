@@ -18,6 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.JSON;
+
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 /**
  * Controller for FieldTypeItem domain class
@@ -27,6 +29,9 @@ import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class FieldTypeItemController {
     
+	def listService
+	def dialogService
+	
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
@@ -36,7 +41,17 @@ class FieldTypeItemController {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ fieldTypeItemInstanceList: FieldTypeItem.list( params ), fieldTypeItemInstanceTotal: FieldTypeItem.count() ]
     }
+	
+	def jsonlist = {
+		render listService.jsonlist(FieldTypeItem,params,request) as JSON
+	}
 
+	def dialog = { return dialogService.edit(FieldTypeItem,params) }
+	
+	def submitdialog = { render dialogService.submit(FieldTypeItem,params) as JSON }
+	
+	def delete = { render dialogService.delete(FieldTypeItem,params) as JSON }
+	
     def show = {
         def fieldTypeItemInstance = FieldTypeItem.get( params.id )
 
@@ -47,7 +62,7 @@ class FieldTypeItemController {
         else { return [ fieldTypeItemInstance : fieldTypeItemInstance ] }
     }
 
-    def delete = {
+    def xdelete = {
         def fieldTypeItemInstance = FieldTypeItem.get( params.id )
         if(fieldTypeItemInstance) {
             try {

@@ -28,6 +28,7 @@
         <g:javascript src="jquery/jquery-1.4.2.js" plugin="wfp" />
         <g:javascript>
         	var wfp={};
+        	var dataTableHashList = {};
         	wfp.baseUrl="${request.contextPath}";
         </g:javascript>
                  
@@ -97,12 +98,6 @@
 			   }
 			
 			});
-          	
-          	
-           $('.detailTable').dataTable({"bJQueryUI": true
-           ,"sPaginationType": "full_numbers"} );		
-		
-		
           	
           	
         </jq:jquery>

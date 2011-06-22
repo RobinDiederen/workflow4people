@@ -5,9 +5,12 @@
 		<jqui:resources theme="smoothness" />
         <title><g:message code="${controllerName}.list.title" default="${controllerName}.list.title" /></title>
         <jq:jquery>
+        
+        //Create Id for the table
+        var tableId="detailTable_" + "${dc.getName().replace(".","_").replace("class ","")}";
 
-		listDatatable=$('#datatable').dataTable( {
-		//"sDom": '<"toolbar">frtip',
+		dataTableHashList[tableId]=$("#"+tableId).dataTable( {
+		//"sDom": '<"H"lfr>t<"F"ip>',
 		"bProcessing": true,
 		"bServerSide": true,		
 		"sAjaxSource": "${resource(dir:controllerName,file:'jsonlist')}",
@@ -20,10 +23,7 @@
 		
 		} );
 	
-	
-	
-	////$("div.datatable div.fg-toolbar div.datatable_length").prepend('<div style="float:left;height:20px;">test</div>');
-	$("div.datatable div.fg-toolbar div#datatable_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',null)">New</span></span>&nbsp;');
+		$("div.datatable div.fg-toolbar div.dataTables_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',{ refresh : \''+tableId+'\'})">New</span></span>&nbsp;');
         </jq:jquery>       
     </head>
     
@@ -35,7 +35,7 @@
    		</div>
       <div class="datatable">
       
-   <table cellpadding="0" cellspacing="0" border="0" class="display" id="datatable">
+   <table cellpadding="0" cellspacing="0" border="0" class="display" id="detailTable_${dc.getName().replace(".","_").replace("class ","")}">
 	<thead>
 
 		<tr>

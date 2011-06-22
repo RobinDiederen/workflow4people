@@ -7,6 +7,8 @@ var fieldTypeTree
 var dataModelTree
 var workflowTree
 
+//var dataTableHashList = {}
+
 /*
  * Modal JQuery UI confirmation dialog
  */
@@ -51,24 +53,21 @@ function logMessage(message) {
 }
 
 function formDialog(id,controllerName,params) {
-	 var urlId=""
-	 if(params) {
-		 urlId=id+'?'+params
-	 } else {
-		 urlId=id
-	 }	 
+	var urlId=id+obj2ParamStr(params);
+	 
 	 theUrl=wfp.baseUrl+'/'+controllerName+'/dialog/'+urlId	 	
 	 
 	 var dialogHTML = $.ajax({
 		  url: theUrl,
-		  async: false
+		  async: false,
+		  cache: false
 		 }).responseText;
 	 
 	 var theWidth=$(dialogHTML).css("width");
+	 
 	 var theDialog=$(dialogHTML).dialog({ 
-		 modal:false,
+		 modal:true,
 		 width:theWidth,
-		 //height:400,
 		 buttons: { 
 		 	"Save": function(e) {
 			 	var formData=theDialog.find("form").serialize();
@@ -76,12 +75,9 @@ function formDialog(id,controllerName,params) {
 			 		{
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
-			 		if (urlId) {
-			 			listDatatable.fnDraw(false);
-			 		} else {
-			 			listDatatable.fnPageChange( 'last' );
-			 			//listDatatable.fnDraw(true);
-			 		}
+			 		
+			 		refreshDataTable(params["refresh"], dataTableHashList, (id ? false : true));
+			 		
 			 		if(result.success){
 				 		theDialog.dialog("close");
 				 	} else  {
@@ -103,7 +99,25 @@ function formDialog(id,controllerName,params) {
        		$(this).find(".datepicker").datepicker({ dateFormat: "yy-mm-dd" , changeMonth: true, changeYear:true});
        		$(this).find(".dialogtabs").tabs();
        		$(this).find(".multiselect").multiselect();
-       		$(this).find('.detailTable').dataTable({"bJQueryUI": true ,"sPaginationType": "full_numbers" });
+     		
+       		var dataTable = $(this).find('.detailTable');
+       		if (dataTable.size() > 0) {
+       			var tableId = dataTable.attr('id');
+       			var jsonUrl = $(this).find('.detailTable').attr("jsonUrl");
+       			dataTableHashList[tableId] = dataTable.dataTable({
+    				"bProcessing": true,
+    				"bServerSide": true,
+    				"sAjaxSource": wfp.baseUrl+jsonUrl,
+    				"sPaginationType": "full_numbers",
+    				"bFilter": false,
+    				"bJQueryUI": true
+    			});
+
+       			$(this).find('div.dataTables_length').prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'fieldTypeItem\', { refresh : \''+tableId+'\', parentId : '+id+'})">New</span></span>&nbsp;');
+
+       		}
+
+       		
        		$(this).find(".help").cluetip({
        			splitTitle: '|',  
        			cluezIndex: 2000
@@ -117,12 +131,7 @@ function formDialog(id,controllerName,params) {
 
 
 function deleteDialog(id,controllerName,params) {
-	 var urlId=""
-	 if(params) {
-		 urlId=id+'?'+params
-	 } else {
-		 urlId=id
-	 }
+	var urlId=id+obj2ParamStr(params);
 	 
 	 var dialogHTML = '<div "title="Confirm delete"><form><div class="errors" style="display:none;"></div><div>Are you sure you want to delete '+controllerName+' '+id+' ?</div></form></div>'	 
 	 
@@ -137,7 +146,8 @@ function deleteDialog(id,controllerName,params) {
 			 		{
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
-			 		listDatatable.fnDraw(false);
+			 		
+			 		refreshDataTable(params["refresh"], dataTableHashList, false);
 			 		
 			 		if(result.success){
 				 		theDialog.dialog("close");
@@ -157,6 +167,29 @@ function deleteDialog(id,controllerName,params) {
         });
 }
 
+function refreshDataTable(key, list, lastPage) {
+	var curTable = list[key];
+	if (typeof(curTable) !== 'undefined' && curTable != null) {
+		if (lastPage == false) {
+			curTable.fnDraw(false);
+		} else {
+			curTable.fnPageChange( 'last' );
+		}
+		
+	}
+}
+
+function obj2ParamStr(params) {
+	var paramStr="";
+	 if (params) {
+		 var sep = "?";
+		 for (key in params) {
+			 paramStr=paramStr+sep+key+"="+params[key];
+			 sep="&";
+		 }		 
+	 }
+	 return paramStr;
+}
 		
 $(function() {		        
 

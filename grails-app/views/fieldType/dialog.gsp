@@ -1,4 +1,4 @@
-<wf:form title="Field type">
+<wf:form title="Field type" >
 	<wf:tabs names="Details,Text,List,Advanced" object="${fieldTypeInstance}">		
 		<wf:tab name="Details" object="${fieldTypeInstance}">		                            
 	        <wf:textField object="${fieldTypeInstance}" propertyName="id" mode="show" />                                                      
