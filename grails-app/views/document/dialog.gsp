@@ -20,7 +20,8 @@
 			
 			<wf:textField object="${documentInstance}" propertyName="cmisFolderObjectId" mode="edit" class="extrawide"/>
 			<wf:textField object="${documentInstance}" propertyName="cmisFolderUrl" mode="edit" class="extrawide"/>
-	           		
+	        <wf:textField object="${documentInstance}" propertyName="cmisPath" mode="edit" class="extrawide"/>
+	        
 		</wf:tab>
 		<wf:tab name="XML" object="${documentInstance}">
 			<wf:xml object="${documentInstance}" propertyName="xmlDocument" mode="show" class="xmldoc"/>	        

@@ -28,6 +28,9 @@
 package org.workflow4people.services
 import org.springframework.beans.factory.InitializingBean;
 import org.workflow4people.*;
+
+import org.open_t.cmis.services.*
+import org.open_t.cmis.*
 import java.text.*;
 import groovy.lang.Binding;
 import groovy.xml.StreamingMarkupBuilder
@@ -51,7 +54,7 @@ class DocumentService implements InitializingBean {
 	TaskService taskService
 	ExecutionService executionService
 	IdentityService identityService
-	CmisService cmisService
+	def cmisService
 	
 	def domFactory
 	
@@ -128,7 +131,7 @@ class DocumentService implements InitializingBean {
     		documentInstance.save(failOnError:true)
     		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
     		
-    		createCaseFolder(documentInstance)		
+    		createCaseFolder(documentInstance,document)		
     		documentInstance.save(failOnError:true)
     	
     		// Get the document again because it might have changed
@@ -208,17 +211,48 @@ class DocumentService implements InitializingBean {
     }
     
     
-    def createCaseFolder(def documentInstance) {
-	    if (cmisService.enabled) {
+    def createCaseFolder(def documentInstance,document) {
+    	String val= ApplicationConfiguration.findByConfigKey('cmis.enabled').configValue    	
+    	def cmisEnabled= (val.toLowerCase()=="true" || val=="1")
+    	
+	    if (cmisEnabled && documentInstance.documentType.useCmis) {
+	    	if (!cmisService.initialized) {
+	    		String cmisPassword= ApplicationConfiguration.findByConfigKey('cmis.password').configValue
+	    		String cmisUsername= ApplicationConfiguration.findByConfigKey('cmis.username').configValue
+	    		String cmisUrl = ApplicationConfiguration.findByConfigKey('cmis.url').configValue
+	    		cmisService.init(cmisUrl,cmisUsername,cmisPassword)
+	    	}
 			println "Creating case ${documentInstance.id}"
-			def cmisObjectId=cmisService.createCase(documentInstance.id)
-		
-			documentInstance.cmisFolderObjectId=cmisObjectId
-		    		
-			documentInstance.cmisFolderUrl=cmisService.caseFolderUrl(documentInstance)
-			println "The folder url is ${documentInstance.cmisFolderUrl}"
+		  	def cmisPathTemplate=documentInstance.documentType.cmisPathTemplate
+	    	
+	    	def cmisPath=new GroovyShell(new Binding([document:documentInstance,xmlDocument:document])).evaluate('"""'+cmisPathTemplate+'"""')
+	    	cmisPath=cmisPath.trim()
+	    	documentInstance.cmisPath=cmisPath
+	    	documentInstance.save()
+	    	
+	    	def pathElements=cmisPath.split("/")
+	    	
+	    	def parent=cmisService.getEntryByPath("/")
+	    	
+	    	def path=""
+	    	pathElements.each { pathElement ->
+	    		if (pathElement.length()>0) {
+	
+		    		path+="/"+pathElement
+		    		def entry=cmisService.getEntryByPath(path)
+		    		if(!entry) {
+		    			cmisService.createFolder(parent.objectId,pathElement,"Created by wfp document service")
+		    			parent=cmisService.getEntryByPath(path)
+		    		} else {
+		    			parent=entry
+		    		}
+	    		}
+	    	}
+	    	
+	    	return cmisPath			
+	
 		} else {
-			println "CMIS disabled, skipping case folder creation"
+			//println "CMIS disabled, skipping case folder creation"
 		}
     }
 
@@ -291,6 +325,7 @@ class DocumentService implements InitializingBean {
 		
 		xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
 		xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
+		xmlDocument.header.cmis.path=document.cmisPath
     	
     	return xmlDocument
     }

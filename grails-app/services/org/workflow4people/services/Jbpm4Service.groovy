@@ -45,7 +45,7 @@ class Jbpm4Service implements InitializingBean {
 	TaskService taskService
 	ExecutionService executionService
 	IdentityService identityService
-	CmisService cmisService
+
 	
 	def domFactory
 	
@@ -117,6 +117,7 @@ class Jbpm4Service implements InitializingBean {
 	def updateWorkflowOut(msg) {		
 		java.lang.Long id=new java.lang.Long (msg.id)
 		def workflow=Workflow.get(id)
+		return null
 	}
 	
 	
@@ -124,13 +125,17 @@ class Jbpm4Service implements InitializingBean {
 	
 	@Queue(name="wfp.jbpm4.in.workflow.update")
 	def updateWorkflowIn(msg) {
-		def processInstance=executionService.findProcessInstanceById(msg.id)				
+		def processInstance=executionService.findProcessInstanceById(msg.id)
+		return null
+
 	}
 	
 	
 	@Queue(name="wfp.jbpm4.out.workflow.delete")
 	def deleteWorkflowOut(msg) {
 		println "Delete workflow message received: ${msg}"
+		return null
+
 	}
 	
 	@Queue(name="wfp.jbpm4.in.workflow.delete")
@@ -227,5 +232,7 @@ class Jbpm4Service implements InitializingBean {
 	def deleteTask(msg) {
 		
 		java.lang.Long id=new java.lang.Long (msg.id)
+		return null
+
 	}
 }

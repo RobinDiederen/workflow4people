@@ -117,7 +117,7 @@ function formDialog(id,controllerName,params) {
     				"bFilter": false,
     				"bJQueryUI": true
     			});
-
+       		
        			$(this).find('div.dataTables_length').prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'fieldTypeItem\', { refresh : \''+tableId+'\', parentId : '+id+'})">New</span></span>&nbsp;');
 
        		}

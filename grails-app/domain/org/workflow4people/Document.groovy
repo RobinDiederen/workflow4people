@@ -53,7 +53,7 @@ class Document {
     	    
     	    documentIndex(sortable:false,sort:'id',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
     	    form(help:'x')
-    	    
+    	    cmisPath(nullable:true)
     }
     @SearchableId
     Long id
@@ -94,6 +94,9 @@ class Document {
     
     String cmisFolderObjectId
     String cmisFolderUrl
+    
+    @SearchableProperty
+    String cmisPath
     
     String xmlDocument
     
