@@ -41,7 +41,7 @@ class WorkflowService {
     			orderBy=" order by task.${params['sort']} ${params['order']}"
     		}
     		println "Orderby: ${orderBy}"
-    		params=[:]
+
     		
     		def taskList=Task.executeQuery("select task from Task task where task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")"+orderBy,authmap,params)
     		def taskCount=Task.executeQuery("select count(*) from Task task where task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap)
