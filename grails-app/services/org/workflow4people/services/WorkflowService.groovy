@@ -49,6 +49,46 @@ class WorkflowService {
     	}
     }
     
+    def isTaskAssignee(taskId,username,params=[:]) {
+      def isTaskAssignee = false
+      
+    	Task.withTransaction { status ->
+    		params+=[fetch:[form:'join',workflow:'join']]
+    	
+    		def task=Task.get(taskId)
+    		if (task && (task.assignee) && (task.assignee.username == username) && !task.completionDate) {
+  	      isTaskAssignee = true
+    		}
+    	}
+    	
+    	return isTaskAssignee
+    }
+    
+    def isTaskCandidate(taskId,username,params=[:]) {
+      def isTaskCandidate = false
+      
+    	Task.withTransaction { status ->
+    		def person=Person.findByUsername(username)
+    		params+=[fetch:[form:'join',workflow:'join']]
+    		def authorities=person.authorities
+    		def authmap=[person:person]
+    		String query=""
+    		authorities.each { a ->
+    			authmap.put(a.authority,a)
+    			query+=" or :${a.authority} in elements(task.candidateGroups)"
+    		}
+
+    		params=[:]
+    		def taskList=Task.executeQuery("select task from Task task where task.id=${taskId} and task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap,params)
+    		
+    	  if (taskList.size() > 0) {
+    	    isTaskCandidate = true
+    	  }
+    	}
+    	
+    	return isTaskCandidate
+    }
+    
     
     
     def getTask(id) {

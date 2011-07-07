@@ -33,6 +33,7 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 import groovy.xml.StreamingMarkupBuilder
 import java.util.Date;
 
+import org.workflow4people.*;
 
 /**
  * <h3>Store document Endpoint</h3> 
@@ -52,6 +53,7 @@ class DocumentQueryEndpoint  {
 	def static namespace = "http://www.workflow4people.org/services"
 	
 	def documentService
+	def workflowService
 	
 	def invoke = { request ->
 		log.debug("Processing DocumentQuery service request ${request.name()}")
@@ -103,6 +105,20 @@ class DocumentQueryEndpoint  {
 				break
 		}				
 		
+		documentHeaders.each {
+	  	def workflow = org.workflow4people.Workflow.findByDocumentAndCompletionDate(Document.get(it.documentId.text()), null)
+	  	if (workflow) {
+	  	  
+	    	def activeTask = org.workflow4people.Task.findByWorkflowAndCompletionDate(workflow, null)
+	    	if (activeTask) {
+	    	  
+	    	  if (workflowService.isTaskAssignee(activeTask.id, userName, [:]) || workflowService.isTaskCandidate(activeTask.id, userName, [:])) {
+	    	    it.taskId = activeTask.id
+	    	  }
+	    	}
+	  	}
+	  }
+	  
 		def response = { DocumentQueryResponse(xmlns:namespace) 
 			{
 				documentList {
