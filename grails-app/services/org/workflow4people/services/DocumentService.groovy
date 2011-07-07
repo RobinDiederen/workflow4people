@@ -378,7 +378,7 @@ class DocumentService implements InitializingBean {
     	return documentheaders
     }
     
-    def luceneSearch(String query, def params,String userName="",boolean userDocumentsOnly=true) {
+    def luceneSearch(String query, def params,String userName="",boolean userDocumentsOnly=true,boolean groupDocumentsOnly=true) {
     	if (userName!="") {
     		if(userDocumentsOnly) {
     			if (query!="" && query!="*") {
@@ -386,7 +386,7 @@ class DocumentService implements InitializingBean {
     			} else {
     				query="user:${userName}"
     			}
-    		} else {
+    		} else if (groupDocumentsOnly) {
         		def groupNames=identityService.findGroupIdsByUser(userName)
         		def groupClause=""
         		groupNames.each { groupClause += " OR groupId:${it}"}

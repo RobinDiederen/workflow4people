@@ -66,6 +66,7 @@ class DocumentQueryEndpoint  {
 		
 		def userName=request.request.documentQuery.user.text()
 		boolean userDocumentsOnly=request.request.documentQuery.userDocumentsOnly.text()!="false"
+		boolean groupDocumentsOnly=request.request.documentQuery.groupDocumentsOnly.text()!="false"
 		int currentPage=1
 		
 		int maxPageLength=100
@@ -88,7 +89,7 @@ class DocumentQueryEndpoint  {
 				if (!queryOrder) queryOrder="auto"	
 				def queryParams=['offset':(currentPage-1)*maxPageLength,'max':maxPageLength,'sort':querySort,'order':queryOrder,'analyzer':'wfp']
 				
-				def queryResult=documentService.luceneSearch(query,queryParams,userName,userDocumentsOnly);
+				def queryResult=documentService.luceneSearch(query,queryParams,userName,userDocumentsOnly,groupDocumentsOnly);
 				theSize=queryResult.total
 				theTotalPages=((theSize -1)/ maxPageLength) +1				
 				
