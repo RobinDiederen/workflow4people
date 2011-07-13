@@ -33,6 +33,7 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 import groovy.xml.StreamingMarkupBuilder
 import java.util.Date;
 
+import org.workflow4people.*;
 
 /**
  * <h3>Store document Endpoint</h3> 
@@ -52,6 +53,7 @@ class DocumentQueryEndpoint  {
 	def static namespace = "http://www.workflow4people.org/services"
 	
 	def documentService
+	def workflowService
 	
 	def invoke = { request ->
 		log.debug("Processing DocumentQuery service request ${request.name()}")
@@ -66,6 +68,7 @@ class DocumentQueryEndpoint  {
 		
 		def userName=request.request.documentQuery.user.text()
 		boolean userDocumentsOnly=request.request.documentQuery.userDocumentsOnly.text()!="false"
+		boolean groupDocumentsOnly=request.request.documentQuery.groupDocumentsOnly.text()!="false"
 		int currentPage=1
 		
 		int maxPageLength=100
@@ -88,7 +91,7 @@ class DocumentQueryEndpoint  {
 				if (!queryOrder) queryOrder="auto"	
 				def queryParams=['offset':(currentPage-1)*maxPageLength,'max':maxPageLength,'sort':querySort,'order':queryOrder,'analyzer':'wfp']
 				
-				def queryResult=documentService.luceneSearch(query,queryParams,userName,userDocumentsOnly);
+				def queryResult=documentService.luceneSearch(query,queryParams,userName,userDocumentsOnly,groupDocumentsOnly);
 				theSize=queryResult.total
 				theTotalPages=((theSize -1)/ maxPageLength) +1				
 				
@@ -102,6 +105,20 @@ class DocumentQueryEndpoint  {
 				break
 		}				
 		
+		documentHeaders.each {
+	  	def workflow = org.workflow4people.Workflow.findByDocumentAndCompletionDate(Document.get(it.documentId.text()), null)
+	  	if (workflow) {
+	  	  
+	    	def activeTask = org.workflow4people.Task.findByWorkflowAndCompletionDate(workflow, null)
+	    	if (activeTask) {
+	    	  
+	    	  if (workflowService.isTaskAssignee(activeTask.id, userName, [:]) || workflowService.isTaskCandidate(activeTask.id, userName, [:])) {
+	    	    it.taskId = activeTask.id
+	    	  }
+	    	}
+	  	}
+	  }
+	  
 		def response = { DocumentQueryResponse(xmlns:namespace) 
 			{
 				documentList {

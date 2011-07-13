@@ -309,9 +309,10 @@ h1 {
 
 div.wf4p-menu { float: left; width: 175px; }
 div.wf4p-menu ul {list-style-type: none;}
-div.wf4p-menu ul li {display:block;min-height:20px;font-weight:bold;color:#68A;}
+div.wf4p-menu ul li {display:block;min-height:20px;font-weight:bold;color:#68A;border-bottom:1px solid #888;}
 div.wf4p-menu ul li div {padding: 5px 0;font-size:12px;}
-div.wf4p-menu ul ul {border-top:1px solid #888;}
+
+div.wf4p-menu ul ul {border-top:0px solid green}
 div.wf4p-menu ul ul li:hover {background-color:#DDD;cursor:pointer;}
 div.wf4p-menu ul ul li {font-weight:bold;color:#666;border-bottom:1px solid #888;}
 div.wf4p-menu ul ul li a {font-size:10px;}

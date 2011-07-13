@@ -117,6 +117,7 @@
 				<element type="string" name ="parameters" minOccurs="0"/>
 				<element type="string" name ="user" />
 				<element type="boolean" name="userDocumentsOnly" />
+				<element type="boolean" name="groupDocumentsOnly" />
 				<element type="string"  name="documentType" minOccurs="0"/>
 				<element type="string" name ="sort" minOccurs="0"/>
 				<element type="wf4p:OrderType" name ="order" minOccurs="0"/>
@@ -271,6 +272,52 @@
 				<element name="givenName" type="string" />
 				<element name="email" type="string" />
 				<element name="features" type="wf4p:Features" />				
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="Users">
+			<sequence>
+				<element name="user" type="wf4p:User" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="User" >
+			<sequence>
+				<element name="name" type="string" />
+				<element name="realName" type="string" />
+				<element name="familyName" type="string" />
+				<element name="givenName" type="string" />
+				<element name="email" type="string" />
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="UserGroups">
+			<sequence>
+				<element name="userGroup" type="wf4p:UserGroup" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="UserGroup" >
+			<sequence>
+				<element name="name" type="string" />
+				<element name="description" type="string" />
+				<element name="type" type="string" />
+			</sequence>
+		</complexType>
+		
+		
+		<complexType name="DocumentTypes">
+			<sequence>
+				<element name="documentType" type="wf4p:DocumentType" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="DocumentType" >
+			<sequence>
+				<element name="name" type="string" />
+				<element name="description" type="string" />
 			</sequence>
 		</complexType>
 		
@@ -789,5 +836,67 @@
 				</sequence>
 			</complexType>		
 		</element>	
+		
+		<element name="FindUsersRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="realName" />							    						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="FindUsersResponse">
+			<complexType>
+				<sequence>
+					<element name="users" type="wf4p:Users" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>	
+		
+		<element name="FindUserGroupsRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />
+					<element name="request">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="name" />							    						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="FindUserGroupsResponse">
+			<complexType>
+				<sequence>
+					<element name="userGroups" type="wf4p:UserGroups" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>	
+		
+		<element name="GetDocumentTypesRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetDocumentTypesResponse">
+			<complexType>
+				<sequence>
+					<element name="documentTypes" type="wf4p:DocumentTypes" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>
 		
 </schema>

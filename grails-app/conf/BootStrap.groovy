@@ -4,11 +4,13 @@ class BootStrap {
 
      def init = { servletContext ->
     println "Bootstrap"
-    println "Authority count:  	${org.workflow4people.Authority.count()}"
+    //println "Authority count:  	${org.workflow4people.Authority.count()}"
      // workaround for GRAILS-4580
+    /*
      ApplicationHolder.application.domainClasses.each { dc ->
          "println ${dc} - count: ${dc.clazz.count()}"
      }
+     */
 /*    
        	org.workflow4people.Action.get(-1)
      	org.workflow4people.ApplicationConfiguration.get(-1)

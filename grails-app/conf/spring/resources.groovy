@@ -18,5 +18,6 @@ beans = {
 	hibernateEventListeners(HibernateEventListeners) {
 	    listenerMap = ['post-commit-insert':eventListener,'post-commit-update':eventListener]
 	                   
-	}
+	}	
 }
+

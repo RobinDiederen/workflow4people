@@ -186,6 +186,8 @@ class TemplateConfigDelegate
 		s=s.replace("<f:","<g:");
 		s=s.replace("</f:","</g:");
 		s=s.replace('*{',"\${");
+		s=s.replace("<ccmis:","<cmis:");
+		s=s.replace("</ccmis:","</cmis:");
 		
 	}
 	

@@ -65,10 +65,14 @@ class GetDocumentEndpoint {
 		} else {
 		  taskId = request.request.taskId.text()
 		  def task=workflowService.getTask(taskId)
-		  task=hibSession.merge(task)
-		  	
-		  documentId=task.workflow.document.id
-		  
+		  if (task.active) {
+			  println "Task active :)" 
+			  task=hibSession.merge(task)		  	
+			  documentId=task.workflow.document.id
+		  } else {
+			  println "Task not active ... :("
+			  throw new Exception("Task already completed")
+		  }
 		}
 		def xmlDocument=documentService.getDocument(documentId)
 		xmlDocument.header.taskId=taskId

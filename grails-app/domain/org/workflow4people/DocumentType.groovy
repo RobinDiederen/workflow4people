@@ -38,7 +38,8 @@ class DocumentType {
     	lastUpdated(nullable:true,edit:false,help:'x')
     	fieldList(help:'x')
     	viewForm(help:'x')
-    	documentIndexField(selectSort:'name',help:'x')    	
+    	documentIndexField(selectSort:'name',help:'x')
+    	cmisPathTemplate(nullable:true)
     }
     
     static hasMany = [documentIndexField:DocumentIndexField]
@@ -51,6 +52,9 @@ class DocumentType {
     String descriptionTemplate
     FieldList fieldList
     Form viewForm
+    
+    String cmisPathTemplate
+    boolean useCmis=false
     
     String toString() {
 		  return name;

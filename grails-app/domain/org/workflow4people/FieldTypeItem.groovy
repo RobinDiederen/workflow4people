@@ -25,6 +25,7 @@ package org.workflow4people
  * @author Joost Horward
  */
 class FieldTypeItem {
+	
 	static belongsTo = [fieldType:FieldType]	
    	static listProperties=['id','itemPosition','label','value']
 
