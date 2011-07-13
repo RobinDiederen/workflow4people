@@ -23,7 +23,7 @@
 		
 		} );
 	
-		$("div.datatable div.fg-toolbar div.dataTables_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',{ refresh : \''+tableId+'\'})">New</span></span>&nbsp;');
+		$("div.datatable div.fg-toolbar div.dataTables_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',{ refresh : \''+tableId+'\'}, null)">New</span></span>&nbsp;');
         </jq:jquery>       
     </head>
     

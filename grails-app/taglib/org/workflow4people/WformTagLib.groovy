@@ -110,18 +110,36 @@ class WformTagLib {
 		def propertyName=attrs.propertyName;
 		def property=domainClass.getPropertyByName(propertyName)
 		def naturalName=property.naturalName;
-
 		
-		
-		out <<"""<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName} ${attrs.class}">
+		if (attrs.vertical == "true") {
+			out <<"""
+			<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName} ${attrs.class}">
 				<td valign="top" class="name">
-        		<label for="name">${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</label>
-        		</td>
-        		<td valign="top" class="value ${attrs.class}">"""
-		out << body()
-		
-		out << """</td><td>&nbsp;<span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span>                
-			</td></tr>"""		
+					<label for="name">${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</label>
+				</td>
+				<td>&nbsp;
+				</td>
+				<td>
+					<p align=right><span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span></p>
+				</td>
+			</tr>
+			<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName} ${attrs.class}">
+				<td valign="top" colspan="3" class="value ${attrs.class}">"""
+			out << body()
+			out << """
+				</td>
+			</tr>"""			
+		} else {		
+			out <<"""<tr class="prop object-${domainPropertyName} property-${domainPropertyName}-${propertyName} property-${propertyName} ${attrs.class}">
+					<td valign="top" class="name">
+	        		<label for="name">${g.message(code:"${domainPropertyName}.${propertyName}.label", default:"${naturalName}")}</label>
+	        		</td>
+	        		<td valign="top" class="value ${attrs.class}">"""
+			out << body()
+			
+			out << """</td><td>&nbsp;<span class="help-icon help action" title="${g.message(code:"${domainPropertyName}.${propertyName}.help",default:'Help!')}" href="#">&nbsp;</span>                
+				</td></tr>"""
+		}		
 	
 
 		
@@ -250,8 +268,8 @@ class WformTagLib {
 	}
 	
 	def select = { attrs ->
-	
-		out << row (object:attrs.object,propertyName:attrs.propertyName) {
+
+		out << row (object:attrs.object,propertyName:attrs.propertyName, vertical:attrs.vertical) {
 			def multiple = attrs.multiple ? attrs.multiple : "no"
 			def cssClass=attrs.class ? attrs.class : ""
 			multiple=""
@@ -281,6 +299,8 @@ class WformTagLib {
 					if (attrs["class"]) opts.put("class",attrs["class"])
 					if (attrs["optionKey"]) opts.put("optionKey",attrs["optionKey"])
 					if (attrs["multiple"]) opts.put("multiple",attrs["multiple"])
+					if (attrs["style"]) opts.put("style", attrs["style"])
+					
 					if (property.isOptional()) {
 						// yes. ''  for strings, null for int's
 						opts.put("noSelection",['': '-'])

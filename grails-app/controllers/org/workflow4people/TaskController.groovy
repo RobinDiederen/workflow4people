@@ -21,16 +21,70 @@ import grails.plugins.springsecurity.Secured
 	    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
 		def list = {
-			render (view:'/datatable/list', model:[dc:Task,controllerName:'task',request:request])
+			render (view:'/datatable/list', model:[dc:Task,controllerName:'task',request:request,jsonlist:'jsonlist'])
 		}
 			
 		def jsonlist = {
-			render listService.jsonlist(Task,params,request) as JSON
+			//render listService.jsonlist(Task,params,request) as JSON
+			def actions= {  doc,env -> """<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'task', { refresh : '${env.detailTableId}'}, null)">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'task',{ refresh : '${env.detailTableId}', dialogname : 'assigndialog', submitname : 'submitassigndialog' }, null)">assign</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${doc.id},'task',{ refresh : '${env.detailTableId}'})">&times;</span>""" }
+			render listService.jsonlist(Task,params,request,null,actions) as JSON
 		}
 
 	    def dialog = { return dialogService.edit(Task,params) }
 		
 		def submitdialog = { render dialogService.submit(Task,params) as JSON }
+		
+		def assigndialog = { return dialogService.edit(Task,params) }
+		
+		def submitassigndialog = { 
+			def res
+			def taskInstance
+			
+			if (params.id!=null && params.id!="null" ) {
+				taskInstance = Task.get(params.id)
+			} else {
+				taskInstance = new Task()
+				taskInstance.properties = params
+			}
+
+			if (taskInstance) {
+				Authority[] currentCandidateGroups = taskInstance.getCandidateGroups()
+				Person[] currentCandidateUsers = taskInstance.getCandidateUsers()
+				taskInstance.properties = params
+		
+				res= dialogService.submit(Task,params,taskInstance)
+
+				if (res.result.success == true) {
+					//Delete CandidateGroups 
+					currentCandidateGroups.each { Authority curCandidateGroup ->
+						def deleteCandidateGroup = true
+						Authority[] newCandidateGroups = params.candidateGroups ? taskInstance.getCandidateGroups() : []
+						newCandidateGroups.each { Authority newCandidateGroup ->
+							if (curCandidateGroup.getId() == newCandidateGroup.getId()) {
+								deleteCandidateGroup = false
+							}
+						}
+						if (deleteCandidateGroup) {
+							taskInstance.removeFromCandidateGroups(curCandidateGroup)
+						}
+					}
+					//Delete CandidateUsers
+					currentCandidateUsers.each { Person curCandidateUser ->
+						def deleteCandidateUser = true
+						Person[] newCandidateUsers = params.candidateUsers ? taskInstance.getCandidateUsers() : []
+						newCandidateUsers.each { Person newCandidateUser ->
+							if (curCandidateUser.getId() == newCandidateUser.getId()) {
+								deleteCandidateUser = false
+							}
+						}
+						if (deleteCandidateUser) {
+							taskInstance.removeFromCandidateUsers(curCandidateUser)
+						}
+					}
+				}
+			}
+			render res as JSON
+		}
 		
 		def delete = { render dialogService.delete(Task,params) as JSON }
 		

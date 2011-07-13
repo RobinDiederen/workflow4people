@@ -1,4 +1,4 @@
-<wf:form title="Document index field" >
+<wf:form title="Document index field" width="795px">
 	<wf:table>		                            
 		<wf:textField object="${documentIndexFieldInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${documentIndexFieldInstance}" propertyName="name" mode="edit" />

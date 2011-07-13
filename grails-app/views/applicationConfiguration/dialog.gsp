@@ -1,4 +1,4 @@
-<wf:form title="Configuration item" >
+<wf:form title="Configuration item" width="730px">
 	<wf:table>		                            
 		<wf:textField object="${applicationConfigurationInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${applicationConfigurationInstance}" propertyName="configKey" mode="edit" class="wide"/>

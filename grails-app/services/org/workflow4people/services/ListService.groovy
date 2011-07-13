@@ -60,9 +60,9 @@ class ListService {
         		}	            		
         		def baseUrl=request.contextPath
         		if(!actions) {
-        			actions= { dok -> """<span class="list-action-button ui-state-default" onclick="formDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'})">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'})">&times;</span>""" }
+        			actions= { dok, env -> """<span class="list-action-button ui-state-default" onclick="formDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'}, null)">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="deleteDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span>""" }
         		}
-        		inLine+=actions(doc)
+        		inLine+=actions(doc,['detailTableId':detailTableId])
         		def aaLine=[inLine]
         		aaData+=(aaLine)
     		}
