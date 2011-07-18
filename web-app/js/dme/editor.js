@@ -421,7 +421,7 @@ function workflowContextMenu( node ) {
 			"delete" : {
 									"label": 'Delete',
 									"action" : function( node ) {this.remove(node) }
-								},
+								}
 	
 	}
 	
@@ -434,7 +434,7 @@ function workflowContextMenu( node ) {
 				"delete" : {
 										"label": 'Delete',
 										"action" : function( node ) {this.remove(node) }
-									},
+									}
 		
 		}
 		
@@ -598,7 +598,7 @@ $(function() {
 								"delete" : {
             									"label": 'Delete',
             									"action" : function( node ) {this.remove(node) }
-            								},
+            								}
             								
             			
             				

@@ -52,10 +52,18 @@ function logMessage(message) {
 	
 }
 
-function formDialog(id,controllerName,params) {
-	var urlId=id+obj2ParamStr(params);
+function formDialog(id,controllerName, options ,urlParams) {
+	var urlId=id+obj2ParamStr(urlParams);
+	
+	var dialogName = (options != null && options["dialogname"] != null) ? options["dialogname"] : "dialog";
+	var submitName = (options != null && options["submitname"] != null) ? options["submitname"] : "submitdialog";
+	var refreshTableKey = (options != null && options["refresh"] != null) ? options["refresh"] : "NO_REFRESH";
+			 
+	 theUrl=wfp.baseUrl+'/'+controllerName+'/'+dialogName+'/'+urlId	 	
 	 
-	 theUrl=wfp.baseUrl+'/'+controllerName+'/dialog/'+urlId	 	
+//	 var tstDlg = $("<div></div>").load(theUrl, function() {
+//		 $(this).find(".multiselect").multiselect();
+//	 }).dialog();
 	 
 	 var dialogHTML = $.ajax({
 		  url: theUrl,
@@ -76,12 +84,12 @@ function formDialog(id,controllerName,params) {
 		 buttons: { 
 		 	"Save": function(e) {
 			 	var formData=theDialog.find("form").serialize();
-			 	$.post(wfp.baseUrl+"/"+controllerName+"/submitdialog/"+urlId,formData, function(data) 
+			 	$.post(wfp.baseUrl+"/"+controllerName+"/"+submitName+"/"+urlId,formData, function(data) 
 			 		{
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
 			 		
-			 		refreshDataTable(params["refresh"], dataTableHashList, (id ? false : true));
+			 		refreshDataTable(refreshTableKey, dataTableHashList, (id ? false : true));
 			 		
 			 		if(result.success){
 				 		theDialog.dialog("close");
@@ -104,12 +112,16 @@ function formDialog(id,controllerName,params) {
        		$(this).find(".datepicker").datepicker({ dateFormat: "yy-mm-dd" , changeMonth: true, changeYear:true});
        		$(this).find(".dialogtabs").tabs();
        		$(this).find(".multiselect").multiselect();
-     		
+       		
        		var dataTable = $(this).find('.detailTable');
-       		if (dataTable.size() > 0) {
-       			var tableId = dataTable.attr('id');
-       			var jsonUrl = $(this).find('.detailTable').attr("jsonUrl");
-       			dataTableHashList[tableId] = dataTable.dataTable({
+       		
+       		$(this).find('.detailTable').each(function (index) {
+       			var curMatch = $(this);
+       			var tableId = curMatch.attr('id');
+       			var jsonUrl = curMatch.attr("jsonUrl");
+       			var controller = jsonUrl.split('/')[1]; //extract controller name from json url
+       			
+       			dataTableHashList[tableId] = curMatch.dataTable({
     				"bProcessing": true,
     				"bServerSide": true,
     				"sAjaxSource": wfp.baseUrl+jsonUrl,
@@ -117,11 +129,13 @@ function formDialog(id,controllerName,params) {
     				"bFilter": false,
     				"bJQueryUI": true
     			});
-       		
-       			$(this).find('div.dataTables_length').prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'fieldTypeItem\', { refresh : \''+tableId+'\', parentId : '+id+'})">New</span></span>&nbsp;');
-
-       		}
-
+       			
+       			// Add NEW button ("parent()" is the div with class dataTables_wrapper)
+       			if (id != null) {
+       				curMatch.parent().find('div.dataTables_length').prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\''+controller+'\', { refresh : \''+tableId+'\'}, { parentId : '+id+'})">New</span></span>&nbsp;');
+       			}
+       			
+       		});
        		
        		$(this).find(".help").cluetip({
        			splitTitle: '|',  
@@ -137,8 +151,8 @@ function formDialog(id,controllerName,params) {
 }
 
 
-function deleteDialog(id,controllerName,params) {
-	var urlId=id+obj2ParamStr(params);
+function deleteDialog(id,controllerName, options ,urlParams) {
+	var urlId=id+obj2ParamStr(urlParams);
 	 
 	 var dialogHTML = '<div "title="Confirm delete"><form><div class="errors" style="display:none;"></div><div>Are you sure you want to delete '+controllerName+' '+id+' ?</div></form></div>'	 
 	 
@@ -154,7 +168,7 @@ function deleteDialog(id,controllerName,params) {
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
 			 		
-			 		refreshDataTable(params["refresh"], dataTableHashList, false);
+			 		refreshDataTable(options["refresh"], dataTableHashList, false);
 			 		
 			 		if(result.success){
 				 		theDialog.dialog("close");

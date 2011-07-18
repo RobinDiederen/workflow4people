@@ -1,4 +1,4 @@
-<wf:form title="Form item" >
+<wf:form title="Form item" width="625px">
 	<wf:table>		                            
 		<wf:textField object="${formItemInstance}" propertyName="id" mode="show" />
 		<wf:domainObject object="${formItemInstance}" propertyName="form" mode="show" />

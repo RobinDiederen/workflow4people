@@ -64,4 +64,11 @@ class Task {
 		return completionDate ==null
 	}
 	
+	def getTransitionsArray() {
+		if (transitions) {
+			return transitions.split(',')
+		} else {
+			return []
+		}
+	}
 }

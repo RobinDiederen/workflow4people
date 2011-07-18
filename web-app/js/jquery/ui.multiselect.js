@@ -126,7 +126,14 @@ $.widget("ui.multiselect", {
 		this.element.show();
 		this.container.remove();
 
-		$.widget.prototype.destroy.apply(this, arguments);
+		//$.widget.prototype.destroy.apply(this, arguments);
+        if ($.Widget === undefined)
+            $.widget.prototype.destroy.apply(this, arguments);
+        else {
+            $.Widget.prototype.destroy.apply(this, arguments);
+            return this;
+        }
+        
 	},
 	_populateLists: function(options) {
 		this.selectedList.children('.ui-element').remove();

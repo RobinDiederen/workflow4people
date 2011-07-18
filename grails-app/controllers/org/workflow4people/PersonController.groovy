@@ -51,9 +51,6 @@ class PersonController {
     
     def dialog = { return dialogService.edit(Person,params) }
 	
-	def xsubmitdialog = { render dialogService.submit(Person,params) as JSON }
-    
-    
     def submitdialog = {
     	def res
     	def personInstance
@@ -72,12 +69,13 @@ class PersonController {
 	     			personInstance.passwd = authenticateService.encodePassword(params.passwd)     			    			
 	     		 }
 	             res= dialogService.submit(Person,params,personInstance)
-	             println "RESULT: ${res.result.success}"
+
 	             if (res.result.success) {
 	 				currentPersonAuth.each { Authority currentAuthority -> 
-	 					def deletePersonAuthority = true
-	 					personInstance.getAuthorities().each { Authority newAuthority ->
-	 						if (currentAuthority.getId() == newAuthority.getId()) {
+						 def deletePersonAuthority = true
+						 Authority[] newPersonAuth = params.authorities ? personInstance.getAuthorities() : []
+						 newPersonAuth.each { Authority newAuthority ->
+ 						if (currentAuthority.getId() == newAuthority.getId()) {
 	 							deletePersonAuthority = false;
 	 						}
 	 					}

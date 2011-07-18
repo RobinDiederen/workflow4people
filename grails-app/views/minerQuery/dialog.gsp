@@ -3,9 +3,9 @@
 		<wf:tab name="Details" object="${minerQueryInstance}">		                            
 	        <wf:textField object="${minerQueryInstance}" propertyName="id" mode="show" />                                                        
 	        <wf:textField object="${minerQueryInstance}" propertyName="name" mode="edit" />                            
-	        <wf:textField object="${minerQueryInstance}" propertyName="title" class="extrawide" mode="edit" />
-	        <wf:textField object="${minerQueryInstance}" propertyName="description" class="extrawide" mode="edit" />
-	        <wf:textField object="${minerQueryInstance}" propertyName="explanationMessage" class="extrawide" mode="edit" />	           		
+	        <wf:textField object="${minerQueryInstance}" propertyName="title" class="wide" mode="edit" />
+	        <wf:textArea object="${minerQueryInstance}" propertyName="description" mode="edit" />
+	        <wf:textArea object="${minerQueryInstance}" propertyName="explanationMessage" mode="edit" />	           		
 		</wf:tab>
 		<wf:tab name="Queries" object="${minerQueryInstance}">
 			<wf:textArea object="${minerQueryInstance}" propertyName="query" mode="edit" />
