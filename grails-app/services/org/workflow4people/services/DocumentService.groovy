@@ -54,7 +54,7 @@ class DocumentService implements InitializingBean {
 	TaskService taskService
 	ExecutionService executionService
 	IdentityService identityService
-	def cmisService
+	def cmisServiceProxy
 	
 	def domFactory
 	
@@ -216,11 +216,11 @@ class DocumentService implements InitializingBean {
     	def cmisEnabled= (val.toLowerCase()=="true" || val=="1")
     	
 	    if (cmisEnabled && documentInstance.documentType.useCmis) {
-	    	if (!cmisService.initialized) {
+	    	if (!cmisServiceProxy.initialized) {
 	    		String cmisPassword= ApplicationConfiguration.findByConfigKey('cmis.password').configValue
 	    		String cmisUsername= ApplicationConfiguration.findByConfigKey('cmis.username').configValue
 	    		String cmisUrl = ApplicationConfiguration.findByConfigKey('cmis.url').configValue
-	    		cmisService.init(cmisUrl,cmisUsername,cmisPassword)
+	    		cmisServiceProxy.init(cmisUrl,cmisUsername,cmisPassword)
 	    	}
 			println "Creating case ${documentInstance.id}"
 		  	def cmisPathTemplate=documentInstance.documentType.cmisPathTemplate
@@ -232,17 +232,17 @@ class DocumentService implements InitializingBean {
 	    	
 	    	def pathElements=cmisPath.split("/")
 	    	
-	    	def parent=cmisService.getEntryByPath("/")
+	    	def parent=cmisServiceProxy.getEntryByPath("/")
 	    	
 	    	def path=""
 	    	pathElements.each { pathElement ->
 	    		if (pathElement.length()>0) {
 	
 		    		path+="/"+pathElement
-		    		def entry=cmisService.getEntryByPath(path)
+		    		def entry=cmisServiceProxy.getEntryByPath(path)
 		    		if(!entry) {
-		    			cmisService.createFolder(parent.objectId,pathElement,"Created by wfp document service")
-		    			parent=cmisService.getEntryByPath(path)
+		    			cmisServiceProxy.createFolder(parent.objectId,pathElement,"Created by wfp document service")
+		    			parent=cmisServiceProxy.getEntryByPath(path)
 		    		} else {
 		    			parent=entry
 		    		}

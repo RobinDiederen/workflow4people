@@ -18,6 +18,13 @@ beans = {
 	hibernateEventListeners(HibernateEventListeners) {
 	    listenerMap = ['post-commit-insert':eventListener,'post-commit-update':eventListener]
 	                   
-	}	
+	}
+	
+	
+		cmisServiceProxy(org.springframework.aop.scope.ScopedProxyFactoryBean) {
+			targetBeanName = 'cmisService'
+			proxyTargetClass = true
+	   }
+	   
 }
 

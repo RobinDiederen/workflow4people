@@ -111,13 +111,10 @@ security {
 
 cmis {
 
-	//baseUrl="http://localhost:8080/alfresco/s/cmis"
-	baseUrl="http://mercury:8080/alfresco/s/cmis"
-	username="wfp"
-	password="wfp"
+	baseUrl="http://localhost:8080/alfresco/s/cmis"
 	//baseUrl="http://cmis.alfresco.com:80/service/cmis"
-	//username="admin"
-	//password="admin"
+	username="admin"
+	password="admin"
 		
 
 

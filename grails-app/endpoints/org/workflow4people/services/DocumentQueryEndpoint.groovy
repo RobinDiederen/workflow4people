@@ -106,6 +106,7 @@ class DocumentQueryEndpoint  {
 		}				
 		
 		documentHeaders.each {
+		
 	  	def workflow = org.workflow4people.Workflow.findByDocumentAndCompletionDate(Document.get(it.documentId.text()), null)
 	  	if (workflow) {
 	  	  
@@ -117,6 +118,7 @@ class DocumentQueryEndpoint  {
 	    	  }
 	    	}
 	  	}
+	  	
 	  }
 	  
 		def response = { DocumentQueryResponse(xmlns:namespace) 

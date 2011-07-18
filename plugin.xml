@@ -11,7 +11,6 @@ Brief description of the plugin.
     <resource>Config</resource>
     <resource>DataSource</resource>
     <resource>Searchable</resource>
-    <resource>SecurityConfig</resource>
     <resource>UrlMappings</resource>
     <resource>spring.resources</resource>
     <resource>org.workflow4people.ActionController</resource>
@@ -42,16 +41,21 @@ Brief description of the plugin.
     <resource>org.workflow4people.NamespaceController</resource>
     <resource>org.workflow4people.PersonController</resource>
     <resource>org.workflow4people.RequestmapController</resource>
+    <resource>org.workflow4people.RestController</resource>
     <resource>org.workflow4people.RoleController</resource>
     <resource>org.workflow4people.SearchController</resource>
     <resource>org.workflow4people.StatusController</resource>
+    <resource>org.workflow4people.TaskController</resource>
     <resource>org.workflow4people.Wf4pHistoryProcessInstanceController</resource>
     <resource>org.workflow4people.Wf4pHistoryTaskController</resource>
     <resource>org.workflow4people.Wf4pProcessDefinitionController</resource>
     <resource>org.workflow4people.Wf4pProcessInstanceController</resource>
     <resource>org.workflow4people.Wf4pTaskController</resource>
     <resource>org.workflow4people.Wf4pVariableController</resource>
+    <resource>org.workflow4people.WorkflowController</resource>
     <resource>org.workflow4people.WorkflowDefinitionController</resource>
+    <resource>org.workflow4people.WorkflowEngineController</resource>
+    <resource>org.workflow4people.WorkflowLogController</resource>
     <resource>org.workflow4people.WorkflowPermissionController</resource>
     <resource>org.workflow4people.WorkflowWizardController</resource>
     <resource>org.workflow4people.Action</resource>
@@ -78,7 +82,11 @@ Brief description of the plugin.
     <resource>org.workflow4people.Person</resource>
     <resource>org.workflow4people.Requestmap</resource>
     <resource>org.workflow4people.Role</resource>
+    <resource>org.workflow4people.Task</resource>
+    <resource>org.workflow4people.Workflow</resource>
     <resource>org.workflow4people.WorkflowDefinition</resource>
+    <resource>org.workflow4people.WorkflowEngine</resource>
+    <resource>org.workflow4people.WorkflowLog</resource>
     <resource>org.workflow4people.WorkflowPermission</resource>
     <resource>WorkflowServiceEndpoint</resource>
     <resource>org.workflow4people.services.AssignTaskEndpoint</resource>
@@ -97,28 +105,33 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.HasAccessToFormEndpoint</resource>
     <resource>org.workflow4people.services.MinerDrilldownEndpoint</resource>
     <resource>org.workflow4people.services.MinerQueryEndpoint</resource>
+    <resource>org.workflow4people.services.OldGetTaskEndpoint</resource>
+    <resource>org.workflow4people.services.OldTaskQueryEndpoint</resource>
     <resource>org.workflow4people.services.StartProcessInstanceEndpoint</resource>
     <resource>org.workflow4people.services.StoreDocumentEndpoint</resource>
     <resource>org.workflow4people.services.TakeTaskEndpoint</resource>
     <resource>org.workflow4people.services.TaskQueryEndpoint</resource>
     <resource>org.workflow4people.services.BusinessCalendarService</resource>
-    <resource>org.workflow4people.services.CmisService</resource>
+    <resource>org.workflow4people.services.DialogService</resource>
     <resource>org.workflow4people.services.DocumentService</resource>
     <resource>org.workflow4people.services.EchoService</resource>
     <resource>org.workflow4people.services.FormGeneratorService</resource>
     <resource>org.workflow4people.services.FormService</resource>
+    <resource>org.workflow4people.services.Jbpm4Service</resource>
+    <resource>org.workflow4people.services.ListService</resource>
     <resource>org.workflow4people.services.MinerService</resource>
+    <resource>org.workflow4people.services.OldCmisService</resource>
     <resource>org.workflow4people.services.SecurityService</resource>
     <resource>org.workflow4people.services.SetDueDateService</resource>
     <resource>org.workflow4people.services.SoapService</resource>
     <resource>org.workflow4people.services.TemplateService</resource>
     <resource>org.workflow4people.services.Wf4pConfigService</resource>
     <resource>org.workflow4people.services.WorkflowDefinitionService</resource>
+    <resource>org.workflow4people.services.WorkflowService</resource>
     <resource>org.workflow4people.FormTagLib</resource>
     <resource>org.workflow4people.WformTagLib</resource>
   </resources>
   <dependencies>
-    <plugin name='acegi' version='0.5.2' />
     <plugin name='jquery' version='1.4.3.2' />
     <plugin name='springws' version='0.5.0.1' />
     <plugin name='searchable' version='0.5.5' />

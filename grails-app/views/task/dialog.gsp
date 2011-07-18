@@ -18,6 +18,7 @@
 			
 			
 	        <wf:textField object="${taskInstance}" propertyName="priority" mode="edit" />
+	        <wf:textField object="${taskInstance}" propertyName="cssClass" mode="edit" />
 	        
 			<wf:date object="${taskInstance}" propertyName="dateCreated" mode="show" />
 			<wf:date object="${taskInstance}" propertyName="lastUpdated" mode="show" />

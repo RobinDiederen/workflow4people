@@ -17,7 +17,8 @@ class Workflow {
 		dateCreated(nullable:true,edit:false,help:'x')
 		dueDate(edit:false,nullable:true)
 		completionDate(nullable:true)
-		lastUpdated(nullable:true,edit:false,help:'x')        
+		lastUpdated(nullable:true,edit:false,help:'x')
+		status(nullable:true)        
 	}
 	
 	WorkflowEngine workflowEngine
@@ -33,6 +34,8 @@ class Workflow {
 	Date completionDate
 	
 	String externalId
+	
+	String status
 	
 	boolean noMessage=false
 	                   	

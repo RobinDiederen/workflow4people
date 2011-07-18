@@ -10,6 +10,8 @@
 			<wf:domainObject object="${workflowInstance}" propertyName="document" mode="edit" sort="id"/>
 			
 	        <wf:textField object="${workflowInstance}" propertyName="priority" mode="edit" />
+	        <wf:textField object="${workflowInstance}" propertyName="status" mode="edit" />
+	        
 	        
 			<wf:date object="${workflowInstance}" propertyName="dateCreated" mode="show" />
 			<wf:date object="${workflowInstance}" propertyName="lastUpdated" mode="show" />

@@ -30,12 +30,14 @@ class Task {
 		externalWorkflowId(nullable:true)
 		workflow(nullable:true)
 		priority(nullable:true)
+		cssClass(nullable:true)
     }
 	
 	static hasMany = [candidateUsers: Person,candidateGroups:Authority]
 	String name
 	String description
 	int priority
+	String cssClass
 	
 	Person assignee
 	
