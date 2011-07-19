@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
-    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',contextPath:'')}" />
+    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp',contextPath:'')}" />
 	
         <%-- Workflow4people style --%>
 		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />	
@@ -35,7 +35,7 @@
         <g:javascript src="jquery/jquery-ui-1.8.custom.min.js" contextPath="" plugin="wfp" />
         <g:javascript src="jquery/jquery.timers-1.2.js"  contextPath="" plugin="wfp" />
         <g:javascript src="jquery/jquery.cluetip-patched.js"  contextPath="" plugin="wfp" />
-        <g:javascript src="jquery/jquery.dataTables.js"  contextPath="" />
+        <g:javascript src="jquery/jquery.dataTables.js"  contextPath="" plugin='wfp'/>
         
         <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
         <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>

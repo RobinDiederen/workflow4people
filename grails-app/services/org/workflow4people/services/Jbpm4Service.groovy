@@ -29,6 +29,7 @@ import org.jbpm.api.IdentityService;
 import org.jbpm.api.TaskService;
 import org.jbpm.api.* 
 import groovy.xml.StreamingMarkupBuilder
+import grails.plugin.jms.Queue
 
 /**
  * JBPM4 JMS message service class

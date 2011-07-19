@@ -32,7 +32,7 @@ class PersonController {
 
     static allowedMethods = [save: "POST", update: "POST"]
                              
-    def authenticateService
+    def springSecurityService
 	
 	def listService
 	def dialogService
@@ -66,7 +66,7 @@ class PersonController {
 	 			Authority[] currentPersonAuth = personInstance.getAuthorities()
 	             personInstance.properties = params
 	             if (!params.passwd.equals(oldPassword)) {
-	     			personInstance.passwd = authenticateService.encodePassword(params.passwd)     			    			
+	     			personInstance.passwd = springSecurityService.encodePassword(params.passwd)     			    			
 	     		 }
 	             res= dialogService.submit(Person,params,personInstance)
 
@@ -115,7 +115,7 @@ class PersonController {
 
     def save = {
         def personInstance = new Person(params)
-        personInstance.passwd = authenticateService.encodePassword(params.passwd)
+        personInstance.passwd = springSecurityServiceicateService.encodePassword(params.passwd)
         if (personInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
             redirect(action: "show", id: personInstance.id)
@@ -165,8 +165,8 @@ class PersonController {
 			Authority[] currentPersonAuth = personInstance.getAuthorities()
             personInstance.properties = params
             if (!params.passwd.equals(oldPassword)) {
-    			personInstance.passwd = authenticateService.encodePassword(params.passwd)
-    			def test=authenticateService.encodePassword(params.passwd)    			
+    			personInstance.passwd = springSecurityService.encodePassword(params.passwd)
+    			def test=springSecurityService.encodePassword(params.passwd)    			
     		}
             if (!personInstance.hasErrors() && personInstance.save(flush: true)) {
 				currentPersonAuth.each { Authority currentAuthority -> 
