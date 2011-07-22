@@ -5,7 +5,8 @@
         <title><g:layoutTitle default="workflow4people" /></title>
                 
         <%-- css from used modules --%>
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />
+<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />--%>
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
     	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp',contextPath:'')}" />
@@ -40,7 +41,8 @@
         <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
         <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>
         
-        <g:javascript src="jquery/ui.multiselect.js"  contextPath="" plugin="wfp" />
+<%--        <g:javascript src="jquery/ui.multiselect.js"  contextPath="" plugin="wfp" />--%>
+        <g:javascript src="jquery/jquery.ui.altselect.js"  contextPath="" plugin="wfp" /> 
         <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
         
         <jq:jquery>
@@ -86,7 +88,7 @@
           	});
           	
           	$.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/'});
-			$(".multiselect").multiselect();
+			//$(".multiselect").multiselect();
 			//$('#switcher').themeswitcher();
 			$(".help").cluetip({splitTitle: '|'});
 			

@@ -8,8 +8,7 @@
 		<wf:textField object="${personInstance}" propertyName="email" mode="edit" class="wide"/>
 		<wf:checkBox object="${personInstance}" propertyName="emailShow" mode="edit" />
 		<wf:textField object="${personInstance}" propertyName="passwd" mode="edit" class="wide"/>
-		
-		<wf:select multiple="true" class="multiselect" optionKey="id" object="${personInstance}" from="${org.workflow4people.Authority.list(sort:'authority')}" propertyName="authorities" mode="edit" vertical="true" style="width:540px; height:200px;"/>		
+		<wf:select multiple="true" class="altselect" optionKey="id" object="${personInstance}" from="${org.workflow4people.Authority.list(sort:'authority')}" propertyName="authorities" mode="edit"/>
 		<wf:textArea object="${personInstance}" propertyName="description" mode="edit" />		
 	</wf:table>		
 </wf:form>
