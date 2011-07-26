@@ -6,16 +6,6 @@ class UrlMappings {
 		  }
 	  }
 	  
-	  "/rest/$service/$serviceaction"(controller:"rest") {
-	    action=[POST:"restpost"]
-	  }
-	  
-	  "/rest/$controller/$id?" {		  
-		  action = [GET:"restget",PUT:"restput",POST:"restpost",DELETE:"restdelete"]
-		  constraints {
-			  
-		  }
-	  }
 	  /*
 	  "/" {
 		  controller=""
