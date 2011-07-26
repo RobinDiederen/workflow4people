@@ -1,7 +1,4 @@
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-
 class WfpGrailsPlugin {
     // the plugin version
     def version = "0.7.0"
@@ -31,57 +28,6 @@ Brief description of the plugin.
 
     def doWithSpring = {
         // TODO Implement runtime spring config (optional)
-		/*
-		def config = ConfigurationHolder.config
-		
-			  def springSecurityConfig = SpringSecurityUtils.securityConfig
-		
-			  
-		
-			  springSecurityConfig.providerNames = config.grails.plugins.springsecurity.providerNames
-		
-			  
-		
-			  springSecurityConfig.useSecurityEventListener = config.grails.plugins.springsecurity.useSecurityEventListener
-		
-			  springSecurityConfig.active = config.grails.plugins.springsecurity.active
-		
-			  springSecurityConfig.password.algorithm = config.grails.plugins.springsecurity.password.algorithm
-		
-			  
-		
-			  springSecurityConfig.userLookup.userDomainClassName = config.grails.plugins.springsecurity.userLookup.userDomainClassName
-		
-			  springSecurityConfig.authority.className = config.grails.plugins.springsecurity.authority.className
-		
-			  springSecurityConfig.userLookup.passwordPropertyName = config.grails.plugins.springsecurity.userLookup.passwordPropertyName
-		
-			  
-		
-			  springSecurityConfig.ldap.active = config.grails.plugins.springsecurity.ldap.active
-		
-			  springSecurityConfig.ldap.authorities.retrieveDatabaseRoles = config.grails.plugins.springsecurity.ldap.authorities.retrieveDatabaseRoles
-		
-			  springSecurityConfig.ldap.authorities.retrieveGroupRoles = config.grails.plugins.springsecurity.ldap.authorities.retrieveGroupRoles
-		
-			  springSecurityConfig.ldap.context.server = config.grails.plugins.springsecurity.ldap.context.server
-		
-			  springSecurityConfig.ldap.context.managerDn = config.grails.plugins.springsecurity.ldap.context.managerDn
-		
-			  springSecurityConfig.ldap.context.managerPassword = config.grails.plugins.springsecurity.ldap.context.managerPassword
-		
-			  springSecurityConfig.ldap.search.base = config.grails.plugins.springsecurity.ldap.search.base
-		
-			  springSecurityConfig.ldap.search.filter = config.grails.plugins.springsecurity.ldap.search.filter
-		
-			  springSecurityConfig.ldap.search.searchSubtree = config.grails.plugins.springsecurity.ldap.search.searchSubtree
-		
-			  springSecurityConfig.ldap.authorities.groupSearchBase = config.grails.plugins.springsecurity.ldap.authorities.groupSearchBase
-		
-			  springSecurityConfig.ldap.ldap.authorities.groupSearchFilter = config.grails.plugins.springsecurity.ldap.ldap.authorities.groupSearchFilter
-		
-			  springSecurityConfig.ldap.auth.useAuthPassword = config.grails.plugins.springsecurity.ldap.auth.useAuthPassword
-			  */
     }
 
     def doWithDynamicMethods = { ctx ->
