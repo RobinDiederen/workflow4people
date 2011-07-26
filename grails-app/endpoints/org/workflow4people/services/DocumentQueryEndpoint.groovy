@@ -105,22 +105,6 @@ class DocumentQueryEndpoint  {
 				break
 		}				
 		
-		documentHeaders.each {
-		
-	  	def workflow = org.workflow4people.Workflow.findByDocumentAndCompletionDate(Document.get(it.documentId.text()), null)
-	  	if (workflow) {
-	  	  
-	    	def activeTask = org.workflow4people.Task.findByWorkflowAndCompletionDate(workflow, null)
-	    	if (activeTask) {
-	    	  
-	    	  if (workflowService.isTaskAssignee(activeTask.id, userName, [:]) || workflowService.isTaskCandidate(activeTask.id, userName, [:])) {
-	    	    it.taskId = activeTask.id
-	    	  }
-	    	}
-	  	}
-	  	
-	  }
-	  
 		def response = { DocumentQueryResponse(xmlns:namespace) 
 			{
 				documentList {
