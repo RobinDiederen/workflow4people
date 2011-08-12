@@ -68,7 +68,7 @@ public class TemplateService implements  ApplicationContextAware {
 		// This is a bit of a hack. We store the model in the TemplateService singleton so that subsequent runSnippetTemplate calls can re-use the model.
 		// Obviously, the consequence is that only one template generation process can run at any given time. 
 		// One would expect simply to make this service session-scoped, but that doesn't work, probably because of the background thread that it's running in.
-				
+		
 		globalModel=model
 		def gspFile=new File(filename)
     	
@@ -87,11 +87,11 @@ public class TemplateService implements  ApplicationContextAware {
   	    t.make(model).writeTo(writer)
   	    def s= writer.toString()
   	    
-		
 		return s
 	
 	}
 	
+
 	String runSnippetTemplate(def object,def snippetType,def extraModel=[:]) {		
 		String className=object.class.name.substring(object.class.name.lastIndexOf('.')+1)
 		log.debug "running snippet for ${className}"

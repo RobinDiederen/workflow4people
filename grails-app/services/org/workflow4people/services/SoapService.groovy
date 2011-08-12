@@ -33,7 +33,7 @@ class SoapService {
                 throw new Exception("An error occurred in the returned SOAP message! (maybe a SOAPFault?)")
             }
     		method.releaseConnection()
-    		println resultsString
+    		//println resultsString
     		return resultsString    	
     }
        

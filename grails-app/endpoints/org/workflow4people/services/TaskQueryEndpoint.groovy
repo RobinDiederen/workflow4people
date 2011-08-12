@@ -40,7 +40,6 @@ class TaskQueryEndpoint {
 		
 	
 	def invoke = { request ->
-	
 		log.debug("Processing TaskQuery service request ${request.name()}")
 		log.debug("User id: ${request.request.userId.text()}")
 	
@@ -59,9 +58,25 @@ class TaskQueryEndpoint {
 			println "DESC"			
 			params+=[sort:request.request.orderDesc.text(),order:"desc"]
 		}
+
+		if (request.request.documentType.text()) {
+			println "Requested document type " + request.request.documentType.text()
+			params+=[documentType:request.request.documentType.text()]
+		}
+		
+		if (request.request.processStatus.text()) {
+			println "Requested process status " + request.request.processStatus.text()
+			params+=[processStatus:request.request.processStatus.text()]
+		}
+		
+		if (request.request.fromDueDate.text() && request.request.toDueDate.text()) {
+			println "Requested date range " + request.request.fromDueDate.text() + " to " + request.request.toDueDate.text()
+			params+=[fromDueDate:request.request.fromDueDate.text(),toDueDate:request.request.toDueDate.text()]
+		}
 		
 		def res 
 		if (request.request.assignee.text()) {
+			println "Requested tasks for assignee " + request.request.assignee.text()
 			res=workflowService.findTasksByUser(request.request.assignee.text(),params)
 		}
 		
@@ -69,10 +84,6 @@ class TaskQueryEndpoint {
 			println "CANDIDATE: ${request.request.candidate.text()}"
 			res=workflowService.findTasksByCandidate(request.request.candidate.text(),params)
 		}
-		
-		
-		
-		
 		
 		
 		//def res=workflowService.findTasksByUser(request.request.userId.text(),params)

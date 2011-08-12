@@ -7,7 +7,7 @@ class GetDocumentTypesEndpoint {
 	def static namespace = "http://www.workflow4people.org/services" 
 	
 	def invoke = { request ->
-    log.debug("Processing GetDocumentTypes service request")
+    	log.debug("Processing GetDocumentTypes service request")
 		
 		def documentTypeIds = []
 		

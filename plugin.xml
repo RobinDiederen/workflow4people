@@ -41,7 +41,6 @@ Brief description of the plugin.
     <resource>org.workflow4people.NamespaceController</resource>
     <resource>org.workflow4people.PersonController</resource>
     <resource>org.workflow4people.RequestmapController</resource>
-    <resource>org.workflow4people.RestController</resource>
     <resource>org.workflow4people.RoleController</resource>
     <resource>org.workflow4people.SearchController</resource>
     <resource>org.workflow4people.StatusController</resource>
@@ -108,8 +107,7 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.HasAccessToFormEndpoint</resource>
     <resource>org.workflow4people.services.MinerDrilldownEndpoint</resource>
     <resource>org.workflow4people.services.MinerQueryEndpoint</resource>
-    <resource>org.workflow4people.services.OldGetTaskEndpoint</resource>
-    <resource>org.workflow4people.services.OldTaskQueryEndpoint</resource>
+    <resource>org.workflow4people.services.SendEmailEndpoint</resource>
     <resource>org.workflow4people.services.StartProcessInstanceEndpoint</resource>
     <resource>org.workflow4people.services.StoreDocumentEndpoint</resource>
     <resource>org.workflow4people.services.TakeTaskEndpoint</resource>
@@ -118,12 +116,12 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.DialogService</resource>
     <resource>org.workflow4people.services.DocumentService</resource>
     <resource>org.workflow4people.services.EchoService</resource>
+    <resource>org.workflow4people.services.EmailService</resource>
     <resource>org.workflow4people.services.FormGeneratorService</resource>
     <resource>org.workflow4people.services.FormService</resource>
     <resource>org.workflow4people.services.Jbpm4Service</resource>
     <resource>org.workflow4people.services.ListService</resource>
     <resource>org.workflow4people.services.MinerService</resource>
-    <resource>org.workflow4people.services.OldCmisService</resource>
     <resource>org.workflow4people.services.SecurityService</resource>
     <resource>org.workflow4people.services.SetDueDateService</resource>
     <resource>org.workflow4people.services.SoapService</resource>

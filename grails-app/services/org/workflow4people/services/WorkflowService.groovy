@@ -12,10 +12,27 @@ class WorkflowService {
     		def person=Person.findByUsername(username)
     		params+=[fetch:[form:'join',workflow:'join']]
     		println "PARAMS In SERVICE: ${params}"
-
-    	
-    		def taskList=Task.findAllByAssigneeAndCompletionDateIsNull(person,params)
-    		def taskCount=Task.countByAssigneeAndCompletionDateIsNull(person,[:])
+			
+			def filterString = ""
+			
+			if ((params.processStatus) && (params.processStatus != "null") && (params.processStatus != "")) {
+				filterString += "task.name like '" + params.processStatus + "%' and "				
+			}
+			
+			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
+				filterString +=	"task.workflow.name = '" + params.documentType + "' and "
+			}
+			
+			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
+				filterString =+ "task.dueDate between '" + params.fromDueDate + "' and '" + params.toDueDate + "' and"	
+			}
+						
+			println filterString
+			
+			def taskList=Task.executeQuery("select task from Task task where " + filterString + " task.completionDate = null and task.assignee = :person", [person: person], params)
+			//def taskList=Task.findAllByAssigneeAndCompletionDateIsNull(person,params)
+    		def taskCount=Task.executeQuery("select count(*) from Task task where " + filterString + " task.completionDate = null and task.assignee = :person", [person: person])
+    		//def taskCount=Task.countByAssigneeAndCompletionDateIsNull(person,[:])
     	
     		[taskList:taskList,taskCount:taskCount]
     	}
@@ -42,10 +59,26 @@ class WorkflowService {
     		}
     		println "Orderby: ${orderBy}"
 
+			def filterString = ""
+			
+			if ((params.processStatus) && (params.processStatus != "null") && (params.processStatus != "")) {
+				filterString += "task.name like '" + params.processStatus + "%' and "				
+			}
+			
+			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
+				filterString +=	"task.workflow.name = '" + params.documentType + "' and "
+			}
+			
+			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
+				filterString =+ "task.dueDate between '" + params.fromDueDate + "' and '" + params.toDueDate + "' and"	
+			}
+			
+			println "Applying filter : " + filterString 
     		
-    		def taskList=Task.executeQuery("select task from Task task where task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")"+orderBy,authmap,params)
-    		def taskCount=Task.executeQuery("select count(*) from Task task where task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap)
-    	[taskList:taskList,taskCount:taskCount]
+    		def taskList=Task.executeQuery("select task from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")"+orderBy,authmap,params)    		
+    		def taskCount=Task.executeQuery("select count(*) from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap)
+    	
+    		[taskList:taskList,taskCount:taskCount]
     	}
     }
     

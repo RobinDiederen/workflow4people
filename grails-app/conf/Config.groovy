@@ -35,6 +35,9 @@ environments {
     production {
         grails.serverURL = "http://localhost"
     }
+    
+    development {    	
+	}
 }
 
 // log4j configuration
@@ -70,7 +73,7 @@ springws {
             xsds= '/WEB-INF/workflow4people.xsd,/WEB-INF/workflow4people-documents.xsd'
             portTypeName = 'WorkflowPort'
             serviceName = 'WorkflowService'
-            locationUri = "http://localhost:8080/workflow4people/services/"
+            locationUri = "http://localhost:8081/workflow4people/services/"
             targetNamespace = 'http://www.workflow4people.org/services'
         }
     }
@@ -110,12 +113,10 @@ security {
 }
 
 cmis {
-
-	baseUrl="http://localhost:8080/alfresco/s/cmis"
+	baseUrl="http://10.11.250.105:8080/alfresco/s/cmis"
 	//baseUrl="http://cmis.alfresco.com:80/service/cmis"
 	username="admin"
 	password="admin"
-		
-
-
 }
+
+
