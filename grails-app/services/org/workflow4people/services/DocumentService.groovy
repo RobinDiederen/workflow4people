@@ -187,7 +187,6 @@ class DocumentService implements InitializingBean {
     		//theDocumentId=documentInstance.id
     		documentInstance.id
 	  } // withTransaction
-    	
     }
     
     
@@ -268,10 +267,13 @@ class DocumentService implements InitializingBean {
     	//	theDoc.delete()
 		//}
     	
+    	println "Context is: " + nsContext
+    	
     	def xpath = XPathFactory.newInstance().newXPath()
 		xpath.setNamespaceContext(nsContext)
     	
     	documentInstance.documentType.documentIndexField.each { field ->
+    		println field
     		log.debug "Processing xpath expression ${field.xpath} ..."
     		
     		def expr = xpath.compile(field.xpath)    		
@@ -280,7 +282,8 @@ class DocumentService implements InitializingBean {
     		// Delete any previous index keys
     		DocumentIndex.findAllByNameAndDocument(field.name,documentInstance).each { theIndex ->
     			documentInstance.removeFromDocumentIndex(theIndex)    			
-    			theIndex.delete()
+    			theIndex.delete(flush:true)
+    			
     		}
     		// Store all values that match the Xpath expression
     		nodes.each {
@@ -296,8 +299,7 @@ class DocumentService implements InitializingBean {
     			  
     		  //}
     		  indexEntry.value=it.textContent
-    		  indexEntry.save()
-    		  
+    		  indexEntry.save(flush:true)
     		  //theDocumentIndexId=indexEntry.id
     		}
     	}

@@ -29,7 +29,25 @@ class EmailService {
 					break				
 			
 			case "form-task":			
-				break				
+					println "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + " as response to action " + action + " on document " + documentId + "."
+					
+					def did = documentId.toLong()
+					def document = documentService.getDocument(did)
+					if (document) { 
+						println "Fetched document with id " + did 
+						
+						def template = templateService.runTemplate("/Users/robindiederen/Development/MGZL/Workflow4People/wfp-forms/forms/mez/mail.gsp",[document:document])
+						sendMail {
+							to mailTo
+							from mailFrom
+							subject mailSubject
+							html template
+						}
+										
+						println "Mail has been sent!"
+					}					
+					break				
+				
 			default:
 				break			
 		}
