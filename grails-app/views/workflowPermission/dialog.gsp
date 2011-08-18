@@ -1,7 +1,4 @@
-<wf:form title="Workflow permission" >
-	<g:if test="${params.parentId}">
-		<g:hiddenField name="workflow.id" value="${params.parentId}"></g:hiddenField>
-	</g:if>
+<wf:form title="Workflow permission" object="${workflowPermissionInstance}">
 	<wf:table>		                            
 		<wf:textField object="${workflowPermissionInstance}" propertyName="id" mode="show" />
 		<wf:domainObject object="${workflowPermissionInstance}" propertyName="workflow" mode="show" />

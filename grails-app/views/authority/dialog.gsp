@@ -1,4 +1,4 @@
-<wf:form title="Group" >
+<wf:form title="Group" object="${authorityInstance}">
 	<wf:table>		                            
 		<wf:textField object="${authorityInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${authorityInstance}" propertyName="authority" mode="edit" />

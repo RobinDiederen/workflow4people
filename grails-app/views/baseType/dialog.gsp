@@ -1,4 +1,4 @@
-<wf:form title="Field" >
+<wf:form title="Field" object="${baseTypeInstance}">
 	<wf:table>		                            
 		<wf:textField object="${baseTypeInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${baseTypeInstance}" propertyName="name" mode="edit" />                                                    

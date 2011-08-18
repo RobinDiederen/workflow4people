@@ -1,4 +1,4 @@
-<wf:form title="Namespace" width="835px">
+<wf:form title="Namespace" width="835px" object="${namespaceInstance}">
 	<wf:table>		                            
 		<wf:textField object="${namespaceInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${namespaceInstance}" propertyName="prefix" mode="edit" class="wide"/>

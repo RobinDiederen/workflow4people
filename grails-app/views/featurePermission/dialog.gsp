@@ -1,4 +1,4 @@
-<wf:form title="Feature permission" >
+<wf:form title="Feature permission" object="${featurePermissionInstance}">
 	<wf:table>		                            
 		<wf:textField object="${featurePermissionInstance}" propertyName="id" mode="show" />
 		<wf:domainObject object="${featurePermissionInstance}" propertyName="feature" mode="show" />		       

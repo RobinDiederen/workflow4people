@@ -1,4 +1,4 @@
-<wf:form title="Task">
+<wf:form title="Task" object="${taskInstance}">
 	<wf:table>		                            
 
 	        <wf:textField object="${taskInstance}" propertyName="id" mode="show" />

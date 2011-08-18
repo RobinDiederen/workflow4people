@@ -1,4 +1,4 @@
-<wf:form title="Data miner query">
+<wf:form title="Data miner query" object="${minerQueryInstance}">
 	<wf:tabs names="Details,Queries" object="${minerQueryInstance}">		
 		<wf:tab name="Details" object="${minerQueryInstance}">		                            
 	        <wf:textField object="${minerQueryInstance}" propertyName="id" mode="show" />                                                        

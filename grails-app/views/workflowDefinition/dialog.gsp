@@ -1,4 +1,4 @@
-<wf:form title="Workflow">
+<wf:form title="Workflow" object="${workflowDefinitionInstance}">
 	<wf:tabs names="Details,Forms,Permissions" object="${workflowDefinitionInstance}">		
 		<wf:tab name="Details" object="${workflowDefinitionInstance}">		                            
 	        <wf:textField object="${workflowDefinitionInstance}" propertyName="id" mode="show" />                            

@@ -18,7 +18,13 @@ class DialogService {
 		    }
 			domainClassInstance = domainClass.get(params.id)
 		} else {
-			domainClassInstance = domainClass.newInstance()			
+			domainClassInstance = domainClass.newInstance()
+			// Some views (dialogs) shows fields that belong to the parent DomainObject
+			// If there is a parentId it will load the parent DomainObject (belongsTo)
+			// REMARK: Currently it will only work if belongto has only 1 relation
+			if (domainClassInstance.hasProperty("belongsTo") && (domainClassInstance.belongsTo.size() == 1) && params.parentId) {
+				domainClassInstance.belongsTo.each { key, value -> domainClassInstance."${key}" = value.get(params.parentId) }
+			} 
 		}
 		
         def defaultDomainClass = new DefaultGrailsDomainClass( domainClass )

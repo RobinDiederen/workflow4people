@@ -1,4 +1,4 @@
-<wf:form title="Day part" >
+<wf:form title="Day part" object="${dayPartInstance}">
 	<wf:table>		                            
 		<wf:textField object="${dayPartInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${dayPartInstance}" propertyName="position" mode="edit" />                                                    

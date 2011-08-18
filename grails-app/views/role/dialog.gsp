@@ -1,4 +1,4 @@
-<wf:form title="Role" width="615px">
+<wf:form title="Role" width="615px" object="${roleInstance}">
 	<wf:table>		                            
 		<wf:textField object="${roleInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${roleInstance}" propertyName="name" mode="edit" />

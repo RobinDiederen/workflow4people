@@ -1,4 +1,4 @@
-<wf:form title="Workflow engine" >
+<wf:form title="Workflow engine" object="${workflowEngineInstance}">
 	<wf:table>		                            
 		<wf:textField object="${workflowEngineInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${workflowEngineInstance}" propertyName="name" mode="edit" />

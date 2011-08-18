@@ -1,4 +1,4 @@
-<wf:form title="Holiday" >
+<wf:form title="Holiday" object="${holidayInstance}">
 	<wf:table>		                            
 		<wf:textField object="${holidayInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${holidayInstance}" propertyName="title" mode="edit" />

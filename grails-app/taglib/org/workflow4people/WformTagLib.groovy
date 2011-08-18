@@ -203,7 +203,7 @@ class WformTagLib {
 		switch(attrs.mode) {			
 			case "show":
 				def xmltext=attrs.object."${attrs.propertyName}"
-				String s = dialogService.prettyPrint(xmltext)
+				String s = xmltext ? dialogService.prettyPrint(xmltext) : ""
 				return "<textarea cols=\"80\" rows=\"25\">"+s.encodeAsHTML()+"</textarea>"
 				break
 			
@@ -344,10 +344,20 @@ class WformTagLib {
 
 	
 	def form = { attrs,body ->
-		def width = attrs.width ? attrs.width : "600px";		
+		def width = attrs.width ? attrs.width : "600px";
+		
 		out << """<div aid="dialog" style="width:${width};" title="${attrs.title}">
 		<form class="ajaxdialogform">
 		<div class="errors" style="display:none;"></div>"""
+
+		// Add Hidden field with the id of the parent DomainObject (belongsTo)
+		// REMARK: Currently it will only work if belongto has only 1 relation
+		if (attrs?.object.hasProperty("belongsTo") && (attrs.object.belongsTo.size() == 1)) {
+			attrs.object.belongsTo.each { key, value -> 
+				out << '<input id="' + key + '.id" type="hidden" name="' + key + '.id" value="'+ attrs.object."${key}"?.id +'">' 
+			}
+		}
+		
 		out << body()
 		out << "</form></div>"
 	}

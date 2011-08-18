@@ -1,4 +1,4 @@
-<wf:form title="Document type" width="820px">
+<wf:form title="Document type" width="820px" object="${documentTypeInstance}">
 	<wf:table>		                            
 		<wf:textField object="${documentTypeInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${documentTypeInstance}" propertyName="name" mode="edit" />

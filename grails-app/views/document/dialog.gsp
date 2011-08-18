@@ -1,4 +1,4 @@
-<wf:form title="Document" width="850px">
+<wf:form title="Document" width="850px" object="${documentInstance}">
 	<wf:tabs names="Details,XML,Index" object="${documentInstance}">		
 		<wf:tab name="Details" object="${documentInstance}">		     
 			<wf:textField object="${documentInstance}" propertyName="id" mode="show" />                            

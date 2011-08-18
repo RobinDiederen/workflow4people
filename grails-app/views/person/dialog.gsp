@@ -1,4 +1,4 @@
-<wf:form title="User" width="615px">
+<wf:form title="User" width="615px" object="${personInstance}">
 	<wf:table>		                            
 		<wf:textField object="${personInstance}" propertyName="id" mode="show" />                                                        
 		<wf:textField object="${personInstance}" propertyName="username" mode="edit" class="wide"/>

@@ -1,4 +1,4 @@
-<wf:form title="Field List" width="635px">
+<wf:form title="Field List" width="635px" object="${fieldListInstance}">
 	<wf:table>		                            
 		<wf:textField object="${fieldListInstance}" propertyName="id" mode="show" />
 		
