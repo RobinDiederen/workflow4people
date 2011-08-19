@@ -352,8 +352,10 @@ class WformTagLib {
 
 		// Add Hidden field with the id of the parent DomainObject (belongsTo)
 		// REMARK: Currently it will only work if belongto has only 1 relation
-		if (attrs?.object.hasProperty("belongsTo") && (attrs.object.belongsTo.size() == 1)) {
-			attrs.object.belongsTo.each { key, value -> 
+		def defaultDomainClass = new DefaultGrailsDomainClass( attrs.object.class )
+		Map belongToMap = defaultDomainClass.getStaticPropertyValue(GrailsDomainClassProperty.BELONGS_TO, Map.class)
+		if (belongToMap?.size() == 1) {
+			belongToMap.each { key, value -> 
 				out << '<input id="' + key + '.id" type="hidden" name="' + key + '.id" value="'+ attrs.object."${key}"?.id +'">' 
 			}
 		}

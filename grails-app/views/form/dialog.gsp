@@ -2,7 +2,7 @@
 	<wf:tabs names="Details,Messages,FormItems" object="${formInstance}">		
 		<wf:tab name="Details" object="${formInstance}">		                            
 	        <wf:textField object="${formInstance}" propertyName="id" mode="show" />
-			<wf:domainObject object="${formInstance}" propertyName="workflow" mode="edit" />
+			<wf:domainObject object="${formInstance}" propertyName="workflow" mode="show" />
 	        <wf:textField object="${formInstance}" propertyName="name" mode="edit" />                            
 	        <wf:textField object="${formInstance}" propertyName="title" mode="edit" />
 	        <wf:textArea object="${formInstance}" propertyName="description" mode="edit" />

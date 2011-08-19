@@ -166,7 +166,7 @@
 	        <sec:ifAnyGranted roles="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
 	        <li>Forms</li>
 	        <ul>
-	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow Def</g:link></li>
+<%--	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition">Workflow Def</g:link></li>--%>
 	          <li class="menu-icon menu-datamodel"><g:link controller="dataModelEditor">Data model</g:link></li>
 	          
 	          

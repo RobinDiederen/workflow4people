@@ -11,6 +11,9 @@ class DialogService {
     boolean transactional = true
       
     def edit(domainClass,params) {
+		def defaultDomainClass = new DefaultGrailsDomainClass( domainClass )		
+		Map belongToMap = defaultDomainClass.getStaticPropertyValue(GrailsDomainClassProperty.BELONGS_TO, Map.class)
+		
 		def domainClassInstance
 		if (params.id && params.id !='null') {
 		    if (params.id.contains("_")){
@@ -22,12 +25,11 @@ class DialogService {
 			// Some views (dialogs) shows fields that belong to the parent DomainObject
 			// If there is a parentId it will load the parent DomainObject (belongsTo)
 			// REMARK: Currently it will only work if belongto has only 1 relation
-			if (domainClassInstance.hasProperty("belongsTo") && (domainClassInstance.belongsTo.size() == 1) && params.parentId) {
-				domainClassInstance.belongsTo.each { key, value -> domainClassInstance."${key}" = value.get(params.parentId) }
+			if (belongToMap?.size() == 1 && params.parentId) {
+				belongToMap.each { key, value -> domainClassInstance."${key}" = value.get(params.parentId) }
 			} 
 		}
 		
-        def defaultDomainClass = new DefaultGrailsDomainClass( domainClass )
 		def domainPropertyName=defaultDomainClass.propertyName		
         def domainClassName=defaultDomainClass.getName()
         if (!domainClassInstance) {
