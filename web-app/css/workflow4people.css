@@ -634,8 +634,8 @@ div.body {width:auto;}
 .page-body {width:100%;float:left;}
 
 .body {
-    //float: left;
-    margin: 0 15px 10px 15px;
+    float: none;
+    margin: 0px 15px 10px 15px;
     width:800px;
    margin-left:200px;
 }
