@@ -14,7 +14,8 @@
 	        
 	        <wf:domainObject object="${workflowDefinitionInstance}" propertyName="documentType" mode="edit" />
     	    <wf:domainObject object="${workflowDefinitionInstance}" propertyName="workflowEngine" mode="edit" />
-	        	    		
+    	    
+    	    <wf:checkBox object="${workflowDefinitionInstance}" propertyName="publish" mode="edit" />	        	    		
 		</wf:tab>
 		<wf:tab name="Forms" object="${workflowDefinitionInstance}">
 			<wf:detailTable property="workflow" object="${workflowDefinitionInstance}" domainClass="${org.workflow4people.Form}" />			
