@@ -19,50 +19,46 @@
 	    	<div class="editor dialog" style="position:relative;width:auto;">
 	    	
 	    		<%-- fieldType tree --%>		
-				<div id="fieldTypePane" class="treepane ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" style="position:relative;width:30%;float:left;border:1px solid #DDD;hheight:300px;overflow:hidden;background-color:white;">
-		    	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">FieldTypes</div>
+				<div id="fieldTypePane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;float:left;border:1px solid #DDD;hheight:300px;overflow:hidden;background-color:white;">
+		    		<div class="ui-widget-header ui-corner-all ui-helper-clearfix">FieldTypes</div>
 		    	   	<div class="tree-toolbar">
 						<g:link onclick="dmeDialog('','FieldType','');return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</g:link>
 					</div>
-		    	
-					<div id="fieldTypeTree" style="overflow:auto;" class="dmeTree ui-dialog-content ui-widget-content" >
+					<div id="fieldTypeTree" style="overflow:auto;" class="dmeTree" >
 						<ul id="fieldTypeList" class="filetree treeview" />
 					</div>				
 				</div>
 	    	
 	    		    	
 		        <%-- Data model tree --%>
-		        <div id="modelPane" style="position:relative;width:30%;;border:1px solid #DDD;float:left;overflow:hidden;background-color:white;" class="treepane ui-dialog ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" >
-		        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">Data model</div>
+		        <div id="modelPane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;;border:1px solid #DDD;float:left;overflow:hidden;background-color:white;">
+		        	<div class="ui-widget-header ui-corner-all ui-helper-clearfix">Data model</div>
 		        	<div class="tree-toolbar">
 						<g:link onclick="dmeDialog('','FieldList','');return false;" title="New fieldlist" class="action-new-fieldlist action" >&nbsp;</g:link>
 					</div>
-		        	<div id="modelTree" style="overflow:auto;" class="dmeTree ui-dialog-content ui-widget-content" >
+		        	<div id="modelTree" style="overflow:auto;" class="dmeTree" >
 		        	<ul id="tree" class="filetree treeview">    
 		        	</ul>
 		        	</div>		            
 				</div>
 				
-				
 				<%-- workflow tree --%>	
-
-				
-				<div id="workflowPane" style="position:relative;width:30%;;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;" class="treepane ui-dialog ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" >
-				<div style="font-size:12px;" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">Workflows</div>
-				<div class="tree-toolbar">
-					<g:link onclick="dmeDialog('','WorkflowDefinition','');return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>
-				</div>
-					<div id="workflowTree" style="overflow:auto;" class="dmeTree ui-dialog-content ui-widget-content" >
-					<ul id="workflowList" class="filetree treeview" />
+				<div id="workflowPane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
+					<div class="ui-widget-header ui-corner-all ui-helper-clearfix">Workflows</div>
+					<div class="tree-toolbar">
+						<g:link onclick="dmeDialog('','WorkflowDefinition','');return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>
+<%--						<g:link onclick="formDialog(null,'workflowDefinition',null, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>--%>
+					</div>
+					<div id="workflowTree" style="overflow:auto;" class="dmeTree" >
+						<ul id="workflowList" class="filetree treeview" />
 					</div>				
 				</div>
 			
 				<%-- logging pane --%>	
-				<div id="loggingPane" style="position:relative;width:30%;;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;" class="treepane ui-dialog ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" >
-					<div style="font-size:12px;" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">Log</div>   
-		            <div id="log" style="overflow:auto;" class="ui-dialog-content ui-widget-content">...</div>
-				</div>
-			
+				<div id="loggingPane" class="treepane ui-widget ui-widget-content ui-corner-all ui-helper-clearfix" style="position:relative;width:30%;;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
+					<div class="ui-widget-header">Log</div>   
+		            <div id="log" style="overflow:auto;">...</div>
+				</div>			
 			
 			</div>
 			

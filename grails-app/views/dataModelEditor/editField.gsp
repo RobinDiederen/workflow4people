@@ -9,7 +9,6 @@
 	    	<wf:textArea object="${fieldInstance}" propertyName="description" mode="edit" />                        	
 	        <wf:textField object="${fieldInstance}" propertyName="defaultValue" mode="edit" />
 	    	<wf:textField object="${fieldInstance}" propertyName="label" mode="edit" />
-	    	<wf:detailTable property="parent" object="${fieldInstance}" domainClass="${org.workflow4people.Field}" />	    		
 		</wf:tab>
 		<wf:tab name="Text" object="${fieldInstance}">
 			<wf:textArea object="${fieldInstance}" propertyName="help" mode="edit" />
