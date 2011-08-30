@@ -382,7 +382,10 @@ function workflowContextMenu( node ) {
 			
 			"editworkflowproperties" : {
 								"label": 'Edit workflow props',
-								"action" : function( node ) { dmeDialog(node[0].id,'WorkflowDefinition',''); }
+								"action" : function( node ) {
+						        	var theId = node[0].id.split('_').pop();
+						        	formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
+						        }
 	  						  },
 
 			
@@ -408,7 +411,10 @@ function workflowContextMenu( node ) {
 
   		    "newform" : {
 								  "label": 'New form',
-								  "action" : function( node ) { dmeDialog("",'Form','workflow.id='+node[0].id.substring(9)); }
+								  "action" : function( node ) { 
+									  var parentId = node[0].id.split('_').pop();
+									  formDialog(null,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, { parentId: parentId });
+								  }
 							  },
 
 							  
@@ -713,7 +719,8 @@ $(function() {
 
         // 	Open the edit form dialog on a double click
         $("li.form").live("dblclick",function() {        
-        	dmeDialog(this.id,'Form','');
+        	var theId = this.id.split('_').pop();
+        	formDialog(theId,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, null);        	
         	return false;
         });
         
@@ -727,7 +734,8 @@ $(function() {
         
         // Open the edit workflowDefinition dialog on a double click
         $("li.workflow").live("dblclick",function() {        
-        	dmeDialog(this.id,'WorkflowDefinition','');
+        	var theId = this.id.split('_').pop();
+        	formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
         	return false;
         });
         
@@ -735,7 +743,7 @@ $(function() {
       //   $("#outer-treediv").resizable();
       //  $("#outer-editpane").resizable();
        $(".treepane").resizable();
-        $(".treepane").draggable();
+       $(".treepane").draggable();
 
        
        $("#editButton").click(function() {

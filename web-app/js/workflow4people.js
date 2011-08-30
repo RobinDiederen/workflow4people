@@ -61,10 +61,6 @@ function formDialog(id,controllerName, options ,urlParams) {
 			 
 	 theUrl=wfp.baseUrl+'/'+controllerName+'/'+dialogName+'/'+urlId	 	
 	 
-//	 var tstDlg = $("<div></div>").load(theUrl, function() {
-//		 $(this).find(".multiselect").multiselect();
-//	 }).dialog();
-	 
 	 var dialogHTML = $.ajax({
 		  url: theUrl,
 		  async: false,
@@ -88,7 +84,17 @@ function formDialog(id,controllerName, options ,urlParams) {
 			 		{
 			 		var result=data.result			 		
 			 		$("#statusmessage").html(result.message);
-			 		
+
+			 		//DME logMessage & refreshTree (editor.js)
+			 		if (typeof(refreshTree) === 'function') {
+				 		for (i in result.refreshNodes) {
+				 			refreshTree(result.refreshNodes[i])
+				 		}
+			 		}
+			 		if (typeof(logMessage) === 'function') {
+			 			logMessage(result.message);			 			
+			 		}
+
 			 		refreshDataTable(refreshTableKey, dataTableHashList, (id ? false : true));
 			 		
 			 		if(result.success){
@@ -111,7 +117,6 @@ function formDialog(id,controllerName, options ,urlParams) {
          	// Initialize date picker input elements
        		$(this).find(".datepicker").datepicker({ dateFormat: "yy-mm-dd" , changeMonth: true, changeYear:true});
        		$(this).find(".dialogtabs").tabs();
-//       		$(this).find(".multiselect").multiselect();
        		$(this).find(".altselect").altselect();
        		
        		var dataTable = $(this).find('.detailTable');

@@ -46,8 +46,7 @@
 				<div id="workflowPane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
 					<div class="ui-widget-header ui-corner-all ui-helper-clearfix">Workflows</div>
 					<div class="tree-toolbar">
-						<g:link onclick="dmeDialog('','WorkflowDefinition','');return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>
-<%--						<g:link onclick="formDialog(null,'workflowDefinition',null, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>--%>
+						<g:link onclick="formDialog(null,'dataModelEditor',{ dialogname: 'editWorkflowDefinition', submitname: 'submitWorkflowDefinition'}, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>
 					</div>
 					<div id="workflowTree" style="overflow:auto;" class="dmeTree" >
 						<ul id="workflowList" class="filetree treeview" />
