@@ -8,6 +8,8 @@ class DataModelEditorController {
 	def grailsApplication
 	def templateService
 	def dialogService
+	def dmeService
+	def dmeEventService
 	
     def index = { 
     		render(view:'editor')
@@ -77,25 +79,8 @@ class DataModelEditorController {
              def res=[result:result]
              render res as JSON
 			
-			
 	}
 	
-	def xeditForm = {
-			def formInstance
-			if (params.id) {
-				def id=params.id.split("_")[1]
-				formInstance = Form.get( id )
-			} else {
-				formInstance=new Form()
-				formInstance.formAction=Action.findByName('handle')
-			}
-
-            if(!formInstance) {
-                flash.message = "Form not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ formInstance : formInstance, formTemplateNames:templateService.formTemplateNames ] }
-        }
 	
 	def editForm= {			
 		def model= dialogService.edit(Form,params)
@@ -107,34 +92,7 @@ class DataModelEditorController {
 	}
 	
 	
-	def xsubmitForm = {
-			println "Submit Form params: ${params}"
-			def id
-			def formInstance
-			if(params.id) {
-				if (params.id.contains("_")){
-					id=params.id.split("_")[1]
-				} else {
-					id=params.id
-				}
-				formInstance = Form.get(id )
-			} else {
-				formInstance=new Form()
-			}
-			formInstance.properties = params
-			formInstance.save(failOnError:true)
-			def theRefreshNodes=["workflow_${formInstance.workflow.id}"]
-			      
- 			def result = [
- 			              	returnValue:true,
- 			              	message:"form #${formInstance.id} : ${formInstance.name} updated" ,
- 			              	id:params.id,
- 			              	name: formInstance.name,	
- 			              	refreshNodes:theRefreshNodes
- 			              ]              
-             def res=[result:result]
-             render res as JSON			
-	}
+	
 	
 	def submitForm = {		     
 	    println "Submit Form params: ${params}"        
@@ -150,24 +108,7 @@ class DataModelEditorController {
         render result as JSON
 	}
 	
-	
-	def xeditWorkflowDefinition = {
-			def id
-			def workflowDefinitionInstance
-			if (params.id) {
-				id=params.id.split("_")[1]
-				workflowDefinitionInstance = WorkflowDefinition.get( id )
-			} else {
-				workflowDefinitionInstance=new WorkflowDefinition()
-			}
-
-            if(!workflowDefinitionInstance) {
-                flash.message = "WorkflowDefinition not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ workflowDefinitionInstance : workflowDefinitionInstance ] }
-        }
-	
+			
 	def editWorkflowDefinition = {
 			def model= dialogService.edit(WorkflowDefinition,params) 
 			render(view:'/workflowDefinition/dialog',model:model)
@@ -228,42 +169,11 @@ class DataModelEditorController {
 	}
 
 
-	def xeditFormItem = {
-			def id=params.id.split("_")[1]
-
-            def formItemInstance = FormItem.get( id )
-
-            if(!formItemInstance) {
-                flash.message = "FormItem not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ formItemInstance : formItemInstance ] }
-        }
-	
+		
 	def editFormItem = {
 			def model= dialogService.edit(FormItem,params) 
 			render(view:'/formItem/dialog',model:model)
-	}
-			
-	
-	
-	def xsubmitFormItem = {
-			println "Submit FormItem params: ${params}"
-			def id=params.id.split("_")[1]
-			def formItemInstance = FormItem.get(id )
-			formItemInstance.properties = params
-			def theRefreshNodes=["form_${formItemInstance.form.id}"]
-			                     
- 			def result = [
- 			              	returnValue:true,
- 			              	message:"formItem #${formItemInstance.id} ${formItemInstance.field.name} updated" ,
- 			              	id:params.id,
- 			              	name: formItemInstance.field.name,
- 			              	refreshNodes:theRefreshNodes
- 			              ]              
-             def res=[result:result]
-             render res as JSON			
-	}
+	}			
 	
 	def submitFormItem = {
 		     
@@ -294,7 +204,7 @@ class DataModelEditorController {
 		println "Submit FieldType params: ${params}"
      	def result =  dialogService.submit(FieldType,params)
 
-        result['result']['refreshNodes']=["fieldTypeTree"]
+        result['result']['refreshNodes']=["dataModelTree"]
         render result as JSON
 	}
 	
@@ -312,7 +222,7 @@ class DataModelEditorController {
 			render(view:'/fieldList/dialog',model:model)			
     } 
 	
-	
+	/*
     def onmove = {
     		println "We have a move. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
     		println params
@@ -470,446 +380,125 @@ class DataModelEditorController {
     				)
     		}
     }
-    
-	
-	/*
-	 * New functions for jsTree 1.0
-	 */
-	
-	def treeCopy(Field field) {
-		
-		def copyField=new Field()					
-		def domainClass=grailsApplication.getDomainClass('org.workflow4people.Field') 
-			domainClass.persistentProperties.each { prop ->
-				copyField."${prop.name}" = field."${prop.name}"
-			}
-			Field.findAllByParent(field).each { childField ->
-				println "CHILDFIELD ${childField}"
-				def copyChildField=treeCopy(childField)
-				copyChildField.parent=copyField
-				copyChildField.save()
-				
-			}
-		return copyField
-	}
-	
-	def treeDelete(Field field) {
-		Field.findAllByParent(field).each { childField ->
-			println "CHILDFIELD ${childField}"
-			treeDelete(childField)				
-		}
-		field.delete(flush:true)		
-	}
-	
-	
-	def moveField(Field field1,Field field2,String where){
-		// TODO properly renumber positions
-		switch(where) {
-		
-			case "inside":				
-				field1.parent=field2								
-				def maxPosition=Field.findAllByParent(field2,[sort:'fieldPosition',order:'desc',max:1])[0]?.fieldPosition
-				field1.fieldPosition=maxPosition ? maxPosition+1 : 1
-
-				break
-				
-			case "before":
-				field1.parent=field2.parent
-				
-				def position=field2.fieldPosition
-				field1.fieldPosition=field2.fieldPosition
-				field1.save(flush:true)
-				
-				def n=1
-				Field.findAllByParent(field2.parent,[sort:'fieldPosition',order:'asc']).each { field ->
-					field.fieldPosition=n++				
-				}
-				
-				if (field1.fieldPosition>field2.fieldPosition) {
-					swapFieldPosition(field1,field2)					
-				}
-				
-				
-										
-				break
-			case "after":
-				
-				field1.parent=field2.parent
-				
-				def position=field2.fieldPosition
-				field1.fieldPosition=field2.fieldPosition
-				field1.save(flush:true)
-				
-				def n=1
-				Field.findAllByParent(field2.parent,[sort:'fieldPosition',order:'asc']).each { field ->
-					field.fieldPosition=n++				
-				}
-				
-				if (field1.fieldPosition<field2.fieldPosition) {
-					swapFieldPosition(field1,field2)					
-				}
-		
-		}
-	}
-	
-	def swapPosition(item1,item2) {
-		def p1= item1.position
-		def p2 = item2.position							
-		item1.position=p2
-		item2.position=p1
-	}
-	
-	def swapFieldPosition(item1,item2) {
-		def p1= item1.fieldPosition
-		def p2 = item2.fieldPosition							
-		item1.fieldPosition=p2
-		item2.fieldPosition=p1
-	}
-	
-	
+    */
 	def before = {
+		def node1=[:]
+		def node2=[:]
+		
+		if (params.id1) {
+			node1.id=params.id1.split("_")[1]
+			node1.type=params.id1.split("_")[0]
+		}
+		
+		if (params.id2) {
+			node2.id=params.id2.split("_")[1]
+			node2.type=params.id2.split("_")[0]
+		}
+		def moveType=params.moveType
+		def func=params.func
+		def newName=params.newName
+		boolean isCopy=params.isCopy=="true"
+		def result=dmeEventService.defaultResult
+		
+		log.debug "before: func:${func}, node1:${node1.id}, node2:${node2.id} moveType:${moveType}, isCopy:${isCopy}" 
+		switch(func) {
+			case "move_node":
+				if ((node1.type=="field") && (node2.type=="field")) {
+					result=dmeEventService.dragFieldToField(node1,node2,moveType,isCopy)
+				}
+				if (node1.type.equals("fieldtype") && node2.type.equals("field")) {
+					result=dmeEventService.dragFieldTypeToField(node1,node2,moveType,isCopy)
+				}				
+				if (node1.type.equals("fieldtype") && node2.type.equals("fieldtype") && (moveType.equals("inside"))) {
+				   result=dmeEventService.dragFieldTypeToFieldType(node1,node2,moveType,isCopy) 
+				}
+				
+				if (node1.type=="field" && node2.type=="form" && moveType=="inside") {
+					result=dmeEventService.dragFieldToForm(node1,node2,moveType,isCopy)				
+				}
+				
+				if (node1.type=="fieldtype" && node2.type=="form" && moveType=="inside") {
+					result=dmeEventService.dragFieldTypeToForm(node1,node2,moveType,isCopy)
+				}
+				
+				
+				if (node1.type=="field" && node2.type=="formitem" && moveType=="inside") {
+					result=dmeEventService.dragFieldToFormItem(node1,node2,moveType,isCopy)
+				}
+				
+				if (node1.type=="fieldtype" && node2.type=="formitem" && moveType=="inside") {
+					result=dmeEventService.dragFieldTypeToFormItem(node1,node2,moveType,isCopy)
+				}				
+				
+				if (node1.type=="field" && node2.type=="formitem" && moveType=="before") {
+					result=dmeEventService.dragFieldBeforeFormItem(node1,node2,moveType,isCopy)
+				}
+				
+				if (node1.type=="fieldtype" && node2.type=="formitem" && moveType=="before") {
+					result=dmeEventService.dragFieldTypeBeforeFormItem(node1,node2,moveType,isCopy)
+				}
+				
+				if (node1.type=="field" && node2.type=="formitem" && moveType=="after") {
+					result=dmeEventService.dragFieldAfterFormItem(node1,node2,moveType,isCopy)
+				}
+				
+				if (node1.type=="fieldtype" && node2.type=="formitem" && moveType=="after") {
+					result=dmeEventService.dragFieldTypeAfterFormItem(node1,node2,moveType,isCopy)
+				}
+				
+				
+				if (node1.type=="formitem" && node2.type=="formitem" ) {
+					result=dmeEventService.dragFormItemToFormItem(node1,node2,moveType,isCopy)
+				}										
+			break;
 			
-			def successFlag=false
-			println "BEFORE: ${params}"
-			def theRefreshNodes=[]
-			boolean isCopy=params.isCopy=="true"
-			def moveType=params.moveType
-			def type1=""
-			def type2=""
-			def id1=""
-			def id2=""
-			if (params.id1) {
-				id1=params.id1.split("_")[1]
-  				type1=params.id1.split("_")[0]
-			}
-			
-			if (params.id2) {
-				id2=params.id2.split("_")[1]
-  				type2=params.id2.split("_")[0]
-			}
-			println "TYPE1: ${type1} TYPE2: ${type2}"
-			def theMessage="Operation not implemented"
-
-			def allowedFlag=false
-			
-			if ((type1=="field") && (type2=="field")) {
-				println "Dragging ${params.id1} on ${params.id2}"
-				theMessage="Dragging ${params.id1} on ${params.id2}"
-				def field1
-				if (isCopy) {
-					// make copy
-					println "COPY"
-					def originalField=Field.get(new Long(id1))
-					field1=treeCopy(originalField)
+			case "rename_node":
+				switch (node1.type) {
+					case "field":
+						result=dmeEventService.renameField(node1,newName)
+					break
+					case "fieldtype":
+						result=dmeEventService.renameFieldType(node1,newName)
+					break
+					case "form":
+						result=dmeEventService.renameForm(node1,newName)
+					break
+					case "workflow":
+						result=dmeEventService.renameWorkflow(node1,newName)
+					break
 					
-				} else {
-					field1=Field.get(new Long(id1))
-				
-					
-				}
-				def parent1=field1.parent
-				def field2=Field.get(new Long(id2))
-				def parent2=field2.parent
-				
-				moveField(field1,field2,moveType) 
-				
-				if (isCopy) {
-					field1.save()
-					theRefreshNodes=["field_${parent2.id}"]
-				} else {
-					// Renumber the positions of the original sequence
-					def n=1
-						Field.findAllByParent(parent1,[sort:'fieldPosition',order:'asc']).each { field ->
-						field.fieldPosition=n++				
-					}
-					
-					if (parent1==parent2) {
-						theRefreshNodes=["field_${parent1.id}"]
-					} else {
-						theRefreshNodes=["field_${parent1.id}","field_${parent2.id}"]
-					}
-				}         
-                //theRefreshNodes=["field_${field1.id}","field_${field2.id}"]
-				allowedFlag=false
-				successFlag=true
-			}
-			
-			// Create new field from FieldType
-			// New name is fieldtype name with lowercased first char
-			if (type1.equals("fieldtype") && type2.equals("field") ) {
-			println	"NEW FIELD BASED ON FIELDTYPE"
-				def fieldType=FieldType.get(new Long(id1))
-				def parentField=Field.get(new Long(id2))
-				def field = new Field()
-				String name=fieldType.name
-				name=name.substring(0,1).toLowerCase()+name.substring(1)
-				field.name=name
-				/*
-				field.label=fieldType.label
-				field.help=fieldType.help
-				field.alert=fieldType.alert
-				field.defaultValue=fieldType.defaultValue
-				*/
-				field.fieldType=fieldType								
-				moveField(field,parentField,moveType)
-				field.save(failOnError:true)
-				println "NEW FIELD ID ${field.id}"
-				theRefreshNodes=["field_${field.parent.id}"]
-				theMessage="Created field ${field.name} (${field.id})"
-				allowedFlag=false
-				successFlag=true
-			}
-			
-			// Dropping a field on a from creates a formItem
-			if (type1=="field" && type2=="form" && moveType=="inside") {				
-				def field=Field.get(id1)
-				def form=Form.get(id2)
-				def maxPosition=FormItem.findAllByForm(form,[sort:'position',order:'desc',max:1])[0]?.position
-				def formItem=new FormItem()
-				formItem.field=field
-				formItem.form=form
-				formItem.position=maxPosition ? maxPosition+1 : 1
-				formItem.save(failOnError:true)
-				successFlag=true
-				allowedFlag=false
-				theMessage="formItem ${formItem.id} created"
-				theRefreshNodes=["${params.id2}"]
-			}
-			
-			// Dropping a field before or after a formItem creates a formItem 
-			
-			if (type1=="field" && type2=="formitem" && moveType=="before") {
-				
-				def field=Field.get(id1)
-				def refFormItem=FormItem.get(id2)
-				
-				def formItem=new FormItem()
-				
-				formItem.field=field
-								
-				def position=refFormItem.position
-				FormItem.findAllByForm(refFormItem.form,[sort:'position',order:'asc']).each { fi ->
-					if(fi.position>=position) {
-						fi.position+=1
-					}							
-				
-				}
-				formItem.form=refFormItem.form
-				formItem.position=position
-				
-				formItem.save(failOnError:true)
-				successFlag=true
-				allowedFlag=false
-				theMessage="formItem ${formItem.id} created"
-				theRefreshNodes=["form_${formItem.form.id}"]
-				
-			}
-			
-			if (type1=="field" && type2=="formitem" && moveType=="after") {
-				
-				def field=Field.get(id1)
-				def refFormItem=FormItem.get(id2)
-				
-				def formItem=new FormItem()
-				
-				formItem.field=field
-								
-				def position=refFormItem.position
-				FormItem.findAllByForm(refFormItem.form,[sort:'position',order:'asc']).each { fi ->
-					if(fi.position>position) {
-						fi.position+=1
-					}							
-				
-				}
-				formItem.form=refFormItem.form
-				formItem.position=position+1
-				
-				formItem.save(failOnError:true)
-				successFlag=true
-				allowedFlag=false
-				theMessage="formItem ${formItem.id} created"
-				theRefreshNodes=["form_${formItem.form.id}"]				
-			}
-			
-			// moving a formItem
-			if (type1=="formitem" && type2=="formitem" ) {								
-				def formItem=FormItem.get(id1)
-				def refFormItem=FormItem.get(id2)
-				def position=refFormItem.position
-				
-				// move the item into position.
-				formItem.position=refFormItem.position
-				formItem.save(flush:true)
-				
-				def n=1
-				FormItem.findAllByForm(refFormItem.form,[sort:'position',order:'asc']).each { fi ->
-					fi.position=n++
 				}
 				
-				if ((moveType=="before") && (formItem.position>refFormItem.position)) {
-					swapPosition(formItem,refFormItem)					
+			break;
+			
+			case "delete_node":
+				switch(node1.type) {
+					case "workflow":
+						result= dmeEventService.deleteWorkflowDefinition(node1);
+					break
+					case "formitem":
+						result= dmeEventService.deleteFormItem(node1);
+					break
+					case "form":
+						result= dmeEventService.deleteForm(node1);
+					break
+					case "fieldtype":
+						result= dmeEventService.deleteFieldType(node1);
+					break
+					case "field":
+						result= dmeEventService.deleteField(node1);
+				break
 				}
-
-				if ((moveType=="after") && (formItem.position<refFormItem.position)) {
-					swapPosition(formItem,refFormItem)					
-				}
-			
-			
-				successFlag=true
-				allowedFlag=false
-				theMessage="formItem ${formItem.id} moved"
-				theRefreshNodes=["form_${formItem.form.id}"]
-				
-			}
-			
-			
-			if ((type1=="fieldlist") && (type2=="field") && (params.isCopy=="true")) {
-				allowedFlag=false
-				theMessage="not implemented"
-				successFlag="false"
-			}
-			
-			if ((type1=="field") && (type2=="fieldlist")) {
-				allowedFlag=false
-				theMessage="not implemented"
-				successFlag="false"
-			}
-						
-			if (params.func=="rename_node") {
-				allowedFlag=false
-				theMessage="not implemented"
-				successFlag="false"
-			}
-			
-			if ((params.func=="delete_node")  && (type1=="workflow") ){
-				def workflowDefinition=WorkflowDefinition.get(new Long(id1))
-				
-				def n=Form.countByWorkflow(workflowDefinition)
-									
-				if(n>0) {
-					println "NOT DOING IT"
-					theMessage="There are still ${n} forms(s) referencing this workflow!"
-					successFlag=false
-					allowedFlag=false
-				} else {
-					println "Deleting workflow ${id1}"
-					workflowDefinition.delete()
-					theRefreshNodes=["workflowTree"]
-	                successFlag=true				
-	 				allowedFlag=false
-				}
-			}
-			
-			
-			
-			if ((params.func=="delete_node")  && (type1=="field") ){
-				def field=Field.get(new Long(id1))
-				
-				def n=FormItem.countByField(field)
-									
-				if(n>0) {
-					println "NOT DOING IT"
-					theMessage="There are still ${n} field(s) referencing this fieldtype!"
-					successFlag=false
-					allowedFlag=false
-				} else {
-					println "Deleting field ${id1}"
-					treeDelete(field)
-					theRefreshNodes=["field_${field.parent.id}"]
-	                successFlag=true				
-	 				allowedFlag=false
-				}
-			}
-			
-			if ((params.func=="delete_node")  && (type1=="formitem") ){
-				
-				def formItem=FormItem.get(new Long(id1))				
-				theRefreshNodes=["form_${formItem.form.id}"]
-				println "Deleting formItem ${id1}"				
-				formItem.delete()
-				successFlag=true				
-				allowedFlag=false
-			}
-			
-			if ((params.func=="delete_node")  && (type1=="form") ){
-				
-				def form=Form.get(new Long(id1))				
-				theRefreshNodes=["workflow_${form.workflow.id}"]
-				println "Deleting form ${id1}"
-				//form.removeFromWorkflowDefinition(form.workflow)
-				
-				form.workflow.removeFromForm(form)
-				   
-				
-				form.delete()
-				successFlag=true				
-				allowedFlag=false
-			}
+			 
 
 			
-			
-			
-			if ((params.func=="delete_node")  && (type1=="fieldtype") ){
-				println "DELETE"
-				allowedFlag=true
-				def fieldType=FieldType.get(new Long(id1))
-				def n=Field.countByFieldType(fieldType)
-				if(n>0) {
-					println "NOT DOING IT"
-					theMessage="There are still ${n} field(s) referencing this fieldtype!"
-					successFlag=false
-					allowedFlag=false
-				}
-				
-				theRefreshNodes=[]
-				if (allowedFlag) {
-					println "DOING IT"
-					theMessage= "Deleting fieldtype ${id1}"
-					fieldType.delete()				
-					allowedFlag=true
-					successFlag=true
-				}
-			}
-			
-			
-			
-			
-			//TODO should be a list but ends up a string????
-			if (!theRefreshNodes) {
-				if (params.id1) theRefreshNodes+="${params.id1}"
-				if (params.id2) theRefreshNodes+="${params.id2}"
-			}
-			println "REFRESHNODES:${theRefreshNodes}"
-			
-			
-			
-			/*
-			
-			render(contentType:"text/json") {
-    			result(
-    					returnValue:"okay",
-    					allowed:allowedFlag,
-    					message:'ooooh een berichtje',
-    					refreshNodes:theRefreshNodes
-    				)
-    		}
-    		*/
-			
-			def result = [
-			              	returnValue:true,
-			              	allowed:allowedFlag,
-			              	success:successFlag,
-			              	message:theMessage ,
-			              	refreshNodes:theRefreshNodes
-			              ]
-          def res=[result:result]
-          render res as JSON
-			
-			
-			
-			
-			
+		}
+		def res=[result:result]
+        render res as JSON		
 	}
+	
+	
+	
 	
 	def delete = {
 			println "DELETE: ${params}"
@@ -954,10 +543,11 @@ class DataModelEditorController {
 	
 	def fieldJSON = {	
 			def elements=[]
-			def fieldList=false
+			def fieldType=false
 			if (!params.id || params.id=="") {				
-				elements=FieldList.findAll([order:'asc',sort:'name'])
-				fieldList=true
+				//elements=FieldType.findAllByListParentIsNotNull([order:'asc',sort:'name'])
+				elements=FieldType.findAll([order:'asc',sort:'name'])
+				fieldType=true
 			} else {
 				if (params.id.startsWith("field_")) {
 					def id=new Integer(params.id.split("_")[1])
@@ -965,26 +555,24 @@ class DataModelEditorController {
 					elements=Field.findAllByParent(p,[sort:'fieldPosition'])
 				} else {
 					def id=new Integer(params.id.split("_")[1])
-					def p=FieldList.get(id).parent
-					//elements=Field.findAllByParent(p,[sort:'fieldPosition'])
-					elements=[p]
+					def p=FieldType.get(id).listParent
+					elements=Field.findAllByParent(p,[sort:'fieldPosition'])
+					//elements=[p]
 				}
 			}
 			
-			def prefix=fieldList ? "fieldlist" : "field" 
+			def prefix=fieldType ? "fieldtype" : "field" 
 			
 			def elementlist = { elements.collect { f ->
 					boolean hasChildren=false
 					def cssClass=""
-					if (f.class.name=="org.workflow4people.FieldList") {
-						def parentField=f.parent
-						hasChildren=Field.countByParent(parentField)>0
-						cssClass="fieldlist"
+					if (f.class.name=="org.workflow4people.FieldType") {
+						hasChildren=f.listParent!=null
+						cssClass="fieldtype"
 
 					} else {
 						hasChildren= Field.countByParent(f)>0
 						cssClass="field fieldtype-${f.fieldType.name} basetype-${f.fieldType.baseType.name}"
-
 					}
  
 					def nodeRel = hasChildren ? 'folder' : 'default'						

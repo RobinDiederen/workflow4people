@@ -19,6 +19,8 @@
  */
 package org.workflow4people
 import grails.plugins.springsecurity.Secured
+import grails.converters.*
+
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 /**
  * Controller for Field domain class
@@ -26,6 +28,8 @@ import grails.plugins.springsecurity.Secured
  * @author Joost Horward
  */
 class FieldController {
+	
+	def dialogService
     
     def index = { redirect(action:list,params:params) }
 
@@ -121,8 +125,9 @@ class FieldController {
             return [ fieldInstance : fieldInstance ]
         }
     }
-    
+    /*
     def dialog = {
+		
         def fieldInstance = Field.get( params.id )
 
         if(!fieldInstance) {
@@ -133,7 +138,10 @@ class FieldController {
             return [ fieldInstance : fieldInstance ]
         }
     }
-    
+	*/
+	def dialog = { return dialogService.edit(Field,params) }
+	
+	def submitdialog = { render dialogService.submit(Field,params) as JSON }
     
     
     

@@ -5,7 +5,7 @@
 	        <wf:textField object="${fieldInstance}" propertyName="fieldPosition" mode="show" />                            
 	        <wf:textField object="${fieldInstance}" propertyName="name" mode="edit" />                            
 	        <wf:domainObject object="${fieldInstance}" propertyName="fieldType" mode="edit" />
-	        <wf:domainObject object="${fieldInstance}" propertyName="fieldList" mode="edit" />                        
+	        
 	    	<wf:textArea object="${fieldInstance}" propertyName="description" mode="edit" />                        	
 	        <wf:textField object="${fieldInstance}" propertyName="defaultValue" mode="edit" />
 	    	<wf:textField object="${fieldInstance}" propertyName="label" mode="edit" />
@@ -25,7 +25,9 @@
 			<wf:textField object="${fieldInstance}" propertyName="dependencyParameter" mode="edit" />
 			<wf:checkBox object="${fieldInstance}" propertyName="readonly" mode="edit" />
 			<wf:textField object="${fieldInstance}" propertyName="fieldLength" mode="edit" />
+			<%-- 
 			<wf:textField object="${fieldInstance}" propertyName="xpath" mode="show" />
+			 --%>
 			<wf:domainObject object="${fieldInstance}" propertyName="parent" mode="show" />
 		</wf:tab>
 	</wf:tabs>

@@ -595,6 +595,17 @@ $(function() {
             									"label": 'Delete JQ',
             									"action" : function( node ) { jqConfirm("Do you really want to delete "+trim(node[0].textContent)+" ?","Delete","/workflow4people/dataModelEditorController/deleteNode/"+node[0].id); }
             								},*/
+            					
+            					"insertField" : {
+									"label": 'Insert field ...',
+									//node.id.split("_").pop()
+									"action" : function( node ) { 
+										//alert (node[0].id.split("_").pop())
+										formDialog(null,"field",null,{parentId:node[0].id.split("_").pop() })
+									}
+								},
+					
+            					
 								"delete" : {
             									"label": 'Delete',
             									"action" : function( node ) {this.remove(node) }
@@ -630,7 +641,8 @@ $(function() {
     
     	workflowTree=$("#workflowTree").jstree({         
 
-        "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
+        "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu","hotkeys" ],
+        
         
         "json_data" : {
             "ajax" : {
@@ -648,6 +660,9 @@ $(function() {
     	
     	
     	});  
+    	
+    	
+    	
     
     
         /*

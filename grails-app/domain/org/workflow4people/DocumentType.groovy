@@ -36,7 +36,7 @@ class DocumentType {
     	descriptionTemplate(help:'x')
     	dateCreated(nullable:true,edit:false,help:'x')
     	lastUpdated(nullable:true,edit:false,help:'x')
-    	fieldList(help:'x')
+		fieldType()
     	viewForm(help:'x')
     	documentIndexField(selectSort:'name',help:'x')
     	cmisPathTemplate(nullable:true)
@@ -49,8 +49,8 @@ class DocumentType {
     @SearchableProperty(name = "documentType")
     String name
     String description
-    String descriptionTemplate
-    FieldList fieldList
+    String descriptionTemplate    
+	FieldType fieldType
     Form viewForm
     
     String cmisPathTemplate

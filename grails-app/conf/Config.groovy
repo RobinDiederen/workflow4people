@@ -54,13 +54,13 @@ log4j = {
     'org.hibernate'
     warn 'org.codehaus.groovy.grails.orm.hibernate' // hibernate integration
     warn   'org.mortbay.log'    
-    debug 'grails.app.endpoint.org.workflow4people'
+   // debug 'grails.app.endpoint.org.workflow4people'
    // debug 'org.jbpm'
     warn 'import org.codehaus.groovy.grails.plugins.springsecurity'
     warn 'org.springframework.security'
-    debug 'org.workflow4people'
-    debug 'org.workflow4people.services'
-    
+    //debug 'grails.app.controller.org.workflow4people'
+    //debug 'grails.app.service.org.workflow4people.services'
+	debug "grails.app"
     
 }
 

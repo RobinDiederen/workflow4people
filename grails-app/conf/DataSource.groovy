@@ -20,7 +20,8 @@ environments {
 
             dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
 
-        }
+        } 
+
     }
     test {
         dataSource {

@@ -4,8 +4,7 @@
 	        <wf:textField object="${fieldInstance}" propertyName="id" mode="show" />                            
 	        <wf:textField object="${fieldInstance}" propertyName="fieldPosition" mode="show" />                            
 	        <wf:textField object="${fieldInstance}" propertyName="name" mode="edit" />                            
-	        <wf:domainObject object="${fieldInstance}" propertyName="fieldType" mode="edit" />
-	        <wf:domainObject object="${fieldInstance}" propertyName="fieldList" mode="edit" />                        
+	        <wf:domainObject object="${fieldInstance}" propertyName="fieldType" mode="edit" />                        
 	    	<wf:textArea object="${fieldInstance}" propertyName="description" mode="edit" />                        	
 	        <wf:textField object="${fieldInstance}" propertyName="defaultValue" mode="edit" />
 	    	<wf:textField object="${fieldInstance}" propertyName="label" mode="edit" />

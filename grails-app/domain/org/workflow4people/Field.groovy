@@ -26,54 +26,48 @@ import org.workflow4people.services.*;
  */
 
 class Field {
-	//static transients = ["xpath"]
-    static listProperties=['id','name','description']
-	static belongsTo = [fieldList: FieldList]	
+	static listProperties=['id','name','description']
+	static belongsTo = [parent: Field]
     static constraints = {
 		parent(help:'x',nullable:true)
-		fieldPosition(help:'x')
+		fieldPosition()
 		name(help:'x',class:'wide')
 		fieldType(help:'x')
-		childFieldList(nullable:true,display:true,help:'x')		
-		fieldList(nullable:true,display:false)
+		
 				
-		description(nullable:true,size:0..50000,help:'x')
+		description(nullable:true,size:0..50000)
     	
-    	defaultValue(nullable:true,help:'x',class:'wide')
-    	label(nullable:true,help:'x',class:'wide')
-    	help(nullable:true,size:0..50000,help:'x')
-	    alert(nullable:true,size:0..50000,help:'x')
+    	defaultValue(nullable:true,class:'wide')
+    	label(nullable:true,class:'wide')
+    	help(nullable:true,size:0..50000)
+	    alert(nullable:true,size:0..50000)
 	    fieldLength(nullable:true)
-	    contentText(nullable:true,size:0..50000,help:'x')
+	    contentText(nullable:true,size:0..50000)
 	    
 	    
 	    // Determines repetition of this field
 	    
-	    minOccurs(nullable:true,help:'x')
-	    maxOccurs(nullable:true,help:'x')
-		    nillable(nullable:true,help:'x')
+	    minOccurs(nullable:true)
+	    maxOccurs(nullable:true)
+		    nillable(nullable:true)
 		    
-		    // Determines dependency of this field on another field
-		dependsOn(nullable:true,help:'x')
-		dependencyType(nullable:true,inList:['true','false','empty','nonempty','gt','lt','eq','ne'],help:'x')	    	
-		dependencyParameter(nullable:true,help:'x')
-		    //customDependencyExpression(nullable:true,size:0..50000,help:'x')
-	    //dependencyExpression(nullable:true,size:0..50000,help:'x')
+	    // Determines dependency of this field on another field
+		dependsOn(nullable:true)
+		dependencyType(nullable:true,inList:['true','false','empty','nonempty','gt','lt','eq','ne'])	    	
+		dependencyParameter(nullable:true)
 	    
     	readonly(help:'x')
-	   // securitylevelRead(nullable:true,help:'x')
-    //	securitylevelReadWrite(nullable:true,help:'x')
-
-	    xpath(nullable:true,help:'x',class:'extrawide')
+	
+	    xpath(nullable:true,class:'extrawide')
 	    
     }
 	def templateService
-    int fieldPosition
+    int fieldPosition=1
     
     /**
      * The parent of this field
      */
-    Field parent
+    //Field parent
     
     /**
      * The type of this field
@@ -84,12 +78,10 @@ class Field {
      * The child field list that is represented by this field. When this is populated, the field behaves as a list.
      * The fieldType should be set to a type that supports a list.  
      */
-    FieldList childFieldList
+    //FieldList childFieldList
     
     
 	boolean readonly=false
-	//int securitylevelRead
-	//int securitylevelReadWrite
 	
     String description
     
@@ -116,25 +108,16 @@ class Field {
     Field dependsOn
     String dependencyType
     String dependencyParameter
-    //String customDependencyExpression
-    //String dependencyExpression
-    
-    // Transient field
-   // String xpath
-    
+        
     String toString() {
 		
 		  def theName
 		  try {
-			  theName = name ? name : fieldType.name;
-			  if (fieldList){			  
-				  theName="${theName} (${fieldList.name})"
-			  }
-		  
+			  theName = name ? name : fieldType.name;		  
 			  return "${theName} - ${fieldType.name}"
 		  } 
 		  catch (Exception e) {
-			  return "${name} - fieldType or fieldList does not exist"
+			  return "${name} - fieldType does not exist"
 		  }
 	  }
 	
@@ -163,7 +146,7 @@ class Field {
 	}
 	
 	def getPrefixedName() {
-		return "${fieldList.namespace.prefix}:${getFieldProperty('name')}"
+		return "${parent.fieldType.namespace.prefix}:${getFieldProperty('name')}"
 	}
 	
 	def getBinding() {
@@ -306,27 +289,23 @@ class Field {
 			return "XPath Nested too deep!"
 		}
 	}
+
+		
 	
-	
-	def getNamespacePrefix() {		
-			if (this.fieldList) {
-				return fieldList?.namespace?.prefix 
-			} else {
-				if (parent) {
-					return parent.namespacePrefix
-				} else {
-					"error"
+	def getNamespacePrefix() {
+			def thePrefix=null
+			def f=this
+			println "getting namesp"
+			while (thePrefix==null && f.parent!=null && f.parent!=f) {
+				println "f=${f}"				
+				f=f.parent
+				if (f.fieldType.namespace) {
+					thePrefix=f.fieldType.namespace.prefix
 				}
 			}
+			return thePrefix
 	}
-	void storeXPath(String prefix,String theXPath){
-		//xpath=theXPath+"/${prefix}:${name}"
-    	xpath=theXPath
-    	println "Field storing XPath ${xpath}"
-    	if (childFieldList) {
-    		childFieldList.storeXPath(prefix,xpath)    			    	    		
-    	}
-    }
+	
 	
 	def propertyMissing(String name,args){	
 		if (name.lastIndexOf("Snippet")>0) {
@@ -360,6 +339,21 @@ class Field {
 	        fields+=field.getDescendants()
 		}
 		return fields
+	}
+	
+	/*
+	 * This function returns the id of the parent of this field that is visible in the DME
+	 * That means that if the parent of this field is the listParent the visible element is the FieldType
+	 */
+	def getVisibleParentId() {
+		def parentId=""
+		if (parent?.parent==null || parent?.parent==parent) {
+			def theFieldType=FieldType.findByListParent(parent)			
+			parentId="fieldtype_${theFieldType?.id}"
+		} else {
+			parentId="field_${parent.id}"
+		}
+		return parentId
 	}
 	
 }
