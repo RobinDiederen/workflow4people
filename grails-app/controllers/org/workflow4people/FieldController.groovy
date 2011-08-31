@@ -143,6 +143,29 @@ class FieldController {
 	
 	def submitdialog = { render dialogService.submit(Field,params) as JSON }
     
+	/*
+	 * Creates new field under a FieldType. Creates the listParent field if it did not exist already
+	 */
+	def submitUnderFieldType = { 
+		def fieldType=FieldType.get(params.parentId)
+		if (!fieldType.listParent) {			
+				// Create new listParent field if it didn't exist
+				def theListParent=new Field()
+				theListParent.name=fieldType.name
+				theListParent.parent=null
+				theListParent.fieldType=fieldType
+				theListParent.save(failOnError:true,flush:true)
+				fieldType.listParent=theListParent
+				fieldType.save(failOnError:true,flush:true)			
+		}
+		def field=new Field()
+		field.properties = params
+		field.parent=fieldType.listParent
+		
+		def result = dialogService.submit(Field,params,field)
+		result["result"]+=[refreshNodes:["fieldtype_${fieldType.id}"]]
+		render result as JSON 
+	}
     
     
     /*

@@ -399,6 +399,11 @@ class DataModelEditorController {
 				   result=dmeEventService.dragFieldTypeToFieldType(node1,node2,moveType,isCopy) 
 				}
 				
+				if (node1.type.equals("field") && node2.type.equals("fieldtype") && (moveType.equals("inside"))) {
+					result=dmeEventService.dragFieldToFieldType(node1,node2,moveType,isCopy)
+				 }
+				
+				
 				if (node1.type=="field" && node2.type=="form" && moveType=="inside") {
 					result=dmeEventService.dragFieldToForm(node1,node2,moveType,isCopy)				
 				}
@@ -542,7 +547,9 @@ class DataModelEditorController {
 				} else {
 					def id=new Integer(params.id.split("_")[1])
 					def p=FieldType.get(id).listParent
-					elements=Field.findAllByParent(p,[sort:'fieldPosition'])
+					if(p) {
+						elements=Field.findAllByParent(p,[sort:'fieldPosition'])
+					}
 					//elements=[p]
 				}
 			}

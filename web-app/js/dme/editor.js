@@ -592,44 +592,34 @@ $(function() {
         	"move.always_copy" : "multitree"
         },
  
-       "contextmenu" : {
-        	
-        
+       "contextmenu" : {        
         	"items": function ( node ) {
-            			var obj = {
-            					/*"deletejq" : {
-            									"label": 'Delete JQ',
-            									"action" : function( node ) { jqConfirm("Do you really want to delete "+trim(node[0].textContent)+" ?","Delete","/workflow4people/dataModelEditorController/deleteNode/"+node[0].id); }
-            								},*/
-            					
+        		
+
+
+            			var obj = {            					
             					"insertField" : {
 									"label": 'Insert field ...',
 									//node.id.split("_").pop()
 									"action" : function( node ) { 
 										//alert (node[0].id.split("_").pop())
-										formDialog(null,"field",null,{parentId:node[0].id.split("_").pop() })
+				        				if (node[0].id.substring(0,10)=="fieldtype_") {
+				        					formDialog(null,"field",{submitname:'submitUnderFieldType'},{parentId:node[0].id.split("_").pop() })
+				        				} else {
+				        					formDialog(null,"field",null,{parentId:node[0].id.split("_").pop() })
+				        				}
 									}
 								},
-					
-            					
 								"delete" : {
             									"label": 'Delete',
             									"action" : function( node ) {this.remove(node) }
             								}
-            								
-            			
-            				
-            				
-    					}
-            			
-            			
+            			}
             			return obj;
-        			}
-        		
-   		
-        	
-        	
-        	
+            			
+            			
+            			
+        			}        			
         },
         
         "json_data" : {

@@ -121,7 +121,21 @@ class DmeEventService {
 	}
 	
 	def dragFieldToFieldType(def node1,node2,moveType,isCopy) {
+		def fieldType2=FieldType.get(node2.id)
+		if (!fieldType2.listParent) {
+			// Create new listParent field if it didn't exist
+			def theListParent=new Field()
+			theListParent.name=fieldType2.name
+			theListParent.parent=null
+			theListParent.fieldType=fieldType2
+			theListParent.save(failOnError:true,flush:true)
+			fieldType2.listParent=theListParent
+			fieldType2.save(failOnError:true,flush:true)
+		}
 		
+		node2.id=fieldType2.listParent.id
+		node2.type="field"		
+		return dragFieldToField(node1,node2,moveType,isCopy)			
 	}
 		
 	
@@ -308,19 +322,40 @@ class DmeEventService {
 	
 	def deleteField(def node) {
 		def result=this.defaultResult
-		
+		int fieldCount
 		def field=Field.get(new Long(node.id))
 		def theRefreshNodes=[field.visibleParentId]
 		def n=FormItem.countByField(field)
+		def theFieldType=null
 							
 		if(n>0) {
 			log.debug "NOT DOING IT"
-			result.message="There are still ${n} field(s) referencing this fieldtype!"				
+			result.message="There are still ${n} formItem(s) referencing this fieldtype!"				
 		} else {
+			def deleteListParent=null
+			if (field.parent?.parent==null || field.parent?.parent==field.parent?.parent) {
+				theFieldType=FieldType.findByListParent(field.parent)
+				if (theFieldType)
+					
+					fieldCount=Field.countByParent(field.parent)
+					if (fieldCount==1) {
+						deleteListParent=field.parent
+					}
+				// check if this is the last child of this listParent
+				// if so, clean up the listParent, too
+				// AFTER removing the field(s) 	
+			}
+			
 			log.debug "Deleting field ${node.id}"
 			dmeService.treeDelete(field)
+			if (deleteListParent) {
+				log.debug "Deleting list parent #${deleteListParent.id}"
+				theFieldType.listParent=null
+				theFieldType.save(failOnError:true)
+				deleteListParent.delete()
+			}
 			result.refreshNodes=theRefreshNodes
-			result.message="Deleting field ${node.id}"
+			result.message="Deleted field ${node.id}"
 			result.success=true				
 		}
 		return result
@@ -341,7 +376,7 @@ class DmeEventService {
 	def deleteForm(def node) {
 		def result=this.defaultResult
 		
-		def form=Form.get(new Long(node1.id))
+		def form=Form.get(new Long(node.id))
 		result.refreshNodes=["workflow_${form.workflow.id}"]
 		log.debug "Deleting form ${node.id}"
 		//form.removeFromWorkflowDefinition(form.workflow)

@@ -347,7 +347,7 @@ class Field {
 	 */
 	def getVisibleParentId() {
 		def parentId=""
-		if (parent?.parent==null || parent?.parent==parent) {
+		if (parent?.parent==null || parent?.parent==parent?.parent) {
 			def theFieldType=FieldType.findByListParent(parent)			
 			parentId="fieldtype_${theFieldType?.id}"
 		} else {
