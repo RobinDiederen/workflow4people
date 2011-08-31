@@ -49,7 +49,18 @@ class DocumentTypeController {
 
 	def dialog = { return dialogService.edit(DocumentType,params) }
 	
-	def submitdialog = { render dialogService.submit(DocumentType,params) as JSON }
+	def submitdialog = { 
+		def res = dialogService.submit(DocumentType,params)
+		
+		//Remove of all documentIndexField from documenttype
+		if (res.result.success && params.documentIndexField == null) {
+			def instance = DocumentType.get(res.result.id)
+			instance.documentIndexField = []
+			instance.save()
+		}
+
+		render res as JSON
+	}
 	
 	def delete = { render dialogService.delete(DocumentType,params) as JSON }
 	

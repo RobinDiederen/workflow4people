@@ -47,7 +47,18 @@ class NamespaceController {
 		
 	def dialog = { return dialogService.edit(Namespace,params) }
 	
-	def submitdialog = { render dialogService.submit(Namespace,params) as JSON }
+	def submitdialog = { 
+		def res = dialogService.submit(Namespace,params)
+		
+		//Remove of all importSchema from namespace
+		if (res.result.success && params.importSchema == null) {
+			def instance = Namespace.get(res.result.id)
+			instance.importSchema = []
+			instance.save()
+		}
+
+		render res as JSON
+	}
 	
 	def delete = { render dialogService.delete(Namespace,params) as JSON }
 	

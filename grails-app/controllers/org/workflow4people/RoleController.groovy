@@ -53,7 +53,18 @@ class RoleController {
 
     def dialog = { return dialogService.edit(Role,params) }
 	
-	def submitdialog = { render dialogService.submit(Role,params) as JSON }
+	def submitdialog = {
+		def res = dialogService.submit(Role,params)
+		
+		//Remove of all roleActions from role	
+		if (res.result.success && params.roleAction == null) {
+			def instance = Role.get(res.result.id)
+			instance.roleAction = []
+			instance.save()
+		}
+
+		render res as JSON
+}
 	
 	def delete = { render dialogService.delete(Role,params) as JSON }
 	
