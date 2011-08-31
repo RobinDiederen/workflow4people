@@ -32,7 +32,7 @@
 			self.selectionList = $("<ul></ul>")
 			.addClass("list");
 			var list = $("<div></div>")
-			.addClass("ui-widget-content scroll-y")
+			.addClass("ui-widget-content")
 			.append(self.selectionList)
 			.appendTo(self.container);
 			

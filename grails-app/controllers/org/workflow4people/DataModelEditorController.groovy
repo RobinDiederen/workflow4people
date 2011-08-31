@@ -88,7 +88,7 @@ class DataModelEditorController {
 		if (!model['formInstance'].id) {
 			model['formInstance'].formAction=Action.findByName('handle')
 		}
-		return model
+		render(view:'/form/dialog',model:model)
 	}
 	
 	
@@ -116,56 +116,42 @@ class DataModelEditorController {
 	
 	def submitWorkflowDefinition = {
 			println "Submit WorkflowDefinition params: ${params}"
-			def id
-			def workflowDefinitionInstance			
-			if (params.id) {
-				id=params.id.split("_")[1]
-				workflowDefinitionInstance = WorkflowDefinition.get(id )
-			} else {
-				workflowDefinitionInstance = new WorkflowDefinition()
-			}
-				
-			workflowDefinitionInstance.properties = params
-			def theRefreshNodes=["workflowTree"]
-			workflowDefinitionInstance.save(failOnError:true)
-			
+
+			def res = dialogService.submit(WorkflowDefinition,params)
+
 			// for new workflows, add the request and show form automatically
-			if (!params.id) {
+			if (res.result.success && (params.id == "null")) {
+
+				def instance = WorkflowDefinition.get(res.result.id)
+
 				def showForm=new Form()
-				showForm.workflow=workflowDefinitionInstance
+				showForm.workflow=instance
 				showForm.name="show"
 				showForm.title="Show"
-				showForm.description="This form shows a ${workflowDefinitionInstance.title}"
-				showForm.explanationMessage="This form shows a ${workflowDefinitionInstance.title}"	
+				showForm.description="This form shows a ${instance.title}"
+				showForm.explanationMessage="This form shows a ${instance.title}"	
 				showForm.confirmationMessage="Show has no confirmation"
 				showForm.template="show"
 				showForm.formAction=Action.findByName("show")
 				showForm.save(failOnError:true)
-				
+
 				def requestForm=new Form()
-				requestForm.workflow=workflowDefinitionInstance
+				requestForm.workflow=instance
 				requestForm.name="request"
 				requestForm.title="Request"
-				requestForm.description="This form initiates a ${workflowDefinitionInstance.title} workflow"
-				requestForm.explanationMessage="This initiates a ${workflowDefinitionInstance.title} workflow"	
-							
-				
-				requestForm.confirmationMessage="Thank you for filling in the ${workflowDefinitionInstance.title} request form"
+				requestForm.description="This form initiates a ${instance.title} workflow"
+				requestForm.explanationMessage="This initiates a ${instance.title} workflow"
+				requestForm.confirmationMessage="Thank you for filling in the ${instance.title} request form"
 				requestForm.template="request"
 				requestForm.formAction=Action.findByName("request")
 				requestForm.save(failOnError:true)
-				
+
 			}
-			
- 			def result = [
- 			              	returnValue:true,
- 			              	message:"workflow #${workflowDefinitionInstance.id} : ${workflowDefinitionInstance.name} updated" ,
- 			              	id:params.id,
- 			              	name: workflowDefinitionInstance.name,	
- 			              	refreshNodes:theRefreshNodes
- 			              ]              
-             def res=[result:result]
-             render res as JSON			
+
+			//Add extra values to result (ex. refreshNodes)
+			def theRefreshNodes=["workflowTree"]
+			res.result += [returnValue:true, refreshNodes:theRefreshNodes]
+			render res as JSON			
 	}
 
 

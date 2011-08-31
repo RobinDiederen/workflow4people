@@ -51,8 +51,8 @@ class DialogService {
 			def defaultDomainClass = new DefaultGrailsDomainClass( domainClass )
 			def domainPropertyName=defaultDomainClass.propertyName		
 			def domainClassName=defaultDomainClass.getName()
-		
-    		def id=params.id
+
+			def action
     		def domainClassInstance
     		if (instance) {
     			domainClassInstance=instance
@@ -61,16 +61,16 @@ class DialogService {
 	    		    if (params.id.contains("_")){
 	    					params.id=params.id.split("_")[1]
 	    			}
-	    			domainClassInstance = domainClass.get(params.id )
+	    			domainClassInstance = domainClass.get(params.id)
+					action = 'updated'
 	    		} else 
 	    		{
 	    			domainClassInstance = domainClass.newInstance()
+					action = 'created'
 	    		}
 	    		domainClassInstance.properties = params
     		}
 			
-            def theRefreshNodes=null
-            
             def successFlag=!domainClassInstance.hasErrors() && domainClassInstance.save(flush: true)
             
             def resultMessage
@@ -80,7 +80,8 @@ class DialogService {
             
             	 def session = sessionFactory.getCurrentSession()
             	session.flush()
-            	resultMessage="${domainClassName} #${params.id} : ${domainClassInstance.toString()} updated" 
+				
+            	resultMessage="${domainClassName} #${domainClassInstance.id} : ${domainClassInstance.toString()} ${action}" 
             } else {
             	g.eachError(bean:domainClassInstance) {        		
             		theErrorFields+=it.field
@@ -90,10 +91,9 @@ class DialogService {
     		                     
     		def result = [
     		              	success:successFlag,
-    		              	message:resultMessage ,
-    		              	id:params.id,
+    		              	message:resultMessage,
+							id: domainClassInstance.id,
     		              	name: domainClassInstance.toString(),	
-    		              	refreshNodes:theRefreshNodes,
     		              	errorFields:theErrorFields
     		              ]              
              def res=[result:result]
