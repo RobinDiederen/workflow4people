@@ -4,7 +4,7 @@ import org.workflow4people.*
 
 class DmeService {
 	//static scope='session'
-	
+	def grailsApplication
     boolean transactional = false    
 	
 	def treeCopy(Field field) {
