@@ -83,6 +83,7 @@ class DocumentService implements InitializingBean {
     	def theDocumentId
     	
     	Document.withTransaction { status ->
+			def currentUser="${document?.header?.user?.name?.text()}"
     		def header=document.header
     		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
     		def outputBuilder = new StreamingMarkupBuilder()
@@ -172,14 +173,51 @@ class DocumentService implements InitializingBean {
 	    		workflow.save(failOnError:true)
 	    		println "Done."
     		}
-    		
+    		/*
     		if ((header.taskId?.text().size()>0) && (header.taskOutcome?.text().size()>0)) {    			
 				//taskService.completeTask(header.taskId.text(),header.taskOutcome.text())
 				def id = new java.lang.Long(header.taskId?.text())
 				def task=Task.get(id)
 				task.outcome=header.taskOutcome?.text()
 				task.save(failOnError:true)
-			}   
+			}
+			*/
+			
+			// Process task part of header:
+			// - transition
+			// - status update
+			// priority update
+			
+			if ((header.task?.id?.text().size()>0)) {
+				def id = new java.lang.Long(header.task?.id?.text())
+				def task=Task.get(id)
+				task.noMessage=true
+				if (header?.task?.outcome?.text().size()>0) {
+					task.outcome=header.task.outcome.text()
+					task.noMessage=false
+				}
+				def formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")				
+				if (header?.task?.dueDate?.text().size()>0) {
+					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
+				}
+				
+				if (header?.task?.priority.text().size()>0) {
+					task.priority=new java.lang.Integer(header?.task?.priority?.text())
+				}
+				
+				if (header?.task?.status?.text().size()>0) {
+					if(task.taskStatus?.name!=header.task.status.text()) {
+						def theTaskStatus=TaskStatus.findByName(header.task.status.text())
+						if (theTaskStatus) {
+							task.taskStatus=theTaskStatus
+							task.statusUser=currentUser
+						}
+					} 
+					
+				}
+				task.save(failOnError:true)
+			}
+			   
     		
     	
     		indexDocument(documentInstance)

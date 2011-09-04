@@ -112,7 +112,7 @@ class FormTagLib {
 		
         out << body((attrs.var):model)
 	}
-		
+	/*	
 	def sections = { attrs,body -> 
 		def formInstance=attrs.form
 		org.workflow4people.FormItem.findAllByForm(formInstance,[sort:'position',order:'asc']).each { formItem ->
@@ -151,6 +151,7 @@ class FormTagLib {
 		}
 	
 	}
+	*/
 	
 	def namespaceFieldLists = { attrs, body ->
 	FieldList.findAllByNamespace(attrs.namespace,[sort:'name',order:'asc']).each({ fieldList ->		

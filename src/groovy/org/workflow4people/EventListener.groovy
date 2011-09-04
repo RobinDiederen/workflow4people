@@ -20,6 +20,7 @@
 
 package org.workflow4people;
 import org.hibernate.event.*
+import org.apache.commons.logging.LogFactory
 import grails.plugin.jms.*
 /*
  * Event listener for Hibernate events in the Grails domain objects
@@ -28,7 +29,7 @@ import grails.plugin.jms.*
 
 class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 	def jmsService
-	
+	private static final log = LogFactory.getLog(this)
 	
 	void onPostUpdate(PostUpdateEvent postUpdateEvent) {
 		def entity=postUpdateEvent.getEntity()
@@ -71,7 +72,7 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 	    		  jmsService.send(queueName,[id:entity.id])
 		      }
 		    }
-		println "EventListener: INSERT EVENT v3"
+		log.debug "EventListener: INSERT EVENT v3"
 	}
 	
 	
@@ -87,7 +88,7 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 	    }
 		
 		if (entity instanceof org.workflow4people.Task && !entity.noMessage) {
-		      println "EventListener: DELETE WFP TASK EVENT"
+		      log.debug "EventListener: DELETE WFP TASK EVENT"
 		      if (!entity.noMessage) {
 		    	  def engineName=entity.workflow.workflowEngine.name
 		    	  String queueName="wfp.${engineName}.out.task.delete"

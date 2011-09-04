@@ -75,6 +75,15 @@
 			<element name="folderUrl" type="string" minOccurs="0" />			
 		</sequence>
 	</complexType>
+	<complexType name="task">
+		<element name="id" type="string" minOccurs="0" />
+		<element name="name" type="string" minOccurs="0" />
+		<element name="description" type="string" minOccurs="0" />
+		<element name="outcome" type="string" minOccurs="0" />
+		<element name="dueDate" type="string" minOccurs="0" />
+		<element name="priority" type="string" minOccurs="0" />
+		<element name="assignee" type="string" minOccurs="0" />
+  </complexType>
 	
 
 	<complexType name="header">
@@ -97,6 +106,7 @@
 	    <element name="forms" type="doc:forms" minOccurs="0"/>
 	    <element name="files" type="doc:files" minOccurs="0"/>
 	    <element name="cmis" type="doc:cmis" minOccurs="0" />
+	    <element name="task" type="doc:task" minOccurs="0" />
 	  </sequence>	
 	</complexType>		
 	

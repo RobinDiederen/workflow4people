@@ -133,8 +133,9 @@ class WorkflowService {
     	
     }
     
-    
-    
+    def getTaskStatuses() {
+		return TaskStatus.findAll([sort:'title',order:'asc'])
+	}
     
 
  }

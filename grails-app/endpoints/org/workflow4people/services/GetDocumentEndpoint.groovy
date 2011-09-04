@@ -60,11 +60,12 @@ class GetDocumentEndpoint {
 		log.debug "Processing GetDocument service request ${request.name()}"
 		def documentId
 		def taskId=""
+		def task
 		if (request.request.documentId.text().size()>0) {
 		  documentId = request.request.documentId.text().asType(Long)
 		} else {
 		  taskId = request.request.taskId.text()
-		  def task=workflowService.getTask(taskId)
+		  task=workflowService.getTask(taskId)
 		  if (task.active) {
 			  println "Task active :)" 
 			  task=hibSession.merge(task)		  	
@@ -75,7 +76,20 @@ class GetDocumentEndpoint {
 		  }
 		}
 		def xmlDocument=documentService.getDocument(documentId)
+		
+		// Store task details in document header.
 		xmlDocument.header.taskId=taskId
+		if (taskId.length()>0 && xmlDocument.header.task) {
+			xmlDocument.header.task.id=task.id
+			xmlDocument.header.task.name=task.name
+			xmlDocument.header.task.description=task.description
+			xmlDocument.header.task.outcome=""
+			xmlDocument.header.task.dueDate=task.dueDate.format('yyyy-MM-dd')+'T'+task.dueDate.format('HH:mm:ss')			
+			xmlDocument.header.task.priority=task.priority
+			xmlDocument.header.task.assignee=task.assignee?.username
+			xmlDocument.header.task.status=task.status
+			xmlDocument.header.task.statusUser=task.statusUser
+		}
 
 		def response = { GetDocumentResponse(xmlns:namespace) {
 			document(xmlDocument)

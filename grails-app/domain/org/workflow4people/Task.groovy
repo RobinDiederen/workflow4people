@@ -31,6 +31,8 @@ class Task {
 		workflow(nullable:true)
 		priority(nullable:true)
 		cssClass(nullable:true)
+		taskStatus(nullable:true)
+		statusUser(nullable:true)
     }
 	
 	static hasMany = [candidateUsers: Person,candidateGroups:Authority]
@@ -38,6 +40,9 @@ class Task {
 	String description
 	int priority
 	String cssClass
+		
+	TaskStatus taskStatus 
+	String statusUser
 	
 	Person assignee
 	
@@ -56,6 +61,11 @@ class Task {
 	boolean noMessage=false
 	
 	
+//	def Task(){
+//		taskStatus=TaskStatus.find("from TaskStatus t where t.name='new'")
+//	}
+	
+	
 	def getCompleted() {
 		return completionDate !=null
 	}
@@ -71,4 +81,29 @@ class Task {
 			return []
 		}
 	}
+	
+	/*
+	 * Emulate status string behaviour with getter and setter
+	 */
+	def getStatus()  {
+		if (taskStatus) {
+			return taskStatus.name
+		} else {
+		return ""
+		}
+	}
+	
+	def updateStatus(String name) {
+		log.debug "setting task status to ${name}"
+		def theStatus=TaskStatus.findByName(name)
+		if (theStatus) {
+			taskStatus=theStatus			
+		}		
+	}
+	
+	
+	def beforeInsert = {
+		taskStatus=TaskStatus.findByName("new")	    
+	}
+	
 }

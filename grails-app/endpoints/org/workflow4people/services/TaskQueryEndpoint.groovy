@@ -119,7 +119,7 @@ class TaskQueryEndpoint {
 						name(theTask.name)
 						id(theTask.id)
 						priority(theTask.priority)
-						cssClass(theTask.cssClass)
+						cssClass("${theTask.cssClass} ${theTask.taskStatus?.cssClass}" )
 						
 						form {
 							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;

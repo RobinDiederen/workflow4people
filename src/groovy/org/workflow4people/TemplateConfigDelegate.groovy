@@ -19,6 +19,7 @@
  */
 package org.workflow4people
 import org.workflow4people.services.*;
+import org.apache.commons.logging.LogFactory
 
 /**
  * Delegation class for form templates
@@ -41,13 +42,16 @@ class TemplateConfigDelegate
 	def message="Initializing..."
 	def completed=false
 	
+	private static final log = LogFactory.getLog(this)
+	
+	
   def mlog (logMessage) { 
 		gLogMessage+="<br />"+logMessage
 	}
   
   def msg (theMessage) {
 	  message=theMessage
-	  println message
+	  log.debug message
 	  mlog message
   }
 	
@@ -115,7 +119,7 @@ class TemplateConfigDelegate
 	  msg "Processing forms ..."
 	  current=0
 	  total=workflowDefinition.form.size()
-	  println "The total is ${total}"
+	  log.debug "The total is ${total}"
 	  workflowDefinition.form.each { form ->
   	  	msg "Processing form ${form.name} ..."
   		closure.formName=form.name
@@ -197,8 +201,8 @@ class TemplateConfigDelegate
 	}
 
 def methodMissing(String name, args) {
-  println "Method missing: ${name}, parameters: ${args}"  
-  args.each { aname -> println "${aname}" }
+		log.debug "Method missing: ${name}, parameters: ${args}"  
+  args.each { aname -> log.debug "${aname}" }
 }
 }
 

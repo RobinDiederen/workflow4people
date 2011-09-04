@@ -457,12 +457,6 @@ function workflowContextMenu( node ) {
 	
 	
 }
-
-
-
-function setupTree() {
-		 
-        }
 		
 $(function() {		        
 	$(".dmeTree").bind("before.jstree", function (e,data) {		
@@ -544,7 +538,7 @@ $(function() {
 		//	return false;			
 		 }
 	});
-	
+	/*
 	$("#modelTree").bind("move_node.jstree", function (e,data) {
 		//alert ("We're moving!");
 		
@@ -581,7 +575,7 @@ $(function() {
 		logMessage("Renaming... "+data.rslt.obj[0].id+" - new name:"+data.rslt.name);
 		data.rslt.obj[0].id="field_XXX"
 	});
-	
+	*/
 		
     dataModelTree=$("#modelTree").jstree({
         //	"plugins" : [ "themes", "json_data", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
@@ -656,22 +650,7 @@ $(function() {
     	
     	
     	});  
-    	
-    	
-    	
     
-    
-        /*
-        $("#workflowTree").jstree({         
-
-            "plugins" : [  "html_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
-            
-            "crrm" : {
-        		"move.always_copy" : "multitree"
-        	}
-            
-        });
-*/
         fieldTypeTree=$("#fieldTypeTree").jstree({         
 
             "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu" ],
@@ -697,12 +676,14 @@ $(function() {
         
         
         //  Open the show field pane on a single click
+        /*
         $("a.field").click(function() {        			     
                 	$("#editpane").load("/workflow4people/dataModelEditor/showField/"+this.id,'',function() {
                 	$("#tabs").tabs();                	
                 	});
                 	
         });
+        */
         
         //  Open the edit field dialog on a double click        
         $("li.field").live("dblclick",function() {
@@ -736,7 +717,6 @@ $(function() {
         });
 
         
-        
         // Open the edit workflowDefinition dialog on a double click
         $("li.workflow").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
@@ -750,7 +730,7 @@ $(function() {
        $(".treepane").resizable();
        $(".treepane").draggable();
 
-       
+       /*
        $("#editButton").click(function() {
         //var id=$("#id").html();
         var id=$("#detailId").attr("value");
@@ -793,21 +773,9 @@ $(function() {
        		});
      	}
      	
-     	//alert("Waaaaaaaaaaaaaa");
      	return false;
     	
        });
-       
-       $("#createFieldListButton").click(function() {
-       	//var node=jQuery.tree.focused().create({data: '',attributes: {id:'test'}},-1);
-       		//alert(node);
-       		//jQuery.tree.focused().rename([node],'aaaaa');
-       		//jQuery.tree.focused().create(null,-1);
-       		//alert('before');
-       		//$.tree.focused().rename();
-       		$.jstree.focused().create();
-       		//alert('after');
-       
-       });
+       */
        
 });

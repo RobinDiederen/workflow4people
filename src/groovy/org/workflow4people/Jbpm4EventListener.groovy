@@ -22,6 +22,7 @@ package org.workflow4people;
 import org.hibernate.event.*
 import grails.plugin.jms.*
 import org.workflow4people.SpringUtil;
+import org.apache.commons.logging.LogFactory
 
 /*
  * Event listener for Hibernate events in the JBPM domain objects
@@ -29,10 +30,11 @@ import org.workflow4people.SpringUtil;
  */
 public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEventListener,PostDeleteEventListener{
 	def jmsService
+	private static final log = LogFactory.getLog(this)
 	
 
 	void onPostUpdate(PostUpdateEvent postUpdateEvent) {
-		println "Jbpm4EventListener: UPDATE EVENT (${postUpdateEvent.getEntity()})"		
+		log.debug "Jbpm4EventListener: UPDATE EVENT (${postUpdateEvent.getEntity()})"		
 		def entity=postUpdateEvent.getEntity()
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.update",[id:entity.getId()])
@@ -43,7 +45,7 @@ public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEve
 	  }
 	
 	void onPostInsert(PostInsertEvent postInsertEvent) {
-		println "Jbpm4EventListener: INSERT EVENT (${postInsertEvent.getEntity()} ${postInsertEvent.getEntity().getClass().getName()})"
+		log.debug "Jbpm4EventListener: INSERT EVENT (${postInsertEvent.getEntity()} ${postInsertEvent.getEntity().getClass().getName()})"
 		def entity=postInsertEvent.getEntity()
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.new",[id:entity.getId()])
@@ -55,7 +57,7 @@ public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEve
 	  }
 	
 	void onPostDelete(PostDeleteEvent postDeleteEvent) {
-		println "Jbpm4EventListener: DELETE EVENT (${postDeleteEvent.getEntity()})"		
+		log.debug "Jbpm4EventListener: DELETE EVENT (${postDeleteEvent.getEntity()})"		
 		def entity=postDeleteEvent.getEntity()
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.delete",[id:entity.getId()])

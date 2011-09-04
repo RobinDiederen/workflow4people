@@ -30,16 +30,28 @@ import grails.converters.*
 class FieldController {
 	
 	def dialogService
+	def listService
     
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save:'POST', update:'POST']
 
-    def list = {
+    def xlist = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ fieldInstanceList: Field.list( params ), fieldInstanceTotal: Field.count() ]
     }
+	
+	def list = {
+		render (view:'/datatable/list', model:[dc:Field,controllerName:'field',request:request,jsonlist:'jsonlist'])
+	}
+		
+	def jsonlist = {
+		render listService.jsonlist(Field,params,request,null,null) as JSON
+	}
+
+
+	
 
     def show = {
         def fieldInstance = Field.get( params.id )

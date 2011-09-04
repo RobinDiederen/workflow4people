@@ -133,6 +133,7 @@
 	          <li class="menu-icon menu-workflowdefinition"><g:link controller="workflowDefinition" action="list">Workflow Def</g:link></li>
 	          <li class="menu-icon workflows"><g:link controller="workflow" action="list">Workflows</g:link></li>
         	  <li class="menu-icon tasks" ><g:link controller="task" action="list">Tasks</g:link></li>
+        	  <li class="menu-icon tasks" ><g:link controller="taskStatus" action="list">Task statuses</g:link></li>
           	</ul>
           	<li>Engines</li>
           	<ul>

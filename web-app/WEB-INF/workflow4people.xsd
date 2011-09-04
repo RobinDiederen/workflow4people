@@ -183,13 +183,31 @@
 				<element type="string" name="processStatus" minOccurs="0"/>
 				<element type="wf4p:Outcomes" name="outcomes" minOccurs="0"/>
 				<element type="wf4p:Variables" name="variables" minOccurs="0" />
+				<element type="wf4p:TaskStatus" name="taskStatus" minOccurs="0" />
 				<!-- <element type="wf4p:Comments" name="comments" /> -->
 			</sequence>
 		</complexType>
 		
+		
+		
 		<complexType name="TaskList">
 			<sequence>
 				<element type="wf4p:Task" name="task" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		
+		<complexType name="TaskStatus">
+			<sequence>
+				<element type="string" name="name" minOccurs="0"/>
+				<element type="string" name="title" minOccurs="0"/>
+				<element type="string" name="description" minOccurs="0"/>
+				<element type="string" name="cssClass" minOccurs="0"/>				
+			</sequence>
+		</complexType>
+		
+		<complexType name="TaskStatusList">
+			<sequence>
+				<element type="wf4p:TaskStatus" name="taskStatus" minOccurs="0" maxOccurs="unbounded" />
 			</sequence>
 		</complexType>
 		
@@ -915,6 +933,24 @@
 				</sequence>
 			</complexType>		
 		</element>
+		
+		
+		<element name="GetTaskStatusesRequest">
+			<complexType>
+				<sequence>
+					<element name="authentication" type="wf4p:Authentication" />					
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetTaskStatusesResponse">
+			<complexType>
+				<sequence>
+					<element name="taskStatuses" type="wf4p:TaskStatusList" minOccurs="0" />
+				</sequence>
+			</complexType>		
+		</element>
+		
 		
 		<element name="SendEmailRequest">
 			<complexType>

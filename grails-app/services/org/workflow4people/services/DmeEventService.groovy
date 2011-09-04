@@ -333,7 +333,7 @@ class DmeEventService {
 			result.message="There are still ${n} formItem(s) referencing this fieldtype!"				
 		} else {
 			def deleteListParent=null
-			if (field.parent?.parent==null || field.parent?.parent==field.parent?.parent) {
+			if (field.parent?.parent==null || field.parent?.parent==field.parent) {
 				theFieldType=FieldType.findByListParent(field.parent)
 				if (theFieldType)
 					

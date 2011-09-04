@@ -11,6 +11,8 @@
 			<wf:select object="${taskInstance}" propertyName="outcome" mode="edit" from="${taskInstance.getTransitionsArray()}" />				                     
 			<wf:domainObject object="${taskInstance}" propertyName="form" mode="edit" />
 			
+			<wf:domainObject object="${taskInstance}" propertyName="taskStatus" mode="edit"/>
+			<wf:textField object="${taskInstance}" propertyName="statusUser" mode="edit" />
 			
 	        <wf:textField object="${taskInstance}" propertyName="priority" mode="edit" />
 	        <wf:textField object="${taskInstance}" propertyName="cssClass" mode="edit" />
