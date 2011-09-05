@@ -7,7 +7,6 @@
         <title><g:layoutTitle default="workflow4people" /></title>
                 
         <%-- css from used modules --%>
-<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.multiselect.css',contextPath:'',plugin:'wfp')}" />--%>
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
@@ -43,7 +42,6 @@
         <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
         <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>
         
-<%--        <g:javascript src="jquery/ui.multiselect.js"  contextPath="" plugin="wfp" />--%>
         <g:javascript src="jquery/jquery.ui.altselect.js"  contextPath="" plugin="wfp" /> 
         <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
         
@@ -78,9 +76,12 @@
             
             
         	<%-- Helper for the left menu, when clicking a li the enclosed a's href  will be called --%>
-          	$("div.wf4p-menu ul ul li").click(function(){
-          		document.location=$(this).children("a")[0].href;
-          	});
+			$("div.wf4p-menu ul ul li a").each(function (index) {
+				var curMatch = $(this);
+				curMatch.parent().click(function(){
+					document.location = curMatch[0].href;
+				});
+			});
           	
          	// Initialize date picker input elements
          	$(".datepicker").datepicker({ dateFormat: "yyyy-MM-dd'T'HH:mm:ss" , changeMonth: true, changeYear:true});
@@ -89,9 +90,6 @@
           	return confirm('Are you sure?')
           	});
           	
-          	$.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/'});
-			//$(".multiselect").multiselect();
-			//$('#switcher').themeswitcher();
 			$(".help").cluetip({splitTitle: '|'});
 			
 			// Sortable lists
