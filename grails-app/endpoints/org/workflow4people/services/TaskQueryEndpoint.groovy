@@ -50,38 +50,38 @@ class TaskQueryEndpoint {
 		if (request.request.maxResults.text()) params["max"]=request.request.maxResults.text()
 		
 		if (request.request.orderAsc.text()) {			
-			println "ASC"			
+			log.debug "ASC"			
 			params+=[sort:request.request.orderAsc.text(),order:"asc"]
 		}
 		
 		if (request.request.orderDesc.text()) {
-			println "DESC"			
+			log.debug "DESC"			
 			params+=[sort:request.request.orderDesc.text(),order:"desc"]
 		}
 
 		if (request.request.documentType.text()) {
-			println "Requested document type " + request.request.documentType.text()
+			log.debug "Requested document type " + request.request.documentType.text()
 			params+=[documentType:request.request.documentType.text()]
 		}
 		
 		if (request.request.processStatus.text()) {
-			println "Requested process status " + request.request.processStatus.text()
+			log.debug "Requested process status " + request.request.processStatus.text()
 			params+=[processStatus:request.request.processStatus.text()]
 		}
 		
 		if (request.request.fromDueDate.text() && request.request.toDueDate.text()) {
-			println "Requested date range " + request.request.fromDueDate.text() + " to " + request.request.toDueDate.text()
+			log.debug "Requested date range " + request.request.fromDueDate.text() + " to " + request.request.toDueDate.text()
 			params+=[fromDueDate:request.request.fromDueDate.text(),toDueDate:request.request.toDueDate.text()]
 		}
 		
 		def res 
 		if (request.request.assignee.text()) {
-			println "Requested tasks for assignee " + request.request.assignee.text()
+			log.debug "Requested tasks for assignee " + request.request.assignee.text()
 			res=workflowService.findTasksByUser(request.request.assignee.text(),params)
 		}
 		
 		if (request.request.candidate.text()) {
-			println "CANDIDATE: ${request.request.candidate.text()}"
+			log.debug "CANDIDATE: ${request.request.candidate.text()}"
 			res=workflowService.findTasksByCandidate(request.request.candidate.text(),params)
 		}
 		

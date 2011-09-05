@@ -52,7 +52,7 @@ class DataModelEditorController {
         }
 	
 	def submitField = {
-			println "Submit Field params: ${params}"
+			log.debug "Submit Field params: ${params}"
 			def id=params.id
 			if (id.contains("_")) {
 				id=params.id.split("_")[1]
@@ -61,8 +61,8 @@ class DataModelEditorController {
 			def fieldInstance = Field.get(id )
 			fieldInstance.properties = params
 			//fieldInstance.dependencyType=null
-			println "dependencyType:"+fieldInstance.dependencyType
-			println g.renderErrors(bean:fieldInstance)
+			log.debug "dependencyType:"+fieldInstance.dependencyType
+			log.debug g.renderErrors(bean:fieldInstance)
 			fieldInstance.save(failOnError:true)
 			
     	//	render(view:'showField',model:[ fieldInstance : fieldInstance ])
@@ -95,7 +95,7 @@ class DataModelEditorController {
 	
 	
 	def submitForm = {		     
-	    println "Submit Form params: ${params}"        
+	    log.debug "Submit Form params: ${params}"        
 	    def result =  dialogService.submit(Form,params)
 	    def wfid
 	    if (params.workflow?.id) {
@@ -115,7 +115,7 @@ class DataModelEditorController {
 	}
 	
 	def submitWorkflowDefinition = {
-			println "Submit WorkflowDefinition params: ${params}"
+			log.debug "Submit WorkflowDefinition params: ${params}"
 
 			def res = dialogService.submit(WorkflowDefinition,params)
 
@@ -163,7 +163,7 @@ class DataModelEditorController {
 	
 	def submitFormItem = {
 		     
-        println "Submit FormItem params: ${params}"        
+        log.debug "Submit FormItem params: ${params}"        
         def result =  dialogService.submit(FormItem,params)
         
         def formid
@@ -187,7 +187,7 @@ class DataModelEditorController {
 	
     
 	def submitFieldType = {
-		println "Submit FieldType params: ${params}"
+		log.debug "Submit FieldType params: ${params}"
      	def result =  dialogService.submit(FieldType,params)
 
         result['result']['refreshNodes']=["dataModelTree"]
@@ -196,7 +196,7 @@ class DataModelEditorController {
 	
     def submitFieldList = {
 
-	    println "Submit FieldList params: ${params}"
+	    log.debug "Submit FieldList params: ${params}"
 	    def result =  dialogService.submit(FieldList,params)
 
 	    result['result']['refreshNodes']=["fieldListTree"]
@@ -210,16 +210,16 @@ class DataModelEditorController {
 	
 	/*
     def onmove = {
-    		println "We have a move. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
-    		println params
+    		log.debug "We have a move. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
+    		log.debug params
     		
     		def id=params.node_id.split('_')[1]
     		def theField=org.workflow4people.Field.get(id)
-    		println theField
+    		log.debug theField
     		
     		def refId=params.ref_node_id.split('_')[1]
      		def refField=org.workflow4people.Field.get(refId)
-    		println refField
+    		log.debug refField
     		
     		def moveType=params.type
     		
@@ -265,27 +265,27 @@ class DataModelEditorController {
     }
     
     def oncopy = {
-    		println "We have a copy. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
-    		println params
+    		log.debug "We have a copy. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
+    		log.debug params
     		
     		def nodeType=params.node_rel
     		def id=params.node_id.split('_')[1]
     		                                 
     		                                 
-    		println "nodeType=${nodeType},id=${id}"
+    		log.debug "nodeType=${nodeType},id=${id}"
     		//def theField=org.workflow4people.Field.get(id)
-    		//println theField
+    		//log.debug theField
     		
     		def refNodeType=params.ref_node_rel
     		def refId=params.ref_node_id.split('_')[1]
     		                                        
-            println "refNodeType=${refNodeType},refNodeId=${refId}"
+            log.debug "refNodeType=${refNodeType},refNodeId=${refId}"
             
      		def refField=org.workflow4people.Field.get(refId)
      		
      		def theField=new Field()
      		if (nodeType=="rootFieldList") {
-     			println "Creating new field referring to FieldList"
+     			log.debug "Creating new field referring to FieldList"
      			theField.fieldType=org.workflow4people.FieldType.findByName('FieldList')
      			def fieldList=FieldList.get(id)
      			theField.childFieldList=fieldList
@@ -296,7 +296,7 @@ class DataModelEditorController {
      			theField.description=""
      		} else {
      			// copy the field
-     			println "Copying field"
+     			log.debug "Copying field"
      			def originalField=Field.get(id)
      			def domainClass=grailsApplication.getDomainClass('org.workflow4people.Field') 
      			domainClass.persistentProperties.each { prop ->
@@ -352,7 +352,7 @@ class DataModelEditorController {
     
     
     def beforedelete = {
-    		println params    		
+    		log.debug params    		
     		Boolean canMove=true
     		if (params.node_rel=="rootFieldList") {
     			canMove=false;
@@ -492,7 +492,7 @@ class DataModelEditorController {
 	
 	
 	def delete = {
-			println "DELETE: ${params}"
+			log.debug "DELETE: ${params}"
 			
 			render(contentType:"text/json") {
     			result(    					
@@ -585,7 +585,7 @@ class DataModelEditorController {
 				}
 			}
 			                                           
-		//	println "ELEMENTLIST: ${elementlist()}"                                             
+		//	log.debug "ELEMENTLIST: ${elementlist()}"                                             
 			render elementlist() as JSON
 			
 	}

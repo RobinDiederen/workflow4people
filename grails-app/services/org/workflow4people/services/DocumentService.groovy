@@ -161,7 +161,7 @@ class DocumentService implements InitializingBean {
 			}*/
     		
     		if (startProcess) {
-    			println "starting process by creating a workflow domain object"
+    			log.debug "starting process by creating a workflow domain object"
     			def workflow=new Workflow()
 	    		workflow.document=documentInstance
 	    		def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
@@ -171,7 +171,7 @@ class DocumentService implements InitializingBean {
 	    		workflow.externalId="1"
 	    		workflow.workflowEngine=workflowDefinition.workflowEngine
 	    		workflow.save(failOnError:true)
-	    		println "Done."
+	    		log.debug "Done."
     		}
     		/*
     		if ((header.taskId?.text().size()>0) && (header.taskOutcome?.text().size()>0)) {    			
@@ -259,7 +259,7 @@ class DocumentService implements InitializingBean {
 	    		String cmisUrl = ApplicationConfiguration.findByConfigKey('cmis.url').configValue
 	    		cmisServiceProxy.init(cmisUrl,cmisUsername,cmisPassword)
 	    	}
-			println "Creating case ${documentInstance.id}"
+			log.debug "Creating case ${documentInstance.id}"
 		  	def cmisPathTemplate=documentInstance.documentType.cmisPathTemplate
 	    	
 	    	def cmisPath=new GroovyShell(new Binding([document:documentInstance,xmlDocument:document])).evaluate('"""'+cmisPathTemplate+'"""')
@@ -289,7 +289,7 @@ class DocumentService implements InitializingBean {
 	    	return cmisPath			
 	
 		} else {
-			//println "CMIS disabled, skipping case folder creation"
+			//log.debug "CMIS disabled, skipping case folder creation"
 		}
     }
 
@@ -305,13 +305,13 @@ class DocumentService implements InitializingBean {
     	//	theDoc.delete()
 		//}
     	
-    	println "Context is: " + nsContext
+    	log.debug "Context is: " + nsContext
     	
     	def xpath = XPathFactory.newInstance().newXPath()
 		xpath.setNamespaceContext(nsContext)
     	
     	documentInstance.documentType.documentIndexField.each { field ->
-    		println field
+    		log.debug field
     		log.debug "Processing xpath expression ${field.xpath} ..."
     		
     		def expr = xpath.compile(field.xpath)    		
@@ -439,7 +439,7 @@ class DocumentService implements InitializingBean {
     	}
     	//params.analyzer="standard"
     	log.debug "The query is: ${query}"
-    	println "The query is: ${query}"
+    	log.debug "The query is: ${query}"
     	return searchableService.search(query, params)
     }
     

@@ -54,7 +54,7 @@ class MinerDrilldownEndpoint {
 			
 			def mqResponse=minerService.minerDrilldown(queryName, year,month,value,params)
 
-			println mqResponse
+			log.debug mqResponse
 			// Don't put page limits on the count query, hibernate doesn't like that 
 			params=[:]
 			def theSize=minerService.minerDrilldownCount(queryName, year,month,value,params)

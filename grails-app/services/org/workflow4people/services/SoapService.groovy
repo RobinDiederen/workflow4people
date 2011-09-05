@@ -26,14 +26,14 @@ class SoapService {
     		method.addRequestHeader("Accept","text/xml,application/xml;q=0.9")
     		method.setRequestEntity(new StringRequestEntity(soapRequest))
     		def statusCode = client.executeMethod(method)
-    		println "STATUS CODE : ${statusCode}"
+    		log.debug "STATUS CODE : ${statusCode}"
     		def resultsString = method.getResponseBodyAsString()
             if (statusCode != HttpStatus.SC_OK) {
-                println "An error occurred in the returned SOAP message! (maybe a SOAPFault?)"
+                log.debug "An error occurred in the returned SOAP message! (maybe a SOAPFault?)"
                 throw new Exception("An error occurred in the returned SOAP message! (maybe a SOAPFault?)")
             }
     		method.releaseConnection()
-    		//println resultsString
+    		//log.debug resultsString
     		return resultsString    	
     }
        

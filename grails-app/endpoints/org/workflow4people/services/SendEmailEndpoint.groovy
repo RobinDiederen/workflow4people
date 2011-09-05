@@ -10,7 +10,7 @@ class SendEmailEndpoint {
 				
 	def invoke = { request ->
 	
-		println "Received SOAP request for sending an email message!"
+		log.debug "Received SOAP request for sending an email message!"
 		
 		def mailFrom = ""
 		def mailTo = ""
@@ -36,7 +36,7 @@ class SendEmailEndpoint {
 				emailService.sendEmailByBody(mailFrom, mailTo, mailSubject, mailMessage)				
 			
 			} else {
-			println "Not all of the required arguments for sending an email have been specified, not sending mail…"	
+			log.debug "Not all of the required arguments for sending an email have been specified, not sending mail…"	
 			}
 		}
 	}

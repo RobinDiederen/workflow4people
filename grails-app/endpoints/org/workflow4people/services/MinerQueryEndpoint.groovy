@@ -41,7 +41,7 @@ class MinerQueryEndpoint {
 		def year=request.request.year.text().asType(Integer)
 		def mqResponse=minerService.minerQuery(queryName, year)
 
-		println mqResponse
+		log.debug mqResponse
 		def response = { 
 				MinerQueryResponse(xmlns:namespace) 
 				{	

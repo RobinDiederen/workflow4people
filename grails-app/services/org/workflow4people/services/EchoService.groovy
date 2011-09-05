@@ -35,15 +35,15 @@ class EchoService implements ActivityBehaviour {
     
 
     void execute(ActivityExecution execution) {
-    	println "The message is: ${this.message}"
+    	log.debug "The message is: ${this.message}"
     }
     
     void sayHello() {
-    	println "The message is: ${this.message}"
+    	log.debug "The message is: ${this.message}"
     }
     
     String sayHello(String theParameter) {    	
-    	println "sayHello says: ${theParameter}"
+    	log.debug "sayHello says: ${theParameter}"
     	return "sayHello says: ${theParameter}"
     }
     

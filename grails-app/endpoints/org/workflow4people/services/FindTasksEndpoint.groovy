@@ -97,7 +97,7 @@ class FindTasksEndpoint implements InitializingBean {
 		def personTaskCount=countTq.count()
 		
 		log.debug "Person task count: ${personTaskCount}"
-        println "Person task count: ${personTaskCount}"
+        log.debug "Person task count: ${personTaskCount}"
 		TaskQuery grpTq=taskService.createTaskQuery();
 		grpTq.candidate(request.request.userId.text())
 		grpTq.orderAsc(TaskQuery.PROPERTY_DUEDATE)		
@@ -108,7 +108,7 @@ class FindTasksEndpoint implements InitializingBean {
 		countGrpTq.candidate(request.request.userId.text())		
 		def groupTaskCount=countGrpTq.count()
 		log.debug "Group task count: ${groupTaskCount}"
-		println "Group task count: ${groupTaskCount}"
+		log.debug "Group task count: ${groupTaskCount}"
 		int theSize=Math.max(personTaskCount, groupTaskCount)		
 		int theTotalPages=((theSize -1)/ maxResults) +1		
         

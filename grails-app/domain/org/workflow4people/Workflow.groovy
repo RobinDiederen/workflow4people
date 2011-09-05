@@ -46,9 +46,9 @@ class Workflow {
 	def afterInsert = {
 		def engineName=workflowEngine.name
 		String queueName="wfp.${engineName}.out.workflow.new"
-		println "SENDING MESSAGE"
+		log.debug "SENDING MESSAGE"
 	    jmsService.send(queueName,[id:id])
-	    println "MESSAGE SENT"
+	    log.debug "MESSAGE SENT"
 	    
 	}
 	

@@ -74,7 +74,7 @@ class FieldList implements Serializable {
     def propertyMissing(String name,args){	
 		if (name.lastIndexOf("Snippet")>0) {
 			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))
-			println "Running fieldList snippet ${snippetName} for fieldList ${this.name}"
+			log.debug "Running fieldList snippet ${snippetName} for fieldList ${this.name}"
 			return templateService.runSnippetTemplate(this,snippetName)			
 		} else {
 			throw new MissingPropertyException(name,Field.class,args)
@@ -89,10 +89,10 @@ class FieldList implements Serializable {
     	//xpath=theXPath+"/${prefix}:${name}"
     	xpath=theXPath
     	log.debug("Stored xpath: ${xpath}")
-    	println "Fieldlist stored xpath: ${xpath}"
+    	log.debug "Fieldlist stored xpath: ${xpath}"
     	field.each {
     		it.storeXPath(namespace.prefix,xpath+'/'+namespace.prefix+':'+it.name)
-    		println "Storing XPath prefix=${namespace.prefix} xpath=/${namespace.prefix}:${it.name}"
+    		log.debug "Storing XPath prefix=${namespace.prefix} xpath=/${namespace.prefix}:${it.name}"
     	}
     	
     }

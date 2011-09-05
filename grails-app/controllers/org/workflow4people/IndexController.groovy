@@ -36,7 +36,7 @@ class IndexController {
     		searchableService.unindex()
     		def cnt=0
     		Document.findAll().each { document -> 
-    			println "Indexing ${document}"
+    			log.debug "Indexing ${document}"
     			documentService.indexDocument(document)
     			document.save()
     			cnt++
@@ -48,7 +48,7 @@ class IndexController {
     		def dt=DocumentType.findByName(params.documentTypeName)
     		def cnt=0
     		Document.findAllByDocumentType(dt).each { document -> 
-    			println "Indexing ${document}"
+    			log.debug "Indexing ${document}"
     			documentService.indexDocument(document)
     			document.save()
     			cnt++

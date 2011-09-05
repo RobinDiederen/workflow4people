@@ -52,7 +52,7 @@ class Wf4pVariableController implements InitializingBean{
 	}
     
     def save = {
-		println(params)
+		log.debug(params)
 		switch (params.variableClassName) {		
 		
 		case 'java.lang.Byte':			

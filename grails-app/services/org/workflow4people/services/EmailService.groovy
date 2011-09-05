@@ -17,14 +17,14 @@ class EmailService {
 		switch (action) {
 			case "form-request":			
 	  try {
-					println "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + " as response to action " + action + " on document " + documentId + "."
+					log.debug "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + " as response to action " + action + " on document " + documentId + "."
 					
 					def did = documentId.toLong()
 					def document = documentService.getDocument(did)
 					if (document) { 
-						println "Fetched document with id " + did 
+						log.debug "Fetched document with id " + did 
 						
-						println "Sending mail using template '${outputPath}/${document.header.documentType.text()}/mail.gsp'"
+						log.debug "Sending mail using template '${outputPath}/${document.header.documentType.text()}/mail.gsp'"
 						def template = templateService.runTemplate("${outputPath}/${document.header.documentType.text()}/mail.gsp",[document:document])
 						sendMail {
 							to mailTo
@@ -33,18 +33,18 @@ class EmailService {
 							html template
 						}
 										
-						println "Mail has been sent!"
+						log.debug "Mail has been sent!"
 					}
-	  } catch (Exception exc) { println "ERROR2: ${exc}" }					
+	  } catch (Exception exc) { log.debug "ERROR2: ${exc}" }					
 					break				
 			
 			case "form-task":			
-					println "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + " as response to action " + action + " on document " + documentId + "."
+					log.debug "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + " as response to action " + action + " on document " + documentId + "."
 					
 					def did = documentId.toLong()
 					def document = documentService.getDocument(did)
 					if (document) { 
-						println "Fetched document with id " + did 
+						log.debug "Fetched document with id " + did 
 						
 						def template = templateService.runTemplate("${outputPath}/${document.header.documentType.text()}/mail.gsp",[document:document])
 						sendMail {
@@ -54,7 +54,7 @@ class EmailService {
 							html template
 						}
 										
-						println "Mail has been sent!"
+						log.debug "Mail has been sent!"
 					}					
 					break				
 				
@@ -64,7 +64,7 @@ class EmailService {
 	}
 	
 	def sendEmailByBody(String mailTo, String mailFrom, String mailSubject, String mailMessage) {
-		println "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + "."
+		log.debug "Received a request for sending mail from " + mailFrom + " to " + mailTo + " with subject " + mailSubject + "."
 		
 		sendMail {
 			to mailTo

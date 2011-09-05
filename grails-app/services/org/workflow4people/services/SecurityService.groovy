@@ -104,31 +104,31 @@ class SecurityService {
     	  def tempToken = new UsernamePasswordAuthenticationToken(username, password)
     	  def token = authenticationManager.authenticate(tempToken)
     	} catch (AuthenticationServiceException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false    	
     	} catch (DisabledException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false	
        	} catch (LockedException  e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false	
        	} catch (BadCredentialsException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false	
        	} catch (AccountExpiredException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false	
     	} catch (CredentialsExpiredException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false    	
     	} catch (DisabledException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false    	
     	} catch (ProviderNotFoundException e) {
-    		println "Exception was: " + e
+    		log.debug "Exception was: " + e
     		return false
     	} catch (Throwable e) {
-    		println "Exception was: " + e + e.getStackTrace()
+    		log.debug "Exception was: " + e + e.getStackTrace()
     		return false    	
     	}
     	

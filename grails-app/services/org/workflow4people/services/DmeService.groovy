@@ -15,7 +15,7 @@ class DmeService {
 				copyField."${prop.name}" = field."${prop.name}"
 			}
 			Field.findAllByParent(field).each { childField ->
-				println "CHILDFIELD ${childField}"
+				log.debug "CHILDFIELD ${childField}"
 				def copyChildField=treeCopy(childField)
 				copyChildField.parent=copyField
 				copyChildField.save()
@@ -27,7 +27,7 @@ class DmeService {
 	
 	def treeDelete(Field field) {
 		Field.findAllByParent(field).each { childField ->
-			println "CHILDFIELD ${childField}"
+			log.debug "CHILDFIELD ${childField}"
 			treeDelete(childField)
 		}
 		field.parent=null

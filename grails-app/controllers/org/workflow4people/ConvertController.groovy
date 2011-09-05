@@ -22,7 +22,7 @@ class ConvertController {
 			fieldType.alert=""
 			fieldType.help=""
 			fieldType.save(failOnError:true)		
-			println " [Done]"
+			log.debug " [Done]"
 		}
     }
 }

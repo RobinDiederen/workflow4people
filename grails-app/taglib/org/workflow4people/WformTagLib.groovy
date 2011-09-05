@@ -38,7 +38,7 @@ class WformTagLib {
 			    out << "<li class=\"fieldlist\" id=\"l${it.id}\"><span id=\"${it.id}\" class=\"folder fieldlist\"  >${it.name} [${it.childFieldList.name}]</span>\n"
 			    out << "<ul>"
 				def lattrs = [fieldList:it.childFieldList]
-				//println it.childFieldList
+				//log.debug it.childFieldList
 				treeList.call(lattrs)
 				out << "</ul></li>"
 			}
@@ -55,7 +55,7 @@ class WformTagLib {
 		    out << "<li class=\"open field\" id=\"l${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name} [${it.childFieldList.name}]</a>\n"
 		    out << "<ul>"
 			def lattrs = [fieldList:it.childFieldList]
-			//println it.childFieldList
+			//log.debug it.childFieldList
 			tree.call(lattrs)
 			out << "</ul></li>"
 		}
@@ -72,7 +72,7 @@ class WformTagLib {
 		    out << "<li rel=\"fieldList\" class=\"open field\" id=\"field_${it.id}\"><a class=\"file field\" href=\"#\" id=\"${it.id}\"><ins>&nbsp;</ins>${it.name} [${it.childFieldList.name}]</a>\n"
 		    out << "<ul>"
 			def lattrs = [fieldList:it.childFieldList]
-			//println it.childFieldList
+			//log.debug it.childFieldList
 			modelTree.call(lattrs)
 			out << "</ul></li>"
 		}

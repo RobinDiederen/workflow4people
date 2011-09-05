@@ -40,7 +40,7 @@ class FormTagLib {
 	}
 
 	def fields = { attrs, body ->
-		println "FIELDS: ${attrs}"
+		log.debug "FIELDS: ${attrs}"
 		if(attrs.workflow) {
 			def workflow=attrs.workflow
 			workflow.documentType.fieldList.init()

@@ -131,7 +131,7 @@ class Field {
 		if (this."${name}"?.length() == 0 | this."$name"==null)  {						
 				
 					if (this.fieldType.properties[name]) {
-						//println(this.fieldType."${name}")
+						//log.debug(this.fieldType."${name}")
 						return this.fieldType."${name}"
 						
 					} else {
@@ -140,7 +140,7 @@ class Field {
 			
 		}  else {
 			def value=this."${name}"
-			//println ("Returning field property value ${value} of field ${this.name} (${this.id})for ${name}")
+			//log.debug ("Returning field property value ${value} of field ${this.name} (${this.id})for ${name}")
 			return (this."${name}");
 		}
 	}
@@ -295,9 +295,9 @@ class Field {
 	def getNamespacePrefix() {
 			def thePrefix=null
 			def f=this
-			println "getting namesp"
+			log.debug "getting namesp"
 			while (thePrefix==null && f.parent!=null && f.parent!=f) {
-				println "f=${f}"				
+				log.debug "f=${f}"				
 				f=f.parent
 				if (f.fieldType.namespace) {
 					thePrefix=f.fieldType.namespace.prefix
@@ -310,7 +310,7 @@ class Field {
 	def propertyMissing(String name,args){	
 		if (name.lastIndexOf("Snippet")>0) {
 			def snippetName=name.substring(0,name.lastIndexOf("Snippet"))
-			println "Running field snippet ${snippetName} for field ${this.name}"
+			log.debug "Running field snippet ${snippetName} for field ${this.name}"
 			//TODO make this more generic so that it works for all snippets that have an existing readonly variant
 			// and defaults to the indicated snippet if the readonly version doesn't exist
 			if((readonly) && (snippetName=="form")) {

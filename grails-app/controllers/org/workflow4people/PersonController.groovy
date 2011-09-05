@@ -204,7 +204,7 @@ class PersonController {
                     authorityList.add(it)
                 }
                 authorityList.each { def authority ->
-                    println authority.dump()
+                    log.debug authority.dump()
                     personInstance.removeFromAuthorities(authority)
                 }
                 //delete person
@@ -237,7 +237,7 @@ class PersonController {
                     authorityList.add(it)
                 }
                 authorityList.each { def authority ->
-                    println authority.dump()
+                    log.debug authority.dump()
                     personInstance.removeFromAuthorities(authority)
                 }
                 //delete person                

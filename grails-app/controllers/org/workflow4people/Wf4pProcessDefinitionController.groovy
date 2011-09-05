@@ -138,23 +138,23 @@ class Wf4pProcessDefinitionController implements InitializingBean{
        			
        			def processName=processXML.@name.text()
        			def processDescription=processXML.@description.text()
-       			println "The process name is: ${processName}"
+       			log.debug "The process name is: ${processName}"
        			
        			def processDefinition=WorkflowDefinition.findByName(processName)
        			if (processDefinition) {
-       				println "Found workflow definition for process ${processName}"
+       				log.debug "Found workflow definition for process ${processName}"
        			} else {
-       				println "Workflow definition for process ${processName} not found!"
+       				log.debug "Workflow definition for process ${processName} not found!"
        			}
        			
        			processXML.task.each  { task ->
        				def taskName=task.@name.text()
-       				println "Found task: ${taskName}"
+       				log.debug "Found task: ${taskName}"
        				def form=Form.findByName(taskName)
        				if (form) {
-       					println "Found form for task ${taskName}"
+       					log.debug "Found form for task ${taskName}"
        				} else {
-       					println "Form for task ${taskName} not found!"
+       					log.debug "Form for task ${taskName} not found!"
        				}
        				
        				// find the first task, and make it use a request template
@@ -166,13 +166,13 @@ class Wf4pProcessDefinitionController implements InitializingBean{
        				
        				
        				def candidateGroups=task.@'candidate-groups'       				
-       				println "The candidate groups are: ${candidateGroups}"
+       				log.debug "The candidate groups are: ${candidateGroups}"
        				
        				def candidateUsers=task.@'candidate-users'       				
-       				println "The candidate users are: ${candidateUsers}"
+       				log.debug "The candidate users are: ${candidateUsers}"
        				
        				def assignee=task.@assignee       				
-       				println "The assignee is: ${assignee}"
+       				log.debug "The assignee is: ${assignee}"
        				
        				
        			}
@@ -229,7 +229,7 @@ class Wf4pProcessDefinitionController implements InitializingBean{
     // AJAX action for update the process definition with the process file
     
     def updateProcess = {
-    	println "AAAAA"    	
+    	log.debug "AAAAA"    	
     	def processDefinitionPath=ApplicationConfiguration.findByConfigKey('process.template.outputPath').configValue;
     	def returnMessage="Process ${params.id} updated"
     	def success=true

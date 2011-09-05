@@ -67,11 +67,11 @@ class GetDocumentEndpoint {
 		  taskId = request.request.taskId.text()
 		  task=workflowService.getTask(taskId)
 		  if (task.active) {
-			  println "Task active :)" 
+			  log.debug "Task active :)" 
 			  task=hibSession.merge(task)		  	
 			  documentId=task.workflow.document.id
 		  } else {
-			  println "Task not active ... :("
+			  log.debug "Task not active ... :("
 			  throw new Exception("Task already completed")
 		  }
 		}

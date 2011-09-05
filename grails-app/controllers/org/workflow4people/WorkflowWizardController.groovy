@@ -53,19 +53,19 @@ class WorkflowWizardController {
 	       			String processName=processXML.@name.text()
 	       			flow.processName=processName
 	       			def processDescription=processXML.@description.text()
-	       			println "The process name is: ${processName}"
+	       			log.debug "The process name is: ${processName}"
 	       			
 	       			flow.workflowDefinition=WorkflowDefinition.findByName(processName)
 	       			
 	       			if (flow.workflowDefinition) {
-	       				println "Found workflow definition for process ${processName}"
+	       				log.debug "Found workflow definition for process ${processName}"
 	       			} else {
-	       				println "Workflow definition for process ${processName} not found!"
+	       				log.debug "Workflow definition for process ${processName} not found!"
 	       			}
 	       			flow.tasks=[]
 	       			processXML.task.each  { task ->
 	       				String taskName=task.@name.text()
-	       				println "Found task: ${taskName}"
+	       				log.debug "Found task: ${taskName}"
 	       				def form=Form.findByName(taskName)
 	       				
 	       				def tsk=[:]
@@ -74,9 +74,9 @@ class WorkflowWizardController {
 	       				flow.tasks+=tsk
 	       				
 	       				if (form) {
-	       					println "Found form for task ${taskName}"
+	       					log.debug "Found form for task ${taskName}"
 	       				} else {
-	       					println "Form for task ${taskName} not found!"
+	       					log.debug "Form for task ${taskName} not found!"
 	       				}
 	       				
 	       				// find the first task, and make it use a request template
@@ -86,13 +86,13 @@ class WorkflowWizardController {
 	       				// assignee groups on the request need a request role
 	       				
 	       				def candidateGroups=task.@'candidate-groups'       				
-	       				println "The candidate groups are: ${candidateGroups}"
+	       				log.debug "The candidate groups are: ${candidateGroups}"
 	       				
 	       				def candidateUsers=task.@'candidate-users'       				
-	       				println "The candidate users are: ${candidateUsers}"
+	       				log.debug "The candidate users are: ${candidateUsers}"
 	       				
 	       				def assignee=task.@assignee       				
-	       				println "The assignee is: ${assignee}"
+	       				log.debug "The assignee is: ${assignee}"
 	       				
 	       				
 	       			}	                	
@@ -109,7 +109,7 @@ class WorkflowWizardController {
 		        	//render(view:'getProcessXML')
 		        	redirect(action:'getProcessXML')
 		        }
-		        println "AAAA"
+		        log.debug "AAAA"
 			//[workflowDefinition:flow.workflowDefinition,processName:flow.processName]	
 				
 			}.to("analysis")

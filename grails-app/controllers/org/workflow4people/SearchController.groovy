@@ -39,7 +39,7 @@ class SearchController {
             return [:]
         }
         try {
-        	println "Searching for ${params.q}"
+        	log.debug "Searching for ${params.q}"
         	
         	//params.analyzer="standard"
         	//params.analyzer="keywordAnalyzer"

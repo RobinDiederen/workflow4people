@@ -134,7 +134,7 @@ class Jbpm4Service implements InitializingBean {
 	
 	@Queue(name="wfp.jbpm4.out.workflow.delete")
 	def deleteWorkflowOut(msg) {
-		println "Delete workflow message received: ${msg}"
+		log.debug "Delete workflow message received: ${msg}"
 		return null
 
 	}
@@ -154,13 +154,13 @@ class Jbpm4Service implements InitializingBean {
 	@Queue(name="wfp.jbpm4.in.task.new")
 	def newTaskIn(msg) {
 		java.lang.Long id=new java.lang.Long (msg.id)
-		println id
+		log.debug id
 		return null
 	}
 	
 	@Queue(name="wfp.jbpm4.in.task.update")
 	def updateTaskIn(msg) {
-		println "Update task message received: ${msg}"
+		log.debug "Update task message received: ${msg}"
 		
 		def jbpmTask = taskService.getTask(msg.id)
 		

@@ -68,7 +68,6 @@ public class BusinessCalendarImpl implements Serializable, BusinessCalendar {
   }
 
   public Date add(Date date, String duration) {
-	  System.out.println("Hi from the calendar!");
     return add(date, new Duration(duration));
   }
 
