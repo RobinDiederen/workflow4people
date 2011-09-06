@@ -1,5 +1,5 @@
 package org.workflow4people.services
-
+import org.apache.commons.codec.binary.Base64
 import org.workflow4people.*;
 
 class SendEmailEndpoint {
@@ -29,7 +29,22 @@ class SendEmailEndpoint {
 				mailDocumentId = request.EmailMessage.documentId.text()
 				mailAction = request.EmailMessage.action.text()
 				
-				emailService.sendEmailByDocumentId(mailTo, mailFrom, mailSubject, mailDocumentId, mailAction)
+				// Attachment handling
+				if ((request.EmailMessage.attachmentdata.text()) && request.EmailMessage.attachmentfilename.text()) {
+					log.debug "Mail with attachment"
+					
+					Base64 coder = new Base64()					
+					String fileDataB64 = request.EmailMessage.attachmentdata.text()
+					byte[] fileDataBytes = coder.decodeBase64(fileDataB64.getBytes())
+					//String drs = new String(fileDataBytes)
+
+					String attachmentFileName = request.EmailMessage.attachmentfilename.text()	
+					
+					emailService.sendEmailByDocumentId(mailTo, mailFrom, mailSubject, mailDocumentId, mailAction, true, fileDataBytes, attachmentFileName)
+				} else {
+					log.debug "Mail without attachment"
+					emailService.sendEmailByDocumentId(mailTo, mailFrom, mailSubject, mailDocumentId, mailAction, false, null, null)					
+				}								
 			
 			} else if ((request.EmailMessage.from.text()) && (request.EmailMessage.to.text()) && (request.EmailMessage.to.text()) && (request.EmailMessage.message.text()))  {
 				mailMessage = request.EmailMessage.message.text()

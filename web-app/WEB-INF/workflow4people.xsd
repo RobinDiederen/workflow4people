@@ -135,6 +135,8 @@
 				<element type="string" name="message" minOccurs="0" />
 				<element type="string" name="documentId" minOccurs="0"/>
 				<element type="string" name="action" minOccurs="0"/>
+				<element type="string" name="attachmentdata" minOccurs="0"/>
+				<element type="string" name="attachmentfilename" minOccurs="0"/>
 			</sequence>
 		</complexType>		
 		

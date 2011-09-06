@@ -70,7 +70,7 @@ class WorkflowService {
 			}
 			
 			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
-				filterString =+ "task.dueDate between '" + params.fromDueDate + "' and '" + params.toDueDate + "' and"	
+				filterString += "task.dueDate between '" + params.fromDueDate + "' and '" + params.toDueDate + "' and"
 			}
 			
 			log.debug "Applying filter : " + filterString 
