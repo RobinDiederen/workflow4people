@@ -5,6 +5,7 @@ class UrlMappings {
 			 // apply constraints here
 		  }
 	  }
+	  "/"(controller:"workflowDefinition")
 	  
 	  /*
 	  "/" {
