@@ -83,7 +83,8 @@ class DocumentService implements InitializingBean {
     	def theDocumentId
     	
     	Document.withTransaction { status ->
-			def currentUser="${document?.header?.user?.name?.text()}"
+			def currentUserName="${document?.header?.user?.name?.text()}"
+			def currentUser=Person.findByUsername(currentUserName)
     		def header=document.header
     		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
     		def outputBuilder = new StreamingMarkupBuilder()
@@ -194,11 +195,13 @@ class DocumentService implements InitializingBean {
 				task.noMessage=true
 				if (header?.task?.outcome?.text().size()>0) {
 					task.outcome=header.task.outcome.text()
+					task.workflow.log("Completed task ${task.name} with outcome ${task.outcome}",currentUser)
 					task.noMessage=false
 				}
 				def formatter = new SimpleDateFormat("yyyy-MM-dd")				
 				if (header?.task?.dueDate?.text().size()>0) {
 					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
+					task.workflow.log("Changed due date of task ${task.name} to ${task.dueDate}",currentUser)
 				}
 				
 				if (header?.task?.priority.text().size()>0) {
@@ -210,7 +213,8 @@ class DocumentService implements InitializingBean {
 						def theTaskStatus=TaskStatus.findByName(header.task.status.text())
 						if (theTaskStatus) {
 							task.taskStatus=theTaskStatus
-							task.statusUser=currentUser
+							task.statusUser=currentUserName
+							task.workflow.log("Changed status of task ${task.name} to ${task.status}",currentUser)
 						}
 					} 
 					
@@ -218,7 +222,6 @@ class DocumentService implements InitializingBean {
 				task.save(failOnError:true)
 			}
 			   
-    		
     	
     		indexDocument(documentInstance)
 

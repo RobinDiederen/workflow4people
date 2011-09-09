@@ -103,7 +103,23 @@ class Task {
 	
 	
 	def beforeInsert = {
-		taskStatus=TaskStatus.findByName("new")	    
+		taskStatus=TaskStatus.findByName("new")
+		if (workflow) {
+			workflow.log("Task '${name}' created")
+		}
+		return true
 	}
+	
+	def beforeUpdate = {
+		if (isDirty('workflow')) {
+			workflow.log("Task '${name}' created")			
+		}		
+		if (isDirty('outcome')) {
+			workflow.log("Task '${name}' completed with outcome ${outcome}")
+		}
+		return true
+		
+	}
+	
 	
 }

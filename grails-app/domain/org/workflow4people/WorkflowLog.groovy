@@ -12,7 +12,7 @@ class WorkflowLog {
    		person(nullable:true)
     }
    	
-   	Date dateCreated
+   	Date dateCreated= new Date()
    	String message
    	Person person
 }

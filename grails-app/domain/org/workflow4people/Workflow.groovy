@@ -64,4 +64,15 @@ class Workflow {
 	    jmsService.send(queueName,[id:id,externalId:externalId])
 	}
 	*/
+	   
+	def log(def message,def person=null) {
+		def logInstance=new WorkflowLog()
+		logInstance.message=message
+		logInstance.workflow=this
+		if(person) {
+			logInstance.person=person
+		}
+		logInstance.save()
+	}   
+	
 }

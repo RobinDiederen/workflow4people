@@ -209,7 +209,7 @@ class Jbpm4Service implements InitializingBean {
 				task.noMessage=true
 
 				task.save(failOnError:true,flush:true)
-				print "TASK UPDATE SAVED FOR TASK ${task.id}"
+				log.debug "TASK UPDATE SAVED FOR TASK ${task.id}"
 			} // withTransaction
 		}
 		return null
