@@ -5,7 +5,7 @@ import org.workflow4people.*
 
 class WorkflowService {
 
-    boolean transactional = true
+    boolean transactional = false
     
     def findTasksByUser(username,params=[:]) {
     	Task.withTransaction { status ->

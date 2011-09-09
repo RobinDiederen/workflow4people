@@ -49,7 +49,7 @@ import org.compass.core.engine.SearchEngineQueryParseException
 
 class DocumentService implements InitializingBean {
 	
-	static transactional = true
+	static transactional = false
 	def processEngine
 	TaskService taskService
 	ExecutionService executionService
@@ -196,7 +196,7 @@ class DocumentService implements InitializingBean {
 					task.outcome=header.task.outcome.text()
 					task.noMessage=false
 				}
-				def formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")				
+				def formatter = new SimpleDateFormat("yyyy-MM-dd")				
 				if (header?.task?.dueDate?.text().size()>0) {
 					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
 				}
