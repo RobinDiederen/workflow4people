@@ -82,29 +82,30 @@ function formDialog(id,controllerName, options ,urlParams) {
 			 	var formData=theDialog.find("form").serialize();
 			 	$.post(wfp.baseUrl+"/"+controllerName+"/"+submitName+"/"+urlId,formData, function(data) 
 			 		{
-			 		var result=data.result			 		
-			 		$("#statusmessage").html(result.message);
+			 		var jsonResponse = data.result;
+
+			 		$("#statusmessage").html(jsonResponse.message);
 
 			 		//DME logMessage & refreshTree (editor.js)
 			 		if (typeof(refreshTree) === 'function') {
-				 		for (i in result.refreshNodes) {
-				 			refreshTree(result.refreshNodes[i])
+				 		for (i in jsonResponse.refreshNodes) {
+				 			refreshTree(jsonResponse.refreshNodes[i]);
 				 		}
 			 		}
 			 		if (typeof(logMessage) === 'function') {
-			 			logMessage(result.message);			 			
+			 			logMessage(jsonResponse.message);			 			
 			 		}
 
 			 		refreshDataTable(refreshTableKey, dataTableHashList, (id ? false : true));
 			 		
-			 		if(result.success){
+			 		if(jsonResponse.success){
 				 		theDialog.dialog("close");
 				 	} else  {
-				 		for (key in result.errorFields) {
-				 			var errorField=result.errorFields[key]
+				 		for (key in jsonResponse.errorFields) {
+				 			var errorField=jsonResponse.errorFields[key]
 				 			$("#"+errorField).parent().addClass("errors")				 			
 				 		}
-				 		theDialog.find("div.errors").html(result.message)
+				 		theDialog.find("div.errors").html(jsonResponse.message)
 				 		theDialog.find("div.errors").show();				 		
 				 	}			 		
 			 	});			 	

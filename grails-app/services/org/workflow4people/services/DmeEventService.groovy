@@ -393,7 +393,7 @@ class DmeEventService {
 	def deleteFieldType(def node) {
 		def result=this.defaultResult
 		log.debug "DELETE"
-		allowedFlag=true
+		def allowedFlag=true
 		def fieldType=FieldType.get(new Long(node.id))
 		def n=Field.countByFieldType(fieldType)
 		if(n>0) {

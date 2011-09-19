@@ -12,77 +12,92 @@ class DataModelEditorController {
 	def dmeEventService
 	
     def index = { 
-    		render(view:'editor')
-    		
+    		render(view:'editor')    		
     }
     
-    def showField = {
-			def id=params.id.split("_")[1]
-
-            def fieldInstance = Field.get( id )
-
-            if(!fieldInstance) {
-                flash.message = "Field not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { return [ fieldInstance : fieldInstance ] }
-        }
-    
-    def editField = {
-			def id=params.id
-            if (params.id.contains("_")){
-				id=params.id.split("_")[1]
-			}
-            def fieldInstance = Field.get( id )
-
-            if(!fieldInstance) {
-                flash.message = "Field not found with id ${params.id}"
-                redirect(action:list)
-            }
-            else { 
-            	// find top level
-            	def f= fieldInstance
-            	while (f.parent!=null && f.parent !=f) {
-            		f=f.parent
-            	}
-            	def fieldsInSameTree=f.getDescendants().sort{it.toString()}
-            	
-            	return [ fieldInstance : fieldInstance,fieldsInSameTree:fieldsInSameTree] 
-	         }
-        }
+	// ##############################################################
 	
-	def submitField = {
-			log.debug "Submit Field params: ${params}"
-			def id=params.id
-			if (id.contains("_")) {
-				id=params.id.split("_")[1]
+    def editField = {
+		log.debug "Edit Field params: ${params}"
+		def model = dialogService.edit(Field,params)
+
+		//Find fields in the same tree (for "dependsOn" field)
+		def fieldInstance
+		if (params.parentType && params.parentType == "fieldtype") {
+			log.debug "Create Field under FieldType (parentId: ${params.parentId})"
+			fieldInstance = FieldType.get(params.parentId)?.listParent
+		} else {
+			if (params.id && params.id == 'null' && params.parentId && params.parentId != 'null') {
+				log.debug "Create new Field under other Field (parentId: ${params.parentId})"
+				fieldInstance = Field.get(params.parentId)
+			} else {
+				log.debug "Edit Field (parentId: ${params.id})"
+				fieldInstance = model?.fieldInstance
 			}
-			                            
-			def fieldInstance = Field.get(id )
-			fieldInstance.properties = params
-			//fieldInstance.dependencyType=null
-			log.debug "dependencyType:"+fieldInstance.dependencyType
-			log.debug g.renderErrors(bean:fieldInstance)
-			fieldInstance.save(failOnError:true)
+		}
+		if (fieldInstance) {
+			def f = fieldInstance
+			while (f.parent!=null && f.parent !=f) {
+				f = f.parent
+			}
+			def fieldsInSameTree=f.getDescendants().sort{it.toString()}
 			
-    	//	render(view:'showField',model:[ fieldInstance : fieldInstance ])
-			def theRefreshNodes=fieldInstance.parent?.id ?  ["field_${fieldInstance.parent.id}"] : ["dataModelTree"]
-			
-			                     
- 			def result = [
- 			              	returnValue:true,
- 			              	message:"field #${fieldInstance.id} : ${fieldInstance.name} updated" ,
- 			              	id:params.id,
- 			              	name: fieldInstance.name,	
- 			              	refreshNodes:theRefreshNodes
- 			              ]              
-             def res=[result:result]
-             render res as JSON
-			
+			model['fieldsInSameTree'] = fieldsInSameTree
+		}
+
+		render(view:'/field/dialog',model:model)
+		
 	}
 	
 	
-	def editForm= {			
+	def submitField = {
+		log.debug "Submit Field params: ${params}"
+		def fieldInstance
+	    if (params.id && params.id != 'null') {
+   			fieldInstance = Field.get(params.id)
+   		} else {
+	    	fieldInstance = Field.newInstance()
+	    }
+		fieldInstance.properties = params
+		
+		def res = dialogService.submit(Field,params,fieldInstance)
+
+		//Add extra values to result (ex. refreshNodes)
+		def theRefreshNodes=fieldInstance.parent?.id ?  ["field_${fieldInstance.parent.id}"] : ["dataModelTree"]
+		res.result += [returnValue:true, refreshNodes:theRefreshNodes]
+		render res as JSON		
+	}
+	
+	/*
+	* Creates new field under a FieldType. Creates the listParent field if it did not exist already
+	*/
+   def submitFieldUnderFieldType = {
+	   log.debug "Submit Field params: ${params}"
+	   // Create new listParent field if it didn't exist
+	   def fieldType=FieldType.get(params.parentId)
+	   if (!fieldType.listParent) {
+			   def theListParent=new Field()
+			   theListParent.name=fieldType.name
+			   theListParent.parent=null
+			   theListParent.fieldType=fieldType
+			   theListParent.save(failOnError:true,flush:true)
+			   fieldType.listParent=theListParent
+			   fieldType.save(failOnError:true,flush:true)
+	   }
+	   def field=new Field()
+	   field.properties = params
+	   field.parent=fieldType.listParent
+	   
+	   //Add extra values to result (ex. refreshNodes)
+	   def result = dialogService.submit(Field,params,field)
+	   result["result"]+=[returnValue:true, refreshNodes:["fieldtype_${fieldType.id}"]]
+	   render result as JSON
+   }
+	
+   // ##############################################################
+   
+	def editForm= {
+		log.debug "Edit Form params: ${params}"
 		def model= dialogService.edit(Form,params)
 		model['formTemplateNames']=templateService.formTemplateNames
 		if (!model['formInstance'].id) {
@@ -91,11 +106,8 @@ class DataModelEditorController {
 		render(view:'/form/dialog',model:model)
 	}
 	
-	
-	
-	
 	def submitForm = {		     
-	    log.debug "Submit Form params: ${params}"        
+	    log.debug "Submit Form params: ${params}"
 	    def result =  dialogService.submit(Form,params)
 	    def wfid
 	    if (params.workflow?.id) {
@@ -108,15 +120,16 @@ class DataModelEditorController {
         render result as JSON
 	}
 	
+	// ##############################################################
 			
 	def editWorkflowDefinition = {
-			def model= dialogService.edit(WorkflowDefinition,params) 
-			render(view:'/workflowDefinition/dialog',model:model)
+		log.debug "Edit WorkflowDefinition params: ${params}"
+		def model= dialogService.edit(WorkflowDefinition,params) 
+		render(view:'/workflowDefinition/dialog',model:model)
 	}
 	
 	def submitWorkflowDefinition = {
 			log.debug "Submit WorkflowDefinition params: ${params}"
-
 			def res = dialogService.submit(WorkflowDefinition,params)
 
 			// for new workflows, add the request and show form automatically
@@ -154,15 +167,15 @@ class DataModelEditorController {
 			render res as JSON			
 	}
 
-
+	// ##############################################################
 		
 	def editFormItem = {
-			def model= dialogService.edit(FormItem,params) 
-			render(view:'/formItem/dialog',model:model)
+		log.debug "Edit FormItem params: ${params}"
+		def model= dialogService.edit(FormItem,params) 
+		render(view:'/formItem/dialog',model:model)
 	}			
 	
 	def submitFormItem = {
-		     
         log.debug "Submit FormItem params: ${params}"        
         def result =  dialogService.submit(FormItem,params)
         
@@ -178,14 +191,14 @@ class DataModelEditorController {
         
 	}
 
+	// ##############################################################
 	
-	def editFieldType = { 			
-			def model= dialogService.edit(FieldType,params) 
-			render(view:'/fieldType/dialog',model:model)
+	def editFieldType = {
+		log.debug "Edit FieldType params: ${params}"
+		def model= dialogService.edit(FieldType,params) 
+		render(view:'/fieldType/dialog',model:model)
 	}
 	
-	
-    
 	def submitFieldType = {
 		log.debug "Submit FieldType params: ${params}"
      	def result =  dialogService.submit(FieldType,params)
@@ -194,179 +207,8 @@ class DataModelEditorController {
         render result as JSON
 	}
 	
-    def submitFieldList = {
-
-	    log.debug "Submit FieldList params: ${params}"
-	    def result =  dialogService.submit(FieldList,params)
-
-	    result['result']['refreshNodes']=["fieldListTree"]
-        render result as JSON	
-	}
+	// ##############################################################
 	
-	def editFieldList = {
-			def model= dialogService.edit(FieldList,params) 
-			render(view:'/fieldList/dialog',model:model)			
-    } 
-	
-	/*
-    def onmove = {
-    		log.debug "We have a move. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
-    		log.debug params
-    		
-    		def id=params.node_id.split('_')[1]
-    		def theField=org.workflow4people.Field.get(id)
-    		log.debug theField
-    		
-    		def refId=params.ref_node_id.split('_')[1]
-     		def refField=org.workflow4people.Field.get(refId)
-    		log.debug refField
-    		
-    		def moveType=params.type
-    		
-    		theField.fieldList=refField.fieldList
-    		def n=1
-    		org.workflow4people.Field.findAllByFieldList(theField.fieldList,[sort:'fieldPosition',order:'asc']).each { field -> 
-    			if (field == refField) {
-    				if (moveType=="before") {
-    					theField.fieldPosition=n
-    					theField.save()
-    					n++
-    					field.fieldPosition=n
-    					field.save()
-    					n++
-    					
-    				} else {
-    					// after
-    					field.fieldPosition=n
-    					field.save()
-    					n++
-    					theField.fieldPosition=n
-    					theField.save()
-    					n++
-    				}
-    			} else {
-    				if (field !=theField) {
-    					field.fieldPosition=n
-    					field.save()
-    					n++
-    				}
-				}
-			}
-    		
-    		
-    		
-    		
-    		render(contentType:"text/json") {
-    			result(
-    					returnValue:true,
-    					message:'ooooh een berichtje'
-    				)
-    		}
-    }
-    
-    def oncopy = {
-    		log.debug "We have a copy. ${params.node_id} is now ${params.type} ${params.ref_node_id}"
-    		log.debug params
-    		
-    		def nodeType=params.node_rel
-    		def id=params.node_id.split('_')[1]
-    		                                 
-    		                                 
-    		log.debug "nodeType=${nodeType},id=${id}"
-    		//def theField=org.workflow4people.Field.get(id)
-    		//log.debug theField
-    		
-    		def refNodeType=params.ref_node_rel
-    		def refId=params.ref_node_id.split('_')[1]
-    		                                        
-            log.debug "refNodeType=${refNodeType},refNodeId=${refId}"
-            
-     		def refField=org.workflow4people.Field.get(refId)
-     		
-     		def theField=new Field()
-     		if (nodeType=="rootFieldList") {
-     			log.debug "Creating new field referring to FieldList"
-     			theField.fieldType=org.workflow4people.FieldType.findByName('FieldList')
-     			def fieldList=FieldList.get(id)
-     			theField.childFieldList=fieldList
-     			// convert first chat to lowercase
-     			theField.name=fieldList.name[0].toLowerCase()+fieldList.name.substring(1)		
-     			theField.fieldList=refField.fieldList
-     			theField.label=fieldList.label
-     			theField.description=""
-     		} else {
-     			// copy the field
-     			log.debug "Copying field"
-     			def originalField=Field.get(id)
-     			def domainClass=grailsApplication.getDomainClass('org.workflow4people.Field') 
-     			domainClass.persistentProperties.each { prop ->
-     				theField."${prop.name}" = originalField."${prop.name}"
-     			}     			
-     		}
-     			
-     		
-     		
-    		
-    		
-    		def moveType=params.type
-    		
-    		theField.fieldList=refField.fieldList    		
-    		def n=1
-    		org.workflow4people.Field.findAllByFieldList(theField.fieldList,[sort:'fieldPosition',order:'asc']).each { field -> 
-    			if (field == refField) {
-    				if (moveType=="before") {
-    					theField.fieldPosition=n
-    					theField.save(failOnError:true)
-    					n++
-    					field.fieldPosition=n
-    					field.save(failOnError:true)
-    					n++
-    					
-    				} else {
-    					// after
-    					field.fieldPosition=n
-    					field.save(failOnError:true)
-    					n++
-    					theField.fieldPosition=n
-    					theField.save(failOnError:true)
-    					n++
-    				}
-    			} else {
-    				if (field !=theField) {
-    					field.fieldPosition=n
-    					field.save(failOnError:true)
-    					n++
-    				}
-				}
-			}
-    		
-    		render(contentType:"text/json") {
-    			result(
-    					returnValue:true,
-    					message:'ooooh een berichtje',
-    					fieldId:theField.id
-    				)
-    		}
-    }
-    
-    
-    
-    def beforedelete = {
-    		log.debug params    		
-    		Boolean canMove=true
-    		if (params.node_rel=="rootFieldList") {
-    			canMove=false;
-    		}
-    		
-    		
-    		render(contentType:"text/json") {
-    			result(
-    					returnValue:canMove,
-    					message:'ooooh een berichtje'
-    				)
-    		}
-    }
-    */
 	def before = {
 		def node1=[:]
 		def node2=[:]
