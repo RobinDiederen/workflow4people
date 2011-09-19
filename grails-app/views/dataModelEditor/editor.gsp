@@ -12,6 +12,11 @@
 		<g:javascript src="jquery/jquery.hotkeys.js" contextPath="${pluginContextPath}" />	
 		<g:javascript src="jquery/jquery.jstree.js" contextPath="${pluginContextPath}" />
 		<g:javascript src="dme/editor.js" contextPath="${pluginContextPath}" />
+		
+		<g:javascript>
+		   	wfp.dme = {};
+        	wfp.dme.urlSignavio = "${urlSignavio}";
+        </g:javascript>
 				
     </head>
     <body>

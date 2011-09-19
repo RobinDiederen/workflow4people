@@ -242,7 +242,7 @@ function workflowContextMenu( node ) {
 			
 			"editworkflowdiagram" : {
 								"label": 'Edit workflow diagram',
-								"action" : function( node ) { window.open('http://localhost:8080/signaviocore/p/editor?id=root-directory%3B'+node[0].title+'.jpdl.xml','signavio','width=1000,height=700,left=0,top=100,screenX=0,screenY=100') }
+								"action" : function( node ) { window.open(wfp.dme.urlSignavio + '?id=root-directory%3B'+node[0].title+'.jpdl.xml','signavio','width=1000,height=700,left=0,top=100,screenX=0,screenY=100') }
 							  },
 
 			"generateforms" : {

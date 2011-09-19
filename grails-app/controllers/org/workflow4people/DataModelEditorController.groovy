@@ -11,8 +11,12 @@ class DataModelEditorController {
 	def dmeService
 	def dmeEventService
 	
-    def index = { 
-    		render(view:'editor')    		
+    def index = {
+		def model = [:]
+		def urlSignavio = ApplicationConfiguration.findByConfigKey('wfp.dme.urlSignavio')
+		model['urlSignavio'] = urlSignavio ? urlSignavio.configValue : '/signaviocore/p/editor'
+
+    	render(view:'editor', model:model)    		
     }
     
 	// ##############################################################
