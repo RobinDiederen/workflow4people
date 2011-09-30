@@ -154,7 +154,15 @@ class TaskQueryEndpoint {
 								}
 							}
 						}
-						*/						
+						*/
+						
+					  taskStatus {
+					    name(theTask.taskStatus?.name)
+					    title(theTask.taskStatus?.title)
+					    description(theTask.taskStatus?.description)
+					    cssClass(theTask.taskStatus?.cssClass)
+					  }
+						
 					}
 				}
         		
