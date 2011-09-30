@@ -1,6 +1,7 @@
 <wf:form title="User" width="615px" object="${personInstance}">
 	<wf:table>		                            
-		<wf:textField object="${personInstance}" propertyName="id" mode="show" />                                                        
+		<wf:textField object="${personInstance}" propertyName="id" mode="show" />
+		<wf:checkBox object="${personInstance}" propertyName="enabled" mode="edit" />                                                        
 		<wf:textField object="${personInstance}" propertyName="username" mode="edit" class="wide"/>
 		<wf:textField object="${personInstance}" propertyName="userRealName" mode="edit" class="wide"/>
 		<wf:textField object="${personInstance}" propertyName="givenName" mode="edit" class="wide"/>

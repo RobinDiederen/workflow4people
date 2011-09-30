@@ -39,7 +39,7 @@ class Person  {
 	/** MD5 Password */
 	String passwd
 	/** enabled */
-	boolean enabled
+	boolean enabled = true
 
 	String email
 	boolean emailShow
