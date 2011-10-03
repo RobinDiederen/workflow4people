@@ -18,12 +18,15 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured
 
 import org.jbpm.api.task.*;
 import org.jbpm.api.*;
 import org.jbpm.api.identity.*
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+
 import groovy.xml.StreamingMarkupBuilder
 
 /**
@@ -40,6 +43,53 @@ class Wf4pTaskController implements InitializingBean {
 	TaskService taskService
 	IdentityService identityService
 	def documentService
+	def listService
+
+	/* New Style Lists */
+	ArrayList listProperties = ['id','name','executionId','description','priority','assignee','createTime','duedate']
+
+	def lists = {
+		render (view:'lists', model:[dc: ['listProperties': listProperties], controllerName:'wf4pTask', request:request, jsonlist: 'jsonlist'])
+	}	
+
+	def jsonlist = {
+		def columns=listProperties
+		def query = taskService.createTaskQuery();
+		
+//		def query = taskService.createTaskQuery().assignee(params.userId);
+//		def query = taskService.createTaskQuery().candidate(params.userId);
+		
+		def iTotalRecords = query.count();
+		
+		//Sort order
+		def sortName=columns[new Integer(params.iSortCol_0)]
+		sortName=sortName? sortName:columns[0]
+		if (params.sSortDir_0 == 'asc') {
+			query.orderAsc(sortName)
+		} else {
+			query.orderDesc(sortName)
+		}
+		
+		//Pagination
+		query.page(params.iDisplayStart.toInteger(),params.iDisplayLength.toInteger())
+		
+		def aaData=[]
+			query.list().each { doc ->
+
+			def inLine=[]
+			columns.each {
+				inLine +=doc."${it}".toString()
+			}
+			//Add show action
+			inLine+="""<a href=show?taskId=${doc.id}&previousAction=lists><span class="list-action-button ui-state-default">show&nbsp;&raquo;</span></a>"""
+				            		
+			def aaLine=[inLine]
+			aaData+=(aaLine)
+		}
+		def json = [sEcho:params.sEcho,iTotalRecords:iTotalRecords,iTotalDisplayRecords:iTotalRecords,aaData:aaData]
+		
+		render json as JSON
+	}
 	
 	void afterPropertiesSet() {
 		executionService=processEngine.getExecutionService()
@@ -100,6 +150,8 @@ class Wf4pTaskController implements InitializingBean {
 		
 		["taskList":query.list(),"taskService":taskService,taskTotal:taskTotal,params:params]
 	}
+	
+	
 	
 	def userlist = {
 				

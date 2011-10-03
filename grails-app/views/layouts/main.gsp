@@ -8,7 +8,7 @@
                 
         <%-- css from used modules --%>
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',contextPath:'',plugin:'wfp')}" />
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />
+<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />--%>
         <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
     	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp',contextPath:'')}" />
 	
@@ -46,35 +46,21 @@
         <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
         
         <jq:jquery>
- 		
-            $(".step").addClass("awesome small blue button");
-            $(".currentStep").addClass("awesome small red button");
-            $(".nextLink").addClass("awesome small blue button");
-            $(".prevLink").addClass("awesome small blue button");
-            $("a.list").addClass("awesome small blue button");
-            $("a.create").addClass("awesome small blue button");
-            $("input.edit").addClass("awesome small blue button");
-            $("input.save").addClass("awesome small blue button");
-            $("input.delete").addClass("awesome small red button");
-            $("a.process").addClass("awesome small blue button");
+			<%-- NEW Look buttons--%>
+			$(".awesome").removeClass("small awesome blue button").button();
             
-            /*
+            $(".step").removeClass("small awesome blue button").button();
+            $(".currentStep").removeClass("small awesome red button").button();
+            $(".nextLink").removeClass("small awesome blue button").button();
+            $(".prevLink").removeClass("small awesome blue button").button();
             
-            $(".step").button();
-            $(".currentStep").button();
-            $(".nextLink").button();
-            $(".prevLink").button();
-            $("a.list").button();
-            $("a.create").button();
-            $("input.edit").button();
-            $("input.save").button();
-            $("input.delete").button();
-            $("a.process").button();  
-            $(".awesome").button();
-          
-            */
-            
-            
+            $("a.list").removeClass("small awesome blue button").button();
+            $("a.create").removeClass("small awesome blue button").button();
+            $("input.edit").removeClass("small awesome blue button").button();
+            $("input.save").removeClass("small awesome blue button").button();
+            $("input.delete").removeClass("small awesome red button").button();
+            $("a.process").removeClass("small awesome blue button").button();     
+                   
         	<%-- Helper for the left menu, when clicking a li the enclosed a's href  will be called --%>
 			$("div.wf4p-menu ul ul li a").each(function (index) {
 				var curMatch = $(this);
@@ -82,7 +68,16 @@
 					document.location = curMatch[0].href;
 				});
 			});
-          	
+			
+			<%-- Hide jBpm menu if not used	--%>
+			var pathName = window.location.pathname;
+			if (pathName.split('/')[2].substring(0, 4) == "wf4p") {
+				$("#jbpmMenuItems").toggleClass("hideElement");
+			}
+			$("#jbpmMenu").click(function(){
+				$("#jbpmMenuItems").toggleClass("hideElement");
+			});
+			          	
          	// Initialize date picker input elements
          	$(".datepicker").datepicker({ dateFormat: "yyyy-MM-dd'T'HH:mm:ss" , changeMonth: true, changeYear:true});
           	
@@ -135,8 +130,8 @@
           	</ul>
           	<li>Engines</li>
           	<ul>
-          	<li class="menu-icon jbpm">jBPM</li>	        	        
-	        <ul>	        
+          	<li id="jbpmMenu" class="menu-icon jbpm">jBPM</li>	        	        
+	        <ul id="jbpmMenuItems" class="hideElement">	        
 	          <li class="menu-icon menu-alltasks"><g:link controller="wf4pTask" action="list">All Tasks</g:link></li>
 	          <li class="menu-icon mytasks"><g:link controller="wf4pTask" action="userlist">Tasks by user</g:link></li>
         	  <li class="menu-icon grouptasks" ><g:link controller="wf4pTask" action="grouplist">Group tasks</g:link></li>
