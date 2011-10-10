@@ -47,8 +47,8 @@ class WorkflowService {
     		def authmap=[person:person]
     		String query=""
     		authorities.each { a ->
-    			authmap.put(a.authority,a)
-    			query+=" or :${a.authority} in elements(task.candidateGroups)"
+    			authmap.put(a.authority.replaceAll(" ", "_"),a)
+    			query+=" or :${a.authority.replaceAll(" ", "_")} in elements(task.candidateGroups)"
     		}
     		log.debug "The query is ${query}"
     		log.debug "params: ${params}"
@@ -107,8 +107,8 @@ class WorkflowService {
     		def authmap=[person:person]
     		String query=""
     		authorities.each { a ->
-    			authmap.put(a.authority,a)
-    			query+=" or :${a.authority} in elements(task.candidateGroups)"
+    			authmap.put(a.authority.replaceAll(" ", "_"),a)
+    			query+=" or :${a.authority.replaceAll(" ", "_")} in elements(task.candidateGroups)"
     		}
 
     		params=[:]
