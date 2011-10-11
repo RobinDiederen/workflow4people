@@ -41,7 +41,32 @@ class GetWorkflowDefinitionsEndpoint {
 			//def workflowDefinitionList=workflowDefinitionService.getWorkflowDefinitions(request.request.includeUnpublished.text()=="true")
 			def workflowDefinitionList=workflowDefinitionService.getWorkflowDefinitions(request.request.includeUnpublished.text()=="true")
 			
-		
+		  def user = Person.findByUsername(request.request.userId.text())
+		  def autorities = user.getAuthorities()
+		  
+		  def role = Role.findByName("requestor")
+		  
+		  for (int i = 0; i < workflowDefinitionList.size(); i++) {
+		  
+		    def workflowPermissionCount = 0
+		    def workflowPermissions = WorkflowPermission.withCriteria {
+          eq('workflow', workflowDefinitionList[i])
+          eq('role', role)
+		    }
+		    
+		    workflowPermissions.each { wp ->
+	        autorities.each { a ->
+	          if (wp.authority.authority == a.authority) {
+	            workflowPermissionCount++
+	          }		      
+	        }
+		    }
+		    
+		    if (workflowPermissionCount == 0) {
+		      workflowDefinitionList.remove(i)
+		      i--
+		    }
+		  }
 	    
 			def response = { GetWorkflowDefinitionsResponse(xmlns:namespace) 
 				{			
