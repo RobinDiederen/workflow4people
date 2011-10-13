@@ -20,7 +20,7 @@ class WorkflowService {
 			}
 			
 			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
-				filterString +=	"task.workflow.name = '" + params.documentType + "' and "
+				filterString +=	"task.workflow.name like '%" + params.documentType + "%' and "
 			}
 			
 			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
@@ -46,9 +46,10 @@ class WorkflowService {
     		def authorities=person.authorities
     		def authmap=[person:person]
     		String query=""
-    		authorities.each { a ->
-    			authmap.put(a.authority.replaceAll(" ", "_"),a)
-    			query+=" or :${a.authority.replaceAll(" ", "_")} in elements(task.candidateGroups)"
+    		authorities.eachWithIndex { a, i ->
+    		  String auth = "authority_${i.toString()}"
+    			authmap.put(auth,a)
+    			query+=" or :${auth} in elements(task.candidateGroups)"
     		}
     		log.debug "The query is ${query}"
     		log.debug "params: ${params}"
@@ -62,11 +63,11 @@ class WorkflowService {
 			def filterString = ""
 			
 			if ((params.processStatus) && (params.processStatus != "null") && (params.processStatus != "")) {
-				filterString += "task.name like '" + params.processStatus + "%' and "				
+				filterString += "task.name like '%" + params.processStatus + "%' and "				
 			}
 			
 			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
-				filterString +=	"task.workflow.name = '" + params.documentType + "' and "
+				filterString +=	"task.workflow.name like '" + params.documentType + "%' and "
 			}
 			
 			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
@@ -74,11 +75,11 @@ class WorkflowService {
 			}
 			
 			log.debug "Applying filter : " + filterString 
-    		
+    		try {
     		def taskList=Task.executeQuery("select task from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")"+orderBy,authmap,params)    		
     		def taskCount=Task.executeQuery("select count(*) from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap)
     	
-    		[taskList:taskList,taskCount:taskCount]
+    		[taskList:taskList,taskCount:taskCount] } catch (Exception e) { println "ERROR!!! -> ${e.toString()}"}
     	}
     }
     
