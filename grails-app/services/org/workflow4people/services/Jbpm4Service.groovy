@@ -144,8 +144,10 @@ class Jbpm4Service implements InitializingBean {
 		def processInstance=executionService.findProcessInstanceById(msg.id)
 		def engine=WorkflowEngine.findByName("jbpm4")
 		def workflow=Workflow.findByWorkflowEngineAndExternalId(engine,msg.id)
-		if (!workflow.completionDate) workflow.completionDate=new Date()
-		workflow.save(failOnError:true,flush:true)
+		if (workflow) {
+			if (!workflow.completionDate) workflow.completionDate=new Date()
+			workflow.save(failOnError:true,flush:true)
+		}
 		return null
 	}
 	
@@ -169,6 +171,19 @@ class Jbpm4Service implements InitializingBean {
 			def executionId=jbpmTask.getExecutionId()
 			def workflow=Workflow.findByExternalId(executionId)
 			
+			println "!!! WORKAROUND - updateTaskIn -> executionId: ${executionId}"
+			def iCounter = 1
+			while (!workflow) {
+				if (iCounter > 600) {
+					break
+				}
+				sleep(100)
+				workflow=Workflow.findByExternalId(executionId)
+				println "!!! WORKAROUND - updateTaskIn -> workflow.${iCounter}: ${workflow}"
+				iCounter++
+			}
+			println "!!! WORKAROUND - updateTaskIn -> workflow: ${workflow}"
+
 			Task.withTransaction { status ->
 			//if (workflow) {
 				task = new org.workflow4people.Task()
