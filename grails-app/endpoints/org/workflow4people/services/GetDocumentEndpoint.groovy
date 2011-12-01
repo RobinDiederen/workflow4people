@@ -79,6 +79,7 @@ class GetDocumentEndpoint {
 		
 		// Store task details in document header.
 		xmlDocument.header.taskId=taskId
+		/*
 		if (taskId.length()>0 && xmlDocument.header.task) {
 			xmlDocument.header.task.id=task.id
 			xmlDocument.header.task.name=task.name
@@ -90,7 +91,39 @@ class GetDocumentEndpoint {
 			xmlDocument.header.task.status=task.status
 			xmlDocument.header.task.statusUser=task.statusUser
 		}
-
+		*/
+		xmlDocument.header.taskId=""
+		xmlDocument.header.task.id=""
+		xmlDocument.header.task.name=""
+		xmlDocument.header.task.description=""
+		xmlDocument.header.task.outcome=""
+		xmlDocument.header.task.dueDate=""
+		xmlDocument.header.task.priority=""
+		xmlDocument.header.task.assignee=""
+		xmlDocument.header.task.status=""
+		xmlDocument.header.task.statusUser=""
+		def workflow = Workflow.findByDocumentAndCompletionDateIsNull(Document.get(documentId))
+		if (workflow) {
+			def activeTask = Task.findByWorkflowAndCompletionDateIsNull(workflow)
+			def requestByUser = request.request.requestByUser.text().length() > 0 ? request.request.requestByUser.text() : null
+			println "activeTask: ${activeTask}"
+			println "requestByUser: ${requestByUser}"
+			if (activeTask && requestByUser && (workflowService.isTaskAssignee(activeTask.id, requestByUser, [:]) || workflowService.isTaskCandidate(activeTask.id, requestByUser, [:]))) {
+				println "workflowService.isTaskAssignee(activeTask.id, requestByUser, [:]): ${workflowService.isTaskAssignee(activeTask.id, requestByUser, [:])}"
+				println "workflowService.isTaskCandidate(activeTask.id, requestByUser, [:]): ${workflowService.isTaskCandidate(activeTask.id, requestByUser, [:])}"
+				xmlDocument.header.taskId=activeTask.id
+				xmlDocument.header.task.id=activeTask.id
+				xmlDocument.header.task.name=activeTask.name
+				xmlDocument.header.task.description=activeTask.description
+				xmlDocument.header.task.outcome=""
+				xmlDocument.header.task.dueDate=activeTask.dueDate.format('yyyy-MM-dd')			
+				xmlDocument.header.task.priority=activeTask.priority
+				xmlDocument.header.task.assignee=activeTask.assignee?.username
+				xmlDocument.header.task.status=activeTask.status
+				xmlDocument.header.task.statusUser=activeTask.statusUser
+			}
+		}
+		
 		def response = { GetDocumentResponse(xmlns:namespace) {
 			document(xmlDocument)
 			}		
