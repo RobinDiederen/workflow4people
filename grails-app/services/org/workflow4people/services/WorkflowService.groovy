@@ -11,7 +11,7 @@ class WorkflowService {
     	Task.withTransaction { status ->
     		def person=Person.findByUsername(username)
     		params+=[fetch:[form:'join',workflow:'join']]
-    		log.debug "PARAMS In SERVICE: ${params}"
+    		log.debug "PARAMS In SERVICE: ${params}"	
 			
 			def filterString = ""
 			
@@ -53,11 +53,18 @@ class WorkflowService {
     		}
     		log.debug "The query is ${query}"
     		log.debug "params: ${params}"
+    		println "params: ${params}"
     		def orderBy=""
-    			
-    		if (params["order"]) {
-    			orderBy=" order by task.${params['sort']} ${params['order']}"
-    		}
+    		
+				for (def i = 0; i < params.sort.size(); i++) {				
+					if (i == 0) {
+						orderBy=" order by task.${params.sort[i]} ${params.order[i]}"
+					}
+					else {
+						orderBy+=", task.${params.sort[i]} ${params.order[i]}"
+					}
+				}
+				println "orderBy: ${orderBy}"
     		log.debug "Orderby: ${orderBy}"
 
 			def filterString = ""

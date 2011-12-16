@@ -416,8 +416,7 @@
 								<element type="string" name="assignee" minOccurs="0"/>
 								<element type="string" name="candidate" minOccurs="0"/>
 								<element type="boolean" name="suspended" minOccurs="0"/>
-								<element type="string" name="orderAsc" minOccurs="0"/>
-								<element type="string" name="orderDesc" minOccurs="0"/>
+								<element type="string" name="order" minOccurs="0"/>
 								<element type="integer" name="firstResult" minOccurs="0"/>
 								<element type="integer" name="maxResults" minOccurs="0"/>
 								<element type="string" name="processDefinitionId" minOccurs="0"/>

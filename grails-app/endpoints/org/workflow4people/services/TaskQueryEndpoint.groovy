@@ -49,15 +49,30 @@ class TaskQueryEndpoint {
 		
 		if (request.request.maxResults.text()) params["max"]=request.request.maxResults.text()
 		
-		if (request.request.orderAsc.text()) {			
-			log.debug "ASC"			
-			params+=[sort:request.request.orderAsc.text(),order:"asc"]
-		}
+		params+=[nSort:request.request.order.size()]
 		
-		if (request.request.orderDesc.text()) {
-			log.debug "DESC"			
-			params+=[sort:request.request.orderDesc.text(),order:"desc"]
+		def sortArr = []
+		def orderList = []
+		
+		request.request.order.eachWithIndex { it, i ->
+			def orderName = it.text().split(' ')[0]
+			def orderDir = it.text().split(' ')[1]
+			
+			if (orderDir.toUpperCase() == 'ASC') {			
+				log.debug "ASC"
+				sortArr.add(orderName)
+				orderList.add("asc")
+				//params+=["sort":orderName,"order":"asc"]
+			}
+		
+			if (orderDir.toUpperCase() == 'DESC') {
+				log.debug "DESC"
+				sortArr.add(orderName)
+				orderList.add("desc")
+				//params+=["sort":orderName,"order":"desc"]
+			}
 		}
+		params+=["sort":sortArr,"order":orderList]
 
 		if (request.request.documentType.text()) {
 			log.debug "Requested document type " + request.request.documentType.text()
