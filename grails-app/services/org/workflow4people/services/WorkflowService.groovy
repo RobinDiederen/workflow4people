@@ -20,7 +20,7 @@ class WorkflowService {
 			}
 			
 			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
-				filterString +=	"task.workflow.name like '%" + params.documentType + "%' and "
+				filterString +=	"(task.workflow.name = '" + params.documentType + "' or task.workflow.name like '%" + params.documentType + "-%') and "
 			}
 			
 			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
@@ -74,19 +74,18 @@ class WorkflowService {
 			}
 			
 			if ((params.documentType) && (params.documentType != "null") && (params.documentType != "")) {
-				filterString +=	"task.workflow.name like '" + params.documentType + "%' and "
+				filterString +=	"(task.workflow.name = '" + params.documentType + "' or task.workflow.name like '%" + params.documentType + "-%') and "
 			}
 			
 			if ((params.fromDueDate) && (params.fromDueDate != "null") && (params.fromDueDate != "") && (params.toDueDate) && (params.toDueDate != "null") && (params.toDueDate != "")) {
 				filterString += "task.dueDate between '" + params.fromDueDate + "' and '" + params.toDueDate + "' and"
 			}
 			
-			log.debug "Applying filter : " + filterString 
-    		try {
+			log.debug "Applying filter : " + filterString
     		def taskList=Task.executeQuery("select task from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")"+orderBy,authmap,params)    		
     		def taskCount=Task.executeQuery("select count(*) from Task task where " + filterString + " task.completionDate=null and (:person in elements(task.candidateUsers) "+query+")",authmap)
     	
-    		[taskList:taskList,taskCount:taskCount] } catch (Exception e) { println "ERROR!!! -> ${e.toString()}"}
+    		[taskList:taskList,taskCount:taskCount]
     	}
     }
     
