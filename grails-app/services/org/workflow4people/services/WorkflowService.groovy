@@ -113,9 +113,10 @@ class WorkflowService {
     		def authorities=person.authorities
     		def authmap=[person:person]
     		String query=""
-    		authorities.each { a ->
-    			authmap.put(a.authority.replaceAll(" ", "_"),a)
-    			query+=" or :${a.authority.replaceAll(" ", "_")} in elements(task.candidateGroups)"
+    		authorities.eachWithIndex { a, i ->
+    		  String auth = "authority_${i.toString()}"
+    			authmap.put(auth,a)
+    			query+=" or :${auth} in elements(task.candidateGroups)"
     		}
 
     		params=[:]
