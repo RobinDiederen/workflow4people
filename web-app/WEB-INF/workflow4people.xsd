@@ -354,6 +354,20 @@
 			</sequence>
 		</complexType>
 		
+		<complexType name="DocumentIndexFilter">
+			<sequence>
+				<element type="string" name="name" />
+				<element type="string" name="value" />
+			</sequence>
+		</complexType>
+
+		<complexType name="DocumentIndexFilters">
+			<sequence>
+				<element name="item" minOccurs="0" maxOccurs="unbounded" type="wf4p:DocumentIndexFilter"/>                      
+			</sequence>             
+		</complexType>
+
+		
 		<!-- The WSDL messages -->
 		<element name="GetTaskRequest">
 			<complexType>
@@ -425,6 +439,7 @@
 								<element type="string" name="processStatus" minOccurs="0"/>
 								<element type="dateTime" name="fromDueDate" minOccurs="0" nillable="true" />
 								<element type="dateTime" name="toDueDate" minOccurs="0" nillable="true" />
+								<element type="wf4p:DocumentIndexFilters" name="documentIndexes" minOccurs="0"/>
 								<element type="boolean" name="unassigned" minOccurs="0"/>
 								<element type="boolean" name="returnOutcomes" minOccurs="0"/>
 								<element type="boolean" name="returnVariables" minOccurs="0"/>								

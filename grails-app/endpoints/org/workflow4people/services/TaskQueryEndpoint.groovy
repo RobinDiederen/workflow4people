@@ -89,6 +89,13 @@ class TaskQueryEndpoint {
 			params+=[fromDueDate:request.request.fromDueDate.text(),toDueDate:request.request.toDueDate.text()]
 		}
 		
+		def documentIndexes = [:]
+		request.request.documentIndexes.item.each { 
+			log.debug "Requested document index '${it.name.text()}' => '${it.value.text()}'"
+			documentIndexes[it.name.text()] = it.value.text()
+		}
+		params += [documentIndexes: documentIndexes]
+		
 		def res 
 		if (request.request.assignee.text()) {
 			log.debug "Requested tasks for assignee " + request.request.assignee.text()
