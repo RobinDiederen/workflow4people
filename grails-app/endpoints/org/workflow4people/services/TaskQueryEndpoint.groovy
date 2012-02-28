@@ -137,9 +137,10 @@ class TaskQueryEndpoint {
 						cssClass("${theTask.cssClass} ${theTask.taskStatus?.cssClass}" )
 						
 						form {
-							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
+							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('forms.baseUrl').configValue;
 
-							url("${baseUrl}/taskForm/${theTask.id}/0")
+							//url("${baseUrl}/taskForm/${theTask.id}/0")
+							url("${baseUrl}/form/task/${theTask.id}")
 							name(theTask.form?.name)
 						}
 						//processDefinitionId("${theTask.workflow.workflowDefinition.name}")
