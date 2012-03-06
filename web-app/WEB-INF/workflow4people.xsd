@@ -976,4 +976,128 @@
 			</complexType>
 		</element>
 		
+		<element name="GetTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+							<sequence>							
+								<element type="string" name="taskId" minOccurs="0" />
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasFound" />
+							    <element type="string" name="taskId" />
+							    <element type="string" name="userName" />
+								<element type="string" name="userRealName" />
+								<element type="string" name="lastUpdated" />
+								<element type="string" name="sessionId"/>
+								<element type="string" name="userIpAddress"/>
+								<element type="string" name="userAgent"/>																						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="SetTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+								<sequence>							
+								    <element type="string" name="taskId" />
+								    <element type="string" name="userName" />
+									<element type="string" name="userRealName" />
+									<element type="string" name="sessionId"/>
+									<element type="string" name="userIpAddress"/>
+									<element type="string" name="userAgent"/>														
+								</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="SetTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasSet"/>					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="RemoveTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+							<sequence>							
+								<element type="string" name="requestedByUser" minOccurs="0"/>
+							    <element type="string" name="taskId" minOccurs="0"/>
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="RemoveTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasRemoved" />					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="ListTaskSessionsRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+								<sequence>							
+								</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="ListTaskSessionsResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskSessions" />					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
 </schema>
