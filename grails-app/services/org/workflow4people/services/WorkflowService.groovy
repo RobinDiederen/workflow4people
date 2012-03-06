@@ -85,7 +85,41 @@ class WorkflowService {
 			
 			if (params.documentIndexes && (params.documentIndexes != null) && (params.documentIndexes.size() > 0)) {
 				params.documentIndexes.each {
-					filterString += "(select count(*) from DocumentIndex documentIndex where (documentIndex.document = task.workflow.document) and (documentIndex.name = '${it.key}') and (documentIndex.value like '%${it.value}%')) > 0 and "
+					switch (it.key) {
+						case "\$/Document/id": 
+							filterString += "(task.workflow.document.id = '${it.value}') and "
+						break
+						case "lastUpdated": 
+							filterString += "(task.workflow.document.lastUpdated like '${it.value}%') and "
+						break
+						case "documentType": 
+							filterString += "(task.workflow.document.documentType.name = '${it.value}') and "
+						break
+						case "completionDate": 
+							filterString += "(task.workflow.document.completionDate like '${it.value}%') and "
+						break
+						case "user": 
+							filterString += "(task.workflow.document.user = '${it.value}') and "
+						break
+						case "documentStatus": 
+							filterString += "(task.workflow.document.documentStatus = '${it.value}') and "
+						break
+						case "dateCreated": 
+							filterString += "(task.workflow.document.dateCreated like '${it.value}%') and "
+						break
+						case "documentDescription": 
+							filterString += "(task.workflow.document.documentDescription = '${it.value}') and "
+						break
+						case "groupID": 
+							filterString += "(task.workflow.document.groupID = '${it.value}') and "
+						break
+						case "processingDays": 
+							filterString += "(task.workflow.document.processingDays = '${it.value}') and "
+						break
+						default:
+							filterString += "(select count(*) from DocumentIndex documentIndex where (documentIndex.document = task.workflow.document) and (documentIndex.name = '${it.key}') and (documentIndex.value like '%${it.value}%')) > 0 and "
+						break
+					}
 				}
 			}
     	
