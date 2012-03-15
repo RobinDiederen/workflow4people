@@ -54,8 +54,8 @@ class Person  {
 	static constraints = {
 		username(blank: false, unique: true,help:'x',class:'wide')
 		userRealName(blank: false,help:'x',class:'wide')
-		familyName(blank: false,help:'x',class:'wide')
-		givenName(blank: false,help:'x',class:'wide')
+		familyName(blank: false,help:'x',class:'wide',nullable:true)
+		givenName(blank: false,help:'x',class:'wide',nullable:true)
 		email(help:'x',class:'wide')
 		emailShow(help:'x')
 		enabled(help:'x')

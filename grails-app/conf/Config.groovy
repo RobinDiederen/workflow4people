@@ -3,10 +3,8 @@ import com.sun.net.ssl.internal.ssl.Debug;
 
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
-grails.config.locations = [ "classpath:${appName}-config.properties",
-                             "classpath:${appName}-config.groovy",
-                             "file:${userHome}/.grails/${appName}-config.properties",
-                             "file:${userHome}/.grails/${appName}-config.groovy"]
+grails.config.locations = [ "classpath:wfp-config.properties",
+                             "file:${userHome}/.wfp/wfp-config.properties"]
 
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],

@@ -59,8 +59,8 @@ class Authority {
 
 	static constraints = {
 		authority(help:'x',class:'wide',blank: false,unique:true)
-		description(help:'x',class:'extrawide')
-		authorityType(help:'x',class:'wide')
+		description(help:'x',class:'extrawide',nullable:true)
+		authorityType(help:'x',class:'wide',nullable:true)
 		people(help:'x',selectSort:'username',display:false)
 	}	
 	

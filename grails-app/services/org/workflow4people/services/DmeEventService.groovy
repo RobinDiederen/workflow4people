@@ -68,7 +68,7 @@ class DmeEventService {
 		field.fieldType=fieldType
 		// If the FieldType has an associated list, copy the list across
 		if (fieldType.listParent) {
-			field=treeCopy(fieldType.listParent)
+			field=dmeService.treeCopy(fieldType.listParent)
 		}
 		// create camelCased name for field based on FieldType
 		String name=fieldType.name

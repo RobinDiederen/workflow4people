@@ -11,6 +11,16 @@ class ListService {
     def serviceMethod() {
 
     }
+	
+	/**
+	 * Generates a JSON response to feed the datalist
+	 * @param dc The domain class to be used
+	 * @param params The parameters from the http request
+	 * @param request the HTTPServletRequest
+	 * @param filterColumnName The name of the column to be used for filtering (can be null to disable)
+	 * @param actions A closure that provides customized actions in the actions column of the table
+	 * @return a map that is ready to be rendered as a JSON message	 
+	 */
 
     def jsonlist(dc,params,request,filterColumnName=null,actions=null) {
         	def title=dc.getName();

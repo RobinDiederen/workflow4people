@@ -101,13 +101,7 @@ class Wf4pProcessInstanceController implements InitializingBean {
     		// history tasks
     		
     		def historyTaskList=historyService.createHistoryTaskQuery().executionId(params.processInstanceId).orderAsc(HistoryTaskQuery.PROPERTY_CREATETIME).list()
-    		
-    		
-    		
-    		
-    		
-    		
-    		
+    		    		
     		render(view:'show',model:[historyTaskList:historyTaskList,"processInstance":processInstance,"taskList":taskList,"taskService":taskService,"executionService":executionService])
 	}
 	
