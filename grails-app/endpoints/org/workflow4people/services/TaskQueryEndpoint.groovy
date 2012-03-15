@@ -49,15 +49,30 @@ class TaskQueryEndpoint {
 		
 		if (request.request.maxResults.text()) params["max"]=request.request.maxResults.text()
 		
-		if (request.request.orderAsc.text()) {			
-			log.debug "ASC"			
-			params+=[sort:request.request.orderAsc.text(),order:"asc"]
-		}
+		params+=[nSort:request.request.order.size()]
 		
-		if (request.request.orderDesc.text()) {
-			log.debug "DESC"			
-			params+=[sort:request.request.orderDesc.text(),order:"desc"]
+		def sortArr = []
+		def orderList = []
+		
+		request.request.order.eachWithIndex { it, i ->
+			def orderName = it.text().split(' ')[0]
+			def orderDir = it.text().split(' ')[1]
+			
+			if (orderDir.toUpperCase() == 'ASC') {			
+				log.debug "ASC"
+				sortArr.add(orderName)
+				orderList.add("asc")
+				//params+=["sort":orderName,"order":"asc"]
+			}
+		
+			if (orderDir.toUpperCase() == 'DESC') {
+				log.debug "DESC"
+				sortArr.add(orderName)
+				orderList.add("desc")
+				//params+=["sort":orderName,"order":"desc"]
+			}
 		}
+		params+=["sort":sortArr,"order":orderList]
 
 		if (request.request.documentType.text()) {
 			log.debug "Requested document type " + request.request.documentType.text()
@@ -73,6 +88,13 @@ class TaskQueryEndpoint {
 			log.debug "Requested date range " + request.request.fromDueDate.text() + " to " + request.request.toDueDate.text()
 			params+=[fromDueDate:request.request.fromDueDate.text(),toDueDate:request.request.toDueDate.text()]
 		}
+		
+		def documentIndexes = [:]
+		request.request.documentIndexes.item.each { 
+			log.debug "Requested document index '${it.name.text()}' => '${it.value.text()}'"
+			documentIndexes[it.name.text()] = it.value.text()
+		}
+		params += [documentIndexes: documentIndexes]
 		
 		def res 
 		if (request.request.assignee.text()) {
@@ -122,9 +144,10 @@ class TaskQueryEndpoint {
 						cssClass("${theTask.cssClass} ${theTask.taskStatus?.cssClass}" )
 						
 						form {
-							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('xforms.baseUrl').configValue;
+							def baseUrl=ApplicationHolder.application.getClassForName("org.workflow4people.ApplicationConfiguration").findByConfigKey('forms.baseUrl').configValue;
 
-							url("${baseUrl}/taskForm/${theTask.id}/0")
+							//url("${baseUrl}/taskForm/${theTask.id}/0")
+							url("${baseUrl}/form/task/${theTask.id}")
 							name(theTask.form?.name)
 						}
 						//processDefinitionId("${theTask.workflow.workflowDefinition.name}")

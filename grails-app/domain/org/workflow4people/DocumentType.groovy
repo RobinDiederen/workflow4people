@@ -37,7 +37,6 @@ class DocumentType {
     	dateCreated(nullable:true,edit:false,help:'x')
     	lastUpdated(nullable:true,edit:false,help:'x')
 		fieldType()
-    	viewForm(help:'x')
     	documentIndexField(selectSort:'name',help:'x')
     	cmisPathTemplate(nullable:true)
     }
@@ -51,7 +50,6 @@ class DocumentType {
     String description
     String descriptionTemplate    
 	FieldType fieldType
-    Form viewForm
     
     String cmisPathTemplate
     boolean useCmis=false

@@ -46,6 +46,7 @@ Brief description of the plugin.
     <resource>org.workflow4people.SearchController</resource>
     <resource>org.workflow4people.StatusController</resource>
     <resource>org.workflow4people.TaskController</resource>
+    <resource>org.workflow4people.TaskSessionController</resource>
     <resource>org.workflow4people.TaskStatusController</resource>
     <resource>org.workflow4people.Wf4pHistoryProcessInstanceController</resource>
     <resource>org.workflow4people.Wf4pHistoryTaskController</resource>
@@ -105,13 +106,18 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.GetMinerParametersEndpoint</resource>
     <resource>org.workflow4people.services.GetRequestFormsEndpoint</resource>
     <resource>org.workflow4people.services.GetTaskEndpoint</resource>
+    <resource>org.workflow4people.services.GetTaskSessionEndpoint</resource>
     <resource>org.workflow4people.services.GetTaskStatusesEndpoint</resource>
     <resource>org.workflow4people.services.GetUserDetailsEndpoint</resource>
     <resource>org.workflow4people.services.GetWorkflowDefinitionsEndpoint</resource>
     <resource>org.workflow4people.services.HasAccessToFormEndpoint</resource>
+    <resource>org.workflow4people.services.ListTaskSessionsEndpoint</resource>
     <resource>org.workflow4people.services.MinerDrilldownEndpoint</resource>
     <resource>org.workflow4people.services.MinerQueryEndpoint</resource>
+    <resource>org.workflow4people.services.RemoveTaskSessionEndpoint</resource>
+    <resource>org.workflow4people.services.RemoveTaskSessionsEndpoint</resource>
     <resource>org.workflow4people.services.SendEmailEndpoint</resource>
+    <resource>org.workflow4people.services.SetTaskSessionEndpoint</resource>
     <resource>org.workflow4people.services.StartProcessInstanceEndpoint</resource>
     <resource>org.workflow4people.services.StoreDocumentEndpoint</resource>
     <resource>org.workflow4people.services.TakeTaskEndpoint</resource>
@@ -131,6 +137,7 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.SecurityService</resource>
     <resource>org.workflow4people.services.SetDueDateService</resource>
     <resource>org.workflow4people.services.SoapService</resource>
+    <resource>org.workflow4people.services.TaskSessionService</resource>
     <resource>org.workflow4people.services.TemplateService</resource>
     <resource>org.workflow4people.services.Wf4pConfigService</resource>
     <resource>org.workflow4people.services.WorkflowDefinitionService</resource>

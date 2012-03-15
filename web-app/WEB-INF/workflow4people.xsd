@@ -354,6 +354,20 @@
 			</sequence>
 		</complexType>
 		
+		<complexType name="DocumentIndexFilter">
+			<sequence>
+				<element type="string" name="name" />
+				<element type="string" name="value" />
+			</sequence>
+		</complexType>
+
+		<complexType name="DocumentIndexFilters">
+			<sequence>
+				<element name="item" minOccurs="0" maxOccurs="unbounded" type="wf4p:DocumentIndexFilter"/>                      
+			</sequence>             
+		</complexType>
+
+		
 		<!-- The WSDL messages -->
 		<element name="GetTaskRequest">
 			<complexType>
@@ -416,8 +430,7 @@
 								<element type="string" name="assignee" minOccurs="0"/>
 								<element type="string" name="candidate" minOccurs="0"/>
 								<element type="boolean" name="suspended" minOccurs="0"/>
-								<element type="string" name="orderAsc" minOccurs="0"/>
-								<element type="string" name="orderDesc" minOccurs="0"/>
+								<element type="string" name="order" minOccurs="0"/>
 								<element type="integer" name="firstResult" minOccurs="0"/>
 								<element type="integer" name="maxResults" minOccurs="0"/>
 								<element type="string" name="processDefinitionId" minOccurs="0"/>
@@ -426,6 +439,7 @@
 								<element type="string" name="processStatus" minOccurs="0"/>
 								<element type="dateTime" name="fromDueDate" minOccurs="0" nillable="true" />
 								<element type="dateTime" name="toDueDate" minOccurs="0" nillable="true" />
+								<element type="wf4p:DocumentIndexFilters" name="documentIndexes" minOccurs="0"/>
 								<element type="boolean" name="unassigned" minOccurs="0"/>
 								<element type="boolean" name="returnOutcomes" minOccurs="0"/>
 								<element type="boolean" name="returnVariables" minOccurs="0"/>								
@@ -960,6 +974,130 @@
 					<element name="EmailMessage" type="wf4p:EmailMessage" minOccurs="1" maxOccurs="1"/>
 				</sequence>
 			</complexType>
+		</element>
+		
+		<element name="GetTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+							<sequence>							
+								<element type="string" name="taskId" minOccurs="0" />
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="GetTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasFound" />
+							    <element type="string" name="taskId" />
+							    <element type="string" name="userName" />
+								<element type="string" name="userRealName" />
+								<element type="string" name="lastUpdated" />
+								<element type="string" name="sessionId"/>
+								<element type="string" name="userIpAddress"/>
+								<element type="string" name="userAgent"/>																						
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="SetTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+								<sequence>							
+								    <element type="string" name="taskId" />
+								    <element type="string" name="userName" />
+									<element type="string" name="userRealName" />
+									<element type="string" name="sessionId"/>
+									<element type="string" name="userIpAddress"/>
+									<element type="string" name="userAgent"/>														
+								</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="SetTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasSet"/>					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="RemoveTaskSessionRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+							<sequence>							
+								<element type="string" name="requestedByUser" minOccurs="0"/>
+							    <element type="string" name="taskId" minOccurs="0"/>
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="RemoveTaskSessionResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskWasRemoved" />					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="ListTaskSessionsRequest">
+			<complexType>
+				<sequence>
+					<element name="request">					
+							<complexType>
+								<sequence>							
+								</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
+		</element>
+		
+		<element name="ListTaskSessionsResponse">
+			<complexType>
+				<sequence>
+					<element name="response">					
+							<complexType>
+							<sequence>							
+							    <element type="string" name="taskSessions" />					
+							</sequence>												
+							</complexType>					
+					</element>						
+				</sequence>
+			</complexType>		
 		</element>
 		
 </schema>
