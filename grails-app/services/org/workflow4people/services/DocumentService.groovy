@@ -381,10 +381,17 @@ class DocumentService implements InitializingBean {
     	documentInstance.xmlDocument= outputBuilder.bind { mkp.yield document }
     	
     	// Get processingDays and completionDate from the XML
-    	documentInstance.processingDays=new Double(document.header.processingDays.text())
-    	documentInstance.documentStatus=document.header.documentStatus.text()
-    	def formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
-    	documentInstance.completionDate=(Date)formatter.parse(document.header.completionDate.text())
+    	documentInstance.processingDays=new Double(document.header.processingDays?.text())
+    	documentInstance.documentStatus=document.header.documentStatus?.text()
+    	
+		def formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
+		// Fill completion date, null if unparseable
+		try {
+			documentInstance.completionDate=(Date)formatter.parse(document.header.completionDate?.text())
+		} catch (Exception e) {
+			documentInstance.completionDate=null
+		}
+		
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
     	documentInstance.save()

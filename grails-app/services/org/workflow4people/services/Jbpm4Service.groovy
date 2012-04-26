@@ -33,7 +33,7 @@ import grails.plugin.jms.Queue
 
 /**
  * JBPM4 JMS message service class
- * Listens to events for jBPM processes from both ands (Grails domain objects and JBPM4 domain objects)
+ * Listens to events for jBPM processes from both ends (Grails domain objects and JBPM4 domain objects)
  * 
  * @author Joost Horward
  */
@@ -246,9 +246,29 @@ class Jbpm4Service implements InitializingBean {
 	
 	@Queue(name="wfp.jbpm4.in.task.delete")
 	def deleteTask(msg) {
-		
-		java.lang.Long id=new java.lang.Long (msg.id)
+		def task=Task.findByExternalId(msg.id)
+		if(task) {
+			task.delete(failOnError:true,flush:true)
+			log.debug "TASK ${task.id} DELETED (exernal id was ${msg.id}"
+		}
 		return null
 
 	}
+	@Queue(name="wfp.jbpm4.in.workflow.new")
+	def inWorkflowNew(msg) { 
+		return null
+	}
+	
+	@Queue(name="wfp.jbpm4.out.task.new")
+	def outTaskNew(msg) {
+		return null
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
