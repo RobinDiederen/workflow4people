@@ -130,11 +130,11 @@ class DocumentService implements InitializingBean {
     		documentInstance.xmlDocument=xmlDocument
     		documentInstance.documentStatus=header.documentStatus
 		
-    		documentInstance.save(failOnError:true)
+    		documentInstance.save(failOnError:true,flush:true)
     		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
     		
     		createCaseFolder(documentInstance,document)		
-    		documentInstance.save(failOnError:true)
+    		documentInstance.save(failOnError:true,flush:true)
     	
     		// Get the document again because it might have changed
     		// In particular at the start of the process the jPDL can change the document
@@ -143,23 +143,7 @@ class DocumentService implements InitializingBean {
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
     		header=document.header
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
-    	/*
-	    	if (startProcess) {
-	    	
-	    		LinkedHashMap variableMap = new LinkedHashMap()    							
-	    		variableMap.put("documentId",documentInstance.id)
-	    		variableMap.put("user",documentInstance.user)
-	    		variableMap.put("group",getHomeGroup(documentInstance))
-	    		
-				processInstance = executionService.startProcessInstanceByKey(header.workflowName.text(),variableMap)
-			
-	    		
-				// Store the document again, now with the processInstanceId in it.
-				document.header.processInstanceId=processInstance.id
-				document.header.documentId=documentInstance.id
-				documentInstance.xmlDocument=outputBuilder.bind { mkp.yield document }
-	    		documentInstance.save(failOnError:true)        					
-			}*/
+    	
     		
     		if (startProcess) {
     			log.debug "starting process by creating a workflow domain object"
@@ -171,18 +155,10 @@ class DocumentService implements InitializingBean {
 	    		workflow.priority=0
 	    		workflow.externalId="1"
 	    		workflow.workflowEngine=workflowDefinition.workflowEngine
-	    		workflow.save(failOnError:true)
+	    		workflow.save(flush:true,failOnError:true)
 	    		log.debug "Done."
     		}
-    		/*
-    		if ((header.taskId?.text().size()>0) && (header.taskOutcome?.text().size()>0)) {    			
-				//taskService.completeTask(header.taskId.text(),header.taskOutcome.text())
-				def id = new java.lang.Long(header.taskId?.text())
-				def task=Task.get(id)
-				task.outcome=header.taskOutcome?.text()
-				task.save(failOnError:true)
-			}
-			*/
+    		
 			
 			// Process task part of header:
 			// - transition
@@ -219,7 +195,7 @@ class DocumentService implements InitializingBean {
 					} 
 					
 				}
-				task.save(failOnError:true)
+				task.save(failOnError:true,flush:true)
 			}
 			   
     	
@@ -268,7 +244,7 @@ class DocumentService implements InitializingBean {
 	    	def cmisPath=new GroovyShell(new Binding([document:documentInstance,xmlDocument:document])).evaluate('"""'+cmisPathTemplate+'"""')
 	    	cmisPath=cmisPath.trim()
 	    	documentInstance.cmisPath=cmisPath
-	    	documentInstance.save()
+	    	documentInstance.save(failOnError:true)
 	    	
 	    	def pathElements=cmisPath.split("/")
 	    	
@@ -303,11 +279,6 @@ class DocumentService implements InitializingBean {
     	def doc     = builder.parse(new ByteArrayInputStream(documentInstance.xmlDocument.bytes))
     	def indexEntry
     	
-    	//documentInstance.documentIndex.each { theDoc -> 
-    	//	theDoc.removeFromDocument(documentInstance)
-    	//	theDoc.delete()
-		//}
-    	
     	log.debug "Context is: " + nsContext
     	
     	def xpath = XPathFactory.newInstance().newXPath()
@@ -340,7 +311,7 @@ class DocumentService implements InitializingBean {
     			  
     		  //}
     		  indexEntry.value=it.textContent
-    		  indexEntry.save(flush:true)
+    		  indexEntry.save(flush:true,failOnError:true)
     		  //theDocumentIndexId=indexEntry.id
     		}
     	}
@@ -394,7 +365,7 @@ class DocumentService implements InitializingBean {
 		
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
-    	documentInstance.save()
+    	documentInstance.save(failOnError:true)
     }
     
     

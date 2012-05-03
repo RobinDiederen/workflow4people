@@ -58,13 +58,15 @@ class Jbpm4Service implements InitializingBean {
 		identityService=processEngine.getIdentityService()		
 	}
 
-	static expose = ['jms']
+	static exposes = ['jms']
 
     boolean transactional = false
     
 
     @Queue(name="wfp.jbpm4.out.workflow.new")
     def newWorkflow(msg) {
+		log.debug "wfp.jbpm4.out.workflow.new received: ${msg}"
+		
 		java.lang.Long id=new java.lang.Long (msg.id)
 		def workflow=Workflow.get(id)
 		LinkedHashMap variableMap = new LinkedHashMap()    							
@@ -110,14 +112,16 @@ class Jbpm4Service implements InitializingBean {
 			
 			task.save(flush:true,failOnError:true)		
 		}
-		
+		log.debug "wfp.jbpm4.out.workflow.new processed: ${msg}"
 		return null					
 	}
 
 	@Queue(name="wfp.jbpm4.out.workflow.update")
-	def updateWorkflowOut(msg) {		
+	def updateWorkflowOut(msg) {
+		log.debug "wfp.jbpm4.out.workflow.update received: ${msg}"
 		java.lang.Long id=new java.lang.Long (msg.id)
 		def workflow=Workflow.get(id)
+		log.debug "wfp.jbpm4.out.workflow.update processed: ${msg}"
 		return null
 	}
 	
@@ -126,21 +130,22 @@ class Jbpm4Service implements InitializingBean {
 	
 	@Queue(name="wfp.jbpm4.in.workflow.update")
 	def updateWorkflowIn(msg) {
+		log.debug "wfp.jbpm4.in.workflow.update received: ${msg}"
 		def processInstance=executionService.findProcessInstanceById(msg.id)
+		log.debug "wfp.jbpm4.in.workflow.update processed: ${msg}"
 		return null
-
 	}
-	
 	
 	@Queue(name="wfp.jbpm4.out.workflow.delete")
 	def deleteWorkflowOut(msg) {
-		log.debug "Delete workflow message received: ${msg}"
+		log.debug "wfp.jbpm4.out.workflow.delete received: ${msg}"
 		return null
 
 	}
 	
 	@Queue(name="wfp.jbpm4.in.workflow.delete")
 	def deleteWorkflowIn(msg) {
+		log.debug "wfp.jbpm4.in.workflow.delete received: ${msg}"
 		def processInstance=executionService.findProcessInstanceById(msg.id)
 		def engine=WorkflowEngine.findByName("jbpm4")
 		def workflow=Workflow.findByWorkflowEngineAndExternalId(engine,msg.id)
@@ -148,6 +153,7 @@ class Jbpm4Service implements InitializingBean {
 			if (!workflow.completionDate) workflow.completionDate=new Date()
 			workflow.save(failOnError:true,flush:true)
 		}
+		log.debug "wfp.jbpm4.in.workflow.delete processed: ${msg}"
 		return null
 	}
 	
@@ -155,14 +161,14 @@ class Jbpm4Service implements InitializingBean {
 	
 	@Queue(name="wfp.jbpm4.in.task.new")
 	def newTaskIn(msg) {
-		java.lang.Long id=new java.lang.Long (msg.id)
-		log.debug id
+		log.debug "wfp.jbpm4.in.task.new received: ${msg}"
 		return null
 	}
 	
 	@Queue(name="wfp.jbpm4.in.task.update")
 	def updateTaskIn(msg) {
-		log.debug "Update task message received: ${msg}"
+		log.debug "wfp.jbpm4.in.task.update received: ${msg}"
+		
 		
 		def jbpmTask = taskService.getTask(msg.id)
 		
@@ -171,18 +177,21 @@ class Jbpm4Service implements InitializingBean {
 			def executionId=jbpmTask.getExecutionId()
 			def workflow=Workflow.findByExternalId(executionId)
 			
-			println "!!! WORKAROUND - updateTaskIn -> executionId: ${executionId}"
+			log.debug("Before wait for workflow instance")
 			def iCounter = 1
 			while (!workflow) {
 				if (iCounter > 600) {
+					log.error("Giving up waiting for workflow instance")
 					break
 				}
+				log.error("wait for workflow instance, sleep for 100ms now ...")			
 				sleep(100)
 				workflow=Workflow.findByExternalId(executionId)
-				println "!!! WORKAROUND - updateTaskIn -> workflow.${iCounter}: ${workflow}"
 				iCounter++
 			}
-			println "!!! WORKAROUND - updateTaskIn -> workflow: ${workflow}"
+
+			log.debug("After wait for workflow instance")
+			
 
 			Task.withTransaction { status ->
 			//if (workflow) {
@@ -224,15 +233,18 @@ class Jbpm4Service implements InitializingBean {
 				task.noMessage=true
 
 				task.save(failOnError:true,flush:true)
-				log.debug "TASK UPDATE SAVED FOR TASK ${task.id}"
 			} // withTransaction
 		}
+		log.debug "wfp.jbpm4.in.task.update processed: ${msg}"
+		
 		return null
 		
 	}
 	
 	@Queue(name="wfp.jbpm4.out.task.update")
 	def updateTaskOut(msg) {
+		log.debug "wfp.jbpm4.out.task.update received: ${msg}"
+		
 		def task = Task.get(msg.id)
 		if (task.outcome) {
 			taskService.completeTask(task.externalId,task.outcome)
@@ -240,35 +252,33 @@ class Jbpm4Service implements InitializingBean {
 			task.noMessage=true
 			task.save(flush:true,failOnError:true)
 		}
+		log.debug "wfp.jbpm4.out.task.update processed: ${msg}"
 		return null
 	}
 	
 	
 	@Queue(name="wfp.jbpm4.in.task.delete")
 	def deleteTask(msg) {
+		log.debug "wfp.jbpm4.in.task.delete received: ${msg}"
 		def task=Task.findByExternalId(msg.id)
 		if(task) {
 			task.delete(failOnError:true,flush:true)
 			log.debug "TASK ${task.id} DELETED (exernal id was ${msg.id}"
 		}
+		log.debug "wfp.jbpm4.in.task.delete processed: ${msg}"
+		
 		return null
 
 	}
 	@Queue(name="wfp.jbpm4.in.workflow.new")
 	def inWorkflowNew(msg) { 
+		log.debug "wfp.jbpm4.in.workflow.new received: ${msg}"
 		return null
 	}
 	
 	@Queue(name="wfp.jbpm4.out.task.new")
 	def outTaskNew(msg) {
+		log.debug "wfp.jbpm4.out.task.new received: ${msg}"
 		return null
-	}
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 }

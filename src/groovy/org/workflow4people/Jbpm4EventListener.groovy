@@ -34,37 +34,44 @@ public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEve
 	
 
 	void onPostUpdate(PostUpdateEvent postUpdateEvent) {
-		log.debug "Jbpm4EventListener: UPDATE EVENT (${postUpdateEvent.getEntity()})"		
 		def entity=postUpdateEvent.getEntity()
+		log.debug "onPostUpdate - entity: ${entity} id: ${entity.id}"
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.update",[id:entity.getId()])
 		} 
 		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.update",[id:entity.getId()])			
 		}
+		log.debug "onPostUpdate completed- entity: ${entity} id: ${entity.id}"
+		
 	  }
 	
 	void onPostInsert(PostInsertEvent postInsertEvent) {
-		log.debug "Jbpm4EventListener: INSERT EVENT (${postInsertEvent.getEntity()} ${postInsertEvent.getEntity().getClass().getName()})"
 		def entity=postInsertEvent.getEntity()
+		log.debug "onPostInsert - entity: ${entity} id: ${entity.id}"
+		
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.new",[id:entity.getId()])
 		} 
 		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.new",[id:entity.getId()])			
 		}
+		log.debug "onPostInsert completed - entity: ${entity} id: ${entity.id}"
 		
 	  }
 	
 	void onPostDelete(PostDeleteEvent postDeleteEvent) {
-		log.debug "Jbpm4EventListener: DELETE EVENT (${postDeleteEvent.getEntity()})"		
 		def entity=postDeleteEvent.getEntity()
+		log.debug "onPostDelete - entity: ${entity} id: ${entity.id}"
+		
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.delete",[id:entity.getId()])
 		} 
 		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.delete",[id:entity.getId()])			
 		}
+		log.debug "onPostDelete completed - entity: ${entity} id: ${entity.id}"
+		
 	  }
 	
 	
