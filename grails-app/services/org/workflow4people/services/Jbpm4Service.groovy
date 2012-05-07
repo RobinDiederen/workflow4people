@@ -260,11 +260,11 @@ class Jbpm4Service implements InitializingBean {
 	@Queue(name="wfp.jbpm4.in.task.delete")
 	def deleteTask(msg) {
 		log.debug "wfp.jbpm4.in.task.delete received: ${msg}"
-		def task=Task.findByExternalId(msg.id)
+		/*def task=Task.findByExternalId(msg.id)
 		if(task) {
 			task.delete(failOnError:true,flush:true)
 			log.debug "TASK ${task.id} DELETED (exernal id was ${msg.id}"
-		}
+		}*/
 		log.debug "wfp.jbpm4.in.task.delete processed: ${msg}"
 		
 		return null
