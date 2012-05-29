@@ -194,7 +194,8 @@ class TemplateConfigDelegate
 		s=s.replace("</ccmis:","</cmis:");
 		s=s.replace("<mmail:","<mail:");
 		s=s.replace("</mmail:","</mail:");
-		
+		s=s.replace("*%","<%");
+		s=s.replace("%*","%>");
 	}
 	
 	new File(fullOutputPath).write(s)
