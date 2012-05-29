@@ -365,7 +365,7 @@ class DocumentService implements InitializingBean {
 		
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
-    	documentInstance.save(failOnError:true)
+    	documentInstance.save(flush:true,failOnError:true)
     }
     
     
