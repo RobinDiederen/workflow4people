@@ -185,7 +185,7 @@ class DataModelEditorController {
         
         def formid
 	    if (params.form?.id) {
-	    	wfid=params.form?.id
+	    	formid=params.form?.id
 	    } else {
 	    	def formItemInstance = FormItem.get(params.id)	    	
 	    	formid=formItemInstance.form.id
