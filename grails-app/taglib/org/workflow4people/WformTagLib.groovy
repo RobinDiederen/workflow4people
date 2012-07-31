@@ -200,15 +200,15 @@ class WformTagLib {
 	
 	def xml = { attrs ->	
 	out << row (class:attrs.class,object:attrs.object,propertyName:attrs.propertyName) {
-		switch(attrs.mode) {			
+		def xmltext=attrs.object."${attrs.propertyName}"
+		String s = xmltext ? dialogService.prettyPrint(xmltext) : ""
+		switch(attrs.mode) {
 			case "show":
-				def xmltext=attrs.object."${attrs.propertyName}"
-				String s = xmltext ? dialogService.prettyPrint(xmltext) : ""
-				return "<textarea cols=\"80\" rows=\"25\">"+s.encodeAsHTML()+"</textarea>"
+				return "<textarea cols=\"80\" rows=\"25\" readonly=\"readonly\">"+s.encodeAsHTML()+"</textarea>"
 				break
 			
-			case "edit":			
-				"""${g.textArea(name:attrs.propertyName,value:attrs.object."${attrs.propertyName}",cols:40,rows:5)}"""
+			case "edit":
+				"""${g.textArea(name:attrs.propertyName,value:"${s}",cols:80,rows:25)}"""
 				break		
 		}
 	}

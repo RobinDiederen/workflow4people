@@ -24,7 +24,7 @@
 	        
 		</wf:tab>
 		<wf:tab name="XML" object="${documentInstance}">
-			<wf:xml object="${documentInstance}" propertyName="xmlDocument" mode="show" class="xmldoc"/>	        
+			<wf:xml object="${documentInstance}" propertyName="xmlDocument" mode="edit" class="xmldoc"/>	        
 		</wf:tab>
 		<wf:tab name="Index" object="${documentInstance}">
 			<wf:detailTable property="document" object="${documentInstance}" domainClass="${org.workflow4people.DocumentIndex}" />	    		
