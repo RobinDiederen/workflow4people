@@ -115,7 +115,7 @@ class DialogService {
         def resultMessage
         def theName = domainClassInstance.toString()
         try { 
-        	domainClassInstance.delete()
+        	domainClassInstance.delete(flush:true)
         	resultMessage="${domainClassName} #${params.id} : ${theName} deleted"
         	
         } catch (Exception e ){
