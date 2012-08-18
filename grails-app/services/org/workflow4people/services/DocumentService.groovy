@@ -326,20 +326,20 @@ class DocumentService implements InitializingBean {
     	
     	log.debug "The document id is ${documentId}"
     	def document=Document.get(documentId)
-    	
+    
     	def xmlDocument = new XmlSlurper().parseText(document.xmlDocument)
-    	
-    	xmlDocument.header.taskId=""
+	
+	xmlDocument.header.taskId=""
     	xmlDocument.header.taskOutcome=""    		
     	xmlDocument.header.dateCreated= "${document.dateCreated.format('yyyy-MM-dd')}T${document.dateCreated.format('HH:mm:ss')}"
     	xmlDocument.header.lastUpdated= "${document.lastUpdated.format('yyyy-MM-dd')}T${document.lastUpdated.format('HH:mm:ss')}"
-		xmlDocument.header.user.name=document.user
-		xmlDocument.header.group=document.groupId
-		xmlDocument.header.documentDescription=document.documentDescription
+	xmlDocument.header.user.name=document.user
+	xmlDocument.header.group=document.groupId
+	xmlDocument.header.documentDescription=document.documentDescription
 		
-		xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
-		xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
-		xmlDocument.header.cmis.path=document.cmisPath
+	xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
+	xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
+	xmlDocument.header.cmis.path=document.cmisPath
     	
     	return xmlDocument
     }

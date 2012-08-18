@@ -65,7 +65,7 @@ class Jbpm4Service implements InitializingBean {
 
     @Queue(name="wfp.jbpm4.out.workflow.new")
     def newWorkflow(msg) {
-		log.debug "wfp.jbpm4.out.workflow.new received: ${msg}"
+    	    	log.debug "wfp.jbpm4.out.workflow.new received: ${msg}"
 		
 		java.lang.Long id=new java.lang.Long (msg.id)
 		def workflow=Workflow.get(id)
