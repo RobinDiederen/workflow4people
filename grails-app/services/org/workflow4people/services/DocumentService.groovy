@@ -45,7 +45,7 @@ import javax.xml.xpath.*
 import javax.xml.namespace.*;
 import org.jbpm.api.model.*
 
-import org.compass.core.engine.SearchEngineQueryParseException
+//import org.compass.core.engine.SearchEngineQueryParseException
 
 class DocumentService implements InitializingBean {
 	

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured
-import org.compass.core.engine.SearchEngineQueryParseException
+//import org.compass.core.engine.SearchEngineQueryParseException
 /**
  * Search controller
  * 
@@ -85,7 +85,7 @@ class SearchController {
 				aaData+=(aaLine)
 			}
 			
-		} catch (SearchEngineQueryParseException ex) {
+		} catch (Exception ex) {
 			//
 		}
 		

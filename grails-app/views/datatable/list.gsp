@@ -13,7 +13,7 @@
 		//"sDom": '<"H"lfr>t<"F"ip>',
 		"bProcessing": true,
 		"bServerSide": true,		
-		"sAjaxSource": "${resource(dir:controllerName,contextPath:'',file: jsonlist ? jsonlist :'jsonlist')}",
+		"sAjaxSource": "${resource(dir:controllerName,file: jsonlist ? jsonlist :'jsonlist')}",
 		"sPaginationType": "full_numbers",
 		"bFilter": ${bFilter ? true : false},
 		"bJQueryUI": true,

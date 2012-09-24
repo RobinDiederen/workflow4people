@@ -4,9 +4,9 @@
         <meta name="layout" content="main" />
         <title>Data model editor</title>
                 
-        <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'jquery.treeview.css',contextPath:pluginContextPath)}" />
-        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'jquery.jstree.css',contextPath:pluginContextPath)}" />        
-        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'editor.css',contextPath:pluginContextPath)}" />
+        <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'jquery.treeview.css')}" />
+        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'jquery.jstree.css')}" />        
+        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'editor.css')}" />
         
 		<g:javascript src="jquery/jquery.cookie.js" contextPath="${pluginContextPath}" />
 		<g:javascript src="jquery/jquery.hotkeys.js" contextPath="${pluginContextPath}" />	

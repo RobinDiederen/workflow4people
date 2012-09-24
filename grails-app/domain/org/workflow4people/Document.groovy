@@ -18,14 +18,14 @@
  */
 package org.workflow4people
 
-import org.compass.annotations.*
+//import org.compass.annotations.*
 
 /**
  * XML document database domain class.
  * @author Joost Horward
  */
 
-@Searchable(alias = 'Document', analyzer='wfp')
+//@Searchable(alias = 'Document', analyzer='wfp')
 
 class Document {
 	static searchable=true
@@ -55,47 +55,47 @@ class Document {
     	    form(help:'x')
     	    cmisPath(nullable:true)
     }
-    @SearchableId
+    //@SearchableId
     Long id
     
     
     static hasMany = [documentIndex:DocumentIndex,form:Form]
-    //@SearchableDynamicProperty(index = Index.NOT_ANALYZED)
-    @SearchableDynamicProperty
+    ////@SearchableDynamicProperty(index = Index.NOT_ANALYZED)
+    //@SearchableDynamicProperty
     Set<DocumentIndex> documentIndex
     
-    @SearchableComponent
+    //@SearchableComponent
     DocumentType documentType    
     
-    @SearchableProperty
+    //@SearchableProperty
     String documentStatus
     
-    @SearchableProperty
+    //@SearchableProperty
     String documentKey
     
-    @SearchableProperty
+    //@SearchableProperty
     String documentDescription
-    @SearchableProperty
+    //@SearchableProperty
     Date dateCreated
-    @SearchableProperty
+    //@SearchableProperty
     Date lastUpdated
-    @SearchableProperty
+    //@SearchableProperty
     Date completionDate
     
 
-    @SearchableProperty
+    //@SearchableProperty
     double processingDays    
     
-    @SearchableProperty
+    //@SearchableProperty
     String user
 
-    @SearchableProperty
+    //@SearchableProperty
     String groupId
     
     String cmisFolderObjectId
     String cmisFolderUrl
     
-    @SearchableProperty
+    //@SearchableProperty
     String cmisPath
     
     String xmlDocument

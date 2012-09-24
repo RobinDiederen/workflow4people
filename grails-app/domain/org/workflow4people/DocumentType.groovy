@@ -17,7 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-import org.compass.annotations.*
+//import org.compass.annotations.*
 
 /** 
  * XML document database type domain class.
@@ -26,7 +26,7 @@ import org.compass.annotations.*
  */
 
 import java.util.Date;
-@Searchable(root = false)
+//@Searchable(root = false)
 class DocumentType {
     static listProperties=['id','name','description','dateCreated','lastUpdated']
 
@@ -45,7 +45,7 @@ class DocumentType {
     Date dateCreated
     Date lastUpdated
     //@SearchableProperty(index = Index.NOT_ANALYZED, name = "documentType")
-    @SearchableProperty(name = "documentType")
+    //@SearchableProperty(name = "documentType")
     String name
     String description
     String descriptionTemplate    

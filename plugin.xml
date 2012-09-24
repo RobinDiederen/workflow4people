@@ -25,6 +25,7 @@ Brief description of the plugin.
     <resource>org.workflow4people.DocumentIndexFieldController</resource>
     <resource>org.workflow4people.DocumentTypeController</resource>
     <resource>org.workflow4people.ErrorController</resource>
+    <resource>org.workflow4people.ExportController</resource>
     <resource>org.workflow4people.FeatureController</resource>
     <resource>org.workflow4people.FeaturePermissionController</resource>
     <resource>org.workflow4people.FieldController</resource>
@@ -35,6 +36,7 @@ Brief description of the plugin.
     <resource>org.workflow4people.FormItemController</resource>
     <resource>org.workflow4people.FormPermissionController</resource>
     <resource>org.workflow4people.HolidayController</resource>
+    <resource>org.workflow4people.ImportController</resource>
     <resource>org.workflow4people.IndexController</resource>
     <resource>org.workflow4people.LoginController</resource>
     <resource>org.workflow4people.LogoutController</resource>
@@ -131,11 +133,13 @@ Brief description of the plugin.
     <resource>org.workflow4people.services.EmailService</resource>
     <resource>org.workflow4people.services.FormGeneratorService</resource>
     <resource>org.workflow4people.services.FormService</resource>
+    <resource>org.workflow4people.services.ImportExportService</resource>
     <resource>org.workflow4people.services.Jbpm4Service</resource>
     <resource>org.workflow4people.services.ListService</resource>
     <resource>org.workflow4people.services.MinerService</resource>
     <resource>org.workflow4people.services.SecurityService</resource>
     <resource>org.workflow4people.services.SetDueDateService</resource>
+    <resource>org.workflow4people.services.SetupService</resource>
     <resource>org.workflow4people.services.SoapService</resource>
     <resource>org.workflow4people.services.TaskSessionService</resource>
     <resource>org.workflow4people.services.TemplateService</resource>

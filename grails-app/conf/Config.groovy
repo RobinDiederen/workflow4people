@@ -117,4 +117,18 @@ cmis {
 	password="admin"
 }
 
+grails.naming.entries = ['jdbc/wf4p': [
+	type: "javax.sql.DataSource", //required
+		//auth: "Container", // optional
+		description: "Data source for ...", //optional
+		//properties for particular type of resource
+	url: "jdbc:mysql://localhost:3306/wf4p",
+	username: "meander",
+	password: "meander",
+	driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+	maxActive: "8", //and so on
+		maxIdle: "4"
+	]
+]
+
 

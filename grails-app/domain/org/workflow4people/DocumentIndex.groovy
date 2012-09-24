@@ -18,7 +18,7 @@
  */
 package org.workflow4people
 
-import org.compass.annotations.*
+//import org.compass.annotations.*
 class DocumentIndex {
     static listProperties=['id','name','value']
 
@@ -28,9 +28,9 @@ class DocumentIndex {
     	value(nullable:true,help:'x')
     	document(display:false)
     }
-	@SearchableDynamicName
+	//@SearchableDynamicName
     String name
-    @SearchableDynamicValue
+    //@SearchableDynamicValue
     //@SearchableProperty (index = Index.NOT_ANALYZED)    
     String value
     

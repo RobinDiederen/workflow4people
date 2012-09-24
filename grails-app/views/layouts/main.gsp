@@ -7,19 +7,19 @@
         <title><g:layoutTitle default="workflow4people" /></title>
                 
         <%-- css from used modules --%>
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',contextPath:'',plugin:'wfp')}" />
-<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',contextPath:'',plugin:'wfp')}" />--%>
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',contextPath:'',plugin:'wfp')}" />
-    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp',contextPath:'')}" />
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',plugin:'wfp')}" />
+<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',plugin:'wfp')}" />--%>
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',plugin:'wfp')}" />
+    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp')}" />
 	
         <%-- Workflow4people style --%>
-		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',contextPath:'',plugin:'wfp')}" />	
+		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',plugin:'wfp')}" />	
 	
 		<%-- Theme style --%>
-		<link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'roller-theme.css',contextPath:'',plugin:'wfp')}" />
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'theme.css',contextPath:'',plugin:'wfp')}" />
+		<link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'roller-theme.css',plugin:'wfp')}" />
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'theme.css',plugin:'wfp')}" />
                       
-        <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico',contextPath:'',plugin:'wfp')}" type="image/x-icon" />
+        <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico',plugin:'wfp')}" type="image/x-icon" />
         
         
         
