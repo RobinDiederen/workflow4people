@@ -52,7 +52,7 @@ class DocumentType {
 	FieldType fieldType
     
     String cmisPathTemplate
-    boolean useCmis=false
+    Boolean	 useCmis=false
     
     String toString() {
 		  return name;

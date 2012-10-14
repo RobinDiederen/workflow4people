@@ -58,7 +58,7 @@ log4j = {
     warn 'org.springframework.security'
     //debug 'grails.app.controller.org.workflow4people'
     //debug 'grails.app.service.org.workflow4people.services'
-	debug "grails.app"
+	debug "org.workflow4people","grails.app"
     
 }
 
@@ -123,8 +123,8 @@ grails.naming.entries = ['jdbc/wf4p': [
 		description: "Data source for ...", //optional
 		//properties for particular type of resource
 	url: "jdbc:mysql://localhost:3306/wf4p",
-	username: "meander",
-	password: "meander",
+	username: "wf4p",
+	password: "wf4p",
 	driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
 	maxActive: "8", //and so on
 		maxIdle: "4"

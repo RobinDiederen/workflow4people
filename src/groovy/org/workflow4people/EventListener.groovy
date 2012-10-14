@@ -29,6 +29,7 @@ import grails.plugin.jms.*
 
 class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 	def jmsService
+	static transactional=false
 	private static final log = LogFactory.getLog(this)
 	
 	void onPostUpdate(PostUpdateEvent postUpdateEvent) {
@@ -52,7 +53,7 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 	  }
 	
 	void onPostInsert(PostInsertEvent postInsertEvent) {
-
+		
 		def entity=postInsertEvent.getEntity()
 		log.debug "onPostInsert - entity: ${entity.class.name} id: ${entity.id}"
 		
@@ -70,6 +71,7 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"
 			
 		    }
+		    
 	}
 	
 	

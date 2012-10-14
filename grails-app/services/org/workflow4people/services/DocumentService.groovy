@@ -129,10 +129,13 @@ class DocumentService implements InitializingBean {
     		documentInstance.documentType=documentType	
     		documentInstance.xmlDocument=xmlDocument
     		documentInstance.documentStatus=header.documentStatus
-		
+			
     		documentInstance.save(failOnError:true,flush:true)
+			
+			
     		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
-    		
+			
+
     		createCaseFolder(documentInstance,document)		
     		documentInstance.save(failOnError:true,flush:true)
     	
@@ -156,7 +159,7 @@ class DocumentService implements InitializingBean {
 	    		workflow.externalId="1"
 	    		workflow.workflowEngine=workflowDefinition.workflowEngine
 	    		workflow.save(flush:true,failOnError:true)
-	    		log.debug "Done."
+	    		log.debug "Done. Workflow id = ${workflow.id}"
     		}
     		
 			
@@ -323,10 +326,10 @@ class DocumentService implements InitializingBean {
     
     
     def getDocument(java.lang.Long documentId) {  	
-    	
+		Document.withTransaction { status ->
     	log.debug "The document id is ${documentId}"
     	def document=Document.get(documentId)
-    
+		
     	def xmlDocument = new XmlSlurper().parseText(document.xmlDocument)
 	
 	xmlDocument.header.taskId=""
@@ -340,8 +343,9 @@ class DocumentService implements InitializingBean {
 	xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
 	xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
 	xmlDocument.header.cmis.path=document.cmisPath
-    	
+    	document.discard()
     	return xmlDocument
+		}
     }
     
     // Just save the xml, nothing smart going on here ...

@@ -57,6 +57,7 @@ class SetupService {
 	
     def setup() {
 		println "Hi. I'm the setup service."
+		//println "pwd: ${springSecurityService.encodePassword("admin")}"
 		/*
 		def authorityCount=Authority.count()
 		if (authorityCount==0) {

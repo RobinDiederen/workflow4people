@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<beans>	
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd"
+
+
+>	
 	<!-- This is the context that is loaded after Grails' runtime bean 
 		configuration. Put post initialization beans here if you need to get hold
 		of the SessionFactory etc.
 	--> 
-	
+<!-- 	
 	<bean id="currentTime" class="java.util.Date" singleton="false">		
 	</bean>
-	
-	<bean id="identitySession" class="org.workflow4people.services.IdentitySession" singleton="true">		
+	 -->
+	<bean id="identitySession" class="org.workflow4people.services.IdentitySession" >		
 	</bean>
 	
 	
@@ -37,6 +43,72 @@
 			
 
 	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+
+
+	<bean id="eventListener" class="org.workflow4people.EventListener">
+	   <property name="jmsService" ref="jmsService"/>
+    
+	</bean> 
+	
+	
+	<!-- 
+	<bean id="ddsEventListener" class="org.workflow4people.DataDistributionEventListener" depends-on="documentService">
+	   <property name="jmsService" ref="jmsService"/>
+       <property name="documentService" ref="documentService"/>
+    
+	</bean> 
+	
+	<bean id="hibernateEventListeners" class="org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners" depends-on="documentService"> 
+	   <property name="listenerMap" >
+		<map>
+	 	 <entry key="post-commit-insert"  >
+	  		<ref bean="eventListener"/>
+	  	</entry>
+	  	 <entry key="post-commit-update"  >
+	  		<ref bean="eventListener"/>
+	  	</entry>
+	  	 <entry key="post-commit-insert"  >
+	  		<ref bean="ddsEventListener"/>
+	  	</entry>
+	  	 <entry key="post-commit-update"  >
+	  		<ref bean="ddsEventListener"/>
+	  	</entry>
+	  	
+	 
+	  
+	   </map>
+	   </property>
+       
+	</bean> 
+	   -->
+	   
+	   
+	   	<!-- active MQ -->
+	<bean id="org.workflow4people.BrokerContainer" class="org.apache.activemq.xbean.BrokerFactoryBean">
+		<property name="config" value="classpath:activemq.xml"/>
+	</bean>
+	<!-- 
+	<bean id="org.workflow4people.JmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<bean class="org.springframework.jms.connection.SingleConnectionFactory">
+				<property name="targetConnectionFactory">
+					<ref local="org.workflow4people.JmsFactory"/>  
+				</property>
+			</bean>
+		</property>
+	</bean>
+	 -->
+	<!-- 
+	<bean id="org.workflow4people.SimpleContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="org.workflow4people.JmsFactory" />
+		<property name="messageListener" ref="caseService" />
+
+		<property name="destinationName" value="org.exxellence.alfresco.asyncMoveNode"/> 
+		<property name="sessionTransacted" value="true"/>
+	</bean>
+	 -->
+   	<!-- <amq:queue id="org.exxellence.alfresco.Destination" physicalName="org.exxellence.alfresco.asyncMoveNode"/> Destination -->
+	<!--   <amq:connectionFactory id="org.workflow4people.JmsFactory" brokerURL="tcp://localhost:61616"/>  JmsFactory -->
 
 </beans>
 
