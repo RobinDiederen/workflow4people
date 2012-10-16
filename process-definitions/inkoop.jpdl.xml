@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="inkoop" name="inkoop" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="471,36,48,48" name="start">
+      <transition name="to beoordelen" to="beoordelen" g="-75,-22"/>
+   </start>
+   
+   <task candidate-groups="CLR" duedate="3 business days" form="beoordelen" g="445,450,100,80" name="beoordelen">
+   	<description>Beoordelen</description>
+      <transition name="to afhandelen" to="afhandelen" g="-98,-22"/>
+   
+   </task>
+   
+   <task candidate-groups="CLR" duedate="3 business days" form="afhandelen" g="463,642,100,80" name="afhandelen">
+   <description>Afhandelen</description>
+      <transition name="to end" to="end" g="-48,-22"/>
+      <transition name="opnieuw beoordelen" to="beoordelen" g="713,581:-75,-22"/>
+   
+   </task>
+   
+   
+   <end g="473,793,48,48" name="end"/>
+   
+   
+</process>

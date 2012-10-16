@@ -79,7 +79,7 @@ class GetTaskEndpoint {
 				processDefinitionId (theTask.workflow.workflowDefinition.id)				 
 				processName(theTask.workflow.workflowDefinition.name)
 				
-				def outcomeList = theTask.transitions.split(",")				
+				def outcomeList = theTask.transitions?.split(",")				
 				outcomes { outcomeList.each { theOutcome ->							
 						if (theOutcome!='completed') {
 							outcome(theOutcome)
