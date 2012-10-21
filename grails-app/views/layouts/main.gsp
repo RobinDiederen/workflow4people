@@ -26,23 +26,25 @@
         <%-- we need jquery 1.4.2 for jsTree contextMenu 
         <g:javascript library="jquery" plugin="jquery" />
         --%>
-        
-        <g:javascript src="jquery/jquery-1.4.2.js" plugin="wfp" />
+        <dialog:head />
+        <g:javascript src="jquery/jquery-1.7.2.min.js" plugin="dialog" />
+        <%-- <g:javascript src="jquery/jquery-1.4.2.js" plugin="wfp" />--%>
         <g:javascript>
         	var wfp={};
         	var dataTableHashList = {};
         	wfp.baseUrl="${request.contextPath}";
         </g:javascript>
                  
-        <g:javascript src="jquery/jquery-ui-1.8.custom.min.js" contextPath="" plugin="wfp" />
+		<g:javascript src="jquery/jquery-ui-1.8.custom.min.js" plugin="dialog" />
         <g:javascript src="jquery/jquery.timers-1.2.js"  contextPath="" plugin="wfp" />
-        <g:javascript src="jquery/jquery.cluetip-patched.js"  contextPath="" plugin="wfp" />
-        <g:javascript src="jquery/jquery.dataTables.js"  contextPath="" plugin='wfp'/>
+		<g:javascript src="jquery/jquery.cluetip-patched.js"  plugin="dialog" />
+        
+        		<g:javascript src="jquery/jquery.dataTables.js"  plugin='dialog'/>
+		<g:javascript src="jquery/jquery.dataTables.rowReordering.js"  plugin='dialog'/>
+		<g:javascript src="jquery/jquery.ui.altselect.js"  plugin='dialog'/>
         
         <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
-        <g:javascript src="jquery/scrollTo/jquery.scrollTo-min.js""  contextPath="" plugin="wfp"/>
         
-        <g:javascript src="jquery/jquery.ui.altselect.js"  contextPath="" plugin="wfp" /> 
         <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
         
         <jq:jquery>
@@ -98,6 +100,39 @@
           	
           	
         </jq:jquery>
+        
+     		<g:javascript src="fileuploader.js"  plugin='dialog'/>
+		<g:javascript src="dialog.js"  plugin="dialog" />
+		<g:javascript src="tiny_mce/tiny_mce.js"  plugin="dialog" />
+		<g:javascript src="tiny_mce/jquery.tinymce.js"  plugin="dialog" />    
+		<g:javascript src="dialog.tinymce.js"  plugin="dialog" />
+		
+		<g:javascript src="ckeditor/ckeditor.js"  plugin="dialog" />
+    	<g:javascript src="dialog.ckeditor.js"  plugin="dialog" />
+    
+		<!--  CodeMirror -->
+    	<g:javascript src="codemirror/lib/codemirror.js"  plugin="dialog" />
+    	<%--  <g:javascript src="codemirror/lib/util/searchcursor.js"  plugin="dialog" /> --%>
+    	
+    	
+    	<link rel="stylesheet" href="${resource(dir:'js/codemirror/lib',file:'codemirror.css',plugin:'dialog')}" />
+    	
+    	
+    	<!-- CodeMirror autocomplete -->    	    
+
+    	<g:javascript src="codemirror/lib/util/closetag.js"  plugin="dialog" />
+    	
+    	<g:javascript src="codemirror/mode/xml/xml.js"  plugin="dialog" />
+    	<g:javascript src="codemirror/mode/javascript/javascript.js"  plugin="dialog" />
+    	<g:javascript src="codemirror/mode/css/css.js"  plugin="dialog" />
+    	<g:javascript src="codemirror/mode/htmlmixed/htmlmixed.js"  plugin="dialog" />
+		
+		<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'dialog.codemirror.css',plugin:'dialog')}" />
+		
+    	<g:javascript src="dialog.codemirror.js"  plugin="dialog" />
+    	
+    	<!--  End CodeMirror includes -->
+        
 		<g:layoutHead />
 	</head>
     <body>
@@ -155,9 +190,12 @@
 	        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	       <li>Search</li>
            <ul>
-   	          <li class="menu-icon menu-search"><g:link controller="search" action="index">Lucene search</g:link></li>   	            	            
+   	          <li class="menu-icon menu-search"><g:link controller="search" action="index">Solr search</g:link></li>   	            	            
     	      <li class="menu-icon menu-manage-index"><g:link controller="index" action="index">Manage index</g:link></li>
-	        </ul>
+	          <li class="menu-icon menu-status"><g:link controller="solr" action="status">Status</g:link></li>
+	          <li class="menu-icon menu-import" onclick="dialog.formDialog(null,'solr',{dialogname:'reIndex',submitname:'submitReIndex',submitform:true},null)"><span>Reindex</span></li>	          	          
+	        </ul>	        
+
 	        </sec:ifAnyGranted>
 	        <sec:ifAnyGranted roles="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER"> 	        
 	        <li>Forms</li>

@@ -39,7 +39,7 @@ class FeaturePermissionController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
                              
     def list = {
-		render (view:'/datatable/list', model:[dc:FeaturePermission,controllerName:'featurePermission',request:request])
+		render (view:'/dialog/list', model:[dc:FeaturePermission,controllerName:'featurePermission',request:request])
 	}
 		
 	def jsonlist = {
@@ -47,117 +47,10 @@ class FeaturePermissionController {
 	}
 
                              
-    //def list = {
-    //    params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-    //    [featurePermissionInstanceList: FeaturePermission.list(params), featurePermissionInstanceTotal: FeaturePermission.count()]
-    //}
-    
-    
-    
 	def dialog = { return dialogService.edit(FeaturePermission,params) }
 	
 	def submitdialog = { render dialogService.submit(FeaturePermission,params) as JSON }
 	
 	def delete = { render dialogService.delete(FeaturePermission,params) as JSON }
 
-    def create = {
-        def featurePermissionInstance = new FeaturePermission()
-        featurePermissionInstance.properties = params
-        return [featurePermissionInstance: featurePermissionInstance]
-    }
-
-    def save = {
-        def featurePermissionInstance = new FeaturePermission(params)
-        if (!featurePermissionInstance.hasErrors() && featurePermissionInstance.save()) {
-            flash.message = "featurePermission.created"
-            flash.args = [featurePermissionInstance.id]
-            flash.defaultMessage = "FeaturePermission ${featurePermissionInstance.id} created"
-            redirect(action: "show", id: featurePermissionInstance.id)
-        }
-        else {
-            render(view: "create", model: [featurePermissionInstance: featurePermissionInstance])
-        }
-    }
-
-    def show = {
-        def featurePermissionInstance = FeaturePermission.get(params.id)
-        if (!featurePermissionInstance) {
-            flash.message = "featurePermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FeaturePermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [featurePermissionInstance: featurePermissionInstance]
-        }
-    }
-
-    def edit = {
-        def featurePermissionInstance = FeaturePermission.get(params.id)
-        if (!featurePermissionInstance) {
-            flash.message = "featurePermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FeaturePermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [featurePermissionInstance: featurePermissionInstance]
-        }
-    }
-
-    def update = {
-        def featurePermissionInstance = FeaturePermission.get(params.id)
-        if (featurePermissionInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (featurePermissionInstance.version > version) {
-                    
-                    featurePermissionInstance.errors.rejectValue("version", "featurePermission.optimistic.locking.failure", "Another user has updated this FeaturePermission while you were editing")
-                    render(view: "edit", model: [featurePermissionInstance: featurePermissionInstance])
-                    return
-                }
-            }
-            featurePermissionInstance.properties = params
-            if (!featurePermissionInstance.hasErrors() && featurePermissionInstance.save()) {
-                flash.message = "featurePermission.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "FeaturePermission ${params.id} updated"
-                redirect(action: "show", id: featurePermissionInstance.id)
-            }
-            else {
-                render(view: "edit", model: [featurePermissionInstance: featurePermissionInstance])
-            }
-        }
-        else {
-            flash.message = "featurePermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FeaturePermission not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def xdelete = {
-        def featurePermissionInstance = FeaturePermission.get(params.id)
-        if (featurePermissionInstance) {
-            try {
-                featurePermissionInstance.delete()
-                flash.message = "featurePermission.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FeaturePermission ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "featurePermission.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FeaturePermission ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "featurePermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FeaturePermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
 }

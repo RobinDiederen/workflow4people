@@ -33,6 +33,8 @@ import grails.plugins.springsecurity.Secured
 
 class SearchController {
     def searchableService
+	def dialogService
+	def solrService
 
     /**
      * Index page with search form and results
@@ -43,11 +45,27 @@ class SearchController {
 	
 	ArrayList listProperties=['id','documentDescription','documentType', 'documentStatus', 'dateCreated']
 	
+	
+	def list() {
+		render (view:"/dialog/list", model:[dc:Document, controllerName:"search", request:request, bFilter:true])
+	}
+
+	def jsonlist() {
+		render solrService.jsonsearch(Document, params, request, "*:*",['id','documentType','documentDescription','user','lastUpdated']) as JSON		
+	}
+	
+	
+	
 	def search = {
 		render (view: 'search', model:[dc: ['listProperties': listProperties]])
 	}
 	
-	def jsonlist = {
+	
+	
+	
+	
+	
+	def xjsonlist = {
 				
 		log.debug "Searching for ${params.q}"
 		

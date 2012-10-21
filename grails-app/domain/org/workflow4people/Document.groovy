@@ -17,15 +17,14 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import java.awt.JobAttributes.SidesType;
 
-//import org.compass.annotations.*
-
+import org.apache.solr.common.*
 /**
  * XML document database domain class.
  * @author Joost Horward
  */
 
-//@Searchable(alias = 'Document', analyzer='wfp')
 
 class Document {
 	static searchable=true
@@ -55,13 +54,11 @@ class Document {
     	    form(help:'x')
     	    cmisPath(nullable:true)
     }
-    //@SearchableId
-    Long id
-    
-    
+	  
     static hasMany = [documentIndex:DocumentIndex,form:Form]
     ////@SearchableDynamicProperty(index = Index.NOT_ANALYZED)
     //@SearchableDynamicProperty
+	
     Set<DocumentIndex> documentIndex
     
     //@SearchableComponent
@@ -103,5 +100,29 @@ class Document {
 	  String toString() {
 		  return documentDescription;
 	  }
+	  
+	SolrInputDocument getSolrInputDocument() {
+		SolrInputDocument sid = new SolrInputDocument()
+		sid.addField("id",this.id.toString())
+		sid.addField("documentType",documentType.name)
+		sid.addField("documentDescription",documentDescription)		
+		sid.addField("dateCreated",dateCreated)
+		sid.addField("lastUpdated",lastUpdated)
+		sid.addField("completionDate",completionDate)
+		sid.addField("processingDays",processingDays)
+		sid.addField("user",user)
+		sid.addField("groupId",groupId)
+		sid.addField("cmisFolderObjectId",cmisFolderObjectId)
+		sid.addField("cmisFolderUrl",cmisFolderUrl)
+		sid.addField("cmisPath",cmisPath)
+		sid.addField("xmlDocument",xmlDocument)
+		
+		DocumentIndex.findAllByDocument(this).each { di ->
+			sid.addField("index_${di.name}",di.value)
+			println "added index_${di.name}"
+		}
+		
+		return sid
+	}	  
     
 }

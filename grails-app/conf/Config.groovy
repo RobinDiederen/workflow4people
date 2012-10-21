@@ -130,5 +130,7 @@ grails.naming.entries = ['jdbc/wf4p': [
 		maxIdle: "4"
 	]
 ]
-
+solr {
+	url="http://localhost:8080/solr"
+}
 

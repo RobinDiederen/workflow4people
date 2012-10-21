@@ -1,9 +1,9 @@
-<wf:form title="Feature permission" object="${featurePermissionInstance}">
-	<wf:table>		                            
-		<wf:textField object="${featurePermissionInstance}" propertyName="id" mode="show" />
-		<wf:domainObject object="${featurePermissionInstance}" propertyName="feature" mode="show" />		       
-		<wf:domainObject object="${featurePermissionInstance}" propertyName="authority" mode="edit" sort="authority"/>
-		<wf:domainObject object="${featurePermissionInstance}" propertyName="role" mode="edit" />
-		<wf:textArea object="${featurePermissionInstance}" propertyName="remark" mode="edit" />	    		
-	</wf:table>		
-</wf:form>
+<dialog:form title="Feature permission" object="${featurePermissionInstance}">
+	<dialog:table>		                            
+		<dialog:textField object="${featurePermissionInstance}" propertyName="id" mode="show" />
+		<dialog:domainObject object="${featurePermissionInstance}" propertyName="feature" mode="show" />		       
+		<dialog:domainObject object="${featurePermissionInstance}" propertyName="authority" mode="edit" sort="authority"/>
+		<dialog:domainObject object="${featurePermissionInstance}" propertyName="role" mode="edit" />
+		<dialog:textArea object="${featurePermissionInstance}" propertyName="remark" mode="edit" />	    		
+	</dialog:table>		
+</dialog:form>

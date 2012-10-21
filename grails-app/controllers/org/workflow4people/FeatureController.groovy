@@ -39,117 +39,18 @@ class FeatureController {
   
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:Feature,controllerName:'feature',request:request])
+		render (view:'/dialog/list', model:[dc:Feature,controllerName:'feature',request:request])
 	}
 		
 	def jsonlist = {
 		render listService.jsonlist(Feature,params,request) as JSON
 	}
 
-    def create = {
-        def featureInstance = new Feature()
-        featureInstance.properties = params
-        return [featureInstance: featureInstance]
-    }
-	
+    
 	def dialog = { return dialogService.edit(Feature,params) }
 	
 	def submitdialog = { render dialogService.submit(Feature,params) as JSON }
 	
 	def delete = { render dialogService.delete(Feature,params) as JSON }
 
-    def save = {
-        def featureInstance = new Feature(params)
-        if (!featureInstance.hasErrors() && featureInstance.save()) {
-            flash.message = "feature.created"
-            flash.args = [featureInstance.id]
-            flash.defaultMessage = "Feature ${featureInstance.id} created"
-            redirect(action: "show", id: featureInstance.id)
-        }
-        else {
-            render(view: "create", model: [featureInstance: featureInstance])
-        }
-    }
-
-    def show = {
-        def featureInstance = Feature.get(params.id)
-        if (!featureInstance) {
-            flash.message = "feature.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Feature not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [featureInstance: featureInstance]
-        }
-    }
-
-    def edit = {
-        def featureInstance = Feature.get(params.id)
-        if (!featureInstance) {
-            flash.message = "feature.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Feature not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [featureInstance: featureInstance]
-        }
-    }
-
-    def update = {
-        def featureInstance = Feature.get(params.id)
-        if (featureInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (featureInstance.version > version) {
-                    
-                    featureInstance.errors.rejectValue("version", "feature.optimistic.locking.failure", "Another user has updated this Feature while you were editing")
-                    render(view: "edit", model: [featureInstance: featureInstance])
-                    return
-                }
-            }
-            featureInstance.properties = params
-            if (!featureInstance.hasErrors() && featureInstance.save()) {
-                flash.message = "feature.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "Feature ${params.id} updated"
-                redirect(action: "show", id: featureInstance.id)
-            }
-            else {
-                render(view: "edit", model: [featureInstance: featureInstance])
-            }
-        }
-        else {
-            flash.message = "feature.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Feature not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def xdelete = {
-        def featureInstance = Feature.get(params.id)
-        if (featureInstance) {
-            try {
-                featureInstance.delete()
-                flash.message = "feature.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Feature ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "feature.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Feature ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "feature.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Feature not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
 }

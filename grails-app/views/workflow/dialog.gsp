@@ -1,34 +1,34 @@
-<wf:form title="Workflow" object="${workflowInstance}">
-	<wf:tabs names="Details,Tasks,Log" object="${workflowInstance}">		
-		<wf:tab name="Details" object="${workflowInstance}">		                            
-	        <wf:textField object="${workflowInstance}" propertyName="id" mode="show" />
+<dialog:form title="Workflow" object="${workflowInstance}">
+	<dialog:tabs names="Details,Tasks,Log" object="${workflowInstance}">		
+		<dialog:tab name="Details" object="${workflowInstance}">		                            
+	        <dialog:textField object="${workflowInstance}" propertyName="id" mode="show" />
 			
-			<wf:textField object="${workflowInstance}" propertyName="externalId" mode="edit" />
-	        <wf:domainObject object="${workflowInstance}" propertyName="workflowEngine" mode="edit" />
+			<dialog:textField object="${workflowInstance}" propertyName="externalId" mode="edit" />
+	        <dialog:domainObject object="${workflowInstance}" propertyName="workflowEngine" mode="edit" />
 	                     
-			<wf:domainObject object="${workflowInstance}" propertyName="workflowDefinition" mode="edit" />
+			<dialog:domainObject object="${workflowInstance}" propertyName="workflowDefinition" mode="edit" />
 			 
-			<wf:domainObject object="${workflowInstance}" propertyName="document" mode="show" sort="id"/>
+			<dialog:domainObject object="${workflowInstance}" propertyName="document" mode="show" sort="id"/>
 			 
-	        <wf:textField object="${workflowInstance}" propertyName="priority" mode="edit" />
-	        <wf:textField object="${workflowInstance}" propertyName="status" mode="edit" />
+	        <dialog:textField object="${workflowInstance}" propertyName="priority" mode="edit" />
+	        <dialog:textField object="${workflowInstance}" propertyName="status" mode="edit" />
 	        
 	        
-			<wf:date object="${workflowInstance}" propertyName="dateCreated" mode="show" />
-			<wf:date object="${workflowInstance}" propertyName="lastUpdated" mode="show" />
-			<wf:date object="${workflowInstance}" propertyName="dueDate" mode="show" />
+			<dialog:date object="${workflowInstance}" propertyName="dateCreated" mode="show" />
+			<dialog:date object="${workflowInstance}" propertyName="lastUpdated" mode="show" />
+			<dialog:date object="${workflowInstance}" propertyName="dueDate" mode="show" />
 			
-			<wf:date object="${workflowInstance}" propertyName="completionDate" mode="show" />
+			<dialog:date object="${workflowInstance}" propertyName="completionDate" mode="show" />
 			
-		</wf:tab>
+		</dialog:tab>
 		
-		<wf:tab name="Log" object="${workflowInstance}">
-			<wf:detailTable property="workflow" object="${workflowInstance}" domainClass="${org.workflow4people.WorkflowLog}" />			
-		</wf:tab>
-		<wf:tab name="Tasks" object="${workflowInstance}">
-			<wf:detailTable property="workflow" object="${workflowInstance}" domainClass="${org.workflow4people.Task}" />
-		</wf:tab>
+		<dialog:tab name="Log" object="${workflowInstance}">
+			<dialog:detailTable property="workflow" object="${workflowInstance}" domainClass="${org.workflow4people.WorkflowLog}" />			
+		</dialog:tab>
+		<dialog:tab name="Tasks" object="${workflowInstance}">
+			<dialog:detailTable property="workflow" object="${workflowInstance}" domainClass="${org.workflow4people.Task}" />
+		</dialog:tab>
 				
-	</wf:tabs>
+	</dialog:tabs>
 	
-</wf:form>
+</dialog:form>

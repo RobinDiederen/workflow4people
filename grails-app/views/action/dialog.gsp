@@ -1,8 +1,8 @@
-<wf:form title="Action" object="${actionInstance}">
-	<wf:table>		                            
-		<wf:textField object="${actionInstance}" propertyName="id" mode="show" />                                                        
-		<wf:textField object="${actionInstance}" propertyName="name" mode="edit" />
-		<wf:textField object="${actionInstance}" propertyName="title" mode="edit" />
-		<wf:textArea object="${actionInstance}" propertyName="description" mode="edit" />		
-	</wf:table>		
-</wf:form>
+<dialog:form title="Action" object="${actionInstance}">
+	<dialog:table>		                            
+		<dialog:textField object="${actionInstance}" propertyName="id" mode="show" />                                                        
+		<dialog:textField object="${actionInstance}" propertyName="name" mode="edit" />
+		<dialog:textField object="${actionInstance}" propertyName="title" mode="edit" />
+		<dialog:textArea object="${actionInstance}" propertyName="description" mode="edit" />		
+	</dialog:table>		
+</dialog:form>

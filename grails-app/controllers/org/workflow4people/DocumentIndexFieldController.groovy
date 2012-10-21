@@ -39,7 +39,7 @@ class DocumentIndexFieldController {
 	
 	def list = {
     	
-    	render (view:'/datatable/list', model:[dc:DocumentIndexField,controllerName:'documentIndexField',request:request])
+    	render (view:'/dialog/list', model:[dc:DocumentIndexField,controllerName:'documentIndexField',request:request])
     }
     
     def jsonlist = {

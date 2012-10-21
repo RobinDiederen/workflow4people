@@ -1,15 +1,15 @@
-<wf:form title="Field List" width="635px" object="${fieldListInstance}">
-	<wf:table>		                            
-		<wf:textField object="${fieldListInstance}" propertyName="id" mode="show" />
+<dialog:form title="Field List" width="635px" object="${fieldListInstance}">
+	<dialog:table>		                            
+		<dialog:textField object="${fieldListInstance}" propertyName="id" mode="show" />
 		
-		<wf:domainObject object="${fieldListInstance}" propertyName="parent" mode="edit" />                        
-		<wf:textField object="${fieldListInstance}" propertyName="name" mode="edit" />
-		<wf:domainObject object="${fieldListInstance}" propertyName="namespace" mode="edit" sort="prefix"/>
+		<dialog:domainObject object="${fieldListInstance}" propertyName="parent" mode="edit" />                        
+		<dialog:textField object="${fieldListInstance}" propertyName="name" mode="edit" />
+		<dialog:domainObject object="${fieldListInstance}" propertyName="namespace" mode="edit" sort="prefix"/>
 		
-        <wf:domainObject object="${fieldListInstance}" propertyName="baseType" mode="edit" />
+        <dialog:domainObject object="${fieldListInstance}" propertyName="baseType" mode="edit" />
         
-        <wf:textField object="${fieldListInstance}" propertyName="label" mode="edit" class="wide"/>
-        <wf:textArea object="${fieldListInstance}" propertyName="description" mode="edit" class="wide"/>
+        <dialog:textField object="${fieldListInstance}" propertyName="label" mode="edit" class="wide"/>
+        <dialog:textArea object="${fieldListInstance}" propertyName="description" mode="edit" class="wide"/>
                                 		        	    	
-	</wf:table>		
-</wf:form>
+	</dialog:table>		
+</dialog:form>

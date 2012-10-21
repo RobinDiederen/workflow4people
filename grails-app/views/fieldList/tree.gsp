@@ -66,7 +66,7 @@
             	<ul id="tree" class="filetree treeview">
             	<li><span id="${fieldListInstance.id}" class="folder toplevelfieldlist">${fieldListInstance.name}</span>
             	<ul>
-            	<wf:tree fieldList="${fieldListInstance}" ></wf:tree>
+            	<dialog:tree fieldList="${fieldListInstance}" ></dialog:tree>
             	</ul>
             	</li>
             	</ul> 

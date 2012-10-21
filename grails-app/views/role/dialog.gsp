@@ -1,10 +1,10 @@
-<wf:form title="Role" width="615px" object="${roleInstance}">
-	<wf:table>		                            
-		<wf:textField object="${roleInstance}" propertyName="id" mode="show" />                                                        
-		<wf:textField object="${roleInstance}" propertyName="name" mode="edit" />
-		<wf:textField object="${roleInstance}" propertyName="title" mode="edit" />
-		<wf:textArea object="${roleInstance}" propertyName="description" mode="edit" />		
-<%--		<wf:select mode="edit" object="${roleInstance}" propertyName="roleAction" class="multiselect" from="${org.workflow4people.Action.list(sort:'name')}" multiple="true" optionKey="id"  vertical="true" style="width:540px; height:200px;"/>--%>
-		<wf:select mode="edit" object="${roleInstance}" propertyName="roleAction" class="altselect" from="${org.workflow4people.Action.list(sort:'name')}" multiple="true" optionKey="id" />
-	</wf:table>		
-</wf:form>
+<dialog:form title="Role" width="615px" object="${roleInstance}">
+	<dialog:table>		                            
+		<dialog:textField object="${roleInstance}" propertyName="id" mode="show" />                                                        
+		<dialog:textField object="${roleInstance}" propertyName="name" mode="edit" />
+		<dialog:textField object="${roleInstance}" propertyName="title" mode="edit" />
+		<dialog:textArea object="${roleInstance}" propertyName="description" mode="edit" />		
+<%--		<dialog:select mode="edit" object="${roleInstance}" propertyName="roleAction" class="multiselect" from="${org.workflow4people.Action.list(sort:'name')}" multiple="true" optionKey="id"  vertical="true" style="width:540px; height:200px;"/>--%>
+		<dialog:select mode="edit" object="${roleInstance}" propertyName="roleAction" class="altselect" from="${org.workflow4people.Action.list(sort:'name')}" multiple="true" optionKey="id" />
+	</dialog:table>		
+</dialog:form>

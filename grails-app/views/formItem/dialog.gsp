@@ -1,11 +1,11 @@
-<wf:form title="Form item" width="625px" object="${formItemInstance}">
-	<wf:table>		                            
-		<wf:textField object="${formItemInstance}" propertyName="id" mode="show" />
-		<wf:domainObject object="${formItemInstance}" propertyName="form" mode="show" />
+<dialog:form title="Form item" width="625px" object="${formItemInstance}">
+	<dialog:table>		                            
+		<dialog:textField object="${formItemInstance}" propertyName="id" mode="show" />
+		<dialog:domainObject object="${formItemInstance}" propertyName="form" mode="show" />
 		                                                        
-		<wf:textField object="${formItemInstance}" propertyName="position" mode="edit" />
-	    <wf:domainObject object="${formItemInstance}" propertyName="field" mode="edit" />
-	    <wf:textField object="${formItemInstance}" propertyName="snippet" mode="edit" />
-		<wf:checkBox object="${formItemInstance}" propertyName="readonly" mode="edit" />		               		        	    		
-	</wf:table>		
-</wf:form>
+		<dialog:textField object="${formItemInstance}" propertyName="position" mode="edit" />
+	    <dialog:domainObject object="${formItemInstance}" propertyName="field" mode="edit" />
+	    <dialog:textField object="${formItemInstance}" propertyName="snippet" mode="edit" />
+		<dialog:checkBox object="${formItemInstance}" propertyName="readonly" mode="edit" />		               		        	    		
+	</dialog:table>		
+</dialog:form>

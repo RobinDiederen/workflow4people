@@ -1,29 +1,29 @@
-<wf:form title="Task" object="${taskInstance}">
-	<wf:table>		                            
+<dialog:form title="Task" object="${taskInstance}">
+	<dialog:table>		                            
 
-	        <wf:textField object="${taskInstance}" propertyName="id" mode="show" />
-	        <wf:textField object="${taskInstance}" propertyName="externalId" mode="edit" />
-	        <wf:textField object="${taskInstance}" propertyName="externalWorkflowId" mode="edit" />
-	        <wf:domainObject object="${taskInstance}" propertyName="workflow" mode="show" />
+	        <dialog:textField object="${taskInstance}" propertyName="id" mode="show" />
+	        <dialog:textField object="${taskInstance}" propertyName="externalId" mode="edit" />
+	        <dialog:textField object="${taskInstance}" propertyName="externalWorkflowId" mode="edit" />
+	        <dialog:domainObject object="${taskInstance}" propertyName="workflow" mode="show" />
 	        
-	        <wf:textArea object="${taskInstance}" propertyName="description" mode="edit"/>
+	        <dialog:textArea object="${taskInstance}" propertyName="description" mode="edit"/>
 
-			<wf:select object="${taskInstance}" propertyName="outcome" mode="edit" from="${taskInstance.getTransitionsArray()}" />				                     
-			<wf:domainObject object="${taskInstance}" propertyName="form" mode="edit" />
+			<dialog:select object="${taskInstance}" propertyName="outcome" mode="edit" from="${taskInstance.getTransitionsArray()}" />				                     
+			<dialog:domainObject object="${taskInstance}" propertyName="form" mode="edit" />
 			
-			<wf:domainObject object="${taskInstance}" propertyName="taskStatus" mode="edit"/>
-			<wf:textField object="${taskInstance}" propertyName="statusUser" mode="edit" />
+			<dialog:domainObject object="${taskInstance}" propertyName="taskStatus" mode="edit"/>
+			<dialog:textField object="${taskInstance}" propertyName="statusUser" mode="edit" />
 			
-	        <wf:textField object="${taskInstance}" propertyName="priority" mode="edit" />
-	        <wf:textField object="${taskInstance}" propertyName="cssClass" mode="edit" />
+	        <dialog:textField object="${taskInstance}" propertyName="priority" mode="edit" />
+	        <dialog:textField object="${taskInstance}" propertyName="cssClass" mode="edit" />
 	        
-			<wf:date object="${taskInstance}" propertyName="dateCreated" mode="show" />
-			<wf:date object="${taskInstance}" propertyName="lastUpdated" mode="show" />
-			<wf:date object="${taskInstance}" propertyName="dueDate" mode="show" />			
-			<wf:date object="${taskInstance}" propertyName="completionDate" mode="show" />
+			<dialog:date object="${taskInstance}" propertyName="dateCreated" mode="show" />
+			<dialog:date object="${taskInstance}" propertyName="lastUpdated" mode="show" />
+			<dialog:date object="${taskInstance}" propertyName="dueDate" mode="show" />			
+			<dialog:date object="${taskInstance}" propertyName="completionDate" mode="show" />
 			
-			<wf:checkBox object="${taskInstance}" propertyName="noMessage" mode="edit" />
+			<dialog:checkBox object="${taskInstance}" propertyName="noMessage" mode="edit" />
 
-		</wf:table>
+		</dialog:table>
 	
-</wf:form>
+</dialog:form>

@@ -1,4 +1,5 @@
-grails.plugin.location.'cmis' = "/home/joost/workspaces/grails-workspace/cmis"
+grails.plugin.location.'cmis' = "../cmis"
+grails.plugin.location.'dialog' = "../dialog"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
