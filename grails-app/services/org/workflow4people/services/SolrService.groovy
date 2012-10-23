@@ -9,6 +9,8 @@ import org.apache.solr.common.params.ModifiableSolrParams
 import org.apache.solr.client.*
 import org.workflow4people.*
 import groovyx.gpars.*
+import org.codehaus.groovy.grails.commons.*
+
 class SolrService {
 	
 	def searchableService
@@ -52,19 +54,20 @@ class SolrService {
 		currentMessage="Abort requested"
 	}
 	
-	void updateStats() {
-		def res=search("*:*",[max:1])
+	void updateStats(dc) {
+		def res=search(dc,"*:*",[max:1])
 		numDocsInSolr=res.numFound
-		numDocsInDb=Document.count()	
+		numDocsInDb=dc.count()	
 	}
 	
 
-	def search(q,params=[:]) {
+	def search(dc,q,params=[:]) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		SolrDocumentList list
 		if (!q || q.length()<1) {
 			list=[numFound:0,results:[]]
 		} else {
-			String urlString = grailsApplication.config.solr.url
+			String urlString = grailsApplication.config.solr.url+"/"+dcName
 			SolrServer solr = new CommonsHttpSolrServer(urlString);			
 			SolrQuery query = new SolrQuery(q);
 	
@@ -88,12 +91,24 @@ class SolrService {
 	 *  
 	 */
 	
-	def prepareQuery(q,standardFilter=true,standardBoost=true) {
+	def prepareQuery(dc,q,standardFilter=true,standardBoost=true) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		if (!q.contains(":")){
 			def terms=q.split(" ");
-			q=terms.collect { term ->
-				"(documentDescription:${term} or documentType:${term})"
-			}.join(" AND ")
+			// TODO check & make useful queries here			
+			if (dcName=="Document") {
+				q=terms.collect { term ->
+					"(documentDescription:${term} or documentType:${term})"
+				}.join(" AND ")
+			}
+
+			// TODO check & make useful queries here
+			if (dcName=="Task") {
+				q=terms.collect { term ->
+					"(description:${term} or user:${term})"
+				}.join(" AND ")
+			}
+			
 		}
 		if (standardFilter) {
 			// TODO figure out what's right here for documents
@@ -109,25 +124,27 @@ class SolrService {
 	}
 	
 	
-	def humansearch(q,params,standardFilter=true,standardBoost=true) {
+	def humansearch(dc,q,params,standardFilter=true,standardBoost=true) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		def list	
 		if (!q || q.length()<1) {
 			list=[numFound:0,results:[]]
 		} else {
-			list= search(prepareQuery(q,standardFilter,standardBoost),params)
+			list= search(dc,prepareQuery(q,standardFilter,standardBoost),params)
 		}
 		return list		
 	}
 	
-	def filteredsearch(q,params,filter) {
+	def filteredsearch(dc,q,params,filter) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		def list
 		if (!q || q.length()<1) {
 			list=[numFound:0,results:[]]
 		} else {
 			if (filter && filter.length()>0) {
-				list= search("(${q}) AND (${prepareQuery(filter,false,false)})",params)
+				list= search(dc,"(${q}) AND (${prepareQuery(filter,false,false)})",params)
 			} else {
-				list= search(q,params)
+				list= search(dc,q,params)
 			}
 		}
 		return list
@@ -149,6 +166,7 @@ class SolrService {
 	
 	
 	def jsonsearch(dc,params,request,query,listProperties=null,actions=null,queryParams=[:]) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		def title=dc.getName();
 		title=title.replaceAll (".*\\.", "")
 		def propName=title[0].toLowerCase()+title.substring(1)
@@ -166,7 +184,7 @@ class SolrService {
 		detailTableId=detailTableId.replace(".","_")
 		detailTableId=detailTableId.replace("class ","")
 		
-		def res=filteredsearch(query,[max:params.iDisplayLength,offset:params.iDisplayStart,order:params.sSortDir_0,sort:sortName],params.sSearch)
+		def res=filteredsearch(dc,query,[max:params.iDisplayLength,offset:params.iDisplayStart,order:params.sSortDir_0,sort:sortName],params.sSearch)
 		
 		//documentList=res.collect { dc.get(it.id)}
 		documentList=res
@@ -189,7 +207,7 @@ class SolrService {
 				if(!actions) {
 					actions= { dok, env -> """<span class="list-action-button ui-state-default" onclick="dialog.formDialog('${dok.id}','${propName}',{ refresh : '${detailTableId}'}, null)">edit</span>&nbsp;<span class="list-action-button ui-state-default" onclick="dialog.deleteDialog(${dok.id},'${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span>""" }
 				}
-				inLine+=[5:actions(doc,['detailTableId':detailTableId])]
+				inLine+=["${i}":actions(doc,['detailTableId':detailTableId])]
 				aaData+=inLine
 			}
 
@@ -208,28 +226,32 @@ class SolrService {
 	* @return a map that is ready to be rendered as a JSON message
 	*/
 
-	def autocomplete(dc,params,request,labelColumnName="acLabel",descriptionColumnName="acDescription") {
-			def title=dc.getName();
-			title=title.replaceAll (".*\\.", "")
-			def propName=title[0].toLowerCase()+title.substring(1)
-					 
-			def maxResults=10
-						
-			def documentList=humansearch(params.term,[max:maxResults])
-			
-			//documentList=res.collect { dc.get(it.id)}
-			
-			def json=[]
-			documentList.each { doc ->
-				json+=[value:doc.isbn,label:"${doc.documentType} ${doc.id}", description:"${doc.documentDescription}"]				
-			}
-			return json
+	def autocomplete(dc,params,request,labelFieldName="name",descriptionFieldName="description") {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
+		def title=dc.getName();
+		title=title.replaceAll (".*\\.", "")
+		def propName=title[0].toLowerCase()+title.substring(1)
+				 
+		def maxResults=10
+					
+		def documentList=humansearch(dc,params.term,[max:maxResults])
+		
+		//documentList=res.collect { dc.get(it.id)}
+		
+		def json=[]
+		documentList.each { doc ->
+			def label=doc."${labelFieldName}"
+			def description=doc."${descriptionFieldName}"
+			json+=[value:doc.isbn,label:"${label}", description:"${doc.description}"]				
 		}
+		return json
+	}
+
 	
-	
-	def getNewestItemInIndex() {
+	def getNewestItemInIndex(dc) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		SolrDocumentList list
-		String urlString = grailsApplication.config.solr.url
+		String urlString = grailsApplication.config.solr.url+"/"+dcName
 		SolrServer solr = new CommonsHttpSolrServer(urlString);
 		SolrQuery query = new SolrQuery("*:*");			
 		query.set("sort","lastUpdated desc")
@@ -248,16 +270,18 @@ class SolrService {
 	 */
 	
 	def reIndexByLastUpdated(dc) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
+		println "Reindex by last updated for ${dcName}"
 		//println "solr tracker running =${running}"
 		ping++
 		if (!running && !lock) {
 			lock=true
 			running=true
 			abortFlag=false
-			String urlString = grailsApplication.config.solr.url
+			String urlString = grailsApplication.config.solr.url+"/"+dcName
 			SolrServer solr = new CommonsHttpSolrServer(urlString);
 			def startDate
-			def newestItemInIndex=getNewestItemInIndex()
+			def newestItemInIndex=getNewestItemInIndex(dc)
 	
 			if (newestItemInIndex) {
 				startDate=newestItemInIndex["lastUpdated"]
@@ -270,33 +294,38 @@ class SolrService {
 			endDate.setTime(endDate.getTime()-1000);
 			
 			//println "Indexing items from ${startDate} to ${endDate} (if any)"
-			theTotal =dc.executeQuery("""select count(*) from Document d where (d.lastUpdated>:startDate and d.lastUpdated<:endDate)""",[startDate:startDate,endDate:endDate])[0]
+			theTotal =dc.executeQuery("""select count(*) from ${dcName} d where (d.lastUpdated>:startDate and d.lastUpdated<:endDate)""",[startDate:startDate,endDate:endDate])[0]
 			currentItem=0
 			def session = sessionFactory.getCurrentSession()
 			def items
 			//def offset=0
 			Long currentId=0
-			while ((items = dc.findAll("from Document d where d.lastUpdated>:startDate and d.lastUpdated<:endDate and d.id>:currentId order by d.id asc",[startDate:startDate,endDate:endDate,currentId:currentId],[max:500])) && !abortFlag) {
+			while ((items = dc.findAll("from ${dcName} d where d.lastUpdated>:startDate and d.lastUpdated<:endDate and d.id>:currentId order by d.id asc",[startDate:startDate,endDate:endDate,currentId:currentId],[max:500])) && !abortFlag) {
 				try {
-				currentId=items[items.size()-1].id
-				println "Reindexing ${items.size()} items from ${items[0].id}"
-				currentMessage="Reindexing ${items.size()} items from ${items[0].id}"
-				updateStats()
-
-				GParsPool.withPool { pool ->
-					
-					items.eachParallel { item ->
-						def sid=item.getSolrInputDocument();
-						solr.add(sid)
+					currentId=items[items.size()-1].id
+					println "Reindexing ${items.size()} items from ${items[0].id}"
+					currentMessage="Reindexing ${items.size()} items from ${items[0].id}"
+					updateStats(dc)
+	
+					GParsPool.withPool { pool ->
 						
-						incCurrentItem()
-					}
+						items.eachParallel { item ->
+							//println item
+							try {
+								def sid=item.getSolrInputDocument();
+								solr.add(sid)
+							} catch (Exception e) {
+								println "Caught exception while indexing ${item}: ${e.message}"
+							}
 
-				}
-				solr.commit()
-		
-				session.flush()
-				session.clear()
+							incCurrentItem()
+						}
+	
+					}
+					solr.commit()
+			
+					session.flush()
+					session.clear()
 				} catch (Exception e) {
 					println "Caught exception while indexing: ${e.message}"
 					sleep(60000)
@@ -317,7 +346,8 @@ class SolrService {
 	 */
 	
 	
-	def reIndexAll(fromId) {
+	def reIndexAll(dc,fromId) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		abortFlag=false
 		Long currentId=fromId
 		def chunkSize=500
@@ -330,15 +360,15 @@ class SolrService {
 				int maxbuf=500
 				int maxthreads=50
 				SolrServer solr = new org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer(urlString,maxbuf,maxthreads)
-				println "currentIsbn=${currentIsbn}"
-				theTotal =Book.executeQuery("""select count(*) from Book b where (b.isbn>:currentIsbn)""",[currentIsbn:currentIsbn])[0]
+				println "currentId=${currentId}"
+				theTotal =dc.executeQuery("""select count(*) from ${dcName} d where (d.id>:currentId)""",[currentId:currentId])[0]
 				println "theTotal=${theTotal}"
 				currentItem=0
 				
 				def session = sessionFactory.getCurrentSession()
 				def items
 
-				while ((items = Book.findAll("from Document d where d.id>:currentId order by d.id asc",[currentId:currentId],[max:chunkSize])) && !abortFlag) {
+				while ((items = dc.findAll("from ${dcName} d where d.id>:currentId order by d.id asc",[currentId:currentId],[max:chunkSize])) && !abortFlag) {
 					currentId=items[items.size()-1].id					
 					
 					try {
@@ -347,7 +377,6 @@ class SolrService {
 						println "Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						currentMessage="Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						updateStats()
-						println "beforeadd"
 	
 						GParsPool.withPool { pool ->
 							
@@ -391,9 +420,10 @@ class SolrService {
 		currentMessage="Completed indexing"
 	}
 	
-	def deleteItem(id) {
+	def deleteItem(dc,id) {
+		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		println "Deleting ${id} from Solr"
-		String urlString = grailsApplication.config.solr.url
+		String urlString = grailsApplication.config.solr.url+"/"+dcName
 		SolrServer solr = new CommonsHttpSolrServer(urlString);
 		println solr.deleteById(id.toString())
 		solr.commit()

@@ -190,7 +190,8 @@
 	        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	       <li>Search</li>
            <ul>
-   	          <li class="menu-icon menu-search"><g:link controller="search" action="index">Solr search</g:link></li>   	            	            
+   	          <li class="menu-icon menu-search"><g:link controller="search" action="searchdocument">Search Document</g:link></li>
+   	          <li class="menu-icon menu-search"><g:link controller="search" action="searchtask">Search Task</g:link></li>
     	      <li class="menu-icon menu-manage-index"><g:link controller="index" action="index">Manage index</g:link></li>
 	          <li class="menu-icon menu-status"><g:link controller="solr" action="status">Status</g:link></li>
 	          <li class="menu-icon menu-import" onclick="dialog.formDialog(null,'solr',{dialogname:'reIndex',submitname:'submitReIndex',submitform:true},null)"><span>Reindex</span></li>	          	          

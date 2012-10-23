@@ -2,6 +2,8 @@ package org.workflow4people
 
 import java.util.Date;
 
+import org.apache.solr.common.SolrInputDocument;
+
 class Task {
 	static transients = ["noMessage"]
    	//static belongsTo=[workflow:Workflow]
@@ -119,6 +121,45 @@ class Task {
 		}
 		return true
 		
+	}
+	
+	
+	SolrInputDocument getSolrInputDocument() {
+		SolrInputDocument sid = new SolrInputDocument()
+		sid.addField("id",this.id.toString())
+		sid.addField("description",description)
+		sid.addField("priority",priority)
+		sid.addField("dateCreated",lastUpdated)		
+		sid.addField("lastUpdated",lastUpdated)
+		sid.addField("cssClass",cssClass)
+		sid.addField("taskStatus",taskStatus)
+		sid.addField("statusUser",statusUser)
+		sid.addField("assignee",assignee?.username)
+		
+		
+		sid.addField("dueDate",dueDate)
+		sid.addField("completionDate",completionDate)
+		
+		sid.addField("workflow",workflow?.id)
+		
+		sid.addField("transitions",transitions)
+		
+		
+		sid.addField("externalId",externalId)
+		sid.addField("externalWorkflowId",externalWorkflowId)
+		
+		/*
+		candidateGroups.each { cg -> 
+			sid.addField("candidateGroup",cg.authority)
+			
+		}
+		
+		candidateUsers.each { cu ->
+			sid.addField("candidateUser",cu.username)
+			
+		}
+			*/	
+		return sid
 	}
 	
 	

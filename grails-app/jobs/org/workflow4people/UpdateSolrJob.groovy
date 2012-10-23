@@ -6,5 +6,6 @@ class UpdateSolrJob {
 
     def execute() {
 		solrService.reIndexByLastUpdated(Document)
+		solrService.reIndexByLastUpdated(Task)
     }
 }

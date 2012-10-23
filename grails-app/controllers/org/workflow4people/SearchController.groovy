@@ -40,77 +40,22 @@ class SearchController {
      * Index page with search form and results
      */
     def index = {
-		redirect(action: "search")
+		redirect(action: "list")
     }
 	
-	ArrayList listProperties=['id','documentDescription','documentType', 'documentStatus', 'dateCreated']
-	
-	
-	def list() {
-		render (view:"/dialog/list", model:[dc:Document, controllerName:"search", request:request, bFilter:true])
+	def searchdocument() {
+		render (view:"/dialog/list", model:[dc:Document, controllerName:"search", request:request, bFilter:true,jsonlist:'jsonsearchdocument'])
 	}
 
-	def jsonlist() {
+	def jsonsearchdocument() {
 		render solrService.jsonsearch(Document, params, request, "*:*",['id','documentType','documentDescription','user','lastUpdated']) as JSON		
 	}
 	
-	
-	
-	def search = {
-		render (view: 'search', model:[dc: ['listProperties': listProperties]])
+	def searchtask() {
+		render (view:"/dialog/list", model:[dc:Task, controllerName:"search", request:request, bFilter:true,jsonlist:'jsonsearchtask',name:'searchtask'])
 	}
-	
-	
-	
-	
-	
-	
-	def xjsonlist = {
-				
-		log.debug "Searching for ${params.q}"
-		
-		def columns=listProperties
-		def aaData=[]
-		def iTotalRecords = 0
-		
-		try {
-			def paramz=[analyzer:"wfp"]
 
-			iTotalRecords = searchableService.countHits(params.q, paramz)
-			
-			paramz.offset = params.iDisplayStart.toInteger()
-			paramz.max    = params.iDisplayLength.toInteger()
-			
-			//Sort order
-			if (params.iSortCol_0 != '0' || params.sSortDir_0 != 'asc') {
-				paramz.sort = columns[new Integer(params.iSortCol_0)]
-				paramz.order = params.sSortDir_0
-			}
-					
-			log.debug "paramz: ${paramz}"
-				
-			def searchResult = searchableService.search(params.q, paramz);
-			
-			searchResult.results.each { doc ->
-				def inLine=[]
-				columns.each {
-					inLine +=doc."${it}".toString()
-				}
-				//Add show action
-				inLine+="""<span class="list-action-button ui-state-default" onclick="formDialog(${doc.id},'document',null, null)">edit</span>"""
-
-				def aaLine=[inLine]
-				aaData+=(aaLine)
-			}
-			
-		} catch (Exception ex) {
-			//
-		}
-		
-		def json = [sEcho:params.sEcho,iTotalRecords:iTotalRecords,iTotalDisplayRecords:iTotalRecords,aaData:aaData]
-		
-		render json as JSON
-		
-	}
-    
+	def jsonsearchtask() {
+		render solrService.jsonsearch(Task, params, request, "*:*",['id','description','dueDate','assignee']) as JSON
+	}	
 }

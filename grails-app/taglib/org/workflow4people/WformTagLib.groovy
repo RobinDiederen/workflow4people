@@ -101,7 +101,7 @@ class WformTagLib {
 	})
 	}
 	}
-	
+	/*
 	def row = { attrs,body ->
 		def object=attrs.object;
 		def domainPropertyName=object.getClass().getName()
@@ -310,9 +310,7 @@ class WformTagLib {
 			}
 		}
 	}
-/*
-	<g:select class="multiselect" name="importSchema" from="${org.workflow4people.Namespace.list(sort:'prefix')}" multiple="yes" optionKey="id" value="${namespaceInstance?.importSchema}" />
-	*/
+
 	def tabs = { attrs,body ->
 	
 		out << """<div id="dialogtabs" class="dialogtabs" > 
@@ -403,7 +401,7 @@ class WformTagLib {
 	
 	}
 	
-	
+	*/
 	
 	
 }
