@@ -1,0 +1,41 @@
+<doc:header>
+  <doc:documentId></doc:documentId>
+  <doc:documentType>${workflowDefinitionInstance.documentType.name}</doc:documentType>
+  <doc:documentStatus>In behandeling</doc:documentStatus>
+  <doc:documentKey></doc:documentKey>
+  <doc:documentDescription></doc:documentDescription>
+  <doc:workflowName>${workflowDefinitionInstance.name}</doc:workflowName>
+  <doc:taskId></doc:taskId>
+  <doc:taskOutcome></doc:taskOutcome>
+  <doc:processInstanceId></doc:processInstanceId>
+  <doc:dateCreated>2010-01-01T00:00:00</doc:dateCreated>
+  <doc:lastUpdated>2010-01-01T00:00:00</doc:lastUpdated>
+  <doc:completionDate>2010-01-01T00:00:00</doc:completionDate>
+  <doc:processingDays>0</doc:processingDays>
+  <doc:user>
+    <doc:name>*{username}</doc:name>
+    <doc:displayName>*{realname}</doc:displayName>
+    <doc:email>*{email}</doc:email>
+  </doc:user>
+  <doc:onbehalfof></doc:onbehalfof>
+  <doc:group></doc:group>
+  <doc:comments></doc:comments>
+  <doc:forms></doc:forms>
+  <doc:files></doc:files>
+  <doc:cmis>
+  	<doc:folderObjectId></doc:folderObjectId>
+  	<doc:folderUrl></doc:folderUrl>
+  	<doc:path></doc:path>
+  </doc:cmis>
+  <doc:task>
+  	<doc:id></doc:id>
+  	<doc:name></doc:name>
+  	<doc:description></doc:description>
+  	<doc:outcome></doc:outcome>
+  	<doc:dueDate></doc:dueDate>
+  	<doc:priority></doc:priority>
+  	<doc:assignee></doc:assignee>
+  	<doc:status></doc:status>
+  	<doc:statusUser></doc:statusUser>
+  </doc:task>
+</doc:header>

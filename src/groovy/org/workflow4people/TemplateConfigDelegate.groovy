@@ -120,7 +120,8 @@ class TemplateConfigDelegate
 	  current=0
 	  total=workflowDefinition.form.size()
 	  log.debug "The total is ${total}"
-	  workflowDefinition.form.each { form ->
+	  Form.findAllByWorkflow(workflowDefinition,[sort:'name',order:'asc']).each { form ->
+	  //workflowDefinition.form.each { form ->
   	  	msg "Processing form ${form.name} ..."
   		closure.formName=form.name
   		closure.form=form
@@ -136,7 +137,7 @@ class TemplateConfigDelegate
 	  msg "Processing fieldTypes ..."
 	  current=0
 	  total=FieldType.count()
-	  FieldType.findAll().each { fieldType ->	  
+	  FieldType.findAll([sort:'name',order:'asc']).each { fieldType ->	  
   	  	msg "- Processing fieldType ${fieldType.name}"
   		closure.fieldTypeName=fieldType.name
   		closure.fieldType=fieldType

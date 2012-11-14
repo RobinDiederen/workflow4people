@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process  key="${workflow.name}" name="${workflow.name}" description="${workflow.description}" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="471,36,48,48" name="start">
+   </start>
+   
+   <g:each in="${org.workflow4people.Form.findAllByWorkflow(workflow,[sort:name,order:asc])}" status="i" var="form" >
+   <task candidate-groups="CLR" duedate="3 business days" g="445,${150+i*150},100,80" name="${form.name}" form="${form.name}">
+   <description>${form.title}</description>
+   </task>
+   </g:each>
+   
+   <end g="471,${150+org.workflow4people.Form.countByWorkflow(workflow)*150},48,48" name="end"/>
+   
+   
+</process>
