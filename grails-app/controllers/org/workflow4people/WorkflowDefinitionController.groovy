@@ -54,7 +54,7 @@ class WorkflowDefinitionController {
 
 	def list = {
 	
-    	render (view:'/datatable/list', model:[dc:WorkflowDefinition,controllerName:'workflowDefinition',request:request])
+    	render (view:'/dialog/list', model:[dc:WorkflowDefinition,controllerName:'workflowDefinition',request:request])
 	}
 	    
 	def jsonlist = {

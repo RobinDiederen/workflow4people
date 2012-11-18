@@ -38,7 +38,7 @@ class WorkflowPermissionController {
 
     def list = {
     	
-    	render (view:'/datatable/list', model:[dc:WorkflowPermission,controllerName:'workflowPermission',request:request])
+    	render (view:'/dialog/list', model:[dc:WorkflowPermission,controllerName:'workflowPermission',request:request])
 	}
 	    
 	def jsonlist = {

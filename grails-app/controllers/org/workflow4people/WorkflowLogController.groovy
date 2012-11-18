@@ -21,7 +21,7 @@ import grails.plugins.springsecurity.Secured
 	    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
 		def list = {
-			render (view:'/datatable/list', model:[dc:WorkflowLog,controllerName:'workflowLog',request:request])
+			render (view:'/dialog/list', model:[dc:WorkflowLog,controllerName:'workflowLog',request:request])
 		}
 			
 		def jsonlist = {

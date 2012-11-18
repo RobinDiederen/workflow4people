@@ -45,17 +45,17 @@ class DocumentController {
 	}
 
 	def jsonlist() {
-		render solrService.jsonsearch(Document, params, request, "*:*",['id','documentDescription','documentType','user','lastUpdated']) as JSON
+		render solrService.jsonsearch(Document, params, request, "*:*",['id','documentDescription','documentType','dateCreated','lastUpdated']) as JSON
 	}
 /*
     def list = {    	
     	render (view:'/dialog/list', model:[dc:Document,controllerName:'document',request:request])
     }
-    
-    def jsonlist = {
+    */
+    def xjsonlist = {
     	render listService.jsonlist(Document,params,request) as JSON	
     }
-*/
+
 	def dialog = { return dialogService.edit(Document,params) }
 	
 	def submitdialog = { render dialogService.submit(Document,params) as JSON }

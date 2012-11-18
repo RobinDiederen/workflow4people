@@ -130,7 +130,7 @@ class SolrService {
 		if (!q || q.length()<1) {
 			list=[numFound:0,results:[]]
 		} else {
-			list= search(dc,prepareQuery(q,standardFilter,standardBoost),params)
+			list= search(dc,prepareQuery(dc,q,standardFilter,standardBoost),params)
 		}
 		return list		
 	}
@@ -142,7 +142,7 @@ class SolrService {
 			list=[numFound:0,results:[]]
 		} else {
 			if (filter && filter.length()>0) {
-				list= search(dc,"(${q}) AND (${prepareQuery(filter,false,false)})",params)
+				list= search(dc,"(${q}) AND (${prepareQuery(dc,filter,false,false)})",params)
 			} else {
 				list= search(dc,q,params)
 			}
@@ -194,7 +194,8 @@ class SolrService {
 
 		def aaData=[]
 			documentList.each { doc ->
-				//def inLine=[DT_RowId:doc.isbn,0:doc.isbn,1:doc.author,2:doc.title,3:bookAvailability(doc.bookCode),4:sprintf("%.2f",doc.standardPrice)]
+
+				//def inLine=[DT_RowId:doc.id]
 				def inLine=[:]
 				def i=0
 				columns.each {

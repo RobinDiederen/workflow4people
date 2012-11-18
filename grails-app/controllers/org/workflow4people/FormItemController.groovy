@@ -37,7 +37,7 @@ class FormItemController {
     static allowedMethods = [save: "POST", update: "POST"]
 
     def list = {
-		render (view:'/datatable/list', model:[dc:FormItem,controllerName:'formItem',request:request])
+		render (view:'/dialog/list', model:[dc:FormItem,controllerName:'formItem',request:request])
 	}
 	
 	def jsonlist = {

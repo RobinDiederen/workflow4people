@@ -295,9 +295,9 @@ class Field {
 	def getNamespacePrefix() {
 			def thePrefix=null
 			def f=this
-			log.debug "getting namesp"
+			//log.debug "getting namesp"
 			while (thePrefix==null && f.parent!=null && f.parent!=f) {
-				log.debug "f=${f}"				
+				//log.debug "f=${f}"				
 				f=f.parent
 				if (f.fieldType.namespace) {
 					thePrefix=f.fieldType.namespace.prefix

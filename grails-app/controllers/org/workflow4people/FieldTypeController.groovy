@@ -39,7 +39,7 @@ class FieldTypeController {
 
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:FieldType,controllerName:'fieldType',request:request])
+		render (view:'/dialog/list', model:[dc:FieldType,controllerName:'fieldType',request:request])
 	}
 	
 	def jsonlist = {

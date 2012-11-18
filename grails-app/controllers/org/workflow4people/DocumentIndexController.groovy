@@ -40,7 +40,7 @@ class DocumentIndexController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
                              
     def list = {    	
-    	render (view:'/datatable/list', model:[dc:DocumentIndex,controllerName:'documentIndex',request:request])
+    	render (view:'/dialog/list', model:[dc:DocumentIndex,controllerName:'documentIndex',request:request])
     }
     
     def jsonlist = {

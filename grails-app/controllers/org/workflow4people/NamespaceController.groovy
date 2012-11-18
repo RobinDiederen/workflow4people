@@ -37,7 +37,7 @@ class NamespaceController {
 
 	def list = {
     	
-    	render (view:'/datatable/list', model:[dc:Namespace,controllerName:'namespace',request:request])
+    	render (view:'/dialog/list', model:[dc:Namespace,controllerName:'namespace',request:request])
     }
     
     def jsonlist = {

@@ -4,8 +4,9 @@
         <meta name="layout" content="main" />
 		<jqui:resources theme="smoothness" />
         <title><g:message code="${controllerName}.list.title" default="${controllerName}.list.title" /></title>
-        <jq:jquery>
         
+        <r:script>
+              $(function() {
         //Create Id for the table
         var tableId="detailTable_" + "${dc.getName().replace(".","_").replace("class ","")}";
 
@@ -24,7 +25,8 @@
 		} );
 	
 		$("div.datatable div.fg-toolbar div.dataTables_length").prepend('<span class="list-toolbar-button ui-widget-content ui-state-default"><span onclick="formDialog(null,\'${controllerName}\',{ refresh : \''+tableId+'\'}, null)">New</span></span>&nbsp;');
-        </jq:jquery>       
+        });
+        </r:script>       
     </head>
     
     <body>

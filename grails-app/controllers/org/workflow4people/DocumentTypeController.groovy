@@ -40,7 +40,7 @@ class DocumentTypeController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def list = {    	
-    	render (view:'/datatable/list', model:[dc:DocumentType,controllerName:'documentType',request:request])
+    	render (view:'/dialog/list', model:[dc:DocumentType,controllerName:'documentType',request:request])
     }
     
     def jsonlist = {

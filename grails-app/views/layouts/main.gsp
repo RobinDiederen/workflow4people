@@ -5,138 +5,17 @@
     <head>
     	<!-- This is main.gsp in wfp -->
         <title><g:layoutTitle default="workflow4people" /></title>
-                
-        <%-- css from used modules --%>
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui.altselect.css',plugin:'wfp')}" />
-<%--        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'awesome-buttons.css',plugin:'wfp')}" />--%>
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery.cluetip.css',plugin:'wfp')}" />
-    	<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'datatables.css',plugin:'wfp')}" />
-	
-        <%-- Workflow4people style --%>
-		<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'workflow4people.css',plugin:'wfp')}" />	
-	
-		<%-- Theme style --%>
-		<link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'roller-theme.css',plugin:'wfp')}" />
-        <link rel="stylesheet" type="text/css" href="${resource(dir:'css/theme',file:'theme.css',plugin:'wfp')}" />
-                      
-        <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico',plugin:'wfp')}" type="image/x-icon" />
-        
-        
-        
-        <%-- we need jquery 1.4.2 for jsTree contextMenu 
-        <g:javascript library="jquery" plugin="jquery" />
-        --%>
-        <dialog:head />
-        <g:javascript src="jquery/jquery-1.7.2.min.js" plugin="dialog" />
-        <%-- <g:javascript src="jquery/jquery-1.4.2.js" plugin="wfp" />--%>
+		<r:require modules="wfp"/>
         <g:javascript>
         	var wfp={};
         	var dataTableHashList = {};
         	wfp.baseUrl="${request.contextPath}";
-        </g:javascript>
-                 
-		<g:javascript src="jquery/jquery-ui-1.8.custom.min.js" plugin="dialog" />
-        <g:javascript src="jquery/jquery.timers-1.2.js"  contextPath="" plugin="wfp" />
-		<g:javascript src="jquery/jquery.cluetip-patched.js"  plugin="dialog" />
-        
-        		<g:javascript src="jquery/jquery.dataTables.js"  plugin='dialog'/>
-		<g:javascript src="jquery/jquery.dataTables.rowReordering.js"  plugin='dialog'/>
-		<g:javascript src="jquery/jquery.ui.altselect.js"  plugin='dialog'/>
-        
-        <g:javascript src="jquery/localisation/jquery.localisation-min.js"  contextPath="" plugin="wfp" />
-        
-        <g:javascript src="workflow4people.js"  contextPath="" plugin="wfp" />
-        
-        <jq:jquery>
-			<%-- NEW Look buttons--%>
-			$(".awesome").removeClass("small awesome blue button").button();
-            
-            $(".step").removeClass("small awesome blue button").button();
-            $(".currentStep").removeClass("small awesome red button").button();
-            $(".nextLink").removeClass("small awesome blue button").button();
-            $(".prevLink").removeClass("small awesome blue button").button();
-            
-            $("a.list").removeClass("small awesome blue button").button();
-            $("a.create").removeClass("small awesome blue button").button();
-            $("input.edit").removeClass("small awesome blue button").button();
-            $("input.save").removeClass("small awesome blue button").button();
-            $("input.delete").removeClass("small awesome red button").button();
-            $("a.process").removeClass("small awesome blue button").button();     
-                   
-        	<%-- Helper for the left menu, when clicking a li the enclosed a's href  will be called --%>
-			$("div.wf4p-menu ul ul li a").each(function (index) {
-				var curMatch = $(this);
-				curMatch.parent().click(function(){
-					document.location = curMatch[0].href;
-				});
-			});
-			
-			<%-- Hide jBpm menu if not used	--%>
-			var pathName = window.location.pathname;
-			if (pathName.split('/')[2].substring(0, 4) == "wf4p") {
-				$("#jbpmMenuItems").toggleClass("hideElement");
-			}
-			$("#jbpmMenu").click(function(){
-				$("#jbpmMenuItems").toggleClass("hideElement");
-			});
-			          	
-         	// Initialize date picker input elements
-         	$(".datepicker").datepicker({ dateFormat: "yyyy-MM-dd'T'HH:mm:ss" , changeMonth: true, changeYear:true});
-          	
-          	$("a.confirm").live("click",function(){
-          	return confirm('Are you sure?')
-          	});
-          	
-			$(".help").cluetip({splitTitle: '|'});
-			
-			// Sortable lists
-			$(".sortable").sortable({
-			 deactivate: function(event, ui) { 			  
-			   var positions =ui.sender.sortable('toArray');			   			   
-			   $.post("/workflow4people/"+this.id+"/sort",{'positions':positions})
-			   }
-			
-			});
-          	
-          	
-        </jq:jquery>
-        
-     		<g:javascript src="fileuploader.js"  plugin='dialog'/>
-		<g:javascript src="dialog.js"  plugin="dialog" />
-		<g:javascript src="tiny_mce/tiny_mce.js"  plugin="dialog" />
-		<g:javascript src="tiny_mce/jquery.tinymce.js"  plugin="dialog" />    
-		<g:javascript src="dialog.tinymce.js"  plugin="dialog" />
-		
-		<g:javascript src="ckeditor/ckeditor.js"  plugin="dialog" />
-    	<g:javascript src="dialog.ckeditor.js"  plugin="dialog" />
-    
-		<!--  CodeMirror -->
-    	<g:javascript src="codemirror/lib/codemirror.js"  plugin="dialog" />
-    	<%--  <g:javascript src="codemirror/lib/util/searchcursor.js"  plugin="dialog" /> --%>
-    	
-    	
-    	<link rel="stylesheet" href="${resource(dir:'js/codemirror/lib',file:'codemirror.css',plugin:'dialog')}" />
-    	
-    	
-    	<!-- CodeMirror autocomplete -->    	    
-
-    	<g:javascript src="codemirror/lib/util/closetag.js"  plugin="dialog" />
-    	
-    	<g:javascript src="codemirror/mode/xml/xml.js"  plugin="dialog" />
-    	<g:javascript src="codemirror/mode/javascript/javascript.js"  plugin="dialog" />
-    	<g:javascript src="codemirror/mode/css/css.js"  plugin="dialog" />
-    	<g:javascript src="codemirror/mode/htmlmixed/htmlmixed.js"  plugin="dialog" />
-		
-		<link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'dialog.codemirror.css',plugin:'dialog')}" />
-		
-    	<g:javascript src="dialog.codemirror.js"  plugin="dialog" />
-    	
-    	<!--  End CodeMirror includes -->
-        
-		<g:layoutHead />
+        </g:javascript>        
+        <g:layoutHead />
+		<r:layoutResources/>		
+		<dialog:head />       
 	</head>
-    <body>
-    
+    <body>    
      <div id="main-toolbar" >
     	<span id="menu-toolbar">
     		<a href="/workflow4people/" title="Home|Go to the home screen" class="action home help" >&nbsp;</a>
@@ -247,6 +126,7 @@
 	    </div>
 
     	 <g:layoutBody />
+    	 <r:layoutResources/>
     	 	    </div>
     </body>	
 </html>

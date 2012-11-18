@@ -38,7 +38,7 @@ class HolidayController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def list = {
-		render (view:'/datatable/list', model:[dc:Holiday,controllerName:'holiday',request:request])
+		render (view:'/dialog/list', model:[dc:Holiday,controllerName:'holiday',request:request])
 	}
 	
 	def jsonlist = {

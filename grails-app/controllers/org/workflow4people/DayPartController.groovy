@@ -42,7 +42,7 @@ class DayPartController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:DayPart,controllerName:'dayPart',request:request])
+		render (view:'/dialog/list', model:[dc:DayPart,controllerName:'dayPart',request:request])
 	}
 	
 	def jsonlist = {

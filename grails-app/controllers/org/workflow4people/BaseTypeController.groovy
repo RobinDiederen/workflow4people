@@ -41,7 +41,7 @@ class BaseTypeController {
     // the submitdialog and delete actions only accept POST requests
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
-	def list = { render (view:'/datatable/list', model:[dc:BaseType,controllerName:'baseType',request:request]) }
+	def list = { render (view:'/dialog/list', model:[dc:BaseType,controllerName:'baseType',request:request]) }
 	
 	def jsonlist = { render listService.jsonlist(BaseType,params,request) as JSON }
 	

@@ -41,7 +41,7 @@ class MinerQueryController {
 	
 	def list = {
     	
-    	render (view:'/datatable/list', model:[dc:MinerQuery,controllerName:'minerQuery',request:request])
+    	render (view:'/dialog/list', model:[dc:MinerQuery,controllerName:'minerQuery',request:request])
     }
     
     def jsonlist = {

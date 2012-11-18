@@ -48,7 +48,7 @@ class FieldListController {
 //    }
 
 	def list = {
-		render (view:'/datatable/list', model:[dc:FieldList,controllerName:'fieldList',request:request])
+		render (view:'/dialog/list', model:[dc:FieldList,controllerName:'fieldList',request:request])
 	}
 	
 	def jsonlist = {

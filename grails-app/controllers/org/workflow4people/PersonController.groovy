@@ -42,7 +42,7 @@ class PersonController {
     }
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:Person,controllerName:'person',request:request,bFilter: true])
+		render (view:'/dialog/list', model:[dc:Person,controllerName:'person',request:request,bFilter: true])
 	}
 	
 	def jsonlist = {

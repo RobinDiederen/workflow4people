@@ -37,7 +37,7 @@ class FormController {
     static allowedMethods = [submitdialog: "POST", delete: "POST"]
 
     def list = {
-		render (view:'/datatable/list', model:[dc:Form,controllerName:'form',request:request])
+		render (view:'/dialog/list', model:[dc:Form,controllerName:'form',request:request])
 	}
 	
 	def jsonlist = {

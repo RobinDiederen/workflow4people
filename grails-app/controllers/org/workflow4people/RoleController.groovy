@@ -44,7 +44,7 @@ class RoleController {
     //}
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:Role,controllerName:'role',request:request])
+		render (view:'/dialog/list', model:[dc:Role,controllerName:'role',request:request])
 	}
 		
 	def jsonlist = {

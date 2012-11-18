@@ -28,13 +28,14 @@
 */
 </script>
 
-        <jq:jquery>
+        <r:script>
+        jQuery(function() {
         $( "#login" ).show( "slide", function() {
         $("#username").focus();
         }
         );
-                
-        </jq:jquery>
+		});                
+        </r:script>
 
 
 	</head>

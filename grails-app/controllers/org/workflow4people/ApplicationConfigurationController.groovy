@@ -41,7 +41,7 @@ class ApplicationConfigurationController {
 
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:ApplicationConfiguration,controllerName:'applicationConfiguration',request:request])
+		render (view:'/dialog/list', model:[dc:ApplicationConfiguration,controllerName:'applicationConfiguration',request:request])
 	}
 		
 	def jsonlist = {

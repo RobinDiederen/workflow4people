@@ -94,7 +94,7 @@ public class TemplateService implements  ApplicationContextAware {
 
 	String runSnippetTemplate(def object,def snippetType,def extraModel=[:]) {		
 		String className=object.class.name.substring(object.class.name.lastIndexOf('.')+1)
-		log.debug "running snippet for ${className}"
+		log.debug "running snippet for ${className} ${object.toString()}"
     	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue
     	
     	def baseType
@@ -186,6 +186,7 @@ public class TemplateService implements  ApplicationContextAware {
   	  			templateConfigDelegate.current=100	  	       
   	  			templateConfigDelegate.completed=true
   	  		} catch (Exception e) {
+				//String s=getStackTrace(e)
   	  			templateConfigDelegate.msg "An error has occurred: ${e.message}"
   	  			templateConfigDelegate.mlog e.message
   	  		}
@@ -270,7 +271,12 @@ public class TemplateService implements  ApplicationContextAware {
 		 return xhtmlByteOutStream.toString()
 		 
 	}
-	
+	 String getStackTrace(Exception e) {
+		 ByteArrayOutputStream os = new ByteArrayOutputStream();
+		 PrintStream ps = new PrintStream(os);
+		 e.printStackTrace(ps)
+		 return os.toString("UTF8");
+	 }
     
 
 }

@@ -3,20 +3,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Data model editor</title>
-                
-        <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'jquery.treeview.css')}" />
-        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'jquery.jstree.css')}" />        
-        <link rel="stylesheet" href="${createLinkTo(dir:'css/dme',file:'editor.css')}" />
-        
-		<g:javascript src="jquery/jquery.cookie.js" contextPath="${pluginContextPath}" />
-		<g:javascript src="jquery/jquery.hotkeys.js" contextPath="${pluginContextPath}" />	
-		<g:javascript src="jquery/jquery.jstree.js" contextPath="${pluginContextPath}" />
-		<g:javascript src="dme/editor.js" contextPath="${pluginContextPath}" />
-		
-		<g:javascript>
+  		<r:script>
+			wfp = {};
 		   	wfp.dme = {};
         	wfp.dme.urlSignavio = "${urlSignavio}";
-        </g:javascript>
+        </r:script>
+		<r:require modules="dme" />
 				
     </head>
     <body>

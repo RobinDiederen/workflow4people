@@ -49,7 +49,7 @@ class AuthorityController {
     //}
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:Authority,controllerName:'authority',request:request,bFilter: true])
+		render (view:'/dialog/list', model:[dc:Authority,controllerName:'authority',request:request,bFilter: true])
 	}
 	
 	def jsonlist = {
