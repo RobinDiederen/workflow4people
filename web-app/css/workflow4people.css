@@ -41,7 +41,7 @@ ul {
 
 /* NAVIGATION MENU */
 
-.nav {
+.xnav {
     background: #fff url(theme/images/skin/shadow.jpg) bottom repeat-x;
     border: 1px solid #ccc;
     border-style: solid none solid none;	
@@ -343,7 +343,7 @@ div.body {width:auto;}
 
 .home { background-image: url("theme/icons/actions/16/gohome.png" ) !important; background-position: 0px 0px !important; }
 .logout { background-image: url("theme/icons/actions/16/gnome-logout.png" ) !important; background-position: 0px 0px !important; }
-#main-toolbar {border:1px solid #888;background-color:#888;height:20px;margin-bottom:10px;}
+x#main-toolbar {border:1px solid #888;background-color:#888;height:20px;margin-bottom:10px;}
 /*.page-body {width:100%;float:left;}*/
 div.datatable {width:100%;float:left;}
 

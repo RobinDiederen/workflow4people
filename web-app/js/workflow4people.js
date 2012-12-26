@@ -245,7 +245,7 @@ $(function() {
   	return confirm('Are you sure?')
   	});
   	
-	$(".help").cluetip({splitTitle: '|'});
+	//$(".help").cluetip({splitTitle: '|'});
 	
 	/* Sortable lists */
 	$(".sortable").sortable({

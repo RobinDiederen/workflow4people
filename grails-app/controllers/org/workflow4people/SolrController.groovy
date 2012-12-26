@@ -25,7 +25,7 @@ class SolrController {
 	// Goed startpunt: 9790100000000
 	def submitReIndex = { ReIndexDialog dialog ->
 		runAsync {
-			solrService.reIndexAll(dialog.startIsbn)
+			solrService.reIndexAll(dialog.startId)
 		}
 		//def res =[result:['success':true,message:"Reindex vanaf ISBN ${dialog.startIsbn} van maximaal ${dialog.limit} boeken gestart"]]
 

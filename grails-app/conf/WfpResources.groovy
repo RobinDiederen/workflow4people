@@ -1,9 +1,9 @@
 modules = {
 	wfp {
-		dependsOn 'dialog,dialog,dialog-cluetip,dialog-dataTables,dialog-altselect,dialog-codemirror'
+		dependsOn 'dialog,dialog,dialog-dataTables,dialog-altselect,dialog-codemirror,bootstrap-responsive-css,bootstrap-tooltip,bootstrap-popover,bootstrap-modal,dialog-bootstrap,dialog-fileuploader'		
 		
-		resource url:'/css/workflow4people.css'
-		resource url:'/css/theme/roller-theme.css'
+		//resource url:'/css/workflow4people.css'
+		//resource url:'/css/theme/roller-theme.css'
 		resource url:'/css/theme/theme.css'
 		resource url:'/images/favicon.ico'
 		
