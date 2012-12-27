@@ -21,7 +21,7 @@
               
                 <div class="list" >
 
-				    <table>
+				    <table class="table table-striped table-bordered">
 				      <thead>
 				        <tr>
 				          <th>Task</th>
@@ -48,7 +48,7 @@
 				          <td>${taskInstance.createTime}</td> 
 				          <td>${taskInstance.duedate}</td>
 				          <td>
-			                <g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">show&nbsp;&raquo;</g:link>
+			                <g:link class="btn btn-small" controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">show&nbsp;&raquo;</g:link>
 				          </td>
 				        </tr>
 				        </g:each>

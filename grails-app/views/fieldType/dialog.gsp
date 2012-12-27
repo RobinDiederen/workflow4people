@@ -1,4 +1,4 @@
-<dialog:form title="Field type" object="${fieldTypeInstance}">
+<dialog:form title="Field type" object="${fieldTypeInstance}" height="670px">
 	<dialog:tabs names="Details,Text,List,Advanced" object="${fieldTypeInstance}">		
 		<dialog:tab name="Details" object="${fieldTypeInstance}">		                            
 	        <dialog:textField object="${fieldTypeInstance}" propertyName="id" mode="show" />                                                      

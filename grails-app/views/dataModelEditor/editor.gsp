@@ -16,10 +16,10 @@
 	    	<div class="editor dialog" style="position:relative;width:auto;">
 	    	
 		        <%-- Data model tree --%>
-		        <div id="modelPane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
-		        	<div class="ui-widget-header ui-corner-all ui-helper-clearfix">Data model</div>
+		        <div id="modelPane" class="treepane" style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
+		        	<div class="xui-widget-header xui-corner-all xui-helper-clearfix">Data model</div>
 		        	<div class="tree-toolbar">
-						<g:link onclick="formDialog(null,'dataModelEditor',{ dialogname: 'editFieldType', submitname: 'submitFieldType'}, null);return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</g:link>
+						<a href="#" onclick="dialog.formDialog(null,'dataModelEditor',{ dialogname: 'editFieldType', submitname: 'submitFieldType'}, null);return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</a>
 					</div>
 		        	<div id="modelTree" style="overflow:auto;" class="dmeTree" >
 		        	<ul id="tree" class="filetree treeview" />    
@@ -27,10 +27,10 @@
 				</div>
 				
 				<%-- workflow tree --%>	
-				<div id="workflowPane" class="treepane ui-widget ui-widget-content ui-corner-all" style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
-					<div class="ui-widget-header ui-corner-all ui-helper-clearfix">Workflows</div>
+				<div id="workflowPane" class="treepane " style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
+					<div class="">Workflows</div>
 					<div class="tree-toolbar">
-						<g:link onclick="formDialog(null,'dataModelEditor',{ dialogname: 'editWorkflowDefinition', submitname: 'submitWorkflowDefinition'}, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</g:link>
+						<a href="#" onclick="dialog.formDialog(null,'dataModelEditor',{ dialogname: 'editWorkflowDefinition', submitname: 'submitWorkflowDefinition'}, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</a>
 					</div>
 					<div id="workflowTree" style="overflow:auto;" class="dmeTree" >
 						<ul id="workflowList" class="filetree treeview" />
@@ -38,8 +38,8 @@
 				</div>
 			
 				<%-- logging pane --%>	
-				<div id="loggingPane" class="treepane ui-widget ui-widget-content ui-corner-all ui-helper-clearfix" style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
-					<div class="ui-widget-header">Log</div>   
+				<div id="loggingPane" class="treepane" style="position:relative;width:30%;border:1px solid #DDD;float:left;background-color:white;overflow:hidden;">
+					<div class="">Log</div>   
 		            <div id="log" style="overflow:auto;">...</div>
 				</div>			
 			

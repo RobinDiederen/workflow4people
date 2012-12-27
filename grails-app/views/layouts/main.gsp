@@ -27,7 +27,7 @@
 			   		        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 		              			<dialog:dropdown code="wfp.workflow">
 									<dialog:menuitem controller="workflowDefinition" action="list" icon="icon-list"/>
-			              			<dialog:menuitem controller="task" action="list" icon="icon-list"/>
+			              			<dialog:menuitem controller="task" action="list" icon="icon-tasks"/>
 			              			<dialog:menuitem controller="taskStatus" action="list" icon="icon-list"/>
 								</dialog:dropdown>														
 		              			<dialog:dropdown code="wfp.engines">
@@ -44,26 +44,27 @@
 	              			</sec:ifAnyGranted>	
 	            			<sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	            				<dialog:dropdown code="wfp.xmldocuments">
-	            					<dialog:menuitem controller="document" action="list" icon="icon-list"/>
-	            					<dialog:menuitem controller="documentType" action="list" icon="icon-list"/>
+	            					<dialog:menuitem controller="document" action="list" icon="icon-file"/>
+	            					<dialog:menuitem controller="documentType" action="list" icon="icon-file"/>
 	            					<dialog:menuitem controller="documentIndexField" action="list" icon="icon-list"/>
-	            					<dialog:menuitem controller="minerQuery" action="list" icon="icon-list"/>
-	            					<dialog:menuitem controller="namespace" action="list" icon="icon-list"/>
+	            					<dialog:menuitem controller="minerQuery" action="list" icon="icon-cog"/>
+	            					<dialog:menuitem controller="namespace" action="list" icon="icon-folder-close"/>
             					</dialog:dropdown>
             				</sec:ifAnyGranted>
 							<sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
             				 	<dialog:dropdown code="wfp.search">
-            				 		<dialog:menuitem controller="search" action="searchdocument" icon="icon-list"/>
-            				 		<dialog:menuitem controller="search" action="searchtask" icon="icon-list"/>
+            				 		<dialog:menuitem controller="search" action="searchdocument" icon="icon-file"/>
+            				 		<dialog:menuitem controller="search" action="searchtask" icon="icon-tasks"/>
             				 		<dialog:menuitem controller="index" action="index" icon="icon-list"/>
-            				 		<dialog:menuitem controller="solr" action="status" icon="icon-list"/>
-            				 		<dialog:menuitem controller="solr" action="reIndex" icon="icon-list" onclick="dialog.formDialog(null,'solr',{dialogname:'reIndex',submitname:'submitReIndex',submitform:true},null)" />
+            				 		<dialog:menuitem controller="solr" action="overview" icon="icon-asterisk"/>
+            				 		<dialog:menuitem controller="solr" action="status" icon="icon-asterisk"/>
+            				 		<dialog:menuitem controller="solr" action="reIndex" icon="icon-asterisk" onclick="dialog.formDialog(null,'solr',{dialogname:'reIndex',submitname:'submitReIndex',submitform:true},null)" />
            				 		</dialog:dropdown>
 					        </sec:ifAnyGranted>
 		        	        <sec:ifAnyGranted roles="ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 			        	        <dialog:dropdown code="wfp.forms">
 			        	        	<dialog:menuitem controller="form" action="list" icon="icon-list"/>
-        	        	 	        <dialog:menuitem controller="dataModelEditor" action="list" icon="icon-list"/>
+        	        	 	        <dialog:menuitem controller="dataModelEditor" action="index" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="fieldList" action="list" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="fieldType" action="list" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="baseType" action="list" icon="icon-list"/>
@@ -71,21 +72,21 @@
 							</sec:ifAnyGranted>
 							<sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 								<dialog:dropdown code="wfp.calendar">
-									<dialog:menuitem controller="dayPart" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="holiday" action="list" icon="icon-list"/>
+									<dialog:menuitem controller="dayPart" action="list" icon="icon-calendar"/>
+									<dialog:menuitem controller="holiday" action="list" icon="icon-calendar"/>
 								</dialog:dropdown>
 						  	</sec:ifAnyGranted>
 						  	
 			  		        <sec:ifAnyGranted roles="ROLE_WF4P_USER_ADMIN,ROLE_WF4P_ADMIN">
 								<dialog:dropdown code="wfp.admin">
-									<dialog:menuitem controller="person" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="authority" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="role" action="list" icon="icon-list"/>
+									<dialog:menuitem controller="person" action="list" icon="icon-user"/>
+									<dialog:menuitem controller="authority" action="list" icon="icon-user"/>
+									<dialog:menuitem controller="role" action="list" icon="icon-user"/>
 									<dialog:menuitem controller="action" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="feature" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="workflowEngine" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="applicationConfiguration" action="list" icon="icon-list"/>
-									<dialog:menuitem controller="status" action="status" icon="icon-list"/>
+									<dialog:menuitem controller="feature" action="list" icon="icon-star"/>
+									<dialog:menuitem controller="workflowEngine" action="list" icon="icon-cog"/>
+									<dialog:menuitem controller="applicationConfiguration" action="list" icon="icon-wrench"/>
+									<dialog:menuitem controller="status" action="status" icon="icon-info-sign"/>
 								</dialog:dropdown>							
 	        				</sec:ifAnyGranted>
 							

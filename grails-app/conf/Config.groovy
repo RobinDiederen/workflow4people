@@ -58,7 +58,8 @@ log4j = {
     warn 'org.springframework.security'
     //debug 'grails.app.controller.org.workflow4people'
     //debug 'grails.app.service.org.workflow4people.services'
-	debug "org.workflow4people","grails.app"
+	warn "grails.app"
+	debug "org.workflow4people"
     
 }
 
@@ -134,3 +135,4 @@ solr {
 	url="http://localhost:8080/solr"
 }
 
+grails.plugins.twitterbootstrap.fixtaglib = true

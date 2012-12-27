@@ -7,13 +7,6 @@
 <body>
 <div class="body">
   
-  <g:if test="${flash.message}">
-    <div class="message">
-    <g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}"/>
-    </div>
-  </g:if>
-   
-  
     <div class="nav">     
     <span class="menuButton">
     Select user: <g:select name="userId" optionKey="${{it.getId()}}" optionValue="${{it.familyName+', '+it.givenName}}" from="${userList}" onChange="location.href='?userId='+this.value" value="${params.userId}"/>
@@ -23,7 +16,7 @@
                 
                 <div class="list" >
 
-				    <table>
+				    <table class="table table-bordered table-striped">
 				      <thead>
 				        <tr>
 				          <th>Task</th>
@@ -50,9 +43,10 @@
 				          <td>${taskInstance.assignee}</td>
 				          <td>${taskInstance.createTime}</td>
 				          <td>${taskInstance.duedate}</td>
-				          <td>
-			                <g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId: taskInstance.id, previousAction: 'userlist']">show&nbsp;&raquo;</g:link>
-			                <g:link class="awesome small blue button" controller="wf4pTask" action="reassign" params="[taskId: taskInstance.id, previousAction: 'userlist']">reassign&nbsp;&raquo;</g:link>
+				          <td><div class="btn-group">
+			                <g:link class="btn btn-small" controller="wf4pTask" action="show" params="[taskId: taskInstance.id, previousAction: 'userlist']">show&nbsp;&raquo;</g:link>
+			                <g:link class="btn btn-small" controller="wf4pTask" action="reassign" params="[taskId: taskInstance.id, previousAction: 'userlist']">reassign&nbsp;&raquo;</g:link>
+			                </div>
 				          </td>
 				        </tr>
 				        </g:each>

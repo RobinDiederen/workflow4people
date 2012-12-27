@@ -6,18 +6,19 @@
     </head>
     <body>        
         <div class="body">            
-            <g:if test="${flash.message}">
-            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
-            </g:if>            
             
-          	<div class="nav">          	          	                      
-   	              <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessInstance',action:'show',params:[processInstanceId:processInstance.id])}">&laquo; Process instance ${processInstance.id}</a></span>
+          	<div class="navbar">
+			<div class="navbar-inner">			
+				<ul class="nav">	        	          	          	                      
+   	              <li><a class="process" href="${createLink(controller:'wf4pProcessInstance',action:'show',params:[processInstanceId:processInstance.id])}">&laquo; Process instance ${processInstance.id}</a></li>
+   	              </ul>
+   	              </div>
 	        </div>
             
            <g:form method="post">
                 <g:hiddenField name="taskId" value="${task?.id}" />                                
                 <div class="dialog">
-                    <table>
+                    <table class="table table-bordered">
                         <tbody>
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="task.id" default="Task id" />:</td>                                
@@ -38,21 +39,21 @@
                 </div>
                  <div class="buttons">
                     <g:if test="${task.assignee}">
-                	<span class="button"><g:actionSubmit class="edit" action="reassign" params="[taskId: task.id, previousAction: 'show']" value="Reassign&nbsp;&raquo;" /></span>
+                	<span class="button"><g:actionSubmit class="btn edit" action="reassign" params="[taskId: task.id, previousAction: 'show']" value="Reassign&nbsp;&raquo;" /></span>
                 	</g:if>
                 </div>
                 
                 
-                <h1>Available process actions</h1>
+                <h4>Available process actions</h4>
                  <div class="buttons">
                 	<g:each in="${taskService.getOutcomes(task.id)}" var="outcome" >
-                	<span class="button"><g:actionSubmit class="edit" action="complete" value="${outcome}" /></span>
+                	<span class="button"><g:actionSubmit class="btn edit" action="complete" value="${outcome}" /></span>
                     </g:each>
                 </div>
                 
-                <h1>Variables</h1>
+                <h4>Variables</h4>
                 <div class="list" >
-				    <table>
+				    <table class="table table-bordered table-striped">
 				      <thead>
 				        <tr>
 				          <th>Name</th>
@@ -65,7 +66,7 @@
 				        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				          <td>${variableName}</td>
 				          <td>${taskService.getVariable(task.id,variableName)}</td>
-				          <td><g:link class="awesome small blue button" controller="wf4pVariable" action="edit" params="${['processInstanceId':processInstance.id,'variableName':variableName]}">edit&nbsp;&raquo;</</g:link></td>			          
+				          <td><g:link class="btn btn-small" controller="wf4pVariable" action="edit" params="${['processInstanceId':processInstance.id,'variableName':variableName]}">edit&nbsp;&raquo;</</g:link></td>			          
 				        </tr>
 				        </g:each>
 				      </tbody>

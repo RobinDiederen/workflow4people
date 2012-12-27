@@ -6,18 +6,18 @@
 </head>
 <body>
   <div class="body">
-  <g:if test="${flash.message}">
-  <div class="message">${flash.message}</div>
-  </g:if>
-  <div class="nav">
-    <g:if test="${params.processDefinitionName}">
-	    <span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo; Latest process definitions</g:link></span>
-    </g:if>
-    <span class="menuButton"><g:link class="awesome small blue button" action="create">Install new process</g:link></span>
-  </div>
-
+  	<div class="navbar">
+			<div class="navbar-inner">			
+				<ul class="nav">	        	
+    				<g:if test="${params.processDefinitionName}">
+	    				<li><g:link class="awesome small blue button" action="list">&laquo; Latest process definitions</g:link></li>
+    				</g:if>
+    				<li><g:link class="awesome small blue button" action="create">Install new process</g:link></li>
+  			</div>
+	</div>
   <div class="list">
-    <table>
+  <h4>Process definitions</h4>
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>Id</th>
@@ -41,8 +41,8 @@
           	</g:else>
           </td>
           <td>${processDefinition.description?.encodeAsHTML()}</td>
-          <td><g:link class="awesome small blue button" action="show" params="[processDefinitionId:processDefinition.id]">instances &nbsp;&raquo;</g:link>
-          	  <g:link class="awesome small blue button" controller="wf4pHistoryProcessInstance" action="list" id="${processDefinition.id}">history &nbsp;&raquo;</g:link>
+          <td><div class="btn-group"><g:link class="btn btn-small" action="show" params="[processDefinitionId:processDefinition.id]">instances &nbsp;&raquo;</g:link>
+          	  <g:link class="btn btn-small" controller="wf4pHistoryProcessInstance" action="list" id="${processDefinition.id}">history &nbsp;&raquo;</g:link></div>
           </td>
         </tr>
         </g:each>

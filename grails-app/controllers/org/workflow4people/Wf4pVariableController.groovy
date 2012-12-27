@@ -53,7 +53,12 @@ class Wf4pVariableController implements InitializingBean{
     
     def save = {
 		log.debug(params)
-		switch (params.variableClassName) {		
+		switch (params.variableClassName) {
+						
+		case 'java.lang.Boolean':
+			Boolean val=params.variableValue=="true"			
+			executionService.setVariable(params.processInstanceId, params.variableName, val)
+			break	
 		
 		case 'java.lang.Byte':			
 			executionService.setVariable(params.processInstanceId, params.variableName, params.variableValue.asType(java.lang.Byte))

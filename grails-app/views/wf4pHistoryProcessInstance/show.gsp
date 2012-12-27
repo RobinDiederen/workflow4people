@@ -14,7 +14,7 @@
            
                 <div class="dialog">
                 
-                    <table>
+                    <table >
                         <tbody>                      
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -38,8 +38,8 @@
                 </div>
                 
         	<h1>Task history</h1>
-        	<div class="list">
-			    <table>
+        	<div>
+			    <table class="table table-striped table-bordered">
 			      <thead>
 			        <tr>
 			          <th>Task Id</th>

@@ -6,7 +6,7 @@
 
 	<title>Solr status</title>
   
-	<script type="text/javascript">
+	<r:script type="text/javascript">
 	$(document).ready(function() {
 		$("#progressbar").progressbar({
 			value: 100
@@ -21,6 +21,7 @@
 				}, {queue: false});
 
 				$("#total").html(p.total);
+				$("#currentItemType").html(p.currentItemType);
 				$("#count").html(p.current);
 				$("#message").html(p.statusMsg);
 				$("#ping").html(p.ping);
@@ -35,34 +36,34 @@
 			});
 		}, 500);
 	});
-	</script>
+	</r:script>
   
 	</head>
 	<body>
 		<div class="body">
-			<div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr table-title">
-				<h1>Solr status</h1>
-			</div>
 			
+				<h2>Solr status</h2>
 
-			<g:if test="${flash.message}">
-				<div class="message">${flash.message}</div>
-			</g:if>
-
-			<div id="progressStatus">  		
-				<table>
+			<div id="progressStatus" class="well">  		
+				<table class="">
 					<tbody>
 						<tr class="prop">                            
 							<td valign="top" class="name">Progress</td>
 							<td valign="top" class="value"><div id="progressbar"></div></td>
 						</tr>
+						
 						<tr class="prop">                            
-							<td valign="top" class="name">Total number of documents</td>
+							<td valign="top" class="name">Item type</td>
+							<td valign="top" class="value" id="currentItemType">[current item type]</td>
+						</tr>
+						
+						<tr class="prop">                            
+							<td valign="top" class="name">Number of items to be indexed</td>
 							<td valign="top" class="value" id="total">[total]</td>
 						</tr>
 						<tr class="prop">                            
-							<td valign="top" class="name">Number of documents indexed</td>
-							<td valign="top" class="value" id="count">[number of books indexed]</td>
+							<td valign="top" class="name">Number of items completed</td>
+							<td valign="top" class="value" id="count">[number of documents indexed]</td>
 						</tr>
 						<tr class="prop">                            
 							<td valign="top" class="name">Number of documents in database</td>

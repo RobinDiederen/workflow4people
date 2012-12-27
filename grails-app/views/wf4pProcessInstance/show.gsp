@@ -12,15 +12,19 @@
   </g:if>
    
   
-  <div class="nav">
+  <div class="navbar">
+			<div class="navbar-inner">			
+				<ul class="nav">	        	
     
-    <span class="menuButton"><a class="process" href="${createLink(controller:'wf4pProcessDefinition',action:'show',params:[processDefinitionId:processInstance.getProcessDefinitionId()])}">&laquo; Process definition ${processInstance.processDefinitionId}</a></span>
-    <span class="menuButton"><a class="create" href="${createLink(controller:'wf4pVariable',action:'create',params:[processInstanceId:processInstance.id])}">New variable</a></span>
+    <li><a class="process" href="${createLink(controller:'wf4pProcessDefinition',action:'show',params:[processDefinitionId:processInstance.getProcessDefinitionId()])}">&laquo; Process definition ${processInstance.processDefinitionId}</a></li>
+    <li class="menuButton"><a class="create" href="${createLink(controller:'wf4pVariable',action:'create',params:[processInstanceId:processInstance.id])}">New variable</a></li>
    
-  </div>  
+  </ul>  
+  </div>
+  </div>
                 <div class="dialog">
                 
-                    <table>
+                    <table class="table table-bordered">
                         <tbody>                      
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -43,9 +47,9 @@
                     </table>
                 </div>
                 
-                <h1>Task history</h1>
+                <h4>Task history</h4>
         	<div class="list">
-			    <table>
+			    <table class="table table-striped table-bordered">
 			      <thead>
 			        <tr>
 			          <th>Task Id</th>
@@ -76,10 +80,10 @@
                 
                 
                 
-                <h1>Tasks</h1>
+                <h4>Tasks</h4>
                 <div class="list" >
 
-				    <table>
+				    <table class="table table-striped table-bordered">
 				      <thead>
 				        <tr>
 				          <th>Task</th>
@@ -103,7 +107,7 @@
 				          <td>${taskInstance.createTime}</td> 
 				          <td>${taskInstance.duedate}</td>
 				          <td>${taskService.getOutcomes(taskInstance.id)}</td>
-				          <td><g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">Details&nbsp;&raquo;</g:link></td>
+				          <td><g:link class="btn btn-small" controller="wf4pTask" action="show" params="[taskId:taskInstance.id]">Details&nbsp;&raquo;</g:link></td>
 				          
 				        </tr>
 				        </g:each>
@@ -111,9 +115,9 @@
 				    </table>
 				</div>
 				
-				<h1>Variables</h1>
+				<h4>Variables</h4>
                 <div class="list" >
-				    <table>
+				    <table class="table table-striped table-bordered">
 				      <thead>
 				        <tr>
 				          <th>Name</th>
@@ -128,7 +132,7 @@
 				          <td>${variableName}</td>
 				          <td>${executionService.getVariable(processInstance.id,variableName)?.class?.name}</td>
 				          <td>${executionService.getVariable(processInstance.id,variableName)}</td>
-				          <td><g:link class="awesome small blue button" controller="wf4pVariable" action="edit" params="${['processInstanceId':processInstance.id,'variableName':variableName]}">edit&nbsp;&raquo;</</g:link></td>				          
+				          <td><g:link class="btn btn-small" controller="wf4pVariable" action="edit" params="${['processInstanceId':processInstance.id,'variableName':variableName]}">edit&nbsp;&raquo;</</g:link></td>				          
 				        </tr>
 				        </g:each>
 				      </tbody>

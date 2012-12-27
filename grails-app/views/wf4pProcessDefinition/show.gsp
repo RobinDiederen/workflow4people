@@ -6,13 +6,17 @@
     </head>
     <body>
 		<div class="body">
-	        <div class="nav">
-	          <span class="menuButton"><g:link class="awesome small blue button" action="list">&laquo; Process definitions</g:link></span>
-	          <span class="menuButton"><a class="awesome small blue button" href="${createLink(action:'newinstance',params:[processName:processDefinition.name,processDefinitionId:processDefinition.id])}">New process instance</a></span>            
+		<div class="navbar">
+			<div class="navbar-inner">			
+				<ul class="nav">	        	
+	          		<li><g:link class="awesome small blue button" action="list">&laquo; Process definitions</g:link></li>
+	          		<li><a class="awesome small blue button" href="${createLink(action:'newinstance',params:[processName:processDefinition.name,processDefinitionId:processDefinition.id])}">New process instance</a></li>            
+	        	</ul>
 	        </div>
+        </div>
             <g:if test="${flash.message}"><div class="message">${flash.message}</div></g:if>
             <div class="dialog">
-                <table>
+                <table class="table table-bordered">
                     <tbody>
                         <tr class="prop">
                             <td valign="top" class="name">Id:</td>                            
@@ -33,9 +37,9 @@
 					</tbody>
 				</table>
         	</div>
-        	<h1>Process Instances</h1>
+        	<h4>Process Instances</h4>
         	<div class="list">
-			    <table>
+			    <table class="table table-striped table-bordered">
 			      <thead>
 			        <tr>
 			          <th>Id</th>
@@ -57,8 +61,10 @@
 			          <td>${instance.findActiveActivityNames()}</td>
 			          
 			
-			 		  <td><g:link class="awesome small blue button" action="show" controller="wf4pProcessInstance" params="[processInstanceId:instance.id]">details&nbsp;&raquo;</g:link>
-			 		  	  <g:link class="awesome small red button" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" controller="wf4pProcessInstance" action="delete" id="${instance.id}">&times;</g:link>			 		  
+			 		  <td><div class="btn-group">
+			 		  		<g:link class="btn btn-small" action="show" controller="wf4pProcessInstance" params="[processInstanceId:instance.id]">details&nbsp;&raquo;</g:link>
+			 		  	  <g:link class="btn btn-small" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" controller="wf4pProcessInstance" action="delete" id="${instance.id}">&times;</g:link>
+			 		  	  </div>			 		  
 			 		  </td>
 			        </tr>
 			        </g:each>

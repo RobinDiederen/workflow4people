@@ -9,20 +9,20 @@
     <body>
         
         <div class="body">            
-            <g:if test="${flash.message}">
-            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
-            </g:if>
             
-            
-            <div class="nav">
-            <span class="menuButton"><g:link class="small awesome blue button" action="show" controller="wf4pProcessInstance" id="${params.processInstanceId}" >&laquo; Process instance ${params.processInstanceId}</g:link></span>
+            <div class="navbar">
+			<div class="navbar-inner">			
+				<ul class="nav">	        	
+            <li><g:link class="small awesome blue button" action="show" controller="wf4pProcessInstance" id="${params.processInstanceId}" >&laquo; Process instance ${params.processInstanceId}</g:link></li>
+            </ul>
+            </div>
             </div>
             
             
             <g:form action="save" method="post" >
             <input type="hidden" name="processInstanceId" value="${params.processInstanceId}" />
                 <div class="dialog">
-                    <table>
+                    <table class="table-bordered">
                         <tbody>                       
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -47,7 +47,7 @@
                                     <label for="fieldList"><g:message code="wf4pVariable.className" default="Class name" />:</label>
                                 </td>
                                 <td valign="top" class="value">
-                                    <g:select name="variableClassName" from="${['java.lang.Byte','java.lang.Character','java.lang.Date','java.lang.Double','java.lang.Float','java.lang.Integer','java.lang.Long','java.lang.Short','java.lang.String']}" value="${variableClassName}"  />
+                                    <g:select name="variableClassName" from="${['java.lang.Boolean','java.lang.Byte','java.lang.Character','java.lang.Date','java.lang.Double','java.lang.Float','java.lang.Integer','java.lang.Long','java.lang.Short','java.lang.String']}" value="${variableClassName}"  />
 
                                 </td>
                             </tr>
@@ -56,7 +56,7 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'create', 'default': 'Save')}" /></span>
+                    <span><g:submitButton name="create" class="save btn" value="${message(code: 'create', 'default': 'Save')}" /></span>
                 </div>
             </g:form>
         </div>

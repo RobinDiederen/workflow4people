@@ -36,6 +36,7 @@ class SolrService {
 		return currentItem;
 	}
 	
+	def currentItemType
 	def failed=0
 	def theTotal=0
 	def ping=0
@@ -45,7 +46,7 @@ class SolrService {
 	String statusMsg = ""
 	
 	def getProgress() {		
-			return [running:running, total:theTotal, current:currentItem, statusMsg:currentMessage,ping:ping,numDocsInDb:numDocsInDb,numDocsInSolr:numDocsInSolr]		
+			return [running:running, total:theTotal, current:currentItem, currentItemType:currentItemType,statusMsg:currentMessage,ping:ping,numDocsInDb:numDocsInDb,numDocsInSolr:numDocsInSolr]		
 		
 	}
 	
@@ -60,6 +61,12 @@ class SolrService {
 		numDocsInDb=dc.count()	
 	}
 	
+	def getStats(dc) {
+		def res=search(dc,"*:*",[max:1])
+		numDocsInSolr=res.numFound
+		numDocsInDb=dc.count()
+		[numDocsInSolr:numDocsInSolr,numDocsInDb:numDocsInDb]
+	}
 
 	def search(dc,q,params=[:]) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
@@ -273,6 +280,7 @@ class SolrService {
 	
 	def reIndexByLastUpdated(dc) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
+		currentItemType=dcName
 		println "Reindex by last updated for ${dcName}"
 		//println "solr tracker running =${running}"
 		ping++
@@ -336,7 +344,7 @@ class SolrService {
 				
 				println "Finished indexing ${items.size()} items from ${items[0].id}"
 			}
-			//println "Finished indexing"
+			println "Finished indexing"
 			running=false
 			lock=false
 		}
@@ -357,7 +365,7 @@ class SolrService {
 			if (!running && !lock) {
 				lock=true
 				running=true				
-				String urlString = grailsApplication.config.solr.url
+				String urlString = grailsApplication.config.solr.url+"/"+dcName
 				//SolrServer solr = new CommonsHttpSolrServer(urlString);
 				int maxbuf=500
 				int maxthreads=50
@@ -378,7 +386,7 @@ class SolrService {
 						def startTime=new Date().time
 						println "Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						currentMessage="Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
-						updateStats()
+						updateStats(dc)
 	
 						GParsPool.withPool { pool ->
 							

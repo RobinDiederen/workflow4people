@@ -22,35 +22,24 @@ class SolrController {
 		[dialog:new ReIndexDialog()]
 	}
 	//
-	// Goed startpunt: 9790100000000
 	def submitReIndex = { ReIndexDialog dialog ->
 		runAsync {
-			solrService.reIndexAll(dialog.startId)
+			if (dialog.itemType=="Document") {
+				solrService.reIndexAll(Document,dialog.startId)
+			}
+			if (dialog.itemType=="Task") {
+				solrService.reIndexAll(Task,dialog.startId)
+			}
 		}
-		//def res =[result:['success':true,message:"Reindex vanaf ISBN ${dialog.startIsbn} van maximaal ${dialog.limit} boeken gestart"]]
 
-		//render  res as JSON
 		redirect(action:'status')
 		
 	}
 	
 	
-	
-	def reindexBooks = {
-		println "Reindexing books ..."
-		//Book.unindex()
-		//Book.reindex()
-		runAsync {
-			solrService.reIndexAll("9790100000000")
-		}
-		//searchIndexService.reIndex(Book)
-		//render (view:'done')
-		render(view:'status')
-	}
-	
 	def status() {
 		//Show progress bar
-		solrService.updateStats()
+		solrService.updateStats(Document)
 		render(view:'status')
 	}
 	
@@ -77,5 +66,10 @@ class SolrController {
 		render res as JSON
 	}
 	
+	def overview ={
+		def taskStats=solrService.getStats(Task)
+		def documentStats=solrService.getStats(Document)
+		[taskStats:taskStats,documentStats:documentStats]
+	}
 	
 }

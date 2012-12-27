@@ -235,7 +235,7 @@ function workflowContextMenu( node ) {
 								"label": 'Edit workflow props',
 								"action" : function( node ) {
 						        	var theId = node[0].id.split('_').pop();
-						        	formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
+						        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
 						        }
 	  						  },
 
@@ -264,7 +264,7 @@ function workflowContextMenu( node ) {
 								  "label": 'New form',
 								  "action" : function( node ) { 
 									  var parentId = node[0].id.split('_').pop();
-									  formDialog(null,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, { parentId: parentId });
+									  dialog.formDialog(null,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, { parentId: parentId });
 								  }
 							  },
 			"delete" : {
@@ -392,9 +392,9 @@ $(function() {
 										
 										nodeType = nodeType.toLowerCase();
 				        				if (nodeType=="fieldtype") {
-				        					formDialog(null,"dataModelEditor",{ dialogname: "editField", submitname: "submitFieldUnderFieldType"},{ parentId: parentId, parentType: nodeType });
+				        					dialog.formDialog(null,"dataModelEditor",{ dialogname: "editField", submitname: "submitFieldUnderFieldType"},{ parentId: parentId, parentType: nodeType });
 				        				} else {
-				        					formDialog(null,"dataModelEditor",{ dialogname: "editField", submitname: "submitField"},{ parentId: parentId });				        					
+				        					dialog.formDialog(null,"dataModelEditor",{ dialogname: "editField", submitname: "submitField"},{ parentId: parentId });				        					
 				        				}
 									}
 								},
@@ -455,28 +455,28 @@ $(function() {
         //  Open the edit field dialog on a double click        
         $("li.field").live("dblclick",function() {
         	var theId = this.id.split('_').pop();
-        	formDialog(theId,'dataModelEditor',{ dialogname: "editField", submitname: "submitField"}, null);  
+        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editField", submitname: "submitField"}, null);  
         	return false;
         });
              
         // 	Open the edit fieldtype dialog on a double click
         $("li.fieldtype").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
-        	formDialog(theId,'dataModelEditor',{ dialogname: "editFieldType", submitname: "submitFieldType"}, null);          	
+        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editFieldType", submitname: "submitFieldType"}, null);          	
         	return false;
         });
 
         // 	Open the edit form dialog on a double click
         $("li.form").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
-        	formDialog(theId,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, null);        	
+        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editForm", submitname: "submitForm"}, null);        	
         	return false;
         });
         
         // 	Open the edit formItem dialog on a double click
         $("li.formitem").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
-        	formDialog(theId,'dataModelEditor',{ dialogname: "editFormItem", submitname: "submitFormItem"}, null);        	
+        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editFormItem", submitname: "submitFormItem"}, null);        	
         	return false;
         });
 
@@ -484,7 +484,7 @@ $(function() {
         // Open the edit workflowDefinition dialog on a double click
         $("li.workflow").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
-        	formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
+        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editWorkflowDefinition", submitname: "submitWorkflowDefinition"}, null);
         	return false;
         });
         

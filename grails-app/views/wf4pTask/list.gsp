@@ -19,7 +19,7 @@
 
                 <div class="list" >
 
-				    <table>
+				    <table class="table table-striped table-bordered">
 				      <thead>
 				        <tr>
 				          <th>Task</th>
@@ -45,11 +45,12 @@
 				          <td>${taskInstance.assignee}</td>
 				          <td>${taskInstance.createTime}</td> 
 				          <td>${taskInstance.duedate}</td>
-				          <td>
-			                <g:link class="awesome small blue button" controller="wf4pTask" action="show" params="[taskId: taskInstance.id, previousAction: 'list']">show&nbsp;&raquo;</g:link>
+				          <td><div class="btn-group">
+			                <g:link class="btn btn-small" controller="wf4pTask" action="show" params="[taskId: taskInstance.id, previousAction: 'list']">show&nbsp;&raquo;</g:link>
 			                <g:if test="${taskInstance.assignee}">
-			                    <g:link class="awesome small blue button" controller="wf4pTask" action="reassign" params="[taskId: taskInstance.id, previousAction: 'list']">reassign&nbsp;&raquo;</g:link>
+			                    <g:link class="btn btn-small" controller="wf4pTask" action="reassign" params="[taskId: taskInstance.id, previousAction: 'list']">reassign&nbsp;&raquo;</g:link>
 			                </g:if>
+			                </div>
 				          </td>
 				        </tr>
 				        </g:each>

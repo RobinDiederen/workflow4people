@@ -1,4 +1,4 @@
-<dialog:form title="Workflow" object="${workflowDefinitionInstance}">
+<dialog:form title="Workflow" object="${workflowDefinitionInstance}" height="740px">
 	<dialog:tabs names="Details,Forms,Permissions" object="${workflowDefinitionInstance}">		
 		<dialog:tab name="Details" object="${workflowDefinitionInstance}">		                            
 	        <dialog:textField object="${workflowDefinitionInstance}" propertyName="id" mode="show" />                            
