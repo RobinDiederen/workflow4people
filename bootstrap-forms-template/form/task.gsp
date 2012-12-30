@@ -11,8 +11,10 @@
     </head>
 	<body>
 		<form:form action="submit" title="${form.title}" explanation="${form.explanationMessage}" name="${form.name}" process="${form.workflow.name}" type="task" task="*{task}">
-			<table>						
-			 <w:formItems form="${form}" var="formItem" >
+			<table>
+			<w:pages form="${form}" var="page">
+			<w:sections page="${page}" var="section">						
+			 <w:items section="${section}" var="formItem" >
         		<tr>
         		  <td colspan="2">&nbsp;</td>
         		</tr>
@@ -22,7 +24,9 @@
           		</tr>
         		</g:if>			 	        		        	
         		<w:snippet var="${formItem}" name="${formItem.snippet}" />         	
-        	</w:formItems>
+        	</w:items>
+        	</w:sections>
+        	</w:pages>
       		<tr>
       		  <td colspan="2">&nbsp;</td>
       		</tr>

@@ -1,3 +1,4 @@
+<table>
 <tr>
   <td><f:message code="header.requester"/></td>
   <td>*{document.${formItem.field.gpath}.user.displayName.text()} (*{document.${formItem.field.gpath}.user.name.text()})</td>
@@ -50,3 +51,4 @@
 <f:if test="*{document.header.task.id.text().length()==0}">
 	<input type="hidden" id="update-document.header.task.status" name="update-document.header.task.status" value="task-new" />
 </f:if>
+</table>

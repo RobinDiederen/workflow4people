@@ -247,7 +247,7 @@ class DataModelEditorController {
 				
 				if (node1.type.equals("field") && node2.type.equals("fieldtype") && (moveType.equals("inside"))) {
 					result=dmeEventService.dragFieldToFieldType(node1,node2,moveType,isCopy)
-				 }
+				}
 				
 				
 				if (node1.type=="field" && node2.type=="form" && moveType=="inside") {
@@ -281,27 +281,57 @@ class DataModelEditorController {
 				
 				if (node1.type=="fieldtype" && node2.type=="formitem" && moveType=="after") {
 					result=dmeEventService.dragFieldTypeAfterFormItem(node1,node2,moveType,isCopy)
-				}
-				
+				}				
 				
 				if (node1.type=="formitem" && node2.type=="formitem" ) {
 					result=dmeEventService.dragFormItemToFormItem(node1,node2,moveType,isCopy)
-				}										
+				}
+				
+				// Creating fields in sections from Field
+				if (node1.type=="field" && node2.type=="formsection" && moveType=="inside") {
+					result=dmeEventService.dragFieldToFormSection(node1,node2,moveType,isCopy)
+				}
+				// Creating fields in sections from FieldType
+				if (node1.type=="fieldtype" && node2.type=="formsection" && moveType=="inside") {
+					result=dmeEventService.dragFieldTypeToFormSection(node1,node2,moveType,isCopy)
+				}
+				
+				// Section -> Section
+				if (node1.type=="formsection" && node2.type=="formsection" ) {
+					result=dmeEventService.dragFormSectionToFormSection(node1,node2,moveType,isCopy)
+				}
+				
+				// Page -> Page
+				if (node1.type=="formpage" && node2.type=="formpage") {
+					result=dmeEventService.dragFormPageToFormPage(node1,node2,moveType,isCopy)
+				}
+				
+				
+				
+														
 			break;
 			
 			case "rename_node":
 				switch (node1.type) {
 					case "field":
-						result=dmeEventService.renameField(node1,newName)
-					break
-					case "fieldtype":
-						result=dmeEventService.renameFieldType(node1,newName)
+						result=dmeEventService.rename(Field,node1,newName) { rslt.refreshNodes=[instance.visibleParentId]}						
+					break					
+					case "fieldtype":						
+						result=dmeEventService.rename(FieldType,node1,newName) { rslt.refreshNodes=["dataModelTree"]}
 					break
 					case "form":
-						result=dmeEventService.renameForm(node1,newName)
+						result=dmeEventService.rename(Form,node1,newName) { rslt.refreshNodes=["workflow_${instance.workflow.id}"]}
 					break
 					case "workflow":
-						result=dmeEventService.renameWorkflow(node1,newName)
+						result=dmeEventService.rename(WorkflowDefinition,node1,newName) { rslt.refreshNodes=["workflowTree"]}
+					break
+					
+					case "formsection":
+						result= dmeEventService.rename(FormSection,node1,newName) { rslt.refreshNodes=["formpage_${instance.formPage.id}"] }
+					break
+					
+					case "formpage":
+						result= dmeEventService.rename(FormPage,node1,newName) { rslt.refreshNodes=["form_${instance.form.id}"] }
 					break
 					
 				}
@@ -313,12 +343,23 @@ class DataModelEditorController {
 					case "workflow":
 						result= dmeEventService.deleteWorkflowDefinition(node1);
 					break
-					case "formitem":
-						result= dmeEventService.deleteFormItem(node1);
-					break
+					
 					case "form":
 						result= dmeEventService.deleteForm(node1);
 					break
+					
+					case "formpage":
+						result= dmeEventService.deleteFormPage(node1);
+					break
+					
+					case "formsection":
+						result= dmeEventService.deleteFormSection(node1);
+					break
+					
+					case "formitem":
+						result= dmeEventService.deleteFormItem(node1);
+					break
+									
 					case "fieldtype":
 						result= dmeEventService.deleteFieldType(node1);
 					break
@@ -472,11 +513,10 @@ class DataModelEditorController {
 					elements=Form.findAllByWorkflow(workflow,[order:'asc',sort:'name'])	            			
 					def elementlist = { elements.collect { form -> 
 					
-							def hasChildren=FormItem.countByForm(form)>0
+							def hasChildren=FormPage.countByForm(form)>0
 							def nodeRel = hasChildren ? 'folder' : 'default'													
 							def nodeState =hasChildren ? 'closed' : ''
 							def nodeClass="jstree-default form form-${form.name}"
-							
 								
 							[
 		                    attr: [id: "form_${form.id}",title:form.name,class: nodeClass,rel:nodeRel],
@@ -489,29 +529,76 @@ class DataModelEditorController {
 					}
 					render elementlist() as JSON
 					break
+				
 				case "form":
 					def form=Form.get(id)
-					elements=FormItem.findAllByForm(form,[order:'asc',sort:'position'])	            			
-					def elementlist = { elements.collect { formItem -> 
+					elements=FormPage.findAllByForm(form,[order:'asc',sort:'position'])	            			
+					def elementlist = { elements.collect { formPage -> 
 					
-							def nodeRel='default'
-							def nodeState = ""
-							def nodeClass="jstree-default formitem formitem-${formItem.field.name}"
+							def hasChildren=FormSection.countByFormPage(formPage)>0
+							def nodeRel = hasChildren ? 'folder' : 'default'
+							def nodeState =hasChildren ? 'closed' : ''
+							def nodeClass="jstree-default formpage formpage-${formPage.name}"
 							
 								
 								
 							[
-		                    attr: [id: "formitem_${formItem.id}",title:formItem.field.name,class: nodeClass,rel:nodeRel],
-		                 	data: formItem.field.name,
-							title: formItem.field.name,
+		                    attr: [id: "formpage_${formPage.id}",title:formPage.name,class: nodeClass,rel:nodeRel],
+		                 	data: formPage.name,
+							title: formPage.name,
 							state:nodeState,					
 							rel:nodeRel
 						 ]
 						}
 					}
 					render elementlist() as JSON
-					break				
+					break
+					
+				case "formpage":
+					def formPage=FormPage.get(id)
+					elements=FormSection.findAllByFormPage(formPage,[order:'asc',sort:'position'])
+					def elementlist = { elements.collect { formSection ->
+					
+							def hasChildren=FormItem.countByFormSection(formSection)>0
+							def nodeRel = hasChildren ? 'folder' : 'default'
+							def nodeState =hasChildren ? 'closed' : ''
+							def nodeClass="jstree-default formsection formsection-${formSection.name}"
+								
+							[
+							attr: [id: "formsection_${formSection.id}",title:formSection.name,class: nodeClass,rel:nodeRel],
+							 data: formSection.name,
+							title: formSection.name,
+							state:nodeState,
+							rel:nodeRel
+						 ]
+						}
+					}
+					render elementlist() as JSON
+					break
+					
 				
+				
+				case "formsection":
+						def form=FormSection.get(id)
+						elements=FormItem.findAllByFormSection(form,[order:'asc',sort:'position'])
+						def elementlist = { elements.collect { formItem ->
+												
+							def nodeRel = 'default'
+							def nodeState = ""
+							def nodeClass="jstree-default formitem formitem-${formItem.field.name}"
+								
+							[
+							attr: [id: "formitem_${formItem.id}",title:formItem.field.name,class: nodeClass,rel:nodeRel],
+							 data: formItem.field.name,
+							title: formItem.field.name,
+							state:nodeState,
+							rel:nodeRel
+						 ]
+						}
+					}
+					render elementlist() as JSON
+					break
+					
 				case "formitem":
 					def res=[]
 					render res as JSON

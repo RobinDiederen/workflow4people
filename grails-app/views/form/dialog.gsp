@@ -1,5 +1,5 @@
 <dialog:form title="Form" object="${formInstance}" height="620px">
-	<dialog:tabs names="Details,Messages,FormItems" object="${formInstance}">		
+	<dialog:tabs names="Details,Messages,Pages" object="${formInstance}">		
 		<dialog:tab name="Details" object="${formInstance}">		                            
 	        <dialog:textField object="${formInstance}" propertyName="id" mode="show" />
 			<dialog:domainObject object="${formInstance}" propertyName="workflow" mode="show" />
@@ -15,8 +15,8 @@
 			<dialog:textArea object="${formInstance}" propertyName="explanationMessage" mode="edit" />
 			<dialog:textArea object="${formInstance}" propertyName="confirmationMessage" mode="edit" />			
 		</dialog:tab>
-		<dialog:tab name="FormItems" object="${formInstance}">
-			<dialog:detailTable property="form" object="${formInstance}" domainClass="${org.workflow4people.FormItem}" />
+		<dialog:tab name="Pages" object="${formInstance}">
+			<dialog:detailTable property="form" object="${formInstance}" domainClass="${org.workflow4people.FormPage}" />
 		</dialog:tab>
 	</dialog:tabs>
 </dialog:form>

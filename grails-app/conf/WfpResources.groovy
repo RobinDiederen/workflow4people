@@ -15,13 +15,14 @@ modules = {
 	dme {
 		dependsOn 'wfp'
 		resource url:'/css/jquery.treeview.css'
-		resource url:'/css/dme/jquery.jstree.css'
+		resource url:'/css/dme/jquery.jstree.css'		
 		resource url:'/css/dme/editor.css'
 		
 		resource url:'js/jquery/jquery.cookie.js'
 		resource url:'js/jquery/jquery.hotkeys.js'
 		resource url:'js/jquery/jquery.jstree.js'
 		resource url:'js/jquery/jquery.cookie.js'
+		resource url:'js/jquery/jquery.timers-1.2.js'		
 		resource url:'js/dme/editor.js'
 		
 	}

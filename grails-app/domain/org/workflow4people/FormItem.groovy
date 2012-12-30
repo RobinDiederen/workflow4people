@@ -29,16 +29,12 @@ import groovy.lang.Binding;
 class FormItem {
 	def templateService
 	
-	static belongsTo = [form: Form]
-   	static listProperties=['id','position','form','field','readonly']
+	static belongsTo = [formSection: FormSection]
+   	static listProperties=['id','position','formSection','field','readonly']
 
-    static constraints = {
-    	position(help:'x')
-    	field(help:'x')
-    	snippet(nullable:true,help:'x',class:'wide')
-    	baseXpath(nullable:true,help:'x',class:'extrawide')
-    	readonly(help:'x')
-    	form(display:false)
+    static constraints = {    	
+    	snippet(nullable:true)
+    	baseXpath(nullable:true)
     }
     int position
     Field field
@@ -60,8 +56,7 @@ class FormItem {
 			return field.readonlyFormSnippet
 		} else {
 			return field.formSnippet
-		}
-			
+		}			
 	}
 	
 	Binding binding() {	

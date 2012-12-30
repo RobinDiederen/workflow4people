@@ -6,6 +6,17 @@
 //var fieldTypeTree
 var dataModelTree
 var workflowTree
+var dme = {}
+
+dme.refreshTreeHandler=function refreshTreeHandler(event,eventData) {
+	//alert ('weeeee');
+	if (eventData!=null && eventData.jsonResponse !=null && eventData.jsonResponse.refreshNodes !=null ) {
+		for (i in eventData.jsonResponse.refreshNodes) {
+ 			refreshTree(eventData.jsonResponse.refreshNodes[i])
+ 		}
+	}
+};
+
 
 /*
  * Modal JQuery UI confirmation dialog
@@ -133,10 +144,10 @@ function generateFormsDialog(node) {
       	},
        open: function(event, ui) {           	
       		$("#dialogtabs").tabs(); 
-      		$(".help").cluetip({
+      		/*$(".help").cluetip({
       			splitTitle: '|',  
       			cluezIndex: 2000
-     	    	});
+     	    	});*/
                     },
        close: function(event, ui) {      
               $("#dialog").stopTime();
@@ -228,8 +239,9 @@ function generateProcessDialog(node) {
 
 
 function workflowContextMenu( node ) {
+	var obj ={};
 	if (node[0].id.substring(0,9)=="workflow_") {
-	var obj = {
+		obj = {
 			
 			"editworkflowproperties" : {
 								"label": 'Edit workflow props',
@@ -272,31 +284,74 @@ function workflowContextMenu( node ) {
 									"action" : function( node ) {this.remove(node) }
 								}
 	
+		}
+	}
+
+	if (node[0].id.substring(0,5)=="form_") {
+		obj = {										
+	  		    "newpage" : {
+									  "label": 'New page',
+									  "action" : function( node ) { 
+										  var parentId = node[0].id.split('_').pop();
+										  dialog.formDialog(null,'formPage',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
+									  }
+									  },
+				"delete" : {
+											"label": 'Delete',
+											"action" : function( node ) {this.remove(node) }
+										}			
+		}			
+					
 	}
 	
-	
-	return obj; 
-	} else {
-		var obj = {
-				
-
+	if (node[0].id.substring(0,9)=="formpage_") {
+		obj = {										
+	  		    "newsection" : {
+									  "label": 'New section',
+									  "action" : function( node ) { 
+										  var parentId = node[0].id.split('_').pop();
+										  dialog.formDialog(null,'formSection',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
+									  }
+									  },
 				"delete" : {
 										"label": 'Delete',
 										"action" : function( node ) {this.remove(node) }
-									}
-		
-		}
-		
-		
-		return obj;		
-		
-		
+							}			
+		}			
+					
+	}
+	
+	if (node[0].id.substring(0,12)=="formsection_") {
+		obj = {										
+	  		    "newitem" : {
+									  "label": 'New item',
+									  "action" : function( node ) { 
+										  var parentId = node[0].id.split('_').pop();
+										  dialog.formDialog(null,'formItem',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
+									  }
+									  },
+				"delete" : {
+										"label": 'Delete',
+										"action" : function( node ) {this.remove(node) }
+							}			
+		}			
+					
+	}
+								
+	if (node[0].id.substring(0,9)=="formitem_") {
+		obj = {											  		    
+				"delete" : {
+										"label": 'Delete',
+										"action" : function( node ) {this.remove(node) }
+							}			
+		}			
+					
 	}
 		
 	
 	
 	
-	
+	return obj
 	
 	
 }
@@ -310,7 +365,7 @@ $(function() {
 			}
 			
 			if (data.func==="delete_node") {
-				if (!confirm('Are you sure?')) {
+				if (!confirm('Are you sure you want to delete "'+data.args[0][0].title+'" ?')) {
 					e.stopImmediatePropagation();
 					return false;
 					
@@ -473,6 +528,20 @@ $(function() {
         	return false;
         });
         
+        // 	Open the edit form dialog on a double click
+        $("li.formpage").live("dblclick",function() {        
+        	var theId = this.id.split('_').pop();
+        	dialog.formDialog(theId,'formPage',{ dialogname: "dialog", submitname: "submitdialog"}, null);        	
+        	return false;
+        });
+        
+        // Open the edit form dialog on a double click
+        $("li.formsection").live("dblclick",function() {        
+        	var theId = this.id.split('_').pop();
+        	dialog.formDialog(theId,'formSection',{ dialogname: "dialog", submitname: "submitdialog"}, null);        	
+        	return false;
+        });
+        
         // 	Open the edit formItem dialog on a double click
         $("li.formitem").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
@@ -490,5 +559,7 @@ $(function() {
         
        $(".treepane").resizable();
        $(".treepane").draggable();
-   
+       
+		$(".dmeTree").bind("dialog-refresh",dme.refreshTreeHandler);
+		$(".dmeTree").addClass("dialog-events");
 });

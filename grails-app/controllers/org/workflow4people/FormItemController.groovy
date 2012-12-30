@@ -49,8 +49,6 @@ class FormItemController {
 	def submitdialog = { render dialogService.submit(FormItem,params) as JSON }
 	
 	def delete = { render dialogService.delete(FormItem,params) as JSON }
-    
-    
 
     def create = {
         def formItemInstance = new FormItem()
@@ -63,7 +61,6 @@ class FormItemController {
         formItemInstance.properties = params
         return [formItemInstance: formItemInstance]
     }
-    
     
     
     // Inserts a form item after the current item
@@ -159,28 +156,4 @@ class FormItemController {
         }
     }
 
-    def xdelete = {
-        def formItemInstance = FormItem.get(params.id)
-        if (formItemInstance) {
-            try {
-                formItemInstance.delete()
-                flash.message = "formItem.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FormItem ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "formItem.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FormItem ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "formItem.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FormItem not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
 }

@@ -1,7 +1,7 @@
 <dialog:form title="Form item" width="625px" object="${formItemInstance}">
 	<dialog:table>		                            
 		<dialog:textField object="${formItemInstance}" propertyName="id" mode="show" />
-		<dialog:domainObject object="${formItemInstance}" propertyName="form" mode="show" />
+		<dialog:domainObject object="${formItemInstance}" propertyName="formSection" mode="show" />
 		                                                        
 		<dialog:textField object="${formItemInstance}" propertyName="position" mode="edit" />
 	    <dialog:domainObject object="${formItemInstance}" propertyName="field" mode="edit" />

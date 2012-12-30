@@ -20,7 +20,7 @@
 		</dialog:tab>
 		<dialog:tab name="List" object="${fieldTypeInstance}">
 			<dialog:checkBox object="${fieldTypeInstance}" propertyName="runtimeEditableList" mode="edit" />
-		<dialog:detailTable property="fieldType" object="${fieldTypeInstance}" domainClass="${org.workflow4people.FieldTypeItem}" />
+		<dialog:detailTable property="fieldType" object="${fieldTypeInstance}" domainClass="${org.workflow4people.FieldTypeItem}" rowreordering="true"/>
 			    	
 		</dialog:tab>
 		

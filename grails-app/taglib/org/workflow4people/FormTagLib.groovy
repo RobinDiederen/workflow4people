@@ -70,7 +70,7 @@ class FormTagLib {
 	 * or
 	 * <snippet type="" name="" model="" />
 	 * The model attribute is optional. 
-	 * First form: The var attribute is a domain class variable which needs to have a runSnippet method. The type of snippet is determined from the var class name and the model is the domain class' binding, merged with the binding from the model attribute.
+	 * First form: The var attribute is a domain object which needs to have a runSnippet method. The type of snippet is determined from the object's class name and the model is the domain class' binding, merged with the binding from the model attribute.
 	 * Second form form: The type attribute determines the snippet type. The model is the binding from the model attribute. 
 	 */
 	
@@ -85,15 +85,27 @@ class FormTagLib {
 		}
 	}
 	
-	def formItems = { attrs,body -> 
-		def formInstance=attrs.form
-		org.workflow4people.FormItem.findAllByForm(formInstance,[sort:'position',order:'asc']).each { formItem ->	
+	def items = { attrs,body -> 
+		def sectionInstance=attrs.section
+		org.workflow4people.FormItem.findAllByFormSection(sectionInstance,[sort:'position',order:'asc']).each { formItem ->	
         out << body((attrs.var):formItem)			
 		}		
 	}
 	
 	
+	def pages = { attrs,body ->
+		def formInstance=attrs.form
+		org.workflow4people.FormPage.findAllByForm(formInstance,[sort:'position',order:'asc']).each { formPage ->
+		out << body((attrs.var):formPage)
+		}
+	}
 	
+	def sections = { attrs,body ->
+		def pageInstance=attrs.page
+		org.workflow4people.FormSection.findAllByFormPage(pageInstance,[sort:'position',order:'asc']).each { formSection ->
+		out << body((attrs.var):formSection)
+		}
+	}
 	
 	
 

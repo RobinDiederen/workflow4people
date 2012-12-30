@@ -44,6 +44,11 @@ class FieldTypeItemController {
 	def jsonlist = {
 		render listService.jsonlist(FieldTypeItem,params,request) as JSON
 	}
+	
+	def position() {
+		render listService.position(FieldTypeItem,params) as JSON
+	}
+
 
 	def dialog = { return dialogService.edit(FieldTypeItem,params) }
 	

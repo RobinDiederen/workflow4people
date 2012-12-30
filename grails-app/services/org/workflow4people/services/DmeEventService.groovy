@@ -1,5 +1,6 @@
 package org.workflow4people.services
 import org.workflow4people.*
+import org.codehaus.groovy.grails.commons.*
 
 class DmeEventService {
 	def dmeService
@@ -141,7 +142,7 @@ class DmeEventService {
 	
 	
 	
-	// Dropping a field on a form creates a formItem		
+	// Dropping a field on a form creates a formItem	TODO change to find first page/section	
 	def dragFieldToForm(def node1,node2,moveType,isCopy) {					
 		def result=this.defaultResult
 		
@@ -172,6 +173,37 @@ class DmeEventService {
 		return dragFieldToForm([id:fieldType.listParent?.id,type:"fieldtype"],node2,moveType,isCopy)
 	}
 	
+	// Dropping a field on a formsection creates a formItem
+	def dragFieldToFormSection(def node1,node2,moveType,isCopy) {
+		def result=this.defaultResult
+		
+		def field=Field.get(node1.id)
+		def formSection=FormSection.get(node2.id)
+		def form=formSection.formPage.form
+		if (!dmeService.allowFieldOnForm(field,form)) {
+			result.message="Field is not allowed on this form because it is not in the XML document tree"
+			return result
+		}
+		
+		def maxPosition=FormItem.findAllByFormSection(formSection,[sort:'position',order:'desc',max:1])[0]?.position
+		def formItem=new FormItem()
+		formItem.field=field
+		formItem.formSection=formSection
+		formItem.position=maxPosition ? maxPosition+1 : 1
+		formItem.save(failOnError:true)
+
+		result.message="formItem ${formItem.id} created"
+		result.refreshNodes=["formsection_${node2.id}"]
+		
+		result.success=true
+		return result
+	}
+	
+	def dragFieldTypeToFormSection (def node1,node2,moveType,isCopy) {
+		def fieldType=FieldType.get(node1.id)
+		return dragFieldToFormSection([id:fieldType.listParent?.id,type:"fieldtype"],node2,moveType,isCopy)
+	}
+	
 	def dragFieldToFormItem (def node1,node2,moveType,isCopy) {
 		def result=this.defaultResult
 		def field=Field.get(node1.id)
@@ -196,7 +228,7 @@ class DmeEventService {
 		def field=Field.get(node1.id)
 		def refFormItem=FormItem.get(node2.id)
 		
-		if (!dmeService.allowFieldOnForm(field,refFormItem.form)) {
+		if (!dmeService.allowFieldOnForm(field,refFormItem.formSection.formPage.form)) {
 			result.message="Field is not allowed on this form because it is not in the XML document tree"
 			return result
 		}
@@ -238,7 +270,7 @@ class DmeEventService {
 		def field=Field.get(node1.id)
 		def refFormItem=FormItem.get(node2.id)
 		
-		if (!dmeService.allowFieldOnForm(field,refFormItem.form)) {
+		if (!dmeService.allowFieldOnForm(field,refFormItem.formSection.formPage.form)) {
 			result.message="Field is not allowed on this form because it is not in the XML document tree"
 			return result
 		}
@@ -280,7 +312,7 @@ class DmeEventService {
 		formItem.save(flush:true)
 		
 		def n=1
-		FormItem.findAllByForm(refFormItem.form,[sort:'position',order:'asc']).each { fi ->
+		FormItem.findAllByFormSection(refFormItem.formSection,[sort:'position',order:'asc']).each { fi ->
 			fi.position=n++
 		}
 		
@@ -295,11 +327,78 @@ class DmeEventService {
 	
 		result.success=true
 		result.message="formItem ${formItem.id} moved"
-		result.refreshNodes=["form_${formItem.form.id}"]
+		result.refreshNodes=["formsection_${formItem.formSection.id}"]
 		
 		return result
 		
 	}
+	
+	// Section->Section
+	def dragFormSectionToFormSection(def node1,node2,moveType,isCopy) {
+		def result=this.defaultResult
+		def formSection=FormSection.get(node1.id)
+		def refFormSection=FormSection.get(node2.id)
+		def position=refFormSection.position
+		
+		// move the item into position.
+		formSection.position=refFormSection.position
+		formSection.save(flush:true)
+		
+		def n=1
+		FormSection.findAllByFormPage(refFormSection.formPage,[sort:'position',order:'asc']).each { fi ->
+			fi.position=n++
+		}
+		
+		if ((moveType=="before") && (formSection.position>refFormSection.position)) {
+			dmeService.swapPosition(formSection,refFormSection)
+		}
+
+		if ((moveType=="after") && (formSection.position<refFormSection.position)) {
+			dmeService.swapPosition(formSection,refFormSection)
+		}
+	
+	
+		result.success=true
+		result.message="formSection ${formSection.id} moved"
+		result.refreshNodes=["formpage_${formSection.formPage.id}"]
+		
+		return result
+		
+	}
+	
+	// Page->Page
+	def dragFormPageToFormPage(def node1,node2,moveType,isCopy) {
+		def result=this.defaultResult
+		def formPage=FormPage.get(node1.id)
+		def refFormPage=FormPage.get(node2.id)
+		def position=refFormPage.position
+		
+		// move the item into position.
+		formPage.position=refFormPage.position
+		formPage.save(flush:true)
+		
+		def n=1
+		FormPage.findAllByForm(refFormPage.form,[sort:'position',order:'asc']).each { fi ->
+			fi.position=n++
+		}
+		
+		if ((moveType=="before") && (formPage.position>refFormPage.position)) {
+			dmeService.swapPosition(formPage,refFormPage)
+		}
+
+		if ((moveType=="after") && (formPage.position<refFormPage.position)) {
+			dmeService.swapPosition(formPage,refFormPage)
+		}
+	
+		result.success=true
+		result.message="formPage ${formPage.id} moved"
+		result.refreshNodes=["form_${formPage.form.id}"]
+		
+		return result
+		
+	}
+
+	
 	
 	def deleteWorkflowDefinition(def node) {
 		def result=this.defaultResult
@@ -365,7 +464,7 @@ class DmeEventService {
 		def result=this.defaultResult
 		
 		def formItem=FormItem.get(new Long(node.id))
-		result.refreshNodes=["form_${formItem.form.id}"]
+		result.refreshNodes=["formsection_${formItem.formSection.id}"]
 		log.debug "Deleting formItem ${node.id}"
 		formItem.delete()
 		result.success=true
@@ -389,6 +488,37 @@ class DmeEventService {
 		result.success=true
 		return result
 	}
+	
+	def deleteFormPage(def node) {
+		def result=this.defaultResult
+		
+		def formPage=FormPage.get(new Long(node.id))
+		result.refreshNodes=["form_${formPage.form.id}"]
+		log.debug "Deleting formPage ${node.id}"
+	
+		formPage.form.removeFromFormPage(formPage)
+		   
+		formPage.delete()
+		
+		result.success=true
+		return result
+	}
+	
+	def deleteFormSection(def node) {
+		def result=this.defaultResult
+		
+		def formSection=FormSection.get(new Long(node.id))
+		result.refreshNodes=["formpage_${formSection.formPage.id}"]
+		log.debug "Deleting formSection ${node.id}"
+	
+		formSection.formPage.removeFromFormSection(formSection)
+		   
+		formSection.delete()
+		
+		result.success=true
+		return result
+	}
+	
 
 	def deleteFieldType(def node) {
 		def result=this.defaultResult
@@ -411,53 +541,28 @@ class DmeEventService {
 		return result
 	}
 	
-	def renameField(def node,newName) {
+	/*
+	 * Generic rename for domain objects 
+	 */
+	def rename(dc,node,newName,Closure after={}){
+		
+		def defaultDomainClass = new DefaultGrailsDomainClass( dc )
+		def domainPropertyName=defaultDomainClass.propertyName
+		def domainClassName=defaultDomainClass.getName()
+		
 		def result=this.defaultResult
-		def field = Field.get(node.id)
-		def oldName=field.name
-		field.name=newName
-		field.save(failOnError:true)
+		def instance = dc.get(node.id)
+		def oldName=instance.name
+		instance.name=newName
+		instance.save(failOnError:true)
 		result.success=true
-		result.message="Renamed field #${field.id} from ${oldName} to ${newName}"
-		result.refreshNodes=[field.visibleParentId]
-		return result		
-	}
-	
-	def renameFieldType(def node,newName) {
-		def result=this.defaultResult
-		def fieldType = FieldType.get(node.id)
-		def oldName=fieldType.name
-		fieldType.name=newName
-		fieldType.save(failOnError:true)
-		result.success=true
-		result.message="Renamed fieldtype #${fieldType.id} from ${oldName} to ${newName}"
-		result.refreshNodes=["dataModelTree"]
+		result.message="Renamed ${domainClassName} #${instance.id} from ${oldName} to ${newName}"
+		
+		after.setResolveStrategy(Closure.DELEGATE_FIRST)
+		after.setDelegate([instance:instance,rslt:result])
+		after()
+		
 		return result
-	}
-	
-	def renameForm(def node,newName) {
-		def result=this.defaultResult
-		def form = Form.get(node.id)
-		def oldName=form.name
-		form.name=newName
-		form.save(failOnError:true)
-		result.success=true
-		result.message="Renamed form #${form.id} from ${oldName} to ${newName}"
-		result.refreshNodes=["workflow_${form.workflow.id}"]
-		return result
-	}
-	
-	def renameWorkflow(def node,newName) {
-		def result=this.defaultResult
-		def workflow = WorkflowDefinition.get(node.id)
-		def oldName=workflow.name
-		workflow.name=newName
-		workflow.save(failOnError:true)
-		result.success=true
-		result.message="Renamed workflow #${workflow.id} from ${oldName} to ${newName}"
-		result.refreshNodes=["workflowTree"]
-		return result
-	}
-	
+	}	
 	
 }

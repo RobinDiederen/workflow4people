@@ -1,5 +1,4 @@
-<!-- SimpleType formitem -->
-
+<!-- Afhandelaar formitem -->
 <tr class="${formItem.field.dependencySource ? 'dependency-source ' : ''}${formItem.field.dependsOn ? 'dependency-target ' : ''}" 
 
 	depends-on="update-document.${formItem.field.dependsOn?.gpath}" 	

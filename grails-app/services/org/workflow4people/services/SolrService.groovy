@@ -281,8 +281,7 @@ class SolrService {
 	def reIndexByLastUpdated(dc) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		currentItemType=dcName
-		println "Reindex by last updated for ${dcName}"
-		//println "solr tracker running =${running}"
+		log.trace "Reindex by last updated for ${dcName}"
 		ping++
 		if (!running && !lock) {
 			lock=true
@@ -325,7 +324,7 @@ class SolrService {
 								def sid=item.getSolrInputDocument();
 								solr.add(sid)
 							} catch (Exception e) {
-								println "Caught exception while indexing ${item}: ${e.message}"
+								log.error "Caught exception while indexing ${item}: ${e.message}"
 							}
 
 							incCurrentItem()
@@ -337,14 +336,14 @@ class SolrService {
 					session.flush()
 					session.clear()
 				} catch (Exception e) {
-					println "Caught exception while indexing: ${e.message}"
+					log.error "Caught exception while indexing: ${e.message}"
 					sleep(60000)
 				}
 				currentMessage+=' completed.'
 				
-				println "Finished indexing ${items.size()} items from ${items[0].id}"
+				log.debug "Finished indexing ${items.size()} items from ${items[0].id}"
 			}
-			println "Finished indexing"
+			log.trace "Finished indexing"
 			running=false
 			lock=false
 		}

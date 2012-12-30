@@ -18,7 +18,7 @@ environments {
             dbCreate = "update" // one of 'create', 'create-drop','update'
             jndiName = "java:comp/env/jdbc/wf4p"
 
-            dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
+            dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
 
         } 
 
@@ -33,7 +33,7 @@ environments {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
             jndiName = "java:comp/env/jdbc/wf4p"
-            dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
+            dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
         }
     }
 }

@@ -35,8 +35,13 @@ li.fieldtype-RepeatingFieldList > a > ins { background-image: url("../theme/icon
 li.workflow > a > ins { background-image: url("../theme/icons/mimetypes/16/gnome-mime-text-x-python.png" );  background-position: 0px 0px !important; }
 li.form > a > ins { background-image: url("../theme/icons/mimetypes/16/application-rtf.png" );  background-position: 0px 0px !important; }
 li.formitem > a > ins { background-image: url("../theme/icons/emblems/16/emblem-documents.png" ) ; background-position: 0px 0px !important; }
+li.formpage > a > ins { background-image: url("../theme/images/dme/page.png" ) ; background-position: 0px 0px !important; }
+li.formsection > a > ins { background-image: url("../theme/images/dme/section.png" ) ; background-position: 0px 0px !important; }
+
 li.fieldlist > a > ins { background-image: url("../theme/icons/places/16/folder.png" );  background-position: 0px 0px !important; }
 li.fieldtype > a > ins { background-image: url("../theme/icons/mimetypes/16/gnome-mime-application-vnd.sun.xml.calc.png" );  background-position: 0px 0px !important; }
+
+
 
 
 .tree-toolbar {margin-top:3px;}

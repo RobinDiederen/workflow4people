@@ -61,7 +61,7 @@ class FieldType {
 	    minExclusive(nullable:true)
 	    maxExclusive(nullable:true)
 	    
-	    fieldTypeItem(sortable:true,sort:'itemPosition',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
+	    fieldTypeItem(sortable:true,sort:'position',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
 		listParent(nullable:true)
 	    
     }
@@ -229,16 +229,6 @@ class FieldType {
     
     String toString() {
 		  return name;
-	}
-	// TODO check if this is used at all?
-	void renumberItems(){
-		def currentItemPosition=1;
-		FieldTypeItem.findAllByFieldType(this,[sort:'itemPosition',order:'asc']).each({
-			def fieldTypeItem = FieldTypeItem.get(it.id)
-			fieldTypeItem.itemPosition=currentItemPosition
-			fieldTypeItem.save()
-			currentItemPosition++
-		});
 	}
 	
 	

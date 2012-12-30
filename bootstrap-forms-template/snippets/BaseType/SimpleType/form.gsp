@@ -1,3 +1,4 @@
+<!-- form.gsp -->
 <form:input type="text" 
 			class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name} ${field.dependencySource ? 'dependency-source' : ''}" 
 			regexp="${pattern}" 

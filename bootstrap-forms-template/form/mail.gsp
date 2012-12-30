@@ -9,7 +9,9 @@
   <body>
     <mmail:form action="submit" title="" explanation="${form.explanationMessage}" name="request" process="${form.workflow.name}">
       <table>
-        <w:formItems form="${form}" var="formItem">			 	        		        	
+         <w:pages form="${form}" var="page">
+				<w:sections page="${page}" var="section">						
+			 		<w:items section="${section}" var="formItem" >     	 	        		        	
       		<tr>
       		  <td colspan="2">&nbsp;<td>
       		</tr>
@@ -19,7 +21,9 @@
         		</tr>
       		</g:if>			 	
           <w:snippet var="${formItem}" name="${formItem.snippet}" model="${[readonly:true, mail:true]}"/>
-        </w:formItems>
+        </w:items>
+				</w:sections>
+			</w:pages>
     		<tr>
     		  <td colspan="2">&nbsp;<td>
     		</tr>

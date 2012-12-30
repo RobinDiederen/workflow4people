@@ -40,10 +40,10 @@ class Form implements Serializable {
     	formAction(help:'x')
     	//formItem(widget:"insert")
     	workflow(display:false,help:'x')
-    	formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
+    	//formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
     }
 	static belongsTo = [workflow: WorkflowDefinition]
-    static hasMany = [formItem : FormItem]                  
+    static hasMany = [formPage : FormPage]                  
    //	static fetchMode = [formAction: 'eager']
 
     String name
