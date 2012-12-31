@@ -12,45 +12,17 @@ dme.refreshTreeHandler=function refreshTreeHandler(event,eventData) {
 	//alert ('weeeee');
 	if (eventData!=null && eventData.jsonResponse !=null && eventData.jsonResponse.refreshNodes !=null ) {
 		for (i in eventData.jsonResponse.refreshNodes) {
- 			refreshTree(eventData.jsonResponse.refreshNodes[i])
+ 			dme.refreshTree(eventData.jsonResponse.refreshNodes[i])
  		}
 	}
 };
 
 
 /*
- * Modal JQuery UI confirmation dialog
+ * Update process definition
  */
 
-function jqConfirm(message,title,url) {
-	var htmlMessage='<div id="dialog-confirm" title="'+title+'"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>'+message+'</p></div>';
-	
-	var confirmDialog=$(htmlMessage).dialog({
-		resizable: true,
-		width:600,
-		modal: true,
-		buttons: {
-			"OK": function() {				
-				alert(url)
-				$( this ).dialog( "close" );
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		},
-        close: function(event, ui) {      
-            confirmDialog.remove();
-            }
-        });			
-	
-}
-
-
-/*
- * Modal JQuery UI confirmation dialog
- */
-
-function updateProcessDefinition(node) {
+dme.updateProcessDefinition = function updateProcessDefinition(node) {
 	var htmlMessage='<div id="dialog-confirm" title="Update process definition"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Update process definition '+node[0].title+' ?<br />This will update the runtime engine process definition for this workflow.</p><p>&nbsp;</p><p id="returnMessage"></p></div>';
 	var updDialog=$(htmlMessage).dialog({
 		resizable: true,
@@ -94,14 +66,14 @@ function updateProcessDefinition(node) {
 }
 
 
-function trim(value) {
+dme.trim = function trim(value) {
 	  value = value.replace(/^\s+/,'');
 	  value = value.replace(/\s+$/,'');
 	  return value;
 	}
 
 
-function refreshTree(id) {
+dme.refreshTree = function refreshTree(id) {
 	if(id) {
 		if (dataModelTree.find("#"+id).size()>0) {
 			dataModelTree.jstree("refresh","#"+id)
@@ -125,8 +97,9 @@ function refreshTree(id) {
 	
 }
 
-function generateFormsDialog(node) {	
-	 var id=node[0].id.substring(9)
+dme.generateFormsDialog = function generateFormsDialog(node) {	
+	 //var id=node[0].id.substring(9)
+	 var id=node[0].id
 	 var dialogHTML = $.ajax({
 		  url: "/workflow4people/workflowDefinition/generate/"+id,
 		  async: false
@@ -173,7 +146,7 @@ function generateFormsDialog(node) {
 }
 
 
-function generateProcessDialog(node) {	
+dme.generateProcessDialog = function generateProcessDialog(node) {	
 	 var id=node[0].id.substring(9)
 	 var dialogHTML = $.ajax({
 		  url: "/workflow4people/workflowDefinition/generateProcess/"+id,
@@ -238,7 +211,7 @@ function generateProcessDialog(node) {
 
 
 
-function workflowContextMenu( node ) {
+dme.workflowContextMenu = function workflowContextMenu( node ) {
 	var obj ={};
 	if (node[0].id.substring(0,9)=="workflow_") {
 		obj = {
@@ -259,15 +232,15 @@ function workflowContextMenu( node ) {
 
 			"generateforms" : {
 								  "label": 'Generate forms',
-								  "action" : function( node ) { generateFormsDialog(node); }
+								  "action" : function( node ) { dme.generateFormsDialog(node); }
 							  },
 			"generateprocess" : 	  {
 								"label": 'Generate process',
-								"action" : function( node ) { generateProcessDialog(node) }
+								"action" : function( node ) { dme.generateProcessDialog(node) }
 								  },
 			"updateprocessdef" : 	  {
 								"label": 'Update process def',
-								"action" : function( node ) { updateProcessDefinition(node) }
+								"action" : function( node ) { dme.updateProcessDefinition(node) }
 	   	    },		  
 					  
 								  
@@ -293,9 +266,15 @@ function workflowContextMenu( node ) {
 									  "label": 'New page',
 									  "action" : function( node ) { 
 										  var parentId = node[0].id.split('_').pop();
-										  dialog.formDialog(null,'formPage',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
-									  }
+										  dialog.formDialog(null,'formPage',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });}
 									  },
+									  
+									  "generateforms" : {
+										  "label": 'Generate forms',
+										  "action" : function( node ) { dme.generateFormsDialog(node); }
+									  },
+									  
+									  
 				"delete" : {
 											"label": 'Delete',
 											"action" : function( node ) {this.remove(node) }
@@ -408,7 +387,7 @@ $(function() {
 			var result=eval('(' + jsonResponse + ')').result;
 			
 			for (i in result.refreshNodes) {
-	 			refreshTree(result.refreshNodes[i])
+	 			dme.refreshTree(result.refreshNodes[i])
 	 		}
 			
 			if (result.success) {
@@ -495,7 +474,7 @@ $(function() {
         },
     	
     	 "contextmenu" : {        	
-        	"items": workflowContextMenu     			
+        	"items": dme.workflowContextMenu     			
         }
     	
     	

@@ -1,21 +1,17 @@
-<g:if test="${field.fieldList}">
-<element name="${name}" type="${field?.fieldList?.namespace?.prefix}:${field?.fieldList?.name}" ${occurrence} />
+<!-- List schemaElement -->
+<g:if test="${field.hasChildren}" >
+
+	<element name="${name}" ${occurrence}>
+	<complexType>
+	<sequence>
+	<g:each in="${field?.children}" var="theField">
+		<w:snippet var="${theField}" name="schemaElement" />
+	</g:each>
+	</sequence>
+	
+	</complexType>
+	</element>
 </g:if>
 <g:else>
-	<g:if test="${hasChildren}" >
-	
-		<element name="${name}" ${occurrence}>
-		<complexType>
-		<sequence>
-		<g:each in="${children}" var="${field}">
-			<w:snippet var="${field}" name="schemaElement" />
-		</g:each>
-		</sequence>
-		
-		</complexType>
-		</element>
-	</g:if>
-	<g:else>
-		<element name="${name}" type="${field?.fieldType?.namespace?.prefix}:${field?.fieldType?.name}" ${occurrence} />
-	</g:else>
+	<element name="${name}" type="${field?.fieldType?.namespace?.prefix}:${field?.fieldType?.name}" ${occurrence} />
 </g:else>

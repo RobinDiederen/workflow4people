@@ -41,7 +41,8 @@ class TemplateConfigDelegate
 	def gLogMessage=""
 	def message="Initializing..."
 	def completed=false
-	
+	def params=[:]
+	def sections=[]
 	private static final log = LogFactory.getLog(this)
 	
 	
@@ -55,7 +56,10 @@ class TemplateConfigDelegate
 	  mlog message
   }
 	
-  def TemplateConfigDelegate(TemplateService theTemplateService,WorkflowDefinition theWorkflowDefinition,String theTemplatePath,String theOutputPath) {
+  def TemplateConfigDelegate(TemplateService theTemplateService,WorkflowDefinition theWorkflowDefinition,String theTemplatePath,String theOutputPath,def theParams=[:]) {
+	  params=theParams
+	  sections=params.sections?:['workflow','common','form','fieldType','namespace']
+	  
 	  workflowDefinition=theWorkflowDefinition
 	  templateService=theTemplateService
 	  templatePath=theTemplatePath
@@ -82,10 +86,6 @@ class TemplateConfigDelegate
 	return workflowDefinition.name
   }
 
-/*  def getFormName() {
-	return "Default form name"
-  }
-*/
   def getFieldTypeName() {
 	return "Default type name"
   }
@@ -95,81 +95,95 @@ class TemplateConfigDelegate
   }
   
   def common(Closure closure) {
-	  msg "Processing common..."
-      total=1
-      current=1
-	  model = [ 'workflowDefinitions' : WorkflowDefinition.findaAll() ]
-	  closure.workflow=workflowDefinition
-	  closure()
-	  mlog "Processing common completed"
+	  if (sections.contains("common")) {
+		  msg "Processing common..."
+	      total=1
+	      current=1
+		  model = [ 'workflowDefinitions' : WorkflowDefinition.findaAll() ]
+		  closure.workflow=workflowDefinition
+		  closure()
+		  mlog "Processing common completed"
+	  }
   }
   
   def workflow(Closure closure) {
-	  msg "Processing workflow..."
-	  total=1
-      current=1
-	  model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition ]
-	  closure.workflow=workflowDefinition
-	  closure()
-	  mlog "Processing workflow completed"
-  }
-  
-  
-  def form(Closure closure) {
-	  msg "Processing forms ..."
-	  current=0
-	  total=workflowDefinition.form.size()
-	  log.debug "The total is ${total}"
-	  Form.findAllByWorkflow(workflowDefinition,[sort:'name',order:'asc']).each { form ->
-	  //workflowDefinition.form.each { form ->
-  	  	msg "Processing form ${form.name} ..."
-  		closure.formName=form.name
-  		closure.form=form
-  	  	model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition, 'formInstance':form,'form':form ]
-  	    closure()
-  	  	mlog "Procesed form ${form.name}"
-  	  	current++
-  	}
-	mlog "Processing forms completed"
-  }
-  
+	  if (sections.contains("workflow")) {
+		  msg "Processing workflow..."
+		  total=1
+	      current=1
+		  model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition ]
+		  closure.workflow=workflowDefinition
+		  closure()
+		  mlog "Processing workflow completed"
+	  }
+}
+
+  	def form(Closure closure) {
+		if (sections.contains("form")) {
+			msg "Processing forms ..."
+			current=0
+			total=workflowDefinition.form.size()
+			log.debug "The total is ${total}"
+			def forms
+			if (params.formName) {
+				forms=Form.findByWorkflowAndName(workflowDefinition,params.formName)
+			} else {
+				forms=Form.findAllByWorkflow(workflowDefinition,[sort:'name',order:'asc'])
+			}
+			forms.each { form ->
+				msg "Processing form ${form.name} ..."
+				closure.formName=form.name
+				closure.form=form
+	  	  		model = [ 'workflowDefinitionInstance' : workflowDefinition,'workflow' : workflowDefinition, 'formInstance':form,'form':form ]
+				closure()
+	  	  		mlog "Procesed form ${form.name}"
+				current++
+			}
+		mlog "Processing forms completed"			
+		}
+	}
+	  
   def fieldType(Closure closure) {
-	  msg "Processing fieldTypes ..."
-	  current=0
-	  total=FieldType.count()
-	  FieldType.findAll([sort:'name',order:'asc']).each { fieldType ->	  
-  	  	msg "- Processing fieldType ${fieldType.name}"
-  		closure.fieldTypeName=fieldType.name
-  		closure.fieldType=fieldType
-  	  	model = [ 'fieldTypeInstance' : fieldType]
-  	    closure()
-  	  	current++
-  	  	//	mlog "-- Processed fieldType ${fieldType.name}"
-  	}
-	mlog "Processing fieldTypes completed"
+	  if (sections.contains("fieldType")) {
+		  msg "Processing fieldTypes ..."
+		  current=0
+		  total=FieldType.count()
+		  FieldType.findAll([sort:'name',order:'asc']).each { fieldType ->	  
+	  	  	msg "- Processing fieldType ${fieldType.name}"
+	  		closure.fieldTypeName=fieldType.name
+	  		closure.fieldType=fieldType
+	  	  	model = [ 'fieldTypeInstance' : fieldType]
+	  	    closure()
+	  	  	current++
+	  	  	//	mlog "-- Processed fieldType ${fieldType.name}"
+	  	}
+		mlog "Processing fieldTypes completed"
+	  }
   }
   
 
   def namespace(Closure closure) {
-	  msg "Processing namespaces ..."
-	  
-      total=Namespace.count()
-      current=0
-	  
-	  Namespace.findAll().each { namespace ->	 
-	    if (namespace.generateXSDFile) {
-  	  		msg "Processing namespace ${namespace.uri} into ${namespace.filename}"
-  	  		closure.namespaceName=namespace.filename
-  	  	    closure.namespace=namespace
-  	  		model = [ 'namespaceInstance' : namespace]
-            closure()
-  	  		mlog "Processed namespace ${namespace.uri}"
-  	  		current++
-	    } else {
-	    	mlog "Skipped namespace ${namespace.uri}"
-	    }
-  	}
-	mlog "Processing namespaces completed"
+	  if (sections.contains("namespace")) {
+		  msg "Processing namespaces ..."
+		  
+	      total=Namespace.count()
+	      current=0
+		  
+		  Namespace.findAll().each { namespace ->	 
+		    if (namespace.generateXSDFile) {
+	  	  		msg "Processing namespace ${namespace.uri} into ${namespace.filename}"
+	  	  		closure.namespaceName=namespace.filename
+	  	  	    closure.namespace=namespace
+	  	  		model = [ 'namespaceInstance' : namespace]
+	            closure()
+	  	  		mlog "Processed namespace ${namespace.uri}"
+	  	  		current++
+		    } else {
+		    	mlog "Skipped namespace ${namespace.uri}"
+		    }
+	  	}
+		mlog "Processing namespaces completed"
+	  }
   }
   
   def template(String theTemplatePath,String theOutputPath,options=[]) {
@@ -202,9 +216,9 @@ class TemplateConfigDelegate
 	new File(fullOutputPath).write(s)
 	}
 
-def methodMissing(String name, args) {
-		log.debug "Method missing: ${name}, parameters: ${args}"  
-  args.each { aname -> log.debug "${aname}" }
-}
+	def methodMissing(String name, args) {
+			log.debug "Method missing: ${name}, parameters: ${args}"  
+	  args.each { aname -> log.debug "${aname}" }
+	}
 }
 

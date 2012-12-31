@@ -64,7 +64,7 @@
   
   <thead>
 	  <tr>
-	    <g:each in="${fields}" var="theField">
+	    <g:each in="${field.children}" var="theField">
 	    <th>${theField.label}</th>
 		  </g:each>
 		  <th>Acties</th>
@@ -74,7 +74,7 @@
   <tbody>
     <f:each in="*{document.${listGpath}}" var="${name}Instance" status="${name}Index">
     <tr id="tr-document-${listGpath}_*{${name}Index}">
-      <g:each in="${fields}" var="theField">
+      <g:each in="${field.children}" var="theField">
       <td>
         <w:snippet var="${theField}" name="form" />
       </td>

@@ -183,14 +183,14 @@ class DataModelEditorController {
         log.debug "Submit FormItem params: ${params}"        
         def result =  dialogService.submit(FormItem,params)
         
-        def formid
-	    if (params.form?.id) {
-	    	formid=params.form?.id
+        def formSectionId
+		if (params.formSection?.id) {
+	    	formSectionId=params.formSection?.id
 	    } else {
 	    	def formItemInstance = FormItem.get(params.id)	    	
-	    	formid=formItemInstance.form.id
+	    	formSectionId=formItemInstance.formSection.id
 	    } 
-	    result['result']['refreshNodes']=["form_${formid}"]
+	    result['result']['refreshNodes']=["formsection_${formSectionId}"]
         render result as JSON
         
 	}

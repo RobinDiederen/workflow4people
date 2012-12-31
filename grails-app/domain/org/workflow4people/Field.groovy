@@ -20,8 +20,8 @@ package org.workflow4people
 import org.workflow4people.services.*;
 
 /**
- * Field domain class. This defines a field in a field list.
- * @see org.workflow4people.FieldList,org.workflow4people.FieldType
+ * Field domain class. This defines a field
+ * @see org.workflow4people.FieldType
  * @author Joost Horward
  */
 
@@ -72,14 +72,7 @@ class Field {
     /**
      * The type of this field
      */
-    FieldType fieldType
-
-    /** 
-     * The child field list that is represented by this field. When this is populated, the field behaves as a list.
-     * The fieldType should be set to a type that supports a list.  
-     */
-    //FieldList childFieldList
-    
+    FieldType fieldType  
     
 	boolean readonly=false
 	
@@ -197,12 +190,22 @@ class Field {
 		binding.prefix=namespacePrefix
 		binding.output=""
 		
-		binding.fields=Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
-		binding.children=Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
-		binding.hasChildren=Field.countByParent(this)>0		
-		
 		return binding
 	}
+	
+	def getFields() {
+		Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+	}
+	
+	def getChildren() { 
+		Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+	}
+	
+	def getHasChildren() {
+		Field.countByParent(this)>0
+	}
+
+	
 	
 	def getGpath() {
 		def indexString=""

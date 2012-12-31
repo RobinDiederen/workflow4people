@@ -1,5 +1,5 @@
 <${prefixedName}>
-		<g:each in="${fields}" var="theField">
+		<g:each in="${field.children}" var="theField">
 			${theField.xmlSnippet}
 		</g:each>
-</${prefixedName}>	
+</${prefixedName}>

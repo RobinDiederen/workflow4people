@@ -53,11 +53,7 @@ class Form implements Serializable {
     String confirmationMessage
     String template="task"
     Action formAction
-    
-    def getFieldList() {
-    	return workflow.documentType.fieldList
-    }
-	
+    	
     String toString() {
 		  return name;
 	}

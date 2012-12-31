@@ -1,1 +1,0 @@
-<${prefixedName}>${defaultValue}</${prefixedName}>

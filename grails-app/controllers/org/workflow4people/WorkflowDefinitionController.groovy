@@ -257,28 +257,20 @@ class WorkflowDefinitionController {
 	
 	
     def generate = {
-			
-		//formGeneratorService.generate(params.id)
-		templateService.generate(params.id)
-		/*
-    	def workflowDefinitionInstance = WorkflowDefinition.get( params.id )
-	
-  	  	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
-  	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
-		  templatePath+='/'
-  	  	}
-  	  	
-    	def outputPath=ApplicationConfiguration.findByConfigKey('template.outputPath').configValue;  	  	
-  	  	def templateText=new File(templatePath+"template.conf").text
-  	  	def templateConfigDelegate = new TemplateConfigDelegate(templateService,workflowDefinitionInstance,templatePath,outputPath)
-  	  	def template=new GroovyShell().evaluate(templateText)
-
-  	  	log.debug "Generating forms package ..."
-  	  	template.delegate=templateConfigDelegate
-  	  	template()		
-    	log.debug ("Done.")
-        */
-  	    //redirect(action: "generated")
+		
+		// If this is in the context of a form, just generate this single form
+		if (params.id.startsWith("form_")) {
+			def id=new Integer(params.id.replace("form_",""))
+			def form=Form.get(id)					
+			templateService.generate(form.workflow.id,[formName:form.name,sections:'form'])
+		}
+		
+		// If this is in the context of a workflow, generate everything for the workflow
+		if (params.id.startsWith("workflow_")) {
+			def id=new Integer(params.id.replace("workflow_",""))
+			templateService.generate(id)
+		}
+		
   	    render(view:"formGeneratorStatus")
     }
     

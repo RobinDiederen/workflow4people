@@ -18,12 +18,12 @@
         		<tr>
         		  <td colspan="2">&nbsp;</td>
         		</tr>
-        		<g:if test="${formItem.field.binding.label.length() > 0}">
+        		<g:if test="${formItem.field?.binding?.label?.length() > 0}">
           		<tr class="section-head">
           		  <td colspan="2">${formItem.field.binding.label}</td>
           		</tr>
         		</g:if>			 	        		        	
-        		<w:snippet var="${formItem}" name="${formItem.snippet}" />         	
+        			<w:snippet var="${formItem}" name="${formItem.snippet}" />         	
         	</w:items>
         	</w:sections>
         	</w:pages>

@@ -40,6 +40,8 @@ public class TemplateService implements  ApplicationContextAware {
     
 	def wf4pConfigService
 	def backgroundService
+	def dialogService
+	
 	def templateConfigDelegate
 	GroovyPagesTemplateEngine groovyPagesTemplateEngine
 	
@@ -69,7 +71,7 @@ public class TemplateService implements  ApplicationContextAware {
 		// Obviously, the consequence is that only one template generation process can run at any given time. 
 		// One would expect simply to make this service session-scoped, but that doesn't work, probably because of the background thread that it's running in.
 		
-		globalModel=model
+		//globalModel=model
 		def gspFile=new File(filename)
     	
     	groovyPagesTemplateEngine.setApplicationContext(applicationContext)
@@ -78,7 +80,7 @@ public class TemplateService implements  ApplicationContextAware {
     	
     	//TODO make this configurable
     	groovyPagesTemplateEngine.reloadEnabled=true
-    	groovyPagesTemplateEngine.cacheResources=false
+    	groovyPagesTemplateEngine.cacheResources=true
     	
     	
     	Template t = groovyPagesTemplateEngine.createTemplate(gspFile)
@@ -114,12 +116,9 @@ public class TemplateService implements  ApplicationContextAware {
     		fieldType=object
     	}
 		
-		if (object.class==org.workflow4people.FieldList) {
-    		baseType=object.baseType    		
-    	}
-		
-		
-		def model=[:]+globalModel+extraModel		
+			
+		//def model=[:]+globalModel+extraModel
+		def model=[:]+extraModel
    		model+=object.binding().getVariables()
 		
 		def snippetPath
@@ -132,6 +131,11 @@ public class TemplateService implements  ApplicationContextAware {
 			snippetPath=templatePath+'/snippets/BaseType/'+baseType.name+'/'+snippetType+'.gsp'
 		}
 		
+		if (!new File(snippetPath).exists()) {
+			snippetPath=templatePath+'/snippets/Default/'+snippetType+'.gsp'
+		}
+		dialogService.check(new File(snippetPath).exists(),"templateService.snippetnotfound",[snippetPath])
+		
 		log.debug "The snippet path is: ${snippetPath}"
 		
 		return runTemplate(snippetPath,model)
@@ -142,8 +146,8 @@ public class TemplateService implements  ApplicationContextAware {
 		log.debug "running common snippet for type ${templateType}"
     	def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue
     	
-		def model=[:]+globalModel+extraModel		
-   		
+		//def model=[:]+globalModel+extraModel		
+		def model=extraModel
 		def	snippetPath=templatePath+'/snippets/'+templateType+'/'+snippetType+'.gsp'
 		
 		log.debug "The snippet path is: ${snippetPath}"
@@ -153,7 +157,9 @@ public class TemplateService implements  ApplicationContextAware {
 	
 	
 	
-	 def generate(def workflowDefinitionId) {			
+	 def generate(def workflowDefinitionId,params=[:]) {
+		 
+		groovyPagesTemplateEngine.clearPageCache()
   		def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
   	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
 		  templatePath+='/'
@@ -173,7 +179,7 @@ public class TemplateService implements  ApplicationContextAware {
   	  			  	  		
 			def workflowDefinitionInstance = WorkflowDefinition.get( workflowDefinitionId )
 
-  	  		templateConfigDelegate = new TemplateConfigDelegate(this,workflowDefinitionInstance,templatePath,outputPath)
+  	  		templateConfigDelegate = new TemplateConfigDelegate(this,workflowDefinitionInstance,templatePath,outputPath,params)
   	  	
   	  		def template=new GroovyShell().evaluate(templateText)
 
@@ -212,7 +218,10 @@ public class TemplateService implements  ApplicationContextAware {
 	 
 	
 
-	 def generateProcess(def workflowDefinitionId) {			
+	 def generateProcess(def workflowDefinitionId) {
+		 
+		 groovyPagesTemplateEngine.clearPageCache()
+		 
 	  		def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
 	  	  	if (templatePath.charAt(templatePath.length()-1)!='/') {
 			  templatePath+='/'

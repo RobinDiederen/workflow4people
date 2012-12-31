@@ -71,10 +71,6 @@ class WorkflowDefinition implements Serializable {
 
 	String toString() {
 		  return name;
-	  }
-	
-	def getFieldList() {
-		return documentType.fieldList
-	}
+	  }	
 	
 }
