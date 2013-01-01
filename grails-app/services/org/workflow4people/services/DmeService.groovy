@@ -42,32 +42,32 @@ class DmeService {
 		
 			case "inside":
 				field1.parent=field2
-				def maxPosition=Field.findAllByParent(field2,[sort:'fieldPosition',order:'desc',max:1])[0]?.fieldPosition
-				field1.fieldPosition=maxPosition ? maxPosition+1 : 1
+				def maxPosition=Field.findAllByParent(field2,[sort:'position',order:'desc',max:1])[0]?.position
+				field1.position=maxPosition ? maxPosition+1 : 1
 				field1.save(flush:true)
 				break
 				
 			case "before":
 				field1.parent=field2.parent
 				
-				def position=field2.fieldPosition
-				field1.fieldPosition=field2.fieldPosition
+				def position=field2.position
+				field1.position=field2.position
 				field1.save(flush:true)
 				
 				def n=1
-				Field.findAllByParent(field2.parent,[sort:'fieldPosition',order:'asc']).each { field ->
-					field.fieldPosition=n++
+				Field.findAllByParent(field2.parent,[sort:'position',order:'asc']).each { field ->
+					field.position=n++
 					field.save(flush:true)
-					log.debug "${field.name}: ${field.fieldPosition}"
+					log.debug "${field.name}: ${field.position}"
 				}
 								
-				if (field1.fieldPosition>field2.fieldPosition) {
+				if (field1.position>field2.position) {
 					log.debug "Swapping ${field1.id} and ${field2.id}"
 					swapFieldPosition(field1,field2)
 				}
 				
-				Field.findAllByParent(field2.parent,[sort:'fieldPosition',order:'asc']).each { field ->
-					log.debug "${field.name}: ${field.fieldPosition}"
+				Field.findAllByParent(field2.parent,[sort:'position',order:'asc']).each { field ->
+					log.debug "${field.name}: ${field.position}"
 				}
 				
 														
@@ -76,27 +76,27 @@ class DmeService {
 				
 				field1.parent=field2.parent
 				
-				def position=field2.fieldPosition
-				field1.fieldPosition=field2.fieldPosition
+				def position=field2.position
+				field1.position=field2.position
 				field1.save(flush:true)
 				
 				def n=1
-				Field.findAllByParent(field2.parent,[sort:'fieldPosition',order:'asc']).each { field ->
-					field.fieldPosition=n++
+				Field.findAllByParent(field2.parent,[sort:'position',order:'asc']).each { field ->
+					field.position=n++
 					field.save(flush:true)
 				}
 				
-				if (field1.fieldPosition<field2.fieldPosition) {
+				if (field1.position<field2.position) {
 					swapFieldPosition(field1,field2)
 				}
 								
 				break	
 		}
-		// Fix the fieldPositions of the original part of the tree
+		// Fix the positions of the original part of the tree
 		if(originalParent) {
 			def n=1
-			Field.findAllByParent(originalParent,[sort:'fieldPosition',order:'asc']).each { field ->
-			field.fieldPosition=n++
+			Field.findAllByParent(originalParent,[sort:'position',order:'asc']).each { field ->
+			field.position=n++
 			field.save(flush:true)
 		}
 	
@@ -110,14 +110,16 @@ class DmeService {
 		def p1= item1.position
 		def p2 = item2.position
 		item1.position=p2
-		item2.position=p1
+		item2.position=p1		
 	}
 	
+	
+	
 	def swapFieldPosition(item1,item2) {
-		def p1= item1.fieldPosition
-		def p2 = item2.fieldPosition
-		item1.fieldPosition=p2
-		item2.fieldPosition=p1
+		def p1= item1.position
+		def p2 = item2.position
+		item1.position=p2
+		item2.position=p1
 		item1.save(flush:true)
 		item2.save(flush:true)
 	}

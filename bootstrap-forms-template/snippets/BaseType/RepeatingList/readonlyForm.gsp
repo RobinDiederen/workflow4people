@@ -1,4 +1,4 @@
-<table>
+<table class="table table-bordered table-striped">
 	<tr><g:each in="${field?.children}" var="theField">
 			<th align="left">${theField.label}</th>
 		</g:each>

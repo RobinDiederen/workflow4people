@@ -26,11 +26,11 @@ import org.workflow4people.services.*;
  */
 
 class Field {
-	static listProperties=['id','name','description']
+	static listProperties=['position','id','name','description']
 	static belongsTo = [parent: Field]
     static constraints = {
 		parent(help:'x',nullable:true)
-		fieldPosition()
+		position()
 		name(help:'x',class:'wide')
 		fieldType(help:'x')
 		
@@ -62,7 +62,7 @@ class Field {
 	    
     }
 	def templateService
-    int fieldPosition=1
+    int position=1
     
     /**
      * The parent of this field
@@ -194,11 +194,11 @@ class Field {
 	}
 	
 	def getFields() {
-		Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+		Field.findAllByParent(this,[sort:'position',order:'asc'])
 	}
 	
 	def getChildren() { 
-		Field.findAllByParent(this,[sort:'fieldPosition',order:'asc'])
+		Field.findAllByParent(this,[sort:'position',order:'asc'])
 	}
 	
 	def getHasChildren() {

@@ -213,7 +213,7 @@ public class TemplateService implements  ApplicationContextAware {
 	  	  			templateNames+=file.name.replace(".gsp","")
 	  	  		}
 	  	  	}
-	  	  	return templateNames
+	  	  	return templateNames?.sort()
 	 }
 	 
 	

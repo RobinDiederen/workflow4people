@@ -43,7 +43,7 @@ class FieldController {
     }
 	
 	def list = {
-		render (view:'/datatable/list', model:[dc:Field,controllerName:'field',request:request,jsonlist:'jsonlist'])
+		render (view:'/dialog/list', model:[dc:Field,controllerName:'field',request:request,jsonlist:'jsonlist'])
 	}
 		
 	def jsonlist = {
@@ -84,7 +84,7 @@ class FieldController {
             redirect(action:list)
         }
         else { render(builder:'json') {
-    		fieldPosition(fieldInstance.fieldPosition)
+    		position(fieldInstance.position)
     		wizardStep(fieldInstance.wizardStep)
     		name(fieldInstance.name)
     		fieldTypeID(fieldInstance.fieldType.id)
@@ -198,10 +198,10 @@ class FieldController {
         	
         	if (currentFieldInstance.childFieldList) {
         		fieldInstance.fieldList=currentFieldInstance.childFieldList
-        		fieldInstance.fieldPosition=0;
+        		fieldInstance.position=0;
         	} else {
         		fieldInstance.fieldList=currentFieldInstance.fieldList
-        		fieldInstance.fieldPosition=currentFieldInstance.fieldPosition
+        		fieldInstance.position=currentFieldInstance.position
         	}        	
             return [ fieldInstance : fieldInstance ]
         }
@@ -217,16 +217,16 @@ class FieldController {
         def fieldInstance = new Field(params)
         // move everything from current position down the list
         fieldInstance.fieldList.field.each { 
-        	if (it.fieldPosition>fieldInstance.fieldPosition) {
+        	if (it.position>fieldInstance.position) {
         		def itFieldInstance = Field.get(it.id)
-        		itFieldInstance.fieldPosition=itFieldInstance.fieldPosition+1
+        		itFieldInstance.position=itFieldInstance.position+1
         		log.debug ("Saving...")
         		log.debug(itFieldInstance.save())
         		log.debug (itFieldInstance.name)
-        		log.debug (itFieldInstance.fieldPosition)
+        		log.debug (itFieldInstance.position)
         	}
         }
-		fieldInstance.fieldPosition=fieldInstance.fieldPosition+1
+		fieldInstance.position=fieldInstance.position+1
         if(!fieldInstance.hasErrors() && fieldInstance.save()) {
             flash.message = "Field ${fieldInstance.id} inserted"
             redirect(controller:'fieldList',action:'tree',id:fieldInstance.fieldList.id)

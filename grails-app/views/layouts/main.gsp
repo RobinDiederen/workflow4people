@@ -27,6 +27,7 @@
 			   		        <sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 		              			<dialog:dropdown code="wfp.workflow">
 									<dialog:menuitem controller="workflowDefinition" action="list" icon="icon-list"/>
+									<dialog:menuitem controller="workflow" action="list" icon="icon-list"/>
 			              			<dialog:menuitem controller="task" action="list" icon="icon-tasks"/>
 			              			<dialog:menuitem controller="taskStatus" action="list" icon="icon-list"/>
 								</dialog:dropdown>														
@@ -65,7 +66,7 @@
 			        	        <dialog:dropdown code="wfp.forms">
 			        	        	<dialog:menuitem controller="form" action="list" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="dataModelEditor" action="index" icon="icon-list"/>
-        	        	 	        <dialog:menuitem controller="fieldList" action="list" icon="icon-list"/>
+        	        	 	        <dialog:menuitem controller="field" action="list" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="fieldType" action="list" icon="icon-list"/>
         	        	 	        <dialog:menuitem controller="baseType" action="list" icon="icon-list"/>
        	        	 	        </dialog:dropdown>

@@ -59,7 +59,9 @@ log4j = {
     //debug 'grails.app.controller.org.workflow4people'
     //debug 'grails.app.service.org.workflow4people.services'
 	warn "grails.app"
-	debug "org.workflow4people"
+	debug "grails.app.controllers"
+	debug "grails.app.endpoints"
+	
     
 }
 

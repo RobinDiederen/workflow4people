@@ -26,7 +26,7 @@ import grails.plugins.springsecurity.Secured
 			
 		def jsonlist = {
 			//render listService.jsonlist(Task,params,request) as JSON
-			def actions= {  doc,env -> """<div class="btn-group"><span class="btn btn-small" onclick="formDialog(${doc.id},'task', { refresh : '${env.detailTableId}'}, null)">edit</span>&nbsp;<span class="btn btn-small" onclick="formDialog(${doc.id},'task',{ refresh : '${env.detailTableId}', dialogname : 'assigndialog', submitname : 'submitassigndialog' }, null)">assign</span>&nbsp;<span class="btn btn-small" onclick="deleteDialog(${doc.id},'task',{ refresh : '${env.detailTableId}'})">&times;</span></div>""" }
+			def actions= {  doc,env -> """<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog(${doc.id},'task', { refresh : '${env.detailTableId}'}, null)">edit</span>&nbsp;<span class="btn btn-small" onclick="dialog.formDialog(${doc.id},'task',{ refresh : '${env.detailTableId}', dialogname : 'assigndialog', submitname : 'submitassigndialog' }, null)">assign</span>&nbsp;<span class="btn btn-small" onclick="dialog.deleteDialog(${doc.id},'task',{ refresh : '${env.detailTableId}'})">&times;</span></div>""" }
 			render listService.jsonlist(Task,params,request,null,actions) as JSON
 		}
 

@@ -2,7 +2,7 @@
 	<dialog:tabs names="Details,Text,Advanced" object="${fieldInstance}">		
 		<dialog:tab name="Details" object="${fieldInstance}">		                            
 	        <dialog:textField object="${fieldInstance}" propertyName="id" mode="show" />                            
-	        <dialog:textField object="${fieldInstance}" propertyName="fieldPosition" mode="show" />                            
+	        <dialog:textField object="${fieldInstance}" propertyName="position" mode="show" />                            
 	        <dialog:textField object="${fieldInstance}" propertyName="name" mode="edit" />                            
 	        <dialog:domainObject object="${fieldInstance}" propertyName="fieldType" mode="edit" />                        
 	    	<dialog:textArea object="${fieldInstance}" propertyName="description" mode="edit" />                        	

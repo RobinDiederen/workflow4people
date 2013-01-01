@@ -16,9 +16,45 @@ class DataModelEditorController {
 		def urlSignavio = ApplicationConfiguration.findByConfigKey('wfp.dme.urlSignavio')
 		model['urlSignavio'] = urlSignavio ? urlSignavio.configValue : '/signaviocore/p/editor'
 
-    	render(view:'editor', model:model)    		
+    	render(view:'editor', model:model,params:params)    		
     }
+	
+	def workflow = {
+		def workflowDefinition=WorkflowDefinition.get(params.id)
+		def fieldType=workflowDefinition.documentType.fieldType
+		def model = [:]
+		def urlSignavio = ApplicationConfiguration.findByConfigKey('wfp.dme.urlSignavio')
+		model['urlSignavio'] = urlSignavio ? urlSignavio.configValue : '/signaviocore/p/editor'
+		model['workflowRoot'] = "root_${workflowDefinition.id}"
+		model['modelRoot'] = "root_${fieldType.id}"
+		render(view:'editor', model:model)		
+	}
     
+	def fieldType = {
+		def fieldType=FieldType.get(params.id)
+		
+		def model = [:]
+		def urlSignavio = ApplicationConfiguration.findByConfigKey('wfp.dme.urlSignavio')
+		model['urlSignavio'] = urlSignavio ? urlSignavio.configValue : '/signaviocore/p/editor'
+		
+		model['modelRoot'] = "root_${fieldType.id}"
+		render(view:'model', model:model)
+	}
+	
+	def documentType = {
+		def documentType=DocumentType.get(params.id)
+		dialogService.check(documentType!=null,"dataModelEditor.documentType.notfound",[params.id])
+		dialogService.check(documentType?.fieldType!=null,"dataModelEditor.documentType.nofieldtype",[documentType.name])
+		
+		def model = [:]
+		def urlSignavio = ApplicationConfiguration.findByConfigKey('wfp.dme.urlSignavio')
+		model['urlSignavio'] = urlSignavio ? urlSignavio.configValue : '/signaviocore/p/editor'
+		
+		model['modelRoot'] = "root_${documentType.fieldType?.id}"
+		render(view:'model', model:model)
+	}
+	
+	
 	// ##############################################################
 	
     def editField = {
@@ -247,8 +283,7 @@ class DataModelEditorController {
 				
 				if (node1.type.equals("field") && node2.type.equals("fieldtype") && (moveType.equals("inside"))) {
 					result=dmeEventService.dragFieldToFieldType(node1,node2,moveType,isCopy)
-				}
-				
+				}				
 				
 				if (node1.type=="field" && node2.type=="form" && moveType=="inside") {
 					result=dmeEventService.dragFieldToForm(node1,node2,moveType,isCopy)				
@@ -393,7 +428,7 @@ class DataModelEditorController {
 	
 	def fieldTypeJSON = {	
 			def elements=[]
-			if (!params.id || params.id=="") {				
+			if (!params.id || params.id=="") {								
 				elements=FieldType.findAll([order:'asc',sort:'name'])	            
 			} 
 			
@@ -426,16 +461,20 @@ class DataModelEditorController {
 				//elements=FieldType.findAllByListParentIsNotNull([order:'asc',sort:'name'])
 				elements=FieldType.findAll([order:'asc',sort:'name'])
 				fieldType=true
+			} else if (params.id.startsWith("root_")) {
+				def id=new Integer(params.id.split("_")[1])
+				elements=[FieldType.get(id)]
+				fieldType=true
 			} else {
 				if (params.id.startsWith("field_")) {
 					def id=new Integer(params.id.split("_")[1])
 					def p=Field.get(id)
-					elements=Field.findAllByParent(p,[sort:'fieldPosition'])
+					elements=Field.findAllByParent(p,[sort:'position'])
 				} else {
 					def id=new Integer(params.id.split("_")[1])
 					def p=FieldType.get(id).listParent
 					if(p) {
-						elements=Field.findAllByParent(p,[sort:'fieldPosition'])
+						elements=Field.findAllByParent(p,[sort:'position'])
 					}
 					//elements=[p]
 				}
@@ -508,6 +547,29 @@ class DataModelEditorController {
 					}
 					render elementlist() as JSON
 					break
+				
+				case "root":					
+					elements=[WorkflowDefinition.get(id)]
+					def elementlist = { elements.collect { workflow ->
+							def hasChildren=Form.countByWorkflow(workflow)>0
+							def nodeRel = hasChildren ? 'folder' : 'default'
+							def nodeState =hasChildren ? 'closed' : ''
+					
+							def nodeClass="jstree-default workflow workflow-${workflow.name}"
+								
+							[
+							attr: [id: "workflow_${workflow.id}",title:workflow.name,class: nodeClass,rel:nodeRel],
+							 data: workflow.name,
+							title: workflow.name,
+							state:nodeState,
+							rel:nodeRel
+						 ]
+						}
+					}
+					render elementlist() as JSON
+					break
+
+						
 				case "workflow":
 					def workflow=WorkflowDefinition.get(id)
 					elements=Form.findAllByWorkflow(workflow,[order:'asc',sort:'name'])	            			

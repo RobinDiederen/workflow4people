@@ -18,7 +18,7 @@
 	    	<div class="editor dialog row " style="position:relative;width:auto;">
 	    	
 		        <%-- Data model tree --%>
-		        <div id="modelPane" class="treepane span6" >
+		        <div id="modelPane" class="treepane span12" >
 		        	<div class="xui-widget-header xui-corner-all xui-helper-clearfix">Data model</div>
 		        	<div class="tree-toolbar">
 						<a href="#" onclick="dialog.formDialog(null,'dataModelEditor',{ dialogname: 'editFieldType', submitname: 'submitFieldType'}, null);return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</a>
@@ -27,17 +27,7 @@
 		        	<ul id="tree" class="filetree treeview" />    
 		        	</div>		            
 				</div>
-				
-				<%-- workflow tree --%>	
-				<div id="workflowPane" class="treepane span6" >
-					<div class="">Workflows</div>
-					<div class="tree-toolbar">
-						<a href="#" onclick="dialog.formDialog(null,'dataModelEditor',{ dialogname: 'editWorkflowDefinition', submitname: 'submitWorkflowDefinition'}, null);return false;" title="New workflow definition" class="action-new-workflowdefinition action" >&nbsp;</a>
-					</div>
-					<div id="workflowTree" style="overflow:auto;" class="dmeTree" >
-						<ul id="workflowList" class="filetree treeview" />
-					</div>				
-				</div>
+								
 			</div>
 			<%-- logging pane 
 			<div class="row">

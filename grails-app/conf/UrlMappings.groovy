@@ -25,5 +25,7 @@ class UrlMappings {
 	  "501"(controller:"error",action: "error") // not implemented
 	  "503"(controller:"error",action: "error") // service unavailable
 	  */
+	  "500" (controller: "dialogException", action: "dialog", exception: org.open_t.dialog.DialogException)
+	  
 	}
 }

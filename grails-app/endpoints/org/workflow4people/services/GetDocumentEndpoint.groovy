@@ -72,14 +72,14 @@ class GetDocumentEndpoint {
 			  documentId=task.workflow.document.id
 		  } else {
 			  log.debug "Task not active ... :("
-			  throw new Exception("Task already completed")
+			  throw new RuntimeException("Task already completed")
 		  }
 		}
 		def xmlDocument=documentService.getDocument(documentId)
 		
 		// Store task details in document header.
 		xmlDocument.header.taskId=taskId
-		/*
+		
 		if (taskId.length()>0 && xmlDocument.header.task) {
 			xmlDocument.header.task.id=task.id
 			xmlDocument.header.task.name=task.name
@@ -91,7 +91,8 @@ class GetDocumentEndpoint {
 			xmlDocument.header.task.status=task.status
 			xmlDocument.header.task.statusUser=task.statusUser
 		}
-		*/
+		/*
+		 * This would work if requestByUser would actually exist ...!!
 		xmlDocument.header.taskId=""
 		xmlDocument.header.task.id=""
 		xmlDocument.header.task.name=""
@@ -123,7 +124,7 @@ class GetDocumentEndpoint {
 				xmlDocument.header.task.statusUser=activeTask.statusUser
 			}
 		}
-		
+		*/
 		def response = { GetDocumentResponse(xmlns:namespace) {
 			document(xmlDocument)
 			}		

@@ -43,7 +43,14 @@ class FieldTypeController {
 	}
 	
 	def jsonlist = {
-		render listService.jsonlist(FieldType,params,request) as JSON
+		def actions= {  doc,env -> """<div class="btn-group">
+										<span class="btn btn-small" onclick="dialog.formDialog(${doc.id},'fieldType', { refresh : '${env.detailTableId}'}, null)">edit</span>
+										<a class="btn btn-small" href="${createLink(controller:'dataModelEditor',action:'fieldType',id:doc.id)}">model &raquo;</a>
+										<span class="btn btn-small" onclick="dialog.deleteDialog(${doc.id},'fieldType',{ refresh : '${env.detailTableId}'})">&times;</span>
+									</div>""" 
+}
+		
+		render listService.jsonlist(FieldType,params,request,null,actions) as JSON
 	}
 	
 	def dialog = { return dialogService.edit(FieldType,params) }

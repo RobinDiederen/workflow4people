@@ -6,10 +6,10 @@
 //var fieldTypeTree
 var dataModelTree
 var workflowTree
-var dme = {}
+//var dme = {};
+ //dme.clipboard = {};
 
 dme.refreshTreeHandler=function refreshTreeHandler(event,eventData) {
-	//alert ('weeeee');
 	if (eventData!=null && eventData.jsonResponse !=null && eventData.jsonResponse.refreshNodes !=null ) {
 		for (i in eventData.jsonResponse.refreshNodes) {
  			dme.refreshTree(eventData.jsonResponse.refreshNodes[i])
@@ -227,7 +227,7 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 			
 			"editworkflowdiagram" : {
 								"label": 'Edit workflow diagram',
-								"action" : function( node ) { window.open(wfp.dme.urlSignavio + '?id=root-directory%3B'+node[0].title+'.jpdl.xml','signavio','width=1000,height=700,left=0,top=100,screenX=0,screenY=100') }
+								"action" : function( node ) { window.open(dme.urlSignavio + '?id=root-directory%3B'+node[0].title+'.jpdl.xml','signavio','width=1000,height=700,left=0,top=100,screenX=0,screenY=100') }
 							  },
 
 			"generateforms" : {
@@ -308,7 +308,15 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 										  var parentId = node[0].id.split('_').pop();
 										  dialog.formDialog(null,'formItem',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
 									  }
+									  
 									  },
+			
+				
+				"paste" : {
+					"label": 'Paste',
+					"action" : function( node ) {dme.pasteFromClipboard(node) }
+				},					  
+									  
 				"delete" : {
 										"label": 'Delete',
 										"action" : function( node ) {this.remove(node) }
@@ -318,7 +326,16 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 	}
 								
 	if (node[0].id.substring(0,9)=="formitem_") {
-		obj = {											  		    
+		obj = {		
+				"copy" : {
+					"label": 'Copy',
+					"action" : function( node ) {dme.copyToClipboard(node) }
+				},
+				
+				"paste" : {
+					"label": 'Paste',
+					"action" : function( node ) {dme.pasteFromClipboard(node) }
+				},
 				"delete" : {
 										"label": 'Delete',
 										"action" : function( node ) {this.remove(node) }
@@ -334,6 +351,46 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 	
 	
 }
+
+dme.copyToClipboard= function copyToClipboard(node) {
+	dme.clipboard.id=node[0].id;
+	dme.clipboard.title=node[0].title
+	$(".dialog-events").trigger("dialog-message",{ message: dme.clipboard.title +' ('+dme.clipboard.id+') copied to clipboard' })
+}
+
+dme.pasteFromClipboard= function pasteFromClipboard(node) {
+	
+	var jsonobj= {
+			"func":"move_node",
+			"id1":dme.clipboard.id,
+			"id2":node[0].id,
+			"moveType":"inside",
+			"isCopy":true,
+			"newName":""					
+	}
+	
+	var jsonResponse = $.ajax({
+		  url: "/workflow4people/dataModelEditor/before/1",
+		  async: false,
+		  cache: false,
+		  data: jsonobj,
+		  type: "POST"
+		  
+		 }).responseText;
+	var result=eval('(' + jsonResponse + ')').result;
+	
+	for (i in result.refreshNodes) {
+			dme.refreshTree(result.refreshNodes[i])
+		}
+	
+	if (result.success) {
+		$(".dialog-events").trigger("dialog-message",{ message: result.message })	
+	} else {
+		alert(result.message)
+	}
+	
+}
+
 		
 $(function() {		        
 	$(".dmeTree").bind("before.jstree", function (e,data) {		
@@ -361,7 +418,7 @@ $(function() {
 			var moveType=data.args[2]
 			
 			var isCopy=data.args[3]
-			logMessage("Before "+data.func +" ... from:#"+id1+" to:#"+id2+" moveType:"+moveType+" copy:"+isCopy);
+
 			var newName=""
 			if (data.func==="rename_node") {
 				newName=data.args[1]
@@ -391,7 +448,7 @@ $(function() {
 	 		}
 			
 			if (result.success) {
-				logMessage(result.message)
+				$(".dialog-events").trigger("dialog-message",{ message: result.message })	
 			} else {
 				alert(result.message)
 			}
@@ -432,6 +489,16 @@ $(function() {
 				        				}
 									}
 								},
+								"copy" : {
+									"label": 'Copy',
+									"action" : function( node ) {dme.copyToClipboard(node) }
+								},
+								
+								"paste" : {
+									"label": 'Paste',
+									"action" : function( node ) {dme.pasteFromClipboard(node) }
+								},
+								
 								"delete" : {
             									"label": 'Delete',
             									"action" : function( node ) {this.remove(node) }
@@ -449,17 +516,21 @@ $(function() {
                 "url" : "/workflow4people/dataModelEditor/fieldJSON",
                 cache: false,
                 "data" : function (n) {
-                    return { id : n.attr ? n.attr("id") : "" };
+                    return { id : n.attr ? n.attr("id") : dme.modelRoot };
                 }
             }
+        },
+        "themes" : {
+            //Really, we don't need to load this again ...
+            url: "/workflow4people/css/theme/theme.css"
         }
+
   
         
     
         });
     
-    	workflowTree=$("#workflowTree").jstree({         
-
+    	workflowTree=$("#workflowTree").jstree({            		
         "plugins" : [  "json_data","themes", "ui", "crrm", "cookies", "dnd", "search", "types", "contextmenu","hotkeys" ],
         
         
@@ -468,13 +539,17 @@ $(function() {
                 "url" : "/workflow4people/dataModelEditor/workflowJSON",
                 cache: false,
                 "data" : function (n) {
-                    return { id : n.attr ? n.attr("id") : "" };
+                    return { id : n.attr ? n.attr("id") : dme.workflowRoot } ;
                 }
             }
         },
     	
     	 "contextmenu" : {        	
         	"items": dme.workflowContextMenu     			
+        },
+        "themes" : {
+            //Really, we don't need to load this again ...
+            url: "/workflow4people/css/theme/theme.css"
         }
     	
     	
