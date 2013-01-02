@@ -1,1 +1,1 @@
-<mmail:output type="date" value="\${document.${gpath}}" />
+<mmail:output type="date" value="*{document.${gpath}}" />

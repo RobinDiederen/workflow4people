@@ -860,7 +860,8 @@
 			<complexType>
 				<sequence>
 					<element name="access" type="boolean" />
-					<element name="userDetails" type="wf4p:UserDetails" minOccurs="0" />
+					<element name="userDetails" type="wf4p:UserDetails" minOccurs="0" />					
+					<element name="userGroups" type="wf4p:UserGroups" minOccurs="0" />
 				</sequence>
 			</complexType>		
 		</element>	

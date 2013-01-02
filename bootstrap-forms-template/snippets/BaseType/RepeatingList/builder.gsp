@@ -1,1 +1,1 @@
-'${prefixedName}' () { <g:each in="${fields}" var="theField"> ${theField.builderSnippet} </g:each> }
+'${prefixedName}' () { <g:each in="${field.children}" var="theField"> ${theField.builderSnippet} </g:each> }

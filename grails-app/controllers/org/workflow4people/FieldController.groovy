@@ -36,11 +36,6 @@ class FieldController {
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save:'POST', update:'POST']
-
-    def xlist = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ fieldInstanceList: Field.list( params ), fieldInstanceTotal: Field.count() ]
-    }
 	
 	def list = {
 		render (view:'/dialog/list', model:[dc:Field,controllerName:'field',request:request,jsonlist:'jsonlist'])
@@ -49,9 +44,6 @@ class FieldController {
 	def jsonlist = {
 		render listService.jsonlist(Field,params,request,null,null) as JSON
 	}
-
-
-	
 
     def show = {
         def fieldInstance = Field.get( params.id )
@@ -72,9 +64,6 @@ class FieldController {
         }
         else { return [ fieldInstance : fieldInstance ] }
     }
-
-    
-    
     
     def json = {
         def fieldInstance = Field.get( params.id )
@@ -103,28 +92,8 @@ class FieldController {
         	}
         }
     }
-    
-
-    def delete = {
-        def fieldInstance = Field.get( params.id )
-        if(fieldInstance) {
-            try {
-            	def fieldList=fieldInstance.fieldList;
-                fieldInstance.delete(flush:true)
-                fieldList.renumberPositions()
-                flash.message = "Field ${params.id} deleted"                
-                redirect(controller:'fieldList',action:'tree',id:fieldList.id)
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "Field ${params.id} could not be deleted"
-                redirect(action:show,id:params.id)
-            }
-        }
-        else {
-            flash.message = "Field not found with id ${params.id}"
-            redirect(action:list)
-        }
-    }
+	def delete = { render dialogService.delete(Field,params) as JSON }
+	
 
     def edit = {
         def fieldInstance = Field.get( params.id )
@@ -137,20 +106,7 @@ class FieldController {
             return [ fieldInstance : fieldInstance ]
         }
     }
-    /*
-    def dialog = {
-		
-        def fieldInstance = Field.get( params.id )
-
-        if(!fieldInstance) {
-            flash.message = "Field not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else {
-            return [ fieldInstance : fieldInstance ]
-        }
-    }
-	*/
+   
 	def dialog = { return dialogService.edit(Field,params) }
 	
 	def submitdialog = { render dialogService.submit(Field,params) as JSON }
@@ -158,7 +114,8 @@ class FieldController {
 	/*
 	 * Creates new field under a FieldType. Creates the listParent field if it did not exist already
 	 */
-	def submitUnderFieldType = { 
+	
+	def xsubmitUnderFieldType = { 
 		def fieldType=FieldType.get(params.parentId)
 		if (!fieldType.listParent) {			
 				// Create new listParent field if it didn't exist
@@ -185,7 +142,7 @@ class FieldController {
      */
     
     
-    def insert = {
+    def xinsert = {
         def currentFieldInstance = Field.get( params.id )
         def fieldInstance = new Field()
         if(!currentFieldInstance) {        	
@@ -213,7 +170,7 @@ class FieldController {
     
     
     
-    def insertsave = {
+    def xinsertsave = {
         def fieldInstance = new Field(params)
         // move everything from current position down the list
         fieldInstance.fieldList.field.each { 
@@ -240,7 +197,7 @@ class FieldController {
     
     
 
-    def update = {
+    def xupdate = {
         def fieldInstance = Field.get( params.id )
         if(fieldInstance) {
             if(params.version) {
@@ -267,13 +224,13 @@ class FieldController {
         }
     }
 
-    def create = {
+    def xcreate = {
         def fieldInstance = new Field()
         fieldInstance.properties = params
         return ['fieldInstance':fieldInstance]
     }
 
-    def save = {
+    def xsave = {
         def fieldInstance = new Field(params)
         if(!fieldInstance.hasErrors() && fieldInstance.save()) {
             flash.message = "Field ${fieldInstance.id} created"

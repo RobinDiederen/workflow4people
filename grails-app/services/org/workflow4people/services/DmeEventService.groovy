@@ -545,6 +545,12 @@ class DmeEventService {
 			int fieldCount
 			def field=Field.get(new Long(node.id))
 			def theRefreshNodes=[field.visibleParentId]
+			
+			def dependentFields=Field.findAllByDependsOn(field)
+			dependentFields.each { fld ->  
+				fld.dependsOn=null
+			}
+			
 			def n=FormItem.countByField(field)
 			def theFieldType=null
 								

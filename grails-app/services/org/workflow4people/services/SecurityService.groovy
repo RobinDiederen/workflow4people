@@ -96,7 +96,7 @@ class SecurityService {
     		}
     	}
     	}
-    	return features
+    	return features.sort().unique()
     }
     
     def authenticate(String username, String password) {

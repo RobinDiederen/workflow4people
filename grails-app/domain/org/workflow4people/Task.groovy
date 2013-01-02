@@ -148,17 +148,17 @@ class Task {
 		sid.addField("externalId",externalId)
 		sid.addField("externalWorkflowId",externalWorkflowId)
 		
-		/*
+		
 		candidateGroups.each { cg -> 
-			sid.addField("candidateGroup",cg.authority)
+			sid.addField("candidateGroups",cg.authority)
 			
 		}
 		
 		candidateUsers.each { cu ->
-			sid.addField("candidateUser",cu.username)
+			sid.addField("candidateUsers",cu.username)
 			
 		}
-			*/	
+			
 		return sid
 	}
 	

@@ -14,6 +14,6 @@
 			dependency-type="${field.dependencyType}"
 			dependency-parameter="${field.dependencyParameter}"
 			
-			gpath="document.${gpathExpr}"  value="\${document.${gpath}}" helpTitle="${label}" helpBody="${help}" title ="${alert}" 			
+			gpath="document.${gpathExpr}"  value="*{document.${gpath}}" helpTitle="${label}" helpBody="${help}" title ="${alert}" 			
 			
 			/>

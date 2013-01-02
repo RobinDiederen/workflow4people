@@ -226,7 +226,7 @@ class Jbpm4Service implements InitializingBean {
 					}
 					if (participation.type == "candidate" && participation.userId) {					
 						def person=Person.findByUsername(participation.userId)
-						person.addtocandidateUsers(person)
+						person.addToCandidateUsers(person)
 					}					
 				}
 				
