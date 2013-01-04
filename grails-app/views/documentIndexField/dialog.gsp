@@ -5,6 +5,7 @@
 		<dialog:textField object="${documentIndexFieldInstance}" propertyName="title" mode="edit" />
 		<dialog:textArea object="${documentIndexFieldInstance}" propertyName="description" mode="edit" />
 		<dialog:textField object="${documentIndexFieldInstance}" propertyName="xpath" class="extrawide" mode="edit" />
-		<dialog:checkBox object="${documentIndexFieldInstance}" propertyName="publish" mode="edit" />                        		        	    		
+		<dialog:textField object="${documentIndexFieldInstance}" propertyName="script" class="extrawide" mode="edit" />		
+		<dialog:checkBox object="${documentIndexFieldInstance}" propertyName="publish" mode="edit" />		
 	</dialog:table>		
 </dialog:form>

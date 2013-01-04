@@ -276,48 +276,87 @@ class DocumentService implements InitializingBean {
     }
 
 
-    def indexDocument(Document documentInstance){
+    void indexDocument(Document documentInstance){
     	
     	def builder = domFactory.newDocumentBuilder()
-    	def doc     = builder.parse(new ByteArrayInputStream(documentInstance.xmlDocument.bytes))
-    	def indexEntry
-    	
-    	log.debug "Context is: " + nsContext
-    	
-    	def xpath = XPathFactory.newInstance().newXPath()
-		xpath.setNamespaceContext(nsContext)
-    	
-    	documentInstance.documentType.documentIndexField.each { field ->
-    		log.debug field
-    		log.debug "Processing xpath expression ${field.xpath} ..."
-    		
-    		def expr = xpath.compile(field.xpath)    		
-    		def nodes   = expr.evaluate(doc, XPathConstants.NODESET)
-    		
-    		// Delete any previous index keys
-    		DocumentIndex.findAllByNameAndDocument(field.name,documentInstance).each { theIndex ->
-    			documentInstance.removeFromDocumentIndex(theIndex)    			
-    			theIndex.delete(flush:true)
-    			
-    		}
-    		// Store all values that match the Xpath expression
-    		nodes.each {
-    		  log.debug "Index field ${field.name} has value ${it.textContent}"    		  
-    		  //indexEntry=DocumentIndex.findByNameAndDocument(field.name,documentInstance)
-    		  //if (!indexEntry){
-    			  indexEntry=new DocumentIndex()
-    		  	  indexEntry.name=field.name
-    			  //indexEntry.document=documentInstance
-    			  //indexEntry.addToDocument(documentInstance)
-    		  
-    			  documentInstance.addToDocumentIndex(indexEntry)
-    			  
-    		  //}
-    		  indexEntry.value=it.textContent
-    		  indexEntry.save(flush:true,failOnError:true)
-    		  //theDocumentIndexId=indexEntry.id
-    		}
-    	}
+		try {
+			Document.withTransaction {
+	    	def doc     = builder.parse(new ByteArrayInputStream(documentInstance.xmlDocument.bytes))
+	    	def indexEntry
+	    	
+	    	log.debug "Context is: " + nsContext
+	    	
+	    	def xpath = XPathFactory.newInstance().newXPath()
+			xpath.setNamespaceContext(nsContext)
+			
+			def slurpedDoc = new XmlSlurper().parseText(documentInstance.xmlDocument)
+			
+			DocumentIndex.findAllByDocument(documentInstance).each { theIndex ->
+				documentInstance.removeFromDocumentIndex(theIndex)
+				theIndex.delete(flush:false)
+	    	}
+	    	
+	    	documentInstance.documentType.documentIndexField.each { field ->
+				if (field.xpath && field.xpath.length()>0) {
+		    		log.debug field
+		    		log.debug "Processing xpath expression ${field.name} ${field.xpath} ..."
+		    		
+		    		def expr = xpath.compile(field.xpath)    		
+		    		def nodes   = expr.evaluate(doc, XPathConstants.NODESET)
+		    		
+		    		// Delete any previous index keys
+					/*
+		    		DocumentIndex.findAllByNameAndDocument(field.name,documentInstance).each { theIndex ->
+		    			documentInstance.removeFromDocumentIndex(theIndex)    			
+		    			theIndex.delete(flush:false)
+		    			
+		    		}
+		    		*/
+		    		// Store all values that match the Xpath expression
+					nodes.each {
+						log.debug "Index field ${field.name} has value ${it.textContent}"    		  
+						indexEntry=new DocumentIndex()
+						indexEntry.name=field.name		  
+						documentInstance.addToDocumentIndex(indexEntry)    			  
+						indexEntry.value=it.textContent
+						indexEntry.save(flush:false,failOnError:true)
+		    		}
+				}
+				
+				if (field.script && field.script.length()>0) {
+					log.debug field
+					log.debug "Processing script expression ${field.script} ..."
+					
+								
+					def indexExpressionDelegate=new IndexExpressionDelegate([doc:slurpedDoc])
+					def result=indexExpressionDelegate.run(field.script)
+					def resultlist= result instanceof java.util.List?result:[result]
+					
+					
+					// Delete any previous index keys
+					DocumentIndex.findAllByNameAndDocument(field.name,documentInstance).each { theIndex ->
+						documentInstance.removeFromDocumentIndex(theIndex)
+						theIndex.delete(flush:false)
+						
+					}
+					
+					// Store all values that match the expression
+					resultlist.each { val ->
+						log.debug "Index field ${field.name} has value ${val}"
+						indexEntry=new DocumentIndex()
+						indexEntry.name=field.name
+						documentInstance.addToDocumentIndex(indexEntry)
+						indexEntry.value=val
+						indexEntry.save(flush:false,failOnError:true)
+					}
+				}
+				
+				
+	    	}
+			}
+		} catch (Exception e) {
+			log.error "Exception while indexing document ${documentInstance}: ${e.message}"
+		}
     	//searchableService.index(documentInstance)
     }
     

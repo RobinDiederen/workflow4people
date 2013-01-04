@@ -1,6 +1,7 @@
 package org.workflow4people.services
 import org.workflow4people.*
 import org.codehaus.groovy.grails.commons.*
+import org.apache.commons.lang.StringUtils
 
 class DmeEventService {
 	def dmeService
@@ -480,7 +481,7 @@ class DmeEventService {
 		
 	}
 	
-	// Page->Page
+	// FormPage->FormPage
 	def dragFormPageToFormPage(def node1,node2,moveType,isCopy) {
 		def result=this.defaultResult
 		try {
@@ -515,6 +516,30 @@ class DmeEventService {
 		
 	}
 
+	// FormPage->Page
+	def dragFormPageToForm(def node1,node2,moveType,isCopy) {
+		def result=this.defaultResult
+		try {
+			def formPage=FormPage.get(node1.id)
+			def form=Form.get(node2.id)
+			
+			def newFormPage=deepClone(formPage)
+			
+			def maxPosition=FormPage.findAllByForm(form,[sort:'position',order:'desc',max:1])[0]?.position?:0
+			newFormPage.position=maxPosition+1			
+			form.addToFormPage(newFormPage)
+			form.save()
+							
+			result.success=true
+			result.message="formPage ${formPage.id} copied"
+			result.refreshNodes=["form_${form.id}"]
+		} catch (Exception e) {
+			result.message=e.message
+		}
+		return result
+		
+	}
+
 	
 	
 	def deleteWorkflowDefinition(def node) {
@@ -529,7 +554,7 @@ class DmeEventService {
 				result.message="There are still ${n} forms(s) referencing this workflow!"
 			} else {
 				log.debug "Deleting workflow ${node.id}"
-				workflowDefinition.delete()
+				workflowDefinition.delete(failOnError:true,flush:true)
 				result.refreshNodes=["workflowTree"]
 				result.success=true				 
 			}
@@ -598,7 +623,7 @@ class DmeEventService {
 			result.refreshNodes=["formsection_${formItem.formSection.id}"]
 			log.debug "Deleting formItem ${node.id}"
 			result.message="Form item ${formItem} deleted"
-			formItem.delete()
+			formItem.delete(failOnError:true,flush:true)
 			result.success=true
 		} catch (Exception e) {
 			result.message=e.message
@@ -615,7 +640,7 @@ class DmeEventService {
 			log.debug "Deleting form ${node.id}"
 			result.message="Form ${form} deleted"
 			form.workflow.removeFromForm(form)		
-			form.delete()		
+			form.delete(failOnError:true,flush:true)		
 			result.success=true
 		} catch (Exception e) {
 			result.message=e.message
@@ -632,7 +657,7 @@ class DmeEventService {
 			log.debug "Deleting formPage ${node.id}"
 			result.message="Form page ${formPage} deleted"
 			formPage.form.removeFromFormPage(formPage)			  
-			formPage.delete()			
+			formPage.delete(failOnError:true,flush:true)			
 			result.success=true
 		} catch (Exception e) {
 			result.message=e.message
@@ -649,8 +674,8 @@ class DmeEventService {
 			log.debug "Deleting formSection ${node.id}"
 			result.message="Form section ${formSection} deleted"
 			formSection.formPage.removeFromFormSection(formSection)
-			   
-			formSection.delete()
+			
+			formSection.delete(failOnError:true,flush:true)
 			result.success=true
 		} catch (Exception e) {
 			result.message=e.message
@@ -674,7 +699,7 @@ class DmeEventService {
 			if (allowedFlag) {
 				log.debug "DOING IT"
 				result.message= "Deleting fieldtype ${node.id}"
-				fieldType.delete()
+				fieldType.delete(failOnError:true,flush:true)
 				result.success=true
 				result.allowed=true
 			}
@@ -709,6 +734,51 @@ class DmeEventService {
 			result.message=e.message
 		}
 		return result
-	}	
+	}
+	
+	/*
+	 * Clones a domain object and recursively clones children, clearing ids and
+	 * attaching children to their new parents. Ownership relationships (indicated
+	 * by GORM belongsTo keyword) cause "copy as new" (a recursive deep clone),
+	 * but associations without ownership are shallow copied by reference.
+	 */
+	def deepClone(domainInstanceToClone){
+
+		//Our target instance for the instance we want to clone
+		def newDomainInstance = domainInstanceToClone.getClass().newInstance()
+	   
+		//Returns a DefaultGrailsDomainClass (as interface GrailsDomainClass) for inspecting properties
+		def domainClass = ApplicationHolder.application.getDomainClass(newDomainInstance.getClass().name)
+	   
+		domainClass?.persistentProperties.each{prop ->
+			if(prop.association){
+				if(prop.owningSide){
+					//we have to deep clone owned associations
+					if(prop.oneToOne){
+						def newAssociationInstance = deepClone(domainInstanceToClone."${prop.name}")
+						newDomainInstance."${prop.name}" = newAssociationInstance
+					}
+					else{
+						domainInstanceToClone."${prop.name}".each{ associationInstance ->
+							def newAssociationInstance = deepClone(associationInstance)
+							newDomainInstance."addTo${StringUtils.capitalize(prop.name)}"(newAssociationInstance)
+						}
+					}
+				}
+				else{
+					if(!prop.bidirectional){
+						//If the association isn't owned or the owner, then we can just do a  shallow copy of the reference.
+						newDomainInstance."${prop.name}" = domainInstanceToClone."${prop.name}"
+					}
+				}
+			}
+			else{
+				//If the property isn't an association then simply copy the value
+				newDomainInstance."${prop.name}" = domainInstanceToClone."${prop.name}"
+			}
+		}
+
+		return newDomainInstance
+	}
 	
 }

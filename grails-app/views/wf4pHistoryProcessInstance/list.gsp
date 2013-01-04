@@ -10,8 +10,8 @@
 	       <span class="menuButton"><g:link controller="wf4pProcessDefinition" class="awesome small blue button" action="list">&laquo; Process definitions</g:link></span>  
 	        </div>
             <g:if test="${flash.message}"><div class="message">${flash.message}</div></g:if>
-            <div class="dialog">
-                <table>
+            <div class="">
+                <table class="table table-bordered table-striped">
                     <tbody>
                         <tr class="prop">
                             <td valign="top" class="name">Id:</td>                            
@@ -36,7 +36,7 @@
         	</div>
         	<h1>History Process Instances</h1>
         	<div class="list">
-			    <table>
+			    <table class="table table-striped table-bordered">
 			      <thead>
 			        <tr>
 			          <th>Process Instance Id</th>

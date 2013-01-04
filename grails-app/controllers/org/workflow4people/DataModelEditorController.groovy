@@ -341,7 +341,10 @@ class DataModelEditorController {
 					result=dmeEventService.dragFormPageToFormPage(node1,node2,moveType,isCopy)
 				}
 				
-				
+				// PageForm -> Page
+				if (node1.type=="formpage" && node2.type=="form") {
+					result=dmeEventService.dragFormPageToForm(node1,node2,moveType,isCopy)
+				}
 				
 														
 			break;

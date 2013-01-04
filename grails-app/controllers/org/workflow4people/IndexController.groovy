@@ -32,8 +32,7 @@ class IndexController {
 	def documentService
 	
     def index = { }
-    def reindexComplete = {
-    		searchableService.unindex()
+    def reindexComplete = {    		
     		def cnt=0
     		Document.findAll().each { document -> 
     			log.debug "Indexing ${document}"

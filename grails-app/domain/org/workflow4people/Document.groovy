@@ -116,10 +116,17 @@ class Document {
 		sid.addField("cmisFolderUrl",cmisFolderUrl)
 		sid.addField("cmisPath",cmisPath)
 		sid.addField("xmlDocument",xmlDocument)
-		
+		println "Document: ${id}"
 		DocumentIndex.findAllByDocument(this).each { di ->
-			sid.addField("index_${di.name}",di.value)
-			println "added index_${di.name}"
+			if (di.name.startsWith("index_") || di.name.startsWith("mindex_")) {
+				sid.addField(di.name.toString(),di.value)
+				println "added ${di.name}"
+				log.trace "added ${di.name}"
+			} else {
+				sid.addField("index_${di.name}",di.value)
+				log.trace "added index_${di.name}"
+				println "added ${di.name}"
+			}
 		}
 		
 		return sid

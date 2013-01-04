@@ -41,48 +41,54 @@ class AuthenticateEndpoint {
 		
 		def person
 		def theFeatures
-		def userGroupList
+		def userGroupList=[]
+		
 		if (theAccess) {
 			Person.withTransaction {
-			person=securityService.getPerson(request.request.userName.text())
-			def p=org.workflow4people.Person.get(person.id)
-			theFeatures=securityService.getFeatures(request.request.userName.text())
-			userGroupList=person.authorities.sort { it.authority }
-		}
-		
-		def response = { AuthenticateResponse(xmlns:namespace) {
-			access(theAccess)
+				
+				person=securityService.getPerson(request.request.userName.text())
+				def p=org.workflow4people.Person.get(person.id)
+				theFeatures=securityService.getFeatures(request.request.userName.text())
+				try {
+					userGroupList=p?.authorities?.sort { it.authority }
+				} catch (Exception e) {
+					log.error e.message
+				}
+			
+				log.debug "The person is ${person} ${theFeatures}"
+				def response = { AuthenticateResponse(xmlns:namespace) {
+					access(theAccess)
 			
 		
-			if (theAccess) {				
-				userDetails {
-					name (person.username)					
-					realName(person.userRealName)
-					familyName(person.familyName)
-					givenName(person.givenName)
-					email(person.email)					
-					features {					
-						theFeatures.each { theFeature ->
-							feature(theFeature)							
-						}						
-					}
-				}
-				userGroups {
-					userGroupList.each { aUserGroup ->
-							userGroup {
-								name aUserGroup.authority
-									description aUserGroup.description
-									type aUserGroup.authorityType
-								}
+					if (theAccess) {				
+						userDetails {
+							name (person.username)					
+							realName(person.userRealName)
+							familyName(person.familyName)
+							givenName(person.givenName)
+							email(person.email)					
+							features {					
+								theFeatures.each { theFeature ->
+									feature(theFeature)							
+								}						
 							}
+						}
+						userGroups {
+							userGroupList.each { aUserGroup ->
+									userGroup {
+										name aUserGroup.authority
+											description aUserGroup.description
+											type aUserGroup.authorityType
+										}
+									}
+								  }
+							  }
 						  }
-					  }
-				  }
-				
-			}	
-				
+						
+					}
+				return response	
+			}
 		
-		return response
 		}
     }
 }

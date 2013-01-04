@@ -26,8 +26,6 @@ class Person  {
 	static listProperties=['id','username','userRealName','familyName','givenName','email']
 	static hasMany = [authorities: Authority]
 	static belongsTo = Authority
-	
-	//Authority primaryGroup
 
 	/** Username */
 	String username

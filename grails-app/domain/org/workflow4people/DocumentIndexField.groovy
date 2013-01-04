@@ -35,6 +35,7 @@ class DocumentIndexField {
     String title
     String description
     String xpath
+	String script
     boolean publish
     
     String toString() {

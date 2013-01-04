@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.solr.common.SolrInputDocument;
 
 class Task {
+	def solrService
 	static transients = ["noMessage"]
    	//static belongsTo=[workflow:Workflow]
 
@@ -123,6 +124,15 @@ class Task {
 		
 	}
 	
+	def afterDelete() {
+		log.debug "AfterDelete task ${id}"
+		try {
+			solrService.deleteItem(Task,id)
+		} catch (Exception e){
+			log.error "Error while removing task from Solr: ${e.message}"
+		}
+	}
+	
 	
 	SolrInputDocument getSolrInputDocument() {
 		SolrInputDocument sid = new SolrInputDocument()
@@ -144,7 +154,7 @@ class Task {
 		
 		sid.addField("transitions",transitions)
 		
-		
+		sid.addField("outcome",outcome)
 		sid.addField("externalId",externalId)
 		sid.addField("externalWorkflowId",externalWorkflowId)
 		

@@ -10,6 +10,7 @@ import org.apache.solr.client.*
 import org.workflow4people.*
 import groovyx.gpars.*
 import org.codehaus.groovy.grails.commons.*
+import java.util.concurrent.atomic.*
 
 class SolrService {
 	
@@ -28,12 +29,12 @@ class SolrService {
 	
 
 	boolean abortFlag=false
-	Long currentItem=0
-	public synchronized void incCurrentItem() {
-		currentItem++;
+	AtomicInteger currentItem
+	public void incCurrentItem() {
+		currentItem.incrementAndGet()
 	}
-	public synchronized int theCurrentItem() {
-		return currentItem;
+	public int theCurrentItem() {
+		return currentItem.get();
 	}
 	
 	def currentItemType
@@ -45,8 +46,9 @@ class SolrService {
 	
 	String statusMsg = ""
 	
-	def getProgress() {		
-			return [running:running, total:theTotal, current:currentItem, currentItemType:currentItemType,statusMsg:currentMessage,ping:ping,numDocsInDb:numDocsInDb,numDocsInSolr:numDocsInSolr]		
+	def getProgress() {
+			def crnt=currentItem?currentItem.get():0
+			return [running:running, total:theTotal, current:crnt, currentItemType:currentItemType,statusMsg:currentMessage,ping:ping,numDocsInDb:numDocsInDb,numDocsInSolr:numDocsInSolr]		
 		
 	}
 	
@@ -278,12 +280,12 @@ class SolrService {
 	 * Date-based indexing. This one has the great advantage it does not need to write to the database
 	 */
 	
-	def reIndexByLastUpdated(dc) {
+	void reIndexByLastUpdated(dc) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		currentItemType=dcName
 		log.trace "Reindex by last updated for ${dcName}"
 		ping++
-		if (!running && !lock) {
+		if (!running && !lock) {		
 			lock=true
 			running=true
 			abortFlag=false
@@ -302,9 +304,9 @@ class SolrService {
 			Date endDate= new Date()
 			endDate.setTime(endDate.getTime()-1000);
 			
-			//println "Indexing items from ${startDate} to ${endDate} (if any)"
+			log.trace  "Indexing items from ${startDate} to ${endDate} (if any)"
 			theTotal =dc.executeQuery("""select count(*) from ${dcName} d where (d.lastUpdated>:startDate and d.lastUpdated<:endDate)""",[startDate:startDate,endDate:endDate])[0]
-			currentItem=0
+			currentItem=new AtomicInteger(0)
 			def session = sessionFactory.getCurrentSession()
 			def items
 			//def offset=0
@@ -312,14 +314,13 @@ class SolrService {
 			while ((items = dc.findAll("from ${dcName} d where d.lastUpdated>:startDate and d.lastUpdated<:endDate and d.id>:currentId order by d.id asc",[startDate:startDate,endDate:endDate,currentId:currentId],[max:500])) && !abortFlag) {
 				try {
 					currentId=items[items.size()-1].id
-					println "Reindexing ${items.size()} items from ${items[0].id}"
+					log.trace "Reindexing ${items.size()} items from ${items[0].id}"
 					currentMessage="Reindexing ${items.size()} items from ${items[0].id}"
 					updateStats(dc)
 	
 					GParsPool.withPool { pool ->
 						
 						items.eachParallel { item ->
-							//println item
 							try {
 								def sid=item.getSolrInputDocument();
 								solr.add(sid)
@@ -355,25 +356,25 @@ class SolrService {
 	 */
 	
 	
-	def reIndexAll(dc,fromId) {
+	 void reIndexAll(dc,fromId) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
 		abortFlag=false
 		Long currentId=fromId
-		def chunkSize=500
+		def chunkSize=50
 		try {
 			if (!running && !lock) {
+			
 				lock=true
 				running=true				
 				String urlString = grailsApplication.config.solr.url+"/"+dcName
 				//SolrServer solr = new CommonsHttpSolrServer(urlString);
 				int maxbuf=500
-				int maxthreads=50
+				int maxthreads=1
 				SolrServer solr = new org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer(urlString,maxbuf,maxthreads)
-				println "currentId=${currentId}"
+				log.trace "currentId=${currentId}"
 				theTotal =dc.executeQuery("""select count(*) from ${dcName} d where (d.id>:currentId)""",[currentId:currentId])[0]
-				println "theTotal=${theTotal}"
-				currentItem=0
-				
+				log.trace "theTotal=${theTotal}"
+				currentItem=new AtomicInteger(0)				
 				def session = sessionFactory.getCurrentSession()
 				def items
 
@@ -383,7 +384,7 @@ class SolrService {
 					try {
 						
 						def startTime=new Date().time
-						println "Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
+						log.trace "Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						currentMessage="Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						updateStats(dc)
 	
@@ -398,19 +399,19 @@ class SolrService {
 						}
 
 						
-						println "committing"
+						log.trace "committing"
 						solr.commit()
-						//currentItem+=items.size()
+						
 						
 						session.flush()
 						session.clear()
 						def endTime=new Date().time
-						println "Reindexed ${items.size()} items in ${(endTime-startTime)/1000} seconds"
+						log.trace "Reindexed ${items.size()} items in ${(endTime-startTime)/1000} seconds"
 						currentMessage="Reindexed ${items.size()} items in ${(endTime-startTime)/1000} seconds"												
 						
 						
 					} catch (Exception e) {
-						println "Caught exception while indexing (inner loop): ${e.getMessage()}"
+						log.error "Caught exception while indexing (inner loop): ${e.getMessage()}"
 						currentMessage="Caught exception while indexing (inner loop): ${e.getMessage()}"
 						sleep(10000)
 					}
@@ -420,24 +421,24 @@ class SolrService {
 				lock=false
 			}		 
 		} catch (Exception e) {
-			println "Caught exception while indexing: ${e.message}"
+			log.error "Caught exception while indexing: ${e.message}"
 			currentMessage="Caught exception while indexing: ${e.message}"
 			running=false
 			lock=false
 		}
-		println "Completed indexing"
+		log.trace "Completed indexing"
 		currentMessage="Completed indexing"
 	}
 	
 	def deleteItem(dc,id) {
 		def dcName=new DefaultGrailsDomainClass(dc).shortName
-		println "Deleting ${id} from Solr"
+		log.trace "Deleting ${id} from Solr"
 		String urlString = grailsApplication.config.solr.url+"/"+dcName
 		SolrServer solr = new CommonsHttpSolrServer(urlString);
-		println solr.deleteById(id.toString())
+		solr.deleteById(id.toString())
 		solr.commit()
 		
-		println "Completed deleting ${id} from Solr"		
+		log.trace "Completed deleting ${id} from Solr"		
 
 	}
 	

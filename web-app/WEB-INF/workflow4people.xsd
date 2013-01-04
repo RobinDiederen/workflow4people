@@ -392,32 +392,6 @@
 			</complexType>		
 		</element>
 		
-		<element name="FindTasksRequest">
-			<complexType>
-				<sequence>
-					<element name="authentication" type="wf4p:Authentication" />
-						<element name="request">
-							<complexType>
-							<sequence>
-								<element type="string" name="userId" />
-								<element type="string" name="processInstanceId" minOccurs="0"/>
-								<element type="wf4p:Paginate" name="paginate" minOccurs="0"/>
-							</sequence>					
-							</complexType>					
-						</element>
-				</sequence>
-			</complexType>		
-		</element>
-		
-		<element name="FindTasksResponse">
-			<complexType>
-				<sequence>
-					<element type="wf4p:PaginateResult" name="paginateResult" />
-					<element name="personalTaskList" type="wf4p:TaskList" />
-					<element name="groupTaskList" type="wf4p:TaskList" />
-				</sequence>
-			</complexType>		
-		</element>
 		
 		<element name="TaskQueryRequest">
 			<complexType>

@@ -60,7 +60,7 @@
   });
 </f:javascript>
 
-<table id="table-document-${listGpath}">
+<table id="table-document-${listGpath}" class="table table-striped table-bordered">
   
   <thead>
 	  <tr>

@@ -12,9 +12,9 @@
 	        </div>
             <g:if test="${flash.message}"><div class="message">${flash.message}</div></g:if>
            
-                <div class="dialog">
+                <div class="">
                 
-                    <table >
+                    <table class="table table-striped table-bordered">
                         <tbody>                      
                             <tr class="prop">
                                 <td valign="top" class="name">

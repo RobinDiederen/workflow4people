@@ -231,7 +231,7 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 							  },
 
 			"generateforms" : {
-								  "label": 'Generate forms',
+								  "label": 'Generate model/forms',
 								  "action" : function( node ) { dme.generateFormsDialog(node); }
 							  },
 			"generateprocess" : 	  {
@@ -261,6 +261,7 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 	}
 
 	if (node[0].id.substring(0,5)=="form_") {
+		var pasteLabel=dme.clipboard.title?'Paste '+dme.clipboard.title:'Paste'
 		obj = {										
 	  		    "newpage" : {
 									  "label": 'New page',
@@ -268,9 +269,12 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 										  var parentId = node[0].id.split('_').pop();
 										  dialog.formDialog(null,'formPage',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });}
 									  },
-									  
+			  "paste" : {				  
+					"label": pasteLabel,
+					"action" : function( node ) {dme.pasteFromClipboard(node) }
+					},									  
 									  "generateforms" : {
-										  "label": 'Generate forms',
+										  "label": 'Generate form',
 										  "action" : function( node ) { dme.generateFormsDialog(node); }
 									  },
 									  
@@ -292,6 +296,17 @@ dme.workflowContextMenu = function workflowContextMenu( node ) {
 										  dialog.formDialog(null,'formSection',{ dialogname: "dialog", submitname: "submitdialog"}, { parentId: parentId });
 									  }
 									  },
+				"copy" : {
+					"label": 'Copy',
+					"action" : function( node ) {dme.copyToClipboard(node) }
+				},
+				
+				"paste" : {
+					"label": 'Paste',
+					"action" : function( node ) {dme.pasteFromClipboard(node) }
+				},
+									  
+									  
 				"delete" : {
 										"label": 'Delete',
 										"action" : function( node ) {this.remove(node) }
