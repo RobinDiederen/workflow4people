@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -17,51 +17,46 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-
 import groovy.lang.Binding;
 import org.workflow4people.services.*;
 
 /**
  * FieldType domain class. This defines a type of field. It links back to an XML Schema type (baseSchemaType) and a BaseFieldType.
+ * 
  * @see org.workflow4people.Field
  * @author Joost Horward
  */
-
 class FieldType {
 	def templateService
 	
 	static listProperties=['id','name','namespace','baseType','baseSchemaType','description']
 	
 	static hasMany = [fieldTypeItem : FieldTypeItem]    
-	static constraints = {
-		name(help:'x',class:'wide')
+	static constraints = {		
 		namespace(nullable:true)
 		// TODO Nullable alleen voor migratie
-	
 		baseType(nullable:true)
 		baseSchemaType(nullable:true)
-		
-				
+
 		description(size:0..50000)	    
-	    defaultValue(nullable:true,class:'wide')
-	    label(nullable:true,class:'wide')
+	    defaultValue(nullable:true)
+	    label(nullable:true)
 	    help(size:0..50000)
 	    alert(size:0..50000)
 	    
-	    runtimeEditableList(help:'x')
+	    
 	    
 	    generateSchemaType(nullable:true)
 	    restrictions(nullable:true)
 	    length(nullable:true)
 	    minLength(nullable:true)
 	    maxLength(nullable:true)
-	    pattern(nullable:true,class:'wide')
+	    pattern(nullable:true)
 	    minInclusive(nullable:true)
 	    maxInclusive(nullable:true)
 	    minExclusive(nullable:true)
 	    maxExclusive(nullable:true)
 	    
-	    fieldTypeItem(sortable:true,sort:'position',sortOrder:'asc',display:false,edit:true,create:true,delete:true,show:true)
 		listParent(nullable:true)
 	    
     }

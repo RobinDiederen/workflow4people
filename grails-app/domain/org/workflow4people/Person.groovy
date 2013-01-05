@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+
 /**
  * Person domain class. 
  * Represents a person.
@@ -33,7 +34,7 @@ class Person  {
 	String userRealName
 	String familyName
 	String givenName
-	
+
 	/** MD5 Password */
 	String passwd
 	/** enabled */
@@ -50,21 +51,18 @@ class Person  {
     boolean passwordExpired	
 
 	static constraints = {
-		username(blank: false, unique: true,help:'x',class:'wide')
-		userRealName(blank: false,help:'x',class:'wide')
-		familyName(blank: false,help:'x',class:'wide',nullable:true)
-		givenName(blank: false,help:'x',class:'wide',nullable:true)
-		email(help:'x',class:'wide')
-		emailShow(help:'x')
-		enabled(help:'x')
-		passwd(blank: false,password:true,show:false,help:'x',class:'wide')
-		authorities(nullable:true,help:'x',sortable:true,selectSort:'authority')
+		username(blank: false, unique: true)
+		userRealName(blank: false)
+		familyName(nullable:true)
+		givenName(nullable:true)				
+		passwd(blank: false,password:true)
+		authorities(nullable:true)
 		accountExpired(nullable: false)
 		accountLocked(nullable: false)
 		passwordExpired(nullable: false)		
 	}
-			
+	
 	String toString() {
 		  return username;
-	  }	
+	}	
 }

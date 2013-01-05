@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -19,17 +19,20 @@
 package org.workflow4people
 
 /**
- * Base type that references all XForm, XML and Schema snippets.
+ * Base types are the foundation of the data model. Each type has a parent base type for which a snippet set is defined.
  * The snippets themselves are on the filesystem in the template folder.
+ * 
  * @author Joost Horward
  */
 class BaseType {
-
+	/**
+	 * properties to be shown in the user interface list
+	 */
 	static listProperties=['id','name','description']
 	
     static constraints = {
-        name(blank: false,help:'x',class:'wide')    
-        description(size:0..50000,class:'wide')
+        name(blank: false)    
+        description(size:0..50000)
     }
     /**
      * The name of the base type
@@ -41,6 +44,7 @@ class BaseType {
     String description
     /**
      * String representation of this base type. Just returns the name of the base type
+     * @return The string representation of this BaseType
      */
     String toString() {		  
 		  return name

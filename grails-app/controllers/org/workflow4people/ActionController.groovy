@@ -22,7 +22,6 @@ import grails.converters.JSON;
 
 import grails.plugins.springsecurity.Secured
 
-
 /**
  * Controller for Action domain
  * See domain class for more details

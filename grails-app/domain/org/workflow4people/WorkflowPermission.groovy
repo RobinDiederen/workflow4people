@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -16,17 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
-
-/**
- * WorkflowDefinition domain class. 
- * Represents a workflow definition form.
- * The process flow itself is in jBPM, this part of the WorkflowDefinition is only data. forms and permissions.
- * @author Joost Horward
- */
-
 package org.workflow4people
 
+/**
+ * WorkflowPermissin domain class. 
+ * Represents the permission set on a WorkflowDefinition
+ * 
+ * @author Joost Horward
+ */
 class WorkflowPermission {
+	// properties to be shown in list
 	static listProperties=['id','authority','role','remark']
 	static belongsTo=[workflow:WorkflowDefinition]
 	                  
@@ -34,13 +33,10 @@ class WorkflowPermission {
 	Role role
 	String remark
 	              	
-	static constraints = {	              		
-		authority(help:'x')
-	    role(help:'x')
-	    remark(nullable:true,help:'x',class:'extrawide')
-	    workflow()
+	static constraints = {	              				
+	    remark(nullable:true)	    
 	}
-	
+	// String representation of permission 
 	String toString() {
 		try {
 			return "${authority.authority} (${role.name})"

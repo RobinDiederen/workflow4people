@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -20,22 +20,20 @@ package org.workflow4people
 
 /**
  * Feature permission domain class. This defines presentation feature permissions. It is used to control access to features defined in org.workflow4people.Feature.
+ * 
  * @see org.workflow4people.Feature
  * @author Joost Horward
  */
 class FeaturePermission {
 	static listProperties=['id','authority','role','remark']
 	static belongsTo=[feature:Feature]
-	                  
+
 	Authority authority
 	Role role
 	String remark
-	              	
+
 	static constraints = {
-		authority(help:'x')
-		role(help:'x')
-		remark(help:'x',class:'wide',nullable:true)
-		feature(display:false)
+		remark(nullable:true)
     }
 	String toString() {
 		try {

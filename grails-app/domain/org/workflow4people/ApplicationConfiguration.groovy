@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -24,15 +24,14 @@ package org.workflow4people
  * 
  * @author Joost Horward
  */
-
 class ApplicationConfiguration {
-	
+	/**
+	 * properties to be shown in the user interface list	
+	 */
 	static listProperties=['id','configKey','configValue']
 	
 	static features = []
     static constraints = {
-    	configKey(class:'extrawide',help:'x')
-    	configValue(class:'extrawide',help:'x')
     }
     /**
      * The key that identifies the configuration item
@@ -43,7 +42,7 @@ class ApplicationConfiguration {
      */    
     String configValue
     /**
-     * 
+     * String representation of configuration item
      * @returns The string representation of this configuration item
      */
     String toString() {		  

@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -18,25 +18,20 @@
  */
 package org.workflow4people
 
-
 /**
  * Holiday domain class. 
  * Defines a Holiday, e.g. a sequence of days that will not be counted as business days.
+ * 
  * @author Joost Horward
  */
 class Holiday {
-
-	static listProperties=['id','title','fromDate','toDate']
-	
-    static constraints = {
-    	title(help:'x',class:'wide')
-    	fromDate(help:'x')
-    	toDate(help:'x')
-    }
-    String title
-    Date fromDate
-    Date toDate
-    String toString() {
+	static listProperties=['id','title','fromDate','toDate']	
+	static constraints = {    	
+	}
+	String title
+	Date fromDate
+	Date toDate
+	String toString() {
 		return "${title} (${fromDate}-${toDate})"
 	}
 }

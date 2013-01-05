@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -21,24 +21,33 @@ package org.workflow4people
 /** 
  * Defines an action in the permission model.
  * Actions are grouped into roles.
+ * 
  * @see org.workflow4people.Role
  * @author Joost Horward
  */
 class Action {
-	
+	/**
+	 * properties to be shown in the user interface list	
+	 */
 	static listProperties=['id','name','title','description']
 	
+	/**
+	 * The unique name of this action
+	 */	
 	String name
 	String title
 	String description
 	
 
     static constraints = {
-		name(help:'x',class:'wide')
-		title(help:'x',class:'wide')
-		description(help:'x',class:'extrawide',nullable:true)
+		name(unique:true)		
+		description(nullable:true)
     }
 	
+	/**
+	 * String representation of an action
+	 * @return the String representation of this action
+	 */
 	String toString() {
 		return title
 	}

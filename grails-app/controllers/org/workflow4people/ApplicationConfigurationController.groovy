@@ -22,6 +22,7 @@ import grails.converters.JSON;
 
 import grails.plugins.springsecurity.Secured
 
+
 /** Application configuration controller
  * 
  * See domain class for more details
@@ -30,15 +31,14 @@ import grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN'])
 class ApplicationConfigurationController {
-	
+
 	def listService
 	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
-	 // the submitdialog and delete actions only accept POST requests
-	    static allowedMethods = [submitdialog: "POST", delete: "POST"]
-
+	// the submitdialog and delete actions only accept POST requests
+    static allowedMethods = [submitdialog: "POST", delete: "POST"]
 	
 	def list = {
 		render (view:'/dialog/list', model:[dc:ApplicationConfiguration,controllerName:'applicationConfiguration',request:request])

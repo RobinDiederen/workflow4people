@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -19,25 +19,58 @@
 package org.workflow4people
 
 /**
- * XML document database index domain class.
+ * XML document database index definition domain class.
+ * Each time the DocumentService stores an XML document, the DocumentIndexFields are used to calculate the DocumentIndex objects
+ * 
+ * @see org.workflow4people.Document
+ * @see org.workflow4people.DocumentIndex
+ * @see org.workflow4people.services.DocumentService
  * @author Joost Horward
  */
 class DocumentIndexField {
+	/**
+	 * properties to be shown in the user interface list
+	 */
 	static listProperties=['id','name','title','xpath','publish']
-    static constraints = {
-    	name(help:'x',class:'extrawide')
-    	title(help:'x',class:'extrawide')
-    	description(nullable:true,help:'x')
-    	xpath(help:'x',class:'extrawide')
-    	publish(help:'x')
+    static constraints = {    	
+    	description(nullable:true)    	
     }
+	/**
+	 * The name of this index field
+	 */
     String name
+	
+	/**
+	 * The title of this index field
+	 */
     String title
+	
+	/**
+	 * The title of this index field
+	 */
     String description
+	
+	/**
+	 * The XPath expression used to calculate the value for this field
+	 */
     String xpath
+	
+	/**
+	 * The Groovy script expression used to calculae the value for this field
+	 * The expression is run on the IndexExpressionDelegate
+	 * @see org.workflow4people.IndexExpressionDelegate
+	 */
 	String script
+	
+	/**
+	 * Determines if searching on this field should be made available to users
+	 */
     boolean publish
-    
+	
+    /** 
+     * String represenation of this index field 
+     * @return the string represenation of this index field
+     */
     String toString() {
     	return title ;
 	}

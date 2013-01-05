@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -21,45 +21,32 @@ import org.workflow4people.services.*;
 
 /**
  * Field domain class. This defines a field
+ * 
  * @see org.workflow4people.FieldType
  * @author Joost Horward
  */
-
 class Field {
 	static listProperties=['position','id','name','description']
 	static belongsTo = [parent: Field]
     static constraints = {
-		parent(help:'x',nullable:true)
-		position()
-		name(help:'x',class:'wide')
-		fieldType(help:'x')
-		
-				
+		parent(nullable:true)		
 		description(nullable:true,size:0..50000)
-    	
-    	defaultValue(nullable:true,class:'wide')
-    	label(nullable:true,class:'wide')
+    	defaultValue(nullable:true)
+    	label(nullable:true)
     	help(nullable:true,size:0..50000)
 	    alert(nullable:true,size:0..50000)
 	    fieldLength(nullable:true)
 	    contentText(nullable:true,size:0..50000)
 	    
-	    
-	    // Determines repetition of this field
-	    
+	    // Determines repetition of this field	    
 	    minOccurs(nullable:true)
 	    maxOccurs(nullable:true)
-		    nillable(nullable:true)
+		nillable(nullable:true)
 		    
 	    // Determines dependency of this field on another field
 		dependsOn(nullable:true)
 		dependencyType(nullable:true,inList:['true','false','empty','nonempty','gt','lt','eq','ne'])	    	
-		dependencyParameter(nullable:true)
-	    
-    	readonly(help:'x')
-	
-	    xpath(nullable:true,class:'extrawide')
-	    
+		dependencyParameter(nullable:true)	    
     }
 	def templateService
     int position=1
@@ -67,7 +54,7 @@ class Field {
     /**
      * The parent of this field
      */
-    //Field parent
+    Field parent
     
     /**
      * The type of this field
@@ -84,7 +71,7 @@ class Field {
     String label
     String help
     /**
-     * The alert to show in the XForm. If empty, the alert from the FieldType is used 
+     * The alert to show in the Form. If empty, the alert from the FieldType is used 
      */
     String alert
     String fieldLength
@@ -121,23 +108,18 @@ class Field {
 	 */
 	
 	String getFieldProperty(String name){
-		if (this."${name}"?.length() == 0 | this."$name"==null)  {						
+		if (this."${name}"?.length() == 0 | this."$name"==null)  {										
+			if (this.fieldType.properties[name]) {
+				return this.fieldType."${name}"
 				
-					if (this.fieldType.properties[name]) {
-						//log.debug(this.fieldType."${name}")
-						return this.fieldType."${name}"
-						
-					} else {
-						return ("")
-					}				
-			
+			} else {
+				return ("")
+			}				
 		}  else {
-			def value=this."${name}"
-			//log.debug ("Returning field property value ${value} of field ${this.name} (${this.id})for ${name}")
 			return (this."${name}");
 		}
 	}
-	
+
 	def getPrefixedName() {
 		return "${parent.fieldType.namespace.prefix}:${getFieldProperty('name')}"
 	}
@@ -145,8 +127,7 @@ class Field {
 	def getBinding() {
 		return binding()
 	}
-	
-	
+		
 	Binding binding() {
 		
 		groovy.lang.Binding binding = new Binding()		
@@ -215,9 +196,7 @@ class Field {
 		
 		if (parent) {
 			return parent.readGpath(0) ?  "${parent.readGpath(0)}.${name}${indexString}" : "${name}${indexString}" 
-			//return "${parent.readGpath(0)}.${name}${indexString}"
 		} else {
-			//return "${name}${indexString}"
 			return ""
 		}		
 	}
@@ -226,10 +205,8 @@ class Field {
 	// Gpath with the last brackets missing so it refers to the entire list 
 	def getListGpath() {				
 		if (parent) {
-			//return "${parent.readGpath(0)}.${name}"
 			return parent.readGpath(0) ? "${parent.readGpath(0)}.${name}" : "${name}"
 		} else {
-			//return "${name}"
 			return ""
 		}		
 	}

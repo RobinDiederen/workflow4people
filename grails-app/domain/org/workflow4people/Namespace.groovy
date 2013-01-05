@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -21,34 +21,30 @@ package org.workflow4people
 /**
  * Namespace domain class. 
  * Represents a namespace. Each namespace, both generated and imported, need to be defined here.
+ * 
  * @author Joost Horward
  */
 class Namespace {
 	static listProperties=['id','prefix','uri','filename','generateXSDFile','includeSchema','importSchema']
 	static hasMany = [importSchema:Namespace]
+
+	static constraints = {    	
+		includeSchema(nullable:true)
+		importSchema(nullable:true)
+	}
 	
-    static constraints = {
-    	prefix(help:'x',class:'wide')
-    	uri(help:'x',class:'extrawide')
-    	filename(help:'x',class:'wide')
-    	generateXSDFile(help:'x')
-    	includeSchema(nullable:true,help:'x')
-    	importSchema(nullable:true,selectSort:'prefix')
-    	
-    }
-	
-    String prefix
-    String uri
-    
-    String filename
-    String includeSchema
-    
-    boolean generateXSDFile=true
+	String prefix
+	String uri
+
+	String filename
+	String includeSchema
+
+	boolean generateXSDFile=true
 
 	def getTargetNamespaceDeclaration(){		
 		return "targetNamespace=\"${this.uri}\"\n"
 	}
-    
+
 	def getPrefixDeclarations() {		
 		def decl="xmlns:${this.prefix}=\"${this.uri}\"\n";
 		importSchema.each({
@@ -56,8 +52,8 @@ class Namespace {
 		});		
 		return(decl)
 	}
-	
+
 	String toString() {
-		  return prefix;
-	}   
+		return prefix;
+	}
 }

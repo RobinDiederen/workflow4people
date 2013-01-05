@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -20,6 +20,7 @@ package org.workflow4people
 
 /**
  * Feature domain class. This defines presentation features. It is used to control access to these features.
+ * 
  * @see org.workflow4people.FeaturePermission
  * @author Joost Horward
  */
@@ -33,10 +34,8 @@ class Feature {
 	String description
 	
     static constraints = {
-		name(help:'x',class:'wide')
-		title(help:'x',class:'wide')
-		description(nullable:true,help:'x',class:'extrawide')
-		featurePermission(widget:'insert',display:false,sortable:false,sort:'authority',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
+		name(unique:true)		
+		description(nullable:true)
     }
 	
 	String toString() {

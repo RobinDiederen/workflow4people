@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -18,22 +18,31 @@
  */
 package org.workflow4people
 
-//import org.compass.annotations.*
+/**
+ * Stores index information associated with XML Documents stored in Document 
+ * 
+ * @see org.workflow4people.Document
+ * @see org.workflow4people.services.SolrService
+ * @author Joost Horward
+ */
 class DocumentIndex {
+	/**
+	 * properties to be shown in the user interface list
+	 */
     static listProperties=['id','name','value']
-
 	static belongsTo=[document:Document]
-    static constraints = {
-    	name(help:'x')
-    	value(nullable:true,help:'x')
-    	document(display:false)
+    static constraints = {    	
+    	value(nullable:true)
     }
-	//@SearchableDynamicName
-    String name
-    //@SearchableDynamicValue
-    //@SearchableProperty (index = Index.NOT_ANALYZED)    
-    String value
-    
+	/**
+	 *  The index entry name. Values can occur multiple times. In that case they should be named mindex_	
+	 */
+	String name
+	String value
+	/**
+	 * String representation if this index entry
+	 * @return the string representation if this index entry
+	 */
     String toString() {
 		  return "Index ${name}: ${value}";
 	}

@@ -132,7 +132,7 @@ class DocumentService implements InitializingBean {
 			
     		documentInstance.save(failOnError:true,flush:true)
 			
-			
+			//TODO make slurped document available to binding
     		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
 			
 

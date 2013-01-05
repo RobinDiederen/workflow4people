@@ -1,30 +1,42 @@
+/*
+ * Workflow4people
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
+ * by the @author tag. See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License
+ * version 3 published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses
+ */
 package org.workflow4people
-
 import java.util.Date;
-
 import org.apache.solr.common.SolrInputDocument;
 
+/**
+ * Task domain class
+ * 
+ * @author Joost Horward
+ */
 class Task {
 	def solrService
 	static transients = ["noMessage"]
-   	//static belongsTo=[workflow:Workflow]
 
    	static listProperties=['id','description','dueDate','assignee']
-    //static fetchMode = [workflow:'eager',form:'eager']
-/*   	                       
-    static mapping = {
-        workflow fetch:"join"
-        form fetch: "join"
-        	
-    }
-  */                  
     static constraints = {
 		name(nullable:true)
 		description(nullable:true)
-		dateCreated(nullable:true,edit:false,help:'x')
-		dueDate(edit:false,nullable:true)
+		dateCreated(nullable:true)
+		dueDate(nullable:true)
 		completionDate(nullable:true)
-		lastUpdated(nullable:true,edit:false,help:'x')        
+		lastUpdated(nullable:true)        
 		assignee(nullable:true)
 		outcome(nullable:true)
 		transitions(nullable:true)
@@ -62,12 +74,6 @@ class Task {
 	String externalId
 	String externalWorkflowId
 	boolean noMessage=false
-	
-	
-//	def Task(){
-//		taskStatus=TaskStatus.find("from TaskStatus t where t.name='new'")
-//	}
-	
 	
 	def getCompleted() {
 		return completionDate !=null
@@ -132,8 +138,8 @@ class Task {
 			log.error "Error while removing task from Solr: ${e.message}"
 		}
 	}
-	
-	
+
+		
 	SolrInputDocument getSolrInputDocument() {
 		SolrInputDocument sid = new SolrInputDocument()
 		sid.addField("id",this.id.toString())
@@ -145,32 +151,26 @@ class Task {
 		sid.addField("taskStatus",taskStatus)
 		sid.addField("statusUser",statusUser)
 		sid.addField("assignee",assignee?.username)
-		
-		
+
+
 		sid.addField("dueDate",dueDate)
 		sid.addField("completionDate",completionDate)
-		
+
 		sid.addField("workflow",workflow?.id)
-		
+
 		sid.addField("transitions",transitions)
-		
+
 		sid.addField("outcome",outcome)
 		sid.addField("externalId",externalId)
 		sid.addField("externalWorkflowId",externalWorkflowId)
-		
-		
+
 		candidateGroups.each { cg -> 
-			sid.addField("candidateGroups",cg.authority)
-			
+			sid.addField("candidateGroups",cg.authority)			
 		}
-		
+
 		candidateUsers.each { cu ->
 			sid.addField("candidateUsers",cu.username)
-			
-		}
-			
+		}			
 		return sid
-	}
-	
-	
+	}	
 }

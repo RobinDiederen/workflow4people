@@ -68,9 +68,8 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 			def engineName=entity.workflow.workflowEngine.name
 			String queueName="wfp.${engineName}.out.task.new"
 			jmsService.send(queueName,[id:entity.id])
-			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"
-			
-		    }
+			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"			
+	    }
 		    
 	}
 	

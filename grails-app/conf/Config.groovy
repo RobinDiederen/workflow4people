@@ -3,8 +3,8 @@ import com.sun.net.ssl.internal.ssl.Debug;
 
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
-grails.config.locations = [ "classpath:wfp-config.properties",
-                             "file:${userHome}/.wfp/wfp-config.properties"]
+grails.config.locations = [ "classpath:wfp-config.groovy",
+                             "file:${userHome}/.wfp/wfp-config.groovy"]
 
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
@@ -59,10 +59,10 @@ log4j = {
     //debug 'grails.app.controller.org.workflow4people'
     //debug 'grails.app.service.org.workflow4people.services'
 	warn "grails.app"
-	debug "grails.app.controllers"
-	trace "grails.app.services"
-	debug "grails.app.endpoints"
-	debug "grails.app.domain"
+	warn "grails.app.controllers"
+	warn "grails.app.services"
+	warn "grails.app.endpoints"
+	warn "grails.app.domain"
     
 }
 

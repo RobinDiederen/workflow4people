@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -17,34 +17,25 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-
 import java.io.Serializable;
 import groovy.lang.Binding;
-
 
 /**
  * Form domain class. 
  * Represents a workflow form.
+ * 
  * @author Joost Horward
  */
 class Form implements Serializable {
 	def templateService
 	static listProperties=['id','name','title','workflow']
-    static constraints = {
-    	name(help:'x',class:'wide')
-    	title(help:'x',class:'wide')
-    	description(size:0..50000,help:'x')
-    	explanationMessage(size:0..50000,help:'x')
-    	confirmationMessage(size:0..50000,help:'x')
-    	template(class:'wide',help:'x')    
-    	formAction(help:'x')
-    	//formItem(widget:"insert")
-    	workflow(display:false,help:'x')
-    	//formItem(widget:'insert',display:false,sortable:true,sort:'position',sortOrder:'asc',create:true,show:true,edit:true,delete:true)
+    static constraints = {    	
+    	description(size:0..50000)
+    	explanationMessage(size:0..50000)
+    	confirmationMessage(size:0..50000)    	
     }
 	static belongsTo = [workflow: WorkflowDefinition]
     static hasMany = [formPage : FormPage]                  
-   //	static fetchMode = [formAction: 'eager']
 
     String name
     String title
@@ -69,8 +60,4 @@ class Form implements Serializable {
 		model+=binding().getVariables()
 		return templateService.runGenericSnippetTemplate("Form",snippetName,model)
 	}
-	
-
-
-    
 }

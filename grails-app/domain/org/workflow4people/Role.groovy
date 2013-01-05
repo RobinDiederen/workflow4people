@@ -1,6 +1,6 @@
 /*
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -16,30 +16,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
+package org.workflow4people
 
 /**
  * Role domain class. 
  * Represents a workflow role.
  * Each role has one or more actions which this role can perform on a workflow or form.
+ * 
  * @author Joost Horward
  */
-package org.workflow4people
-
 class Role {
 	static listProperties=['id','name','title','description']
-	
+
 	String name
 	String title
 	String description
 	static hasMany=[roleAction:Action]
 
     static constraints = {
-		name(help:'x',class:'wide')
-		title(help:'x',class:'wide')
-		description(nullable:true,help:'x',class:'wide')
-		roleAction(selectSort:'name')
+		name(unique:true)		
+		description(nullable:true)
     }
-	
+
 	String toString() {
 		return title
 	}
