@@ -1,1 +1,0 @@
-<xforms:instance id="${name}-instance" src="oxf:/common/xml/${name}-itemlist.xml" />
