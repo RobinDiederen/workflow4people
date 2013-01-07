@@ -1,5 +1,5 @@
 <%
-def fieldTypeItems = org.workflow4people.FieldTypeItem.findAllByFieldType(field.fieldType,[sort:'itemPosition',order:'asc'])
+def fieldTypeItems = org.workflow4people.FieldTypeItem.findAllByFieldType(field.fieldType,[sort:'position',order:'asc'])
 
 def options = "["
 for (def fieldTypeItem in fieldTypeItems) {
@@ -11,4 +11,4 @@ for (def fieldTypeItem in fieldTypeItems) {
 options = "${options}]"
 %>
 
-<form:select class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name}" gpath="document.${gpathExpr}" options="${options}" value="\${document.${gpath}}" helpTitle="${label}" helpBody="${help}" title="${alert}" />
+<form:select class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name}" gpath="document.${gpathExpr}" options="${options}" value="*{document.${gpath}}" helpTitle="${label}" helpBody="${help}" title="${alert}" />
