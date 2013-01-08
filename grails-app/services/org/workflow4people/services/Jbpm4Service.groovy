@@ -65,8 +65,11 @@ class Jbpm4Service implements InitializingBean {
 
     @Queue(name="wfp.jbpm4.out.workflow.new")
     def newWorkflow(msg) {
-    	    	log.debug "wfp.jbpm4.out.workflow.new received: ${msg}"
 		
+		log.debug "wfp.jbpm4.out.workflow.new received: ${msg}"
+		Workflow.withTransaction { status ->
+			println "JBPM4 TRANSACTION: ${status.isNewTransaction()}"
+			
 		java.lang.Long id=new java.lang.Long (msg.id)
 		def workflow=Workflow.get(id)
 		LinkedHashMap variableMap = new LinkedHashMap()    							
@@ -113,6 +116,8 @@ class Jbpm4Service implements InitializingBean {
 			task.save(flush:true,failOnError:true)		
 		}
 		log.debug "wfp.jbpm4.out.workflow.new processed: ${msg}"
+		
+		}
 		return null					
 	}
 

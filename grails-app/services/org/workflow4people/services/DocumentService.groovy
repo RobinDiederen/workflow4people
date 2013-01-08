@@ -44,7 +44,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
 import javax.xml.namespace.*;
 import org.jbpm.api.model.*
-
+import org.springframework.transaction.annotation.*
 //import org.compass.core.engine.SearchEngineQueryParseException
 
 class DocumentService implements InitializingBean {
@@ -77,14 +77,17 @@ class DocumentService implements InitializingBean {
 		binding.document=document
 		return binding
 	}
-	   
-    
-    def storeDocument(document) throws DocumentException {
-    	def theDocumentId
-    	
+	
+	def createDocument(document) throws DocumentException {
+		def theDocumentId
+		def startProcess=false
+		def currentUserName
+		def currentUser
     	Document.withTransaction { status ->
-			def currentUserName="${document?.header?.user?.name?.text()}"
-			def currentUser=Person.findByUsername(currentUserName)
+			println "STOREDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
+			
+			currentUserName="${document?.header?.user?.name?.text()}"
+			currentUser=Person.findByUsername(currentUserName)
     		def header=document.header
     		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
     		def outputBuilder = new StreamingMarkupBuilder()
@@ -98,7 +101,6 @@ class DocumentService implements InitializingBean {
     		// If the document ID is known, store the document over the existing one
     		// If the document ID is not known, store a new instance, and start a new workflow
     	
-    		def startProcess=false
     		//ProcessInstance processInstance=null
     		
     		
@@ -130,21 +132,27 @@ class DocumentService implements InitializingBean {
     		documentInstance.xmlDocument=xmlDocument
     		documentInstance.documentStatus=header.documentStatus
 			
+			// Needed to get ID
     		documentInstance.save(failOnError:true,flush:true)
 			
 			//TODO make slurped document available to binding
-    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
-			
+    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")		
 
-    		createCaseFolder(documentInstance,document)		
+    		createCaseFolder(documentInstance,document)
+			
     		documentInstance.save(failOnError:true,flush:true)
-    	
+    		theDocumentId=documentInstance.id
     		// Get the document again because it might have changed
     		// In particular at the start of the process the jPDL can change the document
-    		
-    		documentInstance=Document.get(documentInstance.id)
+    	}
+		
+		
+		
+		Document.withTransaction { status ->
+			println "STOREDOCUMENT TRANSACTION 2: ${status.isNewTransaction()}"
+    		def documentInstance=Document.get(theDocumentId)
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
-    		header=document.header
+    		def header=document.header
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
     	
     		
@@ -198,7 +206,7 @@ class DocumentService implements InitializingBean {
 					} 
 					
 				}
-				task.save(failOnError:true,flush:true)
+				task.save(failOnError:true,flush:false)
 			}
 			   
     	
@@ -207,6 +215,97 @@ class DocumentService implements InitializingBean {
     		//theDocumentId=documentInstance.id
     		documentInstance.id
 	  } // withTransaction
+	}
+	
+	def updateDocument(document)throws DocumentException {
+		def theDocumentId
+		def startProcess=false
+		def currentUserName
+		def currentUser
+		Document.withTransaction { status ->
+			println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
+			
+			currentUserName="${document?.header?.user?.name?.text()}"
+			currentUser=Person.findByUsername(currentUserName)
+			def header=document.header
+			log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
+			def outputBuilder = new StreamingMarkupBuilder()
+
+			String xmlDocument = outputBuilder.bind{
+				// Only needed if you want <?xml etc. at the top of the XML document
+				// mkp.xmlDeclaration()
+				mkp.yield document
+			}
+			def documentInstance
+			
+			
+			def theId=header.documentId.text().asType(Integer)
+			documentInstance=Document.get(theId)
+			def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
+			document.header.user=olddocument.header.user
+			document.header.group=olddocument.header.user.group
+			
+			def documentType= documentInstance.documentType
+			documentInstance.xmlDocument=xmlDocument
+			documentInstance.documentStatus=header.documentStatus
+			
+			// Needed to get ID
+			
+			//TODO make slurped document available to binding
+			documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
+
+			documentInstance.save(failOnError:true,flush:true)
+			theDocumentId=documentInstance.id
+			// Get the document again because it might have changed
+			// In particular at the start of the process the jPDL can change the document
+			
+			
+			
+			if ((header.task?.id?.text().size()>0)) {
+				def id = new java.lang.Long(header.task?.id?.text())
+				def task=Task.get(id)
+				task.noMessage=true
+				if (header?.task?.outcome?.text().size()>0) {
+					task.outcome=header.task.outcome.text()
+					task.workflow.log("Completed task ${task.name} with outcome ${task.outcome}",currentUser)
+					task.noMessage=false
+				}
+				def formatter = new SimpleDateFormat("yyyy-MM-dd")
+				if (header?.task?.dueDate?.text().size()>0) {
+					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
+					task.workflow.log("Changed due date of task ${task.name} to ${task.dueDate}",currentUser)
+				}
+				
+				if (header?.task?.priority.text().size()>0) {
+					task.priority=new java.lang.Integer(header?.task?.priority?.text())
+				}
+				
+				if (header?.task?.status?.text().size()>0) {
+					if(task.taskStatus?.name!=header.task.status.text()) {
+						def theTaskStatus=TaskStatus.findByName(header.task.status.text())
+						if (theTaskStatus) {
+							task.taskStatus=theTaskStatus
+							task.statusUser=currentUserName
+							task.workflow.log("Changed status of task ${task.name} to ${task.status}",currentUser)
+						}
+					}
+					
+				}
+				task.save(failOnError:true,flush:false)
+			}
+			documentInstance.save(failOnError:true,flush:false)
+			indexDocument(documentInstance)
+			documentInstance.id
+		}
+	}
+	   
+    
+    def storeDocument(document) throws DocumentException {
+		if (document.header.documentId?.text().size()>0) {
+			updateDocument(document)
+		} else {
+			createDocument(document)
+		}
     }
     
     
@@ -275,12 +374,12 @@ class DocumentService implements InitializingBean {
 		}
     }
 
-
+	@Transactional
     void indexDocument(Document documentInstance){
     	
     	def builder = domFactory.newDocumentBuilder()
 		try {
-			Document.withTransaction {
+			//Document.withTransaction {
 	    	def doc     = builder.parse(new ByteArrayInputStream(documentInstance.xmlDocument.bytes))
 	    	def indexEntry
 	    	
@@ -353,7 +452,7 @@ class DocumentService implements InitializingBean {
 				
 				
 	    	}
-			}
+			//}
 		} catch (Exception e) {
 			log.error "Exception while indexing document ${documentInstance}: ${e.message}"
 		}
@@ -362,32 +461,32 @@ class DocumentService implements InitializingBean {
     
     
     
-    
-    
+    /**
+     * Get a document from the database. The header of the document is modified to reflect the current 
+     * @param documentId The ID of the document to fetch
+     */
+    @Transactional
     def getDocument(java.lang.Long documentId) {  	
-		Document.withTransaction { status ->
-    	log.debug "The document id is ${documentId}"
-    	def document=Document.get(documentId)
-		
-    	def xmlDocument = new XmlSlurper().parseText(document.xmlDocument)
+		log.debug "The document id is ${documentId}"
+		def document=Document.get(documentId)		
+		def xmlDocument = new XmlSlurper().parseText(document.xmlDocument)
+		xmlDocument.header.taskId=""
+		xmlDocument.header.taskOutcome=""    		
+		xmlDocument.header.dateCreated= "${document.dateCreated.format('yyyy-MM-dd')}T${document.dateCreated.format('HH:mm:ss')}"
+		xmlDocument.header.lastUpdated= "${document.lastUpdated.format('yyyy-MM-dd')}T${document.lastUpdated.format('HH:mm:ss')}"
+		xmlDocument.header.user.name=document.user
+		xmlDocument.header.group=document.groupId
+		xmlDocument.header.documentDescription=document.documentDescription
 	
-	xmlDocument.header.taskId=""
-    	xmlDocument.header.taskOutcome=""    		
-    	xmlDocument.header.dateCreated= "${document.dateCreated.format('yyyy-MM-dd')}T${document.dateCreated.format('HH:mm:ss')}"
-    	xmlDocument.header.lastUpdated= "${document.lastUpdated.format('yyyy-MM-dd')}T${document.lastUpdated.format('HH:mm:ss')}"
-	xmlDocument.header.user.name=document.user
-	xmlDocument.header.group=document.groupId
-	xmlDocument.header.documentDescription=document.documentDescription
-		
-	xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
-	xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
-	xmlDocument.header.cmis.path=document.cmisPath
-    	document.discard()
-    	return xmlDocument
-		}
+		xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
+		xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
+		xmlDocument.header.cmis.path=document.cmisPath
+		document.discard()
+		return xmlDocument
     }
     
     // Just save the xml, nothing smart going on here ...
+	@Transactional
     def setDocument(document) {  	
     	def theId=document.header.documentId.text().asType(Long)
     	def documentInstance=Document.get(theId)

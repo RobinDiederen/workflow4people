@@ -317,7 +317,7 @@ class SolrService {
 					log.trace "Reindexing ${items.size()} items from ${items[0].id}"
 					currentMessage="Reindexing ${items.size()} items from ${items[0].id}"
 					updateStats(dc)
-	
+					/*
 					GParsPool.withPool { pool ->
 						
 						items.eachParallel { item ->
@@ -332,6 +332,22 @@ class SolrService {
 						}
 	
 					}
+					*/
+					// Non-concurrent version
+
+					items.each { item ->
+						try {
+							log.trace item
+							def sid=item.getSolrInputDocument();
+							solr.add(sid)
+						} catch (Exception e) {
+							log.error "Caught exception while indexing ${item}: ${e.message}"
+						}
+
+						incCurrentItem()
+					}
+
+					
 					solr.commit()
 			
 					session.flush()
@@ -388,7 +404,7 @@ class SolrService {
 						currentMessage="Reindexing ${items.size()} items from ${items[0].id} through ${items[items.size()-1].id}"
 						updateStats(dc)
 	
-						GParsPool.withPool { pool ->
+						/*GParsPool.withPool { pool ->
 							
 							items.eachParallel { item ->
 								incCurrentItem()
@@ -397,6 +413,18 @@ class SolrService {
 							}
 
 						}
+						*/
+						// Non-concurrent version	
+							items.each { item ->
+								log.trace item
+								incCurrentItem()
+								def sid=item.getSolrInputDocument();
+								solr.add(sid)
+							}
+
+						
+						
+						
 
 						
 						log.trace "committing"
@@ -419,6 +447,8 @@ class SolrService {
 				}
 				running=false
 				lock=false
+			} else {
+				log.trace "Skipped reindex because of locks running=${running} lock=${lock}"
 			}		 
 		} catch (Exception e) {
 			log.error "Caught exception while indexing: ${e.message}"
