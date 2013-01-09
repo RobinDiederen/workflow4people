@@ -24,9 +24,6 @@ import org.springframework.beans.factory.InitializingBean;
 import grails.plugin.jms.*
 import org.workflow4people.*;
 
-import org.jbpm.api.ExecutionService;
-import org.jbpm.api.IdentityService;
-import org.jbpm.api.TaskService;
 import org.jbpm.api.* 
 import groovy.xml.StreamingMarkupBuilder
 import grails.plugin.jms.Queue
@@ -249,13 +246,14 @@ class Jbpm4Service implements InitializingBean {
 	@Queue(name="wfp.jbpm4.out.task.update")
 	def updateTaskOut(msg) {
 		log.debug "wfp.jbpm4.out.task.update received: ${msg}"
-		
-		def task = Task.get(msg.id)
-		if (task.outcome) {
-			taskService.completeTask(task.externalId,task.outcome)
-			task.completionDate=new Date()
-			task.noMessage=true
-			task.save(flush:true,failOnError:true)
+		Task.withTransaction { status ->
+			def task = Task.get(msg.id)
+			if (task.outcome) {
+				taskService.completeTask(task.externalId,task.outcome)
+				task.completionDate=new Date()
+				task.noMessage=true
+				task.save(flush:true,failOnError:true)
+			}
 		}
 		log.debug "wfp.jbpm4.out.task.update processed: ${msg}"
 		return null
