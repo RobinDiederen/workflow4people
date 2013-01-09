@@ -1,7 +1,6 @@
 /*
-
  * Workflow4people
- * Copyright 2009-2010, Open-T B.V., and individual contributors as indicated
+ * Copyright 2009-2013, Open-T B.V., and individual contributors as indicated
  * by the @author tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -36,10 +35,6 @@ import groovy.lang.Binding;
 import groovy.xml.StreamingMarkupBuilder
 import java.util.Date;
 
-import org.jbpm.api.ExecutionService;
-import org.jbpm.api.IdentityService;
-import org.jbpm.api.TaskService;
-import org.jbpm.api.* 
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
 import javax.xml.namespace.*;
@@ -50,40 +45,47 @@ import org.springframework.transaction.annotation.*
 class DocumentService implements InitializingBean {
 	
 	static transactional = false
-	def processEngine
-	TaskService taskService
-	ExecutionService executionService
-	IdentityService identityService
+	
 	def cmisServiceProxy
+	def dataDistributionService
 	
 	def domFactory
 	
+	// This is called after all Spring beans are initialized
 	void afterPropertiesSet() {
-		executionService=processEngine.getExecutionService()		
-		taskService=processEngine.getTaskService()
-		identityService=processEngine.getIdentityService()
-		
+		// Create the DocumentBuilderFactory
 		domFactory =DocumentBuilderFactory.newInstance()
 		domFactory.setNamespaceAware(true)
 	}
 	
-	
-    
     Wf4pNamespaceContext nsContext = new Wf4pNamespaceContext()
-	def  searchableService
-    
+	
+	/**
+	 * Create a document binding for a Groovy script
+	 * 
+	 * @param document
+	 * @return
+	 */
     Binding binding(Document document) {		
 		groovy.lang.Binding binding = new Binding()		
 		binding.document=document
 		return binding
 	}
 	
+	/**
+	 * Create a new XML document in the database
+	 * 
+	 * @param document
+	 * @return
+	 * @throws DocumentException
+	 */
+	
 	def createDocument(document) throws DocumentException {
 		def theDocumentId
 		def startProcess=false
 		def currentUserName
 		def currentUser
-    	Document.withTransaction { status ->
+    	Document.withNewTransaction { status ->
 			println "STOREDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
 			
 			currentUserName="${document?.header?.user?.name?.text()}"
@@ -97,32 +99,10 @@ class DocumentService implements InitializingBean {
     			// mkp.xmlDeclaration()
     			mkp.yield document 
     		}	
-    		def documentInstance
-    		// If the document ID is known, store the document over the existing one
-    		// If the document ID is not known, store a new instance, and start a new workflow
-    	
-    		//ProcessInstance processInstance=null
     		
-    		
-    		if (header.documentId?.text().size()>0) {    		
-    			def theId=header.documentId.text().asType(Integer)
-    		// Pushed down to make it transaction aware	
-    		//	if (header.taskOutcome?.text().size()>0) {    			
-    		//		taskService.completeTask(header.taskId.text(),header.taskOutcome.text())    			
-    		//	}   
-    			// For an existing document, the owner remains the owner.
-    			documentInstance=Document.get(theId)
-    			def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
-    			document.header.user=olddocument.header.user
-    			document.header.group=olddocument.header.user.group    		
-
-			} else {
-				// For a new document, the requestor becomes the owner
-				documentInstance = new Document()
-				documentInstance.user=header.user.name
-				documentInstance.groupId=header.group
-				startProcess=true    		
-			}
+    		def	documentInstance = new Document()
+			documentInstance.user=header.user.name
+			documentInstance.groupId=header.group
     	    
     		def documentType= DocumentType.findByName(header.documentType.text());
     		if(!documentType) {
@@ -148,19 +128,18 @@ class DocumentService implements InitializingBean {
 		
 		
 		
-		Document.withTransaction { status ->
+		Document.withNewTransaction { status ->
 			println "STOREDOCUMENT TRANSACTION 2: ${status.isNewTransaction()}"
     		def documentInstance=Document.get(theDocumentId)
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
     		def header=document.header
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
     	
-    		
-    		if (startProcess) {
-    			log.debug "starting process by creating a workflow domain object"
+    		if (header.workflowName.text()) {
+				log.debug "starting process by creating a workflow domain object"
+				def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
     			def workflow=new Workflow()
 	    		workflow.document=documentInstance
-	    		def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
 	    		workflow.workflowDefinition=workflowDefinition
 	    		workflow.name=workflowDefinition.name
 	    		workflow.priority=0
@@ -169,61 +148,21 @@ class DocumentService implements InitializingBean {
 	    		workflow.save(flush:true,failOnError:true)
 	    		log.debug "Done. Workflow id = ${workflow.id}"
     		}
-    		
-			
-			// Process task part of header:
-			// - transition
-			// - status update
-			// priority update
-			
-			if ((header.task?.id?.text().size()>0)) {
-				def id = new java.lang.Long(header.task?.id?.text())
-				def task=Task.get(id)
-				task.noMessage=true
-				if (header?.task?.outcome?.text().size()>0) {
-					task.outcome=header.task.outcome.text()
-					task.workflow.log("Completed task ${task.name} with outcome ${task.outcome}",currentUser)
-					task.noMessage=false
-				}
-				def formatter = new SimpleDateFormat("yyyy-MM-dd")				
-				if (header?.task?.dueDate?.text().size()>0) {
-					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
-					task.workflow.log("Changed due date of task ${task.name} to ${task.dueDate}",currentUser)
-				}
-				
-				if (header?.task?.priority.text().size()>0) {
-					task.priority=new java.lang.Integer(header?.task?.priority?.text())
-				}
-				
-				if (header?.task?.status?.text().size()>0) {
-					if(task.taskStatus?.name!=header.task.status.text()) {
-						def theTaskStatus=TaskStatus.findByName(header.task.status.text())
-						if (theTaskStatus) {
-							task.taskStatus=theTaskStatus
-							task.statusUser=currentUserName
-							task.workflow.log("Changed status of task ${task.name} to ${task.status}",currentUser)
-						}
-					} 
-					
-				}
-				task.save(failOnError:true,flush:false)
-			}
-			   
-    	
-    		indexDocument(documentInstance)
-
-    		//theDocumentId=documentInstance.id
-    		documentInstance.id
+    		theDocumentId=documentInstance.id
 	  } // withTransaction
+	return 	theDocumentId
 	}
 	
+	
+	@Transactional
 	def updateDocument(document)throws DocumentException {
 		def theDocumentId
 		def startProcess=false
 		def currentUserName
 		def currentUser
-		Document.withTransaction { status ->
-			println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
+		//Document.withTransaction { status ->
+			//println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
+		
 			
 			currentUserName="${document?.header?.user?.name?.text()}"
 			currentUser=Person.findByUsername(currentUserName)
@@ -260,6 +199,10 @@ class DocumentService implements InitializingBean {
 			// In particular at the start of the process the jPDL can change the document
 			
 			
+			// Process task part of header:
+			// - transition
+			// - status update
+			// priority update
 			
 			if ((header.task?.id?.text().size()>0)) {
 				def id = new java.lang.Long(header.task?.id?.text())
@@ -293,16 +236,20 @@ class DocumentService implements InitializingBean {
 				}
 				task.save(failOnError:true,flush:false)
 			}
-			documentInstance.save(failOnError:true,flush:false)
+			// Flush is needed, otherwise indexDocument will produce an unflushed collection exception
+			documentInstance.save(failOnError:true,flush:true)
 			indexDocument(documentInstance)
 			documentInstance.id
-		}
+		//}
 	}
 	   
-    
+    // This is not transactional on purpose. 
     def storeDocument(document) throws DocumentException {
 		if (document.header.documentId?.text().size()>0) {
-			updateDocument(document)
+			Document.withTransaction {
+				def documentId=updateDocument(document)
+				dataDistributionService.afterUpdate(documentId)
+			}
 		} else {
 			createDocument(document)
 		}
@@ -312,9 +259,13 @@ class DocumentService implements InitializingBean {
     def getHomeGroup(def documentInstance) {
 
 		def homeGroup = null
-		def homeGroupInstance=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0]
-		if (homeGroupInstance) {
-		    homeGroup = homeGroupInstance.name
+		//def homeGroupInstance=identityService.findGroupsByUserAndGroupType(documentInstance.user,'home')[0]
+		def person=Person.findByUsername(documentInstance.user)
+		def homeGroupInstance=person?.authorities.find { it.authorityType == 'home' }
+		
+		if (person!=null && homeGroupInstance!=null) {
+		    //homeGroup = homeGroupInstance.name
+			homeGroup = homeGroupInstance.authority	
 		}
 		else {
 		    // Fall back on identity.group.home.default if the user has no home group
@@ -375,8 +326,8 @@ class DocumentService implements InitializingBean {
     }
 
 	@Transactional
-    void indexDocument(Document documentInstance){
-    	
+    public void indexDocument(Document documentInstance){
+    	println "indexing"
     	def builder = domFactory.newDocumentBuilder()
 		try {
 			//Document.withTransaction {
@@ -456,7 +407,6 @@ class DocumentService implements InitializingBean {
 		} catch (Exception e) {
 			log.error "Exception while indexing document ${documentInstance}: ${e.message}"
 		}
-    	//searchableService.index(documentInstance)
     }
     
     
@@ -508,10 +458,12 @@ class DocumentService implements InitializingBean {
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
+		
+		//dataDistributionService.afterUpdate(documentInstance.id)
     }
     
     
-    
+    /*
     def getAllDocumentHeaders(String userName,boolean userDocumentsOnly) {
     	def allDocuments
     	if(userDocumentsOnly) {
@@ -540,7 +492,8 @@ class DocumentService implements InitializingBean {
     	}
     	return documentheaders
     }
-    
+    */
+    /*
     def luceneSearch(String query, def params,String userName="",boolean userDocumentsOnly=true,boolean groupDocumentsOnly=true) {
     	if (userName!="") {
     		if(userDocumentsOnly) {
@@ -565,7 +518,8 @@ class DocumentService implements InitializingBean {
     	log.debug "The query is: ${query}"
     	return searchableService.search(query, params)
     }
-    
+    */
+	
     def getDocumentIndexFields() {
     	def documentIndexFields=DocumentIndexField.findAllByPublish(true)
     	documentIndexFields+=[['name':'$/Document/id','title':'Nummer'],['name':'dateCreated','title':'Aanmaak Datum'],['name':'lastUpdated','title':'Bijwerk Datum'],['name':'completionDate','title':'Eind Datum'],['name':'documentType','title':'Document Type'],['name':'documentDescription','title':'Omschrijving'],['name':'user','title':'Gebruiker'],['name':'groupId','title':'Groep'],['name':'documentStatus','title':'Status'],['name':'processingDays','title':'Doorlooptijd']]
