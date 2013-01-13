@@ -110,134 +110,70 @@ class FieldController {
 	def dialog = { return dialogService.edit(Field,params) }
 	
 	def submitdialog = { render dialogService.submit(Field,params) as JSON }
-    
-	/*
-	 * Creates new field under a FieldType. Creates the listParent field if it did not exist already
-	 */
 	
-	def xsubmitUnderFieldType = { 
-		def fieldType=FieldType.get(params.parentId)
-		if (!fieldType.listParent) {			
-				// Create new listParent field if it didn't exist
-				def theListParent=new Field()
-				theListParent.name=fieldType.name
-				theListParent.parent=null
-				theListParent.fieldType=fieldType
-				theListParent.save(failOnError:true,flush:true)
-				fieldType.listParent=theListParent
-				fieldType.save(failOnError:true,flush:true)			
+	
+	def treeJSON = {
+		def elements=[]
+		def fieldType=false
+		if (!params.id || params.id=="") {
+			elements=FieldType.findAll([order:'asc',sort:'name'])
+			fieldType=true
+		} else if (params.id.startsWith("root_")) {
+			def id=new Integer(params.id.split("_")[1])
+			elements=[FieldType.get(id)]
+			fieldType=true
+		} else {
+			if (params.id.startsWith("fieldtype_")) {
+				def id=new Integer(params.id.split("_")[1])
+				def p=FieldType.get(id).listParent
+				if(p) {
+					elements=Field.findAllByParent(p,[sort:'position'])
+				}							
+			} else {
+				def id
+				if (params.id.startsWith("fieldtype_")) {
+					id=new Integer(params.id.split("_")[1])
+				} else {
+					id=params.id
+				}
+				def p=Field.get(id)
+				elements=Field.findAllByParent(p,[sort:'position'])				
+			}
 		}
-		def field=new Field()
-		field.properties = params
-		field.parent=fieldType.listParent
 		
-		def result = dialogService.submit(Field,params,field)
-		result["result"]+=[refreshNodes:["fieldtype_${fieldType.id}"]]
-		render result as JSON 
+		def prefix=fieldType ? "fieldtype_" : ""
+		
+			def elementlist = { elements.collect { f ->
+				boolean hasChildren=false
+				def cssClass=""
+				if (f.class.name=="org.workflow4people.FieldType") {
+					hasChildren=f.listParent!=null
+					cssClass="fieldtype"
+	
+				} else {
+					hasChildren= Field.countByParent(f)>0
+					cssClass="field fieldtype-${f.fieldType.name} basetype-${f.fieldType.baseType.name}"
+				}
+	
+				def nodeRel = hasChildren ? 'folder' : 'default'
+				def nodeClass="jstree-default ${cssClass}"
+				//
+				def nodeState =hasChildren ? 'closed' : ''
+				[				
+					attr: [id: "${prefix}${f.id}",title:f.name,class: nodeClass,rel:nodeRel],				
+					data: f.name,
+					title: f.name,
+					state:nodeState,
+					rel:nodeRel
+			 ]
+			}
+		}
+
+	render elementlist() as JSON
+		
 	}
+	
+	
+	
     
-    
-    /*
-     * This will insert a field under the currently selected field
-     */
-    
-    
-    def xinsert = {
-        def currentFieldInstance = Field.get( params.id )
-        def fieldInstance = new Field()
-        if(!currentFieldInstance) {        	
-            fieldInstance.properties = params
-            return ['fieldInstance':fieldInstance]
-        }
-        else {
-        	// If the currrent field is a list, add the field to the list
-        	// If the current field is a field, add the field to the same parent
-        	
-        	if (currentFieldInstance.childFieldList) {
-        		fieldInstance.fieldList=currentFieldInstance.childFieldList
-        		fieldInstance.position=0;
-        	} else {
-        		fieldInstance.fieldList=currentFieldInstance.fieldList
-        		fieldInstance.position=currentFieldInstance.position
-        	}        	
-            return [ fieldInstance : fieldInstance ]
-        }
-    }
-    
-    /*
-     * Save an inserted field
-     */
-    
-    
-    
-    def xinsertsave = {
-        def fieldInstance = new Field(params)
-        // move everything from current position down the list
-        fieldInstance.fieldList.field.each { 
-        	if (it.position>fieldInstance.position) {
-        		def itFieldInstance = Field.get(it.id)
-        		itFieldInstance.position=itFieldInstance.position+1
-        		log.debug ("Saving...")
-        		log.debug(itFieldInstance.save())
-        		log.debug (itFieldInstance.name)
-        		log.debug (itFieldInstance.position)
-        	}
-        }
-		fieldInstance.position=fieldInstance.position+1
-        if(!fieldInstance.hasErrors() && fieldInstance.save()) {
-            flash.message = "Field ${fieldInstance.id} inserted"
-            redirect(controller:'fieldList',action:'tree',id:fieldInstance.fieldList.id)
-        }
-        else {
-            render(view:'create',model:[fieldInstance:fieldInstance])
-        }
-    }
-    
-    
-    
-    
-
-    def xupdate = {
-        def fieldInstance = Field.get( params.id )
-        if(fieldInstance) {
-            if(params.version) {
-                def version = params.version.toLong()
-                if(fieldInstance.version > version) {
-                    
-                    fieldInstance.errors.rejectValue("version", "field.optimistic.locking.failure", "Another user has updated this Field while you were editing.")
-                    render(view:'edit',model:[fieldInstance:fieldInstance])
-                    return
-                }
-            }
-            fieldInstance.properties = params
-            if(!fieldInstance.hasErrors() && fieldInstance.save()) {
-                flash.message = "Field ${params.id} updated"
-                    redirect(controller:'fieldList',action:'tree',id:fieldInstance.fieldList.id)
-            }
-            else {
-                render(view:'edit',model:[fieldInstance:fieldInstance])
-            }
-        }
-        else {
-            flash.message = "Field not found with id ${params.id}"
-            redirect(action:list)
-        }
-    }
-
-    def xcreate = {
-        def fieldInstance = new Field()
-        fieldInstance.properties = params
-        return ['fieldInstance':fieldInstance]
-    }
-
-    def xsave = {
-        def fieldInstance = new Field(params)
-        if(!fieldInstance.hasErrors() && fieldInstance.save()) {
-            flash.message = "Field ${fieldInstance.id} created"
-            redirect(action:show,id:fieldInstance.id)
-        }
-        else {
-            render(view:'create',model:[fieldInstance:fieldInstance])
-        }
-    }
 }
