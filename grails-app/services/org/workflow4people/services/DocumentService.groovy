@@ -66,7 +66,7 @@ class DocumentService implements InitializingBean {
 	 * @param document
 	 * @return
 	 */
-	Binding binding(Document document) {		
+    Binding binding(Document document) {		
 		groovy.lang.Binding binding = new Binding()		
 		binding.document=document
 		return binding
@@ -78,7 +78,8 @@ class DocumentService implements InitializingBean {
 	 * @param document
 	 * @return
 	 * @throws DocumentException
-	 */	
+	 */
+	
 	def createDocument(document) throws DocumentException {
 		def theDocumentId
 		def startProcess=false
@@ -125,7 +126,9 @@ class DocumentService implements InitializingBean {
     		// In particular at the start of the process the jPDL can change the document
     	}
 		
-		Document.withNewTransaction { status ->			
+		
+		
+		Document.withNewTransaction { status ->
 			log.debug "createDocument Transaction #2 - newTransaction:${status.isNewTransaction()}"
     		def documentInstance=Document.get(theDocumentId)
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
@@ -157,99 +160,95 @@ class DocumentService implements InitializingBean {
 		def startProcess=false
 		def currentUserName
 		def currentUser
+		//Document.withTransaction { status ->
+			//println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
 		
 			
-		currentUserName="${document?.header?.user?.name?.text()}"
-		currentUser=Person.findByUsername(currentUserName)
-		def header=document.header
-		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
-		def outputBuilder = new StreamingMarkupBuilder()
+			currentUserName="${document?.header?.user?.name?.text()}"
+			currentUser=Person.findByUsername(currentUserName)
+			def header=document.header
+			log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
+			def outputBuilder = new StreamingMarkupBuilder()
 
-		String xmlDocument = outputBuilder.bind{
-			// Only needed if you want <?xml etc. at the top of the XML document
-			// mkp.xmlDeclaration()
-			mkp.yield document
-		}
-		def documentInstance
+			String xmlDocument = outputBuilder.bind{
+				// Only needed if you want <?xml etc. at the top of the XML document
+				// mkp.xmlDeclaration()
+				mkp.yield document
+			}
+			def documentInstance
 			
 			
-		def theId=header.documentId.text().asType(Integer)
-		documentInstance=Document.get(theId)
-		def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
-		document.header.user=olddocument.header.user
-		document.header.group=olddocument.header.user.group
-		
-		def documentType= documentInstance.documentType
-		documentInstance.xmlDocument=xmlDocument
-		documentInstance.documentStatus=header.documentStatus
-		
-		// Needed to get ID
-		
-		//TODO make slurped document available to binding
-		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
+			def theId=header.documentId.text().asType(Integer)
+			documentInstance=Document.get(theId)
+			def olddocument = new XmlSlurper().parseText(documentInstance.xmlDocument)
+			document.header.user=olddocument.header.user
+			document.header.group=olddocument.header.user.group
+			
+			def documentType= documentInstance.documentType
+			documentInstance.xmlDocument=xmlDocument
+			documentInstance.documentStatus=header.documentStatus
+			
+			// Needed to get ID
+			
+			//TODO make slurped document available to binding
+			documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
 
-		documentInstance.save(failOnError:true,flush:true)
-		theDocumentId=documentInstance.id
-		// Get the document again because it might have changed
-		// In particular at the start of the process the jPDL can change the document
+			documentInstance.save(failOnError:true,flush:true)
+			theDocumentId=documentInstance.id
+			// Get the document again because it might have changed
+			// In particular at the start of the process the jPDL can change the document
 			
 			
-		// Process task part of header:
-		// - transition
-		// - status update
-		// priority update
-		
-		if ((header.task?.id?.text().size()>0)) {
-			def id = new java.lang.Long(header.task?.id?.text())
-			def task=Task.get(id)
-			task.noMessage=true
-			if (header?.task?.outcome?.text().size()>0) {
-				task.outcome=header.task.outcome.text()
-				task.workflow.log("Completed task ${task.name} with outcome ${task.outcome}",currentUser)
-				task.noMessage=false
-			}
-			def formatter = new SimpleDateFormat("yyyy-MM-dd")
-			if (header?.task?.dueDate?.text().size()>0) {
-				task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
-				task.workflow.log("Changed due date of task ${task.name} to ${task.dueDate}",currentUser)
-			}
+			// Process task part of header:
+			// - transition
+			// - status update
+			// priority update
 			
-			if (header?.task?.priority.text().size()>0) {
-				task.priority=new java.lang.Integer(header?.task?.priority?.text())
-			}
-			
-			if (header?.task?.status?.text().size()>0) {
-				if(task.taskStatus?.name!=header.task.status.text()) {
-					def theTaskStatus=TaskStatus.findByName(header.task.status.text())
-					if (theTaskStatus) {
-						task.taskStatus=theTaskStatus
-						task.statusUser=currentUserName
-						task.workflow.log("Changed status of task ${task.name} to ${task.status}",currentUser)
-					}
+			if ((header.task?.id?.text().size()>0)) {
+				def id = new java.lang.Long(header.task?.id?.text())
+				def task=Task.get(id)
+				task.noMessage=true
+				if (header?.task?.outcome?.text().size()>0) {
+					task.outcome=header.task.outcome.text()
+					task.workflow.log("Completed task ${task.name} with outcome ${task.outcome}",currentUser)
+					task.noMessage=false
+				}
+				def formatter = new SimpleDateFormat("yyyy-MM-dd")
+				if (header?.task?.dueDate?.text().size()>0) {
+					task.dueDate=(Date)formatter.parse(header?.task?.dueDate?.text())
+					task.workflow.log("Changed due date of task ${task.name} to ${task.dueDate}",currentUser)
 				}
 				
+				if (header?.task?.priority.text().size()>0) {
+					task.priority=new java.lang.Integer(header?.task?.priority?.text())
+				}
+				
+				if (header?.task?.status?.text().size()>0) {
+					if(task.taskStatus?.name!=header.task.status.text()) {
+						def theTaskStatus=TaskStatus.findByName(header.task.status.text())
+						if (theTaskStatus) {
+							task.taskStatus=theTaskStatus
+							task.statusUser=currentUserName
+							task.workflow.log("Changed status of task ${task.name} to ${task.status}",currentUser)
+						}
+					}
+					
+				}
+				task.save(failOnError:true,flush:false)
 			}
-			task.save(failOnError:true,flush:false)
-		}
-		// Flush is needed, otherwise indexDocument will produce an unflushed collection exception
-		documentInstance.save(failOnError:true,flush:true)
-		indexDocument(documentInstance)
-		documentInstance.id
-	//}
+			// Flush is needed, otherwise indexDocument will produce an unflushed collection exception
+			documentInstance.save(failOnError:true,flush:true)
+			indexDocument(documentInstance)
+			documentInstance.id
+		//}
 	}
-	
-	/**
-	 * Store a document
-	 * This is not transactional on purpose, when createDocument is needed there will be 2 transactions
-	 * 
-	 * @param document
-	 * @return
-	 * @throws DocumentException
-	 */
+	   
+    // This is not transactional on purpose. 
     def storeDocument(document) throws DocumentException {
 		if (document.header.documentId?.text().size()>0) {
 			Document.withTransaction {
-				def documentId=updateDocument(document)				
+				def documentId=updateDocument(document)
+				dataDistributionService.afterUpdate(documentId)
 			}
 		} else {
 			createDocument(document)
@@ -471,8 +470,67 @@ class DocumentService implements InitializingBean {
     	log.debug documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
 		
+		//dataDistributionService.afterUpdate(documentInstance.id)
     }
+    
+    
+    /*
+    def getAllDocumentHeaders(String userName,boolean userDocumentsOnly) {
+    	def allDocuments
+    	if(userDocumentsOnly) {
+    		allDocuments=Document.findAllByUser(userName);
+    	} else {
+    		def groupNames=identityService.findGroupIdsByUser(userName)
+    		log.debug groupNames
+    		def c = Document.createCriteria()
+    		allDocuments=c.list {
+    			or {
+    				eq("user",userName)
+    				if(groupNames) {
+    				'in'("groupId",groupNames)
+    				}				
+    			}
+    		}    		
+    	}
     	
+    	def documentheaders    	
+    	documentheaders = allDocuments.collect {
+    		try {
+    		  getDocument(it.id).header
+    		} catch (Exception e) {
+    			""
+    		}	
+    	}
+    	return documentheaders
+    }
+    */
+    /*
+    def luceneSearch(String query, def params,String userName="",boolean userDocumentsOnly=true,boolean groupDocumentsOnly=true) {
+    	if (userName!="") {
+    		if(userDocumentsOnly) {
+    			if (query!="" && query!="*") {
+    				query="(${query}) AND user:${userName}"
+    			} else {
+    				query="user:${userName}"
+    			}
+    		} else if (groupDocumentsOnly) {
+        		def groupNames=identityService.findGroupIdsByUser(userName)
+        		def groupClause=""
+        		groupNames.each { groupClause += " OR groupId:${it}"}
+        		if (query!="" && query!="*") {
+        			query="(${query}) AND (user:${userName} ${groupClause})"
+        		} else {
+        			query="user:${userName} ${groupClause}"
+        		}
+    		}
+    	}
+    	//params.analyzer="standard"
+    	log.debug "The query is: ${query}"
+    	log.debug "The query is: ${query}"
+    	return searchableService.search(query, params)
+    }
+    */
+	
     def getDocumentIndexFields() {
     	def documentIndexFields=DocumentIndexField.findAllByPublish(true)
     	documentIndexFields+=[['name':'$/Document/id','title':'Nummer'],['name':'dateCreated','title':'Aanmaak Datum'],['name':'lastUpdated','title':'Bijwerk Datum'],['name':'completionDate','title':'Eind Datum'],['name':'documentType','title':'Document Type'],['name':'documentDescription','title':'Omschrijving'],['name':'user','title':'Gebruiker'],['name':'groupId','title':'Groep'],['name':'documentStatus','title':'Status'],['name':'processingDays','title':'Doorlooptijd']]
