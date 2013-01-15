@@ -48,6 +48,7 @@ class DocumentService implements InitializingBean {
 	
 	def cmisServiceProxy
 	def dataDistributionService
+	def jmsService
 	
 	def domFactory
 	
@@ -80,11 +81,12 @@ class DocumentService implements InitializingBean {
 	 * @throws DocumentException
 	 */
 	
-	def createDocument(document) throws DocumentException {
+	def createDocument(document,source="service") throws DocumentException {
 		def theDocumentId
 		def startProcess=false
 		def currentUserName
 		def currentUser
+		String xmlDocument
     	Document.withNewTransaction { status ->
 			log.debug "createDocument Transaction #1 - newTransaction:${status.isNewTransaction()}"
 			
@@ -94,7 +96,7 @@ class DocumentService implements InitializingBean {
     		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
     		def outputBuilder = new StreamingMarkupBuilder()
 
-    		String xmlDocument = outputBuilder.bind{
+    		xmlDocument = outputBuilder.bind{
     			// Only needed if you want <?xml etc. at the top of the XML document
     			// mkp.xmlDeclaration()
     			mkp.yield document 
@@ -119,7 +121,6 @@ class DocumentService implements InitializingBean {
     		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")		
 
     		createCaseFolder(documentInstance,document)
-			
     		documentInstance.save(failOnError:true,flush:true)
     		theDocumentId=documentInstance.id
     		// Get the document again because it might have changed
@@ -150,16 +151,19 @@ class DocumentService implements InitializingBean {
     		}
     		theDocumentId=documentInstance.id
 	  } // withTransaction
+		def msg=[eventType:"afterCreateDocument",source:source,xmlDocument:xmlDocument]
+		jmsService.send(topic:"wfp.event",msg,"standard",null)
 	return 	theDocumentId
 	}
 	
 	
 	@Transactional
-	def updateDocument(document)throws DocumentException {
+	def updateDocument(document,source="service")throws DocumentException {
 		def theDocumentId
 		def startProcess=false
 		def currentUserName
 		def currentUser
+		String xmlDocument
 		//Document.withTransaction { status ->
 			//println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
 		
@@ -170,7 +174,7 @@ class DocumentService implements InitializingBean {
 			log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
 			def outputBuilder = new StreamingMarkupBuilder()
 
-			String xmlDocument = outputBuilder.bind{
+			xmlDocument = outputBuilder.bind{
 				// Only needed if you want <?xml etc. at the top of the XML document
 				// mkp.xmlDeclaration()
 				mkp.yield document
@@ -240,18 +244,21 @@ class DocumentService implements InitializingBean {
 			documentInstance.save(failOnError:true,flush:true)
 			indexDocument(documentInstance)
 			documentInstance.id
+			def msg=[eventType:"afterUpdateDocument",source:source,xmlDocument:xmlDocument]
+			jmsService.send(topic:"wfp.event",msg,"standard",null)
+			
 		//}
 	}
 	   
     // This is not transactional on purpose. 
-    def storeDocument(document) throws DocumentException {
+    def storeDocument(document,source="service") throws DocumentException {
 		if (document.header.documentId?.text().size()>0) {
 			Document.withTransaction {
-				def documentId=updateDocument(document)
-				dataDistributionService.afterUpdate(documentId)
+				def documentId=updateDocument(document,source)
+
 			}
 		} else {
-			createDocument(document)
+			createDocument(document,source)
 		}
     }
     
@@ -469,6 +476,9 @@ class DocumentService implements InitializingBean {
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
+		
+		def msg=[eventType:"afterSetDocument",source:source,xmlDocument:documentInstance.xmlDocument]
+		jmsService.send(topic:"wfp.event",msg,"standard",null)
 		
 		//dataDistributionService.afterUpdate(documentInstance.id)
     }

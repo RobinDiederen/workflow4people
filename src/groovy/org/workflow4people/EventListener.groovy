@@ -39,15 +39,15 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 		
 		if (entity instanceof org.workflow4people.Workflow && !entity.noMessage) {	    
 			def engineName=entity.workflowEngine.name
-	    	String queueName="wfp.${engineName}.out.workflow.update"    		  
-    		jmsService.send(queueName,[id:entity.id])
+	    	String queueName="wfp.engine.${engineName}"    		  
+    		jmsService.send(queueName,[messageType:"afterUpdateWfpWorkflow",id:entity.id])
 			log.debug "onPostUpdate completed - entity: ${entity.class.name} id: ${entity.id}"
 	    }
 		
 		if (entity instanceof org.workflow4people.Task && !entity.noMessage) {		
 			def engineName=entity.workflow.workflowEngine.name
-			String queueName="wfp.${engineName}.out.task.update"
-			jmsService.send(queueName,[id:entity.id])  
+			String queueName="wfp.engine.${engineName}"
+			jmsService.send(queueName,[messageType:"afterUpdateWfpTask",id:entity.id])  
 			log.debug "onPostUpdate completed - entity: ${entity.class.name} id: ${entity.id}"
 	    }
 	  }
@@ -59,15 +59,14 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 		
 	    if (entity instanceof org.workflow4people.Workflow && !entity.noMessage) {
 			def engineName=entity.workflowEngine.name
-			String queueName="wfp.${engineName}.out.workflow.new"
-			jmsService.send(queueName,[id:entity.id])
-			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"
-			
+			String queueName="wfp.engine.${engineName}"
+			jmsService.send(queueName,[messageType:"afterCreateWfpWorkflow",id:entity.id])
+			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"			
 	    }
 		if (entity instanceof org.workflow4people.Task && !entity.noMessage) {
 			def engineName=entity.workflow.workflowEngine.name
-			String queueName="wfp.${engineName}.out.task.new"
-			jmsService.send(queueName,[id:entity.id])
+			String queueName="wfp.engine.${engineName}"
+			jmsService.send(queueName,[messageType:"afterCreateWfpTask",id:entity.id])
 			log.debug "onPostInsert completed - entity: ${entity.class.name} id: ${entity.id}"			
 	    }
 		    
@@ -80,16 +79,16 @@ class EventListener implements PostUpdateEventListener,PostInsertEventListener{
 		
 		if (entity instanceof org.workflow4people.Workflow && !entity.noMessage) {
 			def engineName=entity.workflowEngine.name
-			String queueName="wfp.${engineName}.out.workflow.delete"
-			jmsService.send(queueName,[id:entity.id])
+			String queueName="wfp.engine.${engineName}"
+			jmsService.send(queueName,[messageType:"afterDeleteWfpWorkflow",id:entity.id])
 			log.debug "onPostDelete completed - entity: ${entity.class.name} id: ${entity.id}"
 			
 	    }
 		
 		if (entity instanceof org.workflow4people.Task && !entity.noMessage) {
 			def engineName=entity.workflow.workflowEngine.name
-			String queueName="wfp.${engineName}.out.task.delete"
-			jmsService.send(queueName,[id:entity.id])
+			String queueName="wfp.engine.${engineName}"
+			jmsService.send(queueName,[messageType:"afterDeleteWfpTask",id:entity.id])
 			log.debug "onPostDelete completed - entity: ${entity.class.name} id: ${entity.id}"
 			
 	    }

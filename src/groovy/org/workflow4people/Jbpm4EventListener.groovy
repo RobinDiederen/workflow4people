@@ -31,37 +31,32 @@ import org.apache.commons.logging.LogFactory
 public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEventListener,PostDeleteEventListener{
 	def jmsService
 	private static final log = LogFactory.getLog(this)
-	
 
 	void onPostUpdate(PostUpdateEvent postUpdateEvent) {
 		def entity=postUpdateEvent.getEntity()
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			log.debug "onPostUpdate - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.update",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterUpdateJbpmWorkflow",id:entity.getId()])
 			log.debug "onPostUpdate completed- entity: ${entity} id: ${entity.id}"
-		} 
-		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
+		} else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			log.debug "onPostUpdate - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.update",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterUpdateJbpmTask",id:entity.getId()])
 			log.debug "onPostUpdate completed- entity: ${entity} id: ${entity.id}"
 		}
-		
-	  }
+	}
 	
 	void onPostInsert(PostInsertEvent postInsertEvent) {
 		def entity=postInsertEvent.getEntity()
 		
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			log.debug "onPostInsert - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.new",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterCreateJbpmWorkflow",id:entity.getId()])
 			log.debug "onPostInsert completed - entity: ${entity} id: ${entity.id}"
-		} 
-		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
+		} else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			log.debug "onPostInsert - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.new",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterCreateJbpmTask",id:entity.getId()])
 			log.debug "onPostInsert completed - entity: ${entity} id: ${entity.id}"			
-		}
-		
+		}		
 	  }
 	
 	void onPostDelete(PostDeleteEvent postDeleteEvent) {
@@ -69,16 +64,12 @@ public class Jbpm4EventListener implements PostUpdateEventListener,PostInsertEve
 		
 		if (entity instanceof org.jbpm.pvm.internal.model.ExecutionImpl) {
 			log.debug "onPostDelete - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.workflow.delete",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterDeleteJbpmWorkflow",id:entity.getId()])
 			log.debug "onPostDelete completed - entity: ${entity} id: ${entity.id}"
-		} 
-		else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
+		} else if (entity instanceof org.jbpm.pvm.internal.task.TaskImpl) {
 			log.debug "onPostDelete - entity: ${entity} id: ${entity.id}"
-			SpringUtil.getBean("jmsService").send("wfp.jbpm4.in.task.delete",[id:entity.getId()])
+			SpringUtil.getBean("jmsService").send("wfp.engine.jbpm4",[messageType:"afterDeleteJbpmTask",id:entity.getId()])
 			log.debug "onPostDelete completed - entity: ${entity} id: ${entity.id}"
 		}
-		
 	  }
-	
-	
 }
