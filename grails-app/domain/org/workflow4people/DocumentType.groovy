@@ -37,6 +37,14 @@ class DocumentType {
     	lastUpdated(nullable:true)
 		fieldType()    	
     	cmisPathTemplate(nullable:true)
+		defaultChildDocumentType(nullable:true)
+		
+		pathTemplate (nullable:true)
+		documentCategory (nullable:true)
+		
+		nameTemplate (nullable:true)
+		descriptionTemplate (nullable:true)
+		
     }
     
     static hasMany = [documentIndexField:DocumentIndexField]
@@ -45,10 +53,11 @@ class DocumentType {
     String name
     String description
 	/**
-	 * Template that determines how the description for documents of this type is generated
+	 * Templates that determine how the name and description for documents of this type is generated
 	 * The document instance is used as the binding for this description
 	 * @see org.workflow4people.services.DocumentService
 	 */
+	String nameTemplate
     String descriptionTemplate    
 	FieldType fieldType
     /**
@@ -59,6 +68,14 @@ class DocumentType {
 	 * Determines if a CMIS folder should be created for documents of this type
 	 */
     Boolean	 useCmis=false
+	
+	
+	String pathTemplate
+	
+	DocumentType defaultChildDocumentType
+	DocumentCategory documentCategory
+	
+	Boolean folder=false
     
     String toString() {
 		  return name;

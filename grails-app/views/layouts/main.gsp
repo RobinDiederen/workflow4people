@@ -4,11 +4,11 @@
     	<!-- This is main.gsp in wfp -->
         <title><g:layoutTitle default="workflow4people" /></title>
 		<r:require modules="wfp"/>
-        <g:javascript>
+        <script>
         	var wfp={};
         	var dataTableHashList = {};
         	wfp.baseUrl="${request.contextPath}";
-        </g:javascript>        
+        </script>        
         <g:layoutHead />
 		<r:layoutResources/>		
 		<dialog:head />       
@@ -46,7 +46,9 @@
 	            			<sec:ifAnyGranted roles="ROLE_WF4P_PROCESS_ADMIN,ROLE_WF4P_ADMIN,ROLE_WF4P_DEVELOPER">
 	            				<dialog:dropdown code="wfp.xmldocuments">
 	            					<dialog:menuitem controller="document" action="list" icon="icon-file"/>
+	            					<dialog:menuitem controller="document" action="tree" icon="icon-file"/>
 	            					<dialog:menuitem controller="documentType" action="list" icon="icon-file"/>
+	            					<dialog:menuitem controller="documentCategory" action="list" icon="icon-file"/>
 	            					<dialog:menuitem controller="documentIndexField" action="list" icon="icon-list"/>
 	            					<dialog:menuitem controller="minerQuery" action="list" icon="icon-cog"/>
 	            					<dialog:menuitem controller="namespace" action="list" icon="icon-folder-close"/>

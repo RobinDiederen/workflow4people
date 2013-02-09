@@ -38,6 +38,8 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
 import javax.xml.namespace.*;
+
+
 import org.jbpm.api.model.*
 import org.springframework.transaction.annotation.*
 
@@ -102,7 +104,7 @@ class DocumentService implements InitializingBean {
     			mkp.yield document 
     		}	
     		
-    		def	documentInstance = new Document()
+    		def	documentInstance = new Document(name:'new')
 			documentInstance.user=header.user.name
 			documentInstance.groupId=header.group
     	    
@@ -118,8 +120,9 @@ class DocumentService implements InitializingBean {
     		documentInstance.save(failOnError:true,flush:true)
 			
 			//TODO make slurped document available to binding
-    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")		
-
+    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
+			documentInstance.name=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.nameTemplate+"\"")
+			moveDocumentToDefaultPath(documentInstance,document)
     		createCaseFolder(documentInstance,document)
     		documentInstance.save(failOnError:true,flush:true)
     		theDocumentId=documentInstance.id
@@ -342,6 +345,48 @@ class DocumentService implements InitializingBean {
 			//log.debug "CMIS disabled, skipping case folder creation"
 		}
     }
+	
+	/**
+	 * Move document to it's default path
+	 * Create the path if it doesn't exist
+	 * @param documentInstance
+	 * @param document
+	 * @return
+	 */
+	@Transactional
+	def moveDocumentToDefaultPath(def documentInstance,document) {
+		log.debug "Creating document path folder for ${documentInstance.id}"
+		def pathTemplate=documentInstance.documentType.pathTemplate
+		
+		def path=new GroovyShell(new Binding([document:documentInstance,xmlDocument:document])).evaluate('"""'+pathTemplate+'"""')
+    	path=path.trim()
+    	
+    	def pathElements=path.split("/")
+    	
+    	def parent=null
+    	
+    	def currentPath=""
+    	pathElements.each { pathElement ->
+    		if (pathElement.length()>0) {
+	    		currentPath+="/"+pathElement
+	    		def doc=Document.findByNameAndParent(pathElement,parent)
+	    		if(!doc) {
+					def documentType=parent?.documentType?.defaultChildDocumentType 
+					documentType=documentType?:DocumentType.findByName('Folder')
+					doc=new Document(name:pathElement,documentDescription:pathElement,documentType:documentType,xmlDocument:"""<test></test>""")
+					doc.parent=parent
+					doc.save(failOnError:true)	    			
+	    			parent=doc
+	    		} else {
+	    			parent=doc
+	    		}
+    		}
+    	}
+		documentInstance.parent=parent
+		documentInstance.save(failOnError:true)
+    	return path				
+    }
+	
 
 	@Transactional
     public void indexDocument(Document documentInstance){
@@ -382,11 +427,11 @@ class DocumentService implements InitializingBean {
 		    		*/
 		    		// Store all values that match the Xpath expression
 					nodes.each {
-						log.debug "Index field ${field.name} has value ${it.textContent}"    		  
+						log.debug "Index field ${field.name} has value ${it.textDocument}"    		  
 						indexEntry=new DocumentIndex()
 						indexEntry.name=field.name		  
 						documentInstance.addToDocumentIndex(indexEntry)    			  
-						indexEntry.value=it.textContent
+						indexEntry.value=it.textDocument
 						indexEntry.save(flush:false,failOnError:true)
 		    		}
 				}
@@ -548,6 +593,206 @@ class DocumentService implements InitializingBean {
     	                      
 		return documentIndexFields
     }
+	
+	
+	
+	///// copied in from contentService HERE
+	
+	
+	/**
+	 * Find a content object based on it's path
+	 * Returns null if the object cannot be found
+	 * @param path
+	 * @return Document object
+	 */
+	def findByPath(path) {
+		def pathElements=path?path.split("/"):[]
+		def content=null
+		pathElements.each { pathElement ->
+			content=Document.findByParentAndName(content,pathElement)
+		}
+		return content?.active?content:null
+	}
+	
+	/**
+	 * Find a file attachment URL based on it's path
+	 * @param path
+	 * @return URL
+	 */
+	def findFileUrlByPath(path) {
+		dialogService.check(path!=null && path.contains.("/"),"content.findFileUrlByPath.invalidpath")
+		def lastSlash=path.lastIndexOf('/');
+		def contentPath=path.substring(0,lastSlash)
+		def filename=path.substring(lastSlash+1)
+		dialogService.check(filename!=null,"content.findFileUrlByPath.missingfilename")
+		def content=findByPath(contentPath)
+		dialogService.check(content!=null,"content.findFileUrlByPath.notfound")
+		def url=fileService.fileUrl(Document,content.id,"images")+"/${filename}"
+	}
+	
+	/**
+	 * Recursively copy content
+	 * @param content
+	 * @return
+	 */
+	
+	def treeCopy(Document content) {
+		log.trace "Copying content ${content.id} ($content.name})"
+		def copyDocument=new Document()
+		def domainClass=grailsApplication.getDomainClass('org.catviz.Document')
+		domainClass.persistentProperties.each { prop ->
+			if (prop.name!="children" && prop.name !="contentHistory") {
+				copyDocument."${prop.name}" = content."${prop.name}"
+			}
+		}
+		Document.findAllByParent(content).each { childDocument ->
+			log.debug "CHILDCONTENT ${childDocument}"
+			def copyChildDocument=treeCopy(childDocument)
+			copyDocument.addToChildren(copyChildDocument)
+
+			
+		}
+		return copyDocument
+	}
+	
+	/**
+	 * Recursively delete content tree
+	 * UNNECESSARY! the delete just cascades
+	 * TODO check if we need to check templates and layouts for orphanage
+	 *
+	 * @param content
+	 * @return
+	 */
+	def treeDelete(Document content) {
+		log.trace "deleting ${content}"
+		dialogService.check(content!=null,"content.treeDelete.contentisnull")
+		Document.findAllByParent(content).each { childDocument ->
+			log.trace "deleting child content ${childDocument}"
+			treeDelete(childDocument)
+		}
+		//content.parent=null
+		//content.delete(flush:true)
+		content.delete()
+	}
+	
+	/**
+	 * Move content to another location
+	 * @param content1 The content to be moved
+	 * @param content2 The destination reference content
+	 * @param where The postion relative to content2 where content1 should be placed. May be "inside", "before" or "after"
+	 * @return
+	 */
+	def moveDocument(Document content1,Document content2,String where){		
+		def originalParent=content1.parent
+		
+		switch(where) {
+		
+			case "inside":
+				content1.parent=content2
+				content1.save(flush:true)
+				def maxPosition=Document.findAllByParent(content2,[sort:'position',order:'desc',max:1])[0]?.position
+				content1.position=maxPosition ? maxPosition+1 : 1
+				content1.save(flush:true)
+				break
+				
+			case "before":
+				content1.parent=content2.parent
+				
+				def position=content2.position
+				content1.position=content2.position
+				content1.save(flush:true)
+				
+				def n=1
+				Document.findAllByParent(content2.parent,[sort:'position',order:'asc']).each { content ->
+					content.position=n++
+					content.save(flush:true)
+					log.debug "${content.name}: ${content.position}"
+				}
+								
+				if (content1.position>content2.position) {
+					log.debug "Swapping ${content1.id} and ${content2.id}"
+					swapDocumentPosition(content1,content2)
+				}
+				
+				Document.findAllByParent(content2.parent,[sort:'position',order:'asc']).each { content ->
+					log.debug "${content.name}: ${content.position}"
+				}
+				
+														
+				break
+			case "after":
+				
+				content1.parent=content2.parent
+				
+				def position=content2.position
+				content1.position=content2.position
+				content1.save(flush:true)
+				
+				def n=1
+				Document.findAllByParent(content2.parent,[sort:'position',order:'asc']).each { content ->
+					content.position=n++
+					content.save(flush:true)
+				}
+				
+				if (content1.position<content2.position) {
+					swapDocumentPosition(content1,content2)
+				}
+								
+				break
+		}
+		// Fix the positions of the original part of the tree
+		if(originalParent) {
+			def n=1
+			Document.findAllByParent(originalParent,[sort:'position',order:'asc']).each { content ->
+			content.position=n++
+			content.save(flush:true)
+		}
+	
+		}
+		
+		
+		
+	}
+	
+	/**
+	 * Swap position of 2 items in a position-sorted list
+	 * Ietms should have a 'position' property
+	 * @param item1
+	 * @param item2
+	 * @return
+	 */
+	def swapPosition(item1,item2) {
+		def p1= item1.position
+		def p2 = item2.position
+		item1.position=p2
+		item2.position=p1
+	}
+	
+	/**
+	 * Swap 2 position of 2 content items
+	 * @param item1
+	 * @param item2
+	 * @return
+	 */
+	def swapDocumentPosition(item1,item2) {
+		def p1= item1.position
+		def p2 = item2.position
+		item1.position=p2
+		item2.position=p1
+		item1.save(flush:true)
+		item2.save(flush:true)
+	}
+	
+	/**
+	 * Convert string into camelCase
+	 * @param s
+	 * @return camelCased String
+	 */
+	def camelCase(String s) {
+		return s.substring(0,1).toLowerCase()+s.substring(1)
+	}
+	
+	
     
 }
 

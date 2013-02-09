@@ -138,5 +138,40 @@ class SecurityService {
     def getPerson(String username) {
     	return Person.findByUsername(username)    	
     }
+	
+	/**
+	 * Determines if user can perform action on document
+	 * @param user
+	 * @param document
+	 * @param action
+	 * @return
+	 */
+	boolean hasAccessToDocument(String user,String document, String action) {
+		// Assume the worst
+		def hasAccess=false
+		
+		// Get user, document,action
+		//Person user=Person.findByUsername(userName)
+		//def document=Document.get(documentId)
+		//def action=Action.findByName(actionName)
+		
+		// Go through all the groups the user is in
+		user.authorities.each { authority ->
+			def dpa=DocumentPermission.findAllByAuthorityAndDocument(authority,document)
+			dpa.each { dp ->
+				dp?.role?.roleAction?.each { roleAction ->
+					if (actionName==roleAction.name) {
+						hasAccess=true
+						return true
+					}
+				}
+			}
+		}
+		if (!hasAccess && parent!=null && inheritPermissions) {
+			return hasAccessToDocument(user,parent,action)
+		} else {
+			return hasAccess
+		}
+	}
     
 }

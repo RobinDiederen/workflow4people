@@ -17,6 +17,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import java.util.Collection;
+
 import org.apache.solr.common.*
 
 /**
@@ -25,33 +27,52 @@ import org.apache.solr.common.*
  * @author Joost Horward
  */
 class Document {
+	def versionService
 	/**
 	 * properties to be shown in the user interface list
 	 */
     static listProperties=['id','documentDescription','documentType','dateCreated','lastUpdated']
     static constraints = {    	    
+		position		nullable:true
+		
+		documentStatus(nullable:true)
+		documentKey(nullable:true)
+		documentDescription(nullable:true)
+	    
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+		completionDate(nullable:true)
+		processingDays(nullable:true)
+	    
+		user(nullable:true)
+		groupId(nullable:true)
+	    
+		cmisFolderObjectId(nullable:true)
+		cmisFolderUrl(nullable:true)
+	    
+		xmlDocument(size:0..50000000)
+	    
+		cmisPath(nullable:true)
+		
+		parent			nullable:true
 
-    	    documentStatus(nullable:true)
-    	    documentKey(nullable:true)
-    	    documentDescription(nullable:true)
-    	    
-    	    dateCreated(nullable:true)
-    	    lastUpdated(nullable:true)
-    	    completionDate(nullable:true)
-    	    processingDays(nullable:true)
-    	    
-    	    user(nullable:true)
-    	    groupId(nullable:true)
-    	    
-    	    cmisFolderObjectId(nullable:true)
-    	    cmisFolderUrl(nullable:true)
-    	    
-    	    xmlDocument(size:0..50000)
-    	    
-    	    cmisPath(nullable:true)
+		createdBy		nullable:true
+		lastUpdatedBy	nullable:true
+		versionLabel	nullable:true,validator: { label,documentInstance ->
+			// We get Object references an unsaved transient instance errors here if we do the search on a new object. This is avoided by checking for the id which is empty for new instances
+			def exists=false
+			if (documentInstance.id) {
+				exists=DocumentHistory.countByDocumentAndVersionLabel(documentInstance,label)!=0
+			}
+			return exists?['validator.versionLabelExists',label]:null
+		}
     }
-	  
-    static hasMany = [documentIndex:DocumentIndex,form:Form]
+	int position=0
+	Collection children
+	
+    static hasMany = [documentIndex:DocumentIndex,form:Form,children:Document,documentHistory:DocumentHistory,documentPermission:DocumentPermission]
+	static belongsTo=[ parent: Document ]
+	
 	/**
 	 * Set of index fields that have infornation derived from the Document XML by XPath or Groovy expressions defined in the DocumentType	
 	 */
@@ -80,6 +101,12 @@ class Document {
 	 * The date/time this Document was last updated (automatically populated by Grails)
 	 */
     Date lastUpdated
+	
+	String name
+	
+	String createdBy
+	String lastUpdatedBy
+	
 	
 	/**
 	 * The completion date associated with this document
@@ -123,6 +150,72 @@ class Document {
 	 * The XML document itself.
 	 */
     String xmlDocument
+	
+	/**
+	 * The version of this document
+	 */
+	String versionLabel="0.1"
+	
+	/**
+	 * Determines if this document will inherit permissions from it's parent
+	 */
+	boolean inheritPermissions=true
+		
+	/**
+	 * Populate createdBy and lastUpdated when a new item is created
+	 * @return
+	 */
+	def beforeInsert() {
+		createdBy=user
+		this.lastUpdated=new Date()
+		
+	}
+		
+	/**
+	 * Save version history and set lastUpdatedBy when the document is updated
+	 * @return
+	 */
+	def beforeUpdate() {
+		//
+		lastUpdatedBy=user
+		
+		if (this.isDirty('xmlDocument') || this.isDirty('documentDescription') || this.isDirty('name') || this.isDirty('versionLabel')) {
+			// If version is not changed, auto version
+			def currentVersion=this.getPersistentValue('versionLabel')
+			if (!this.isDirty('versionLabel')) {				
+				versionLabel=versionService.nextVersion(currentVersion)
+			}
+			
+			def history=new DocumentHistory(
+				xmlDocument:getPersistentValue('xmlDocument'),
+				documentDescription:getPersistentValue('documentDescription'),
+				name:getPersistentValue('name'),
+				versionLabel:getPersistentValue('versionLabel'),
+				documentLastUpdated:getPersistentValue('lastUpdated'),
+				lastUpdatedBy:getPersistentValue('lastUpdatedBy'),
+				createdBy:getPersistentValue('createdBy')
+				)
+			this.addToDocumentHistory(history)
+		}
+	}
+		
+	/**
+	 * Get the path to this content item
+	 * @return
+	 */
+	def getPath() {
+		if (!parent || parent==this) {
+			return "/${name}"
+		} else {
+			String parentPath=parent.path
+			if (parentPath && parentPath.length()<1000) {
+				return "${parentPath}/${name}"
+			} else {
+				return ""
+			}
+		}
+	}
+	
     /**
      * Provides the description of this document
      * @return The description of this document
@@ -139,11 +232,15 @@ class Document {
 	 */
 	SolrInputDocument getSolrInputDocument() {
 		SolrInputDocument sid = new SolrInputDocument()
-		sid.addField("id",this.id.toString())
+		sid.addField("id",this.id)
 		sid.addField("documentType",documentType.name)
+		sid.addField("name",name)
 		sid.addField("documentDescription",documentDescription)		
 		sid.addField("dateCreated",dateCreated)
 		sid.addField("lastUpdated",lastUpdated)
+		sid.addField("createdBy",createdBy)
+		sid.addField("lastUpdatedBy",lastUpdatedBy)
+		
 		sid.addField("completionDate",completionDate)
 		sid.addField("processingDays",processingDays)
 		sid.addField("user",user)
@@ -152,6 +249,11 @@ class Document {
 		sid.addField("cmisFolderUrl",cmisFolderUrl)
 		sid.addField("cmisPath",cmisPath)
 		sid.addField("xmlDocument",xmlDocument)
+		sid.addField("folder",documentType.folder)
+		sid.addField("cssClass",documentType.name)
+		sid.addField("parent",parent?parent.id:0)
+		sid.addField("documentPath",path)
+		
 		DocumentIndex.findAllByDocument(this).each { di ->
 			if (di.name.startsWith("index_") || di.name.startsWith("mindex_")) {
 				sid.addField(di.name.toString(),di.value)

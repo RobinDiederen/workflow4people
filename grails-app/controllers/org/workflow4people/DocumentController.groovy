@@ -34,6 +34,7 @@ class DocumentController {
 	def listService
 	def dialogService
 	def solrService
+	def treeEventService
 
     def index = { redirect(action: "list", params: params) }
 
@@ -56,10 +57,133 @@ class DocumentController {
     	render listService.jsonlist(Document,params,request) as JSON	
     }
 
-	def dialog = { return dialogService.edit(Document,params) }
-	
-	def submitdialog = { render dialogService.submit(Document,params) as JSON }
+	def dialog = { 		
+		if (!params.id) {
+			def documentType=null
+			def parent=null
+			def defaultChildDocumentType=null
+			if(params.parentId) {
+				parent=Document.get(params.parentId)
+				if (parent) {
+					documentType=parent.documentType
+					defaultChildDocumentType=documentType.defaultChildDocumentType
+				}
+			}		
+			def documentInstance=new Document([parent:parent,documentType:defaultChildDocumentType])		
+			return [documentInstance:documentInstance]
+		} else {
+			return dialogService.edit(Document,params) 
+		}
+    }
+	def submitdialog = { 		
+		def res =dialogService.submit(Document,params,null) { 
+			if (domainClassInstance.parent) {
+				res.result.refreshNodes=["content_${domainClassInstance.parent.id}"]
+			} else {
+				res.result.refreshNodes=["contentTree"]
+			}
+		}		
+		render res as JSON
+    }
+		
 	
 	def delete = { render dialogService.delete(Document,params) as JSON }
+	
+	
+	// Document tree
+	
+	def tree = {
+		[:]
+	}
+	
+	def contentJSON = {
+		def elements=[]
+		def fieldType=false
+		if (!params.id || params.id=="") {
+			elements=Document.findAllByParent(null,[order:'asc',sort:'position'])
+			fieldType=true
+		} else {
+			if (params.id.startsWith("content_")) {
+				def id=new Integer(params.id.split("_")[1])
+				def p=Document.get(id)
+				elements=Document.findAllByParent(p,[sort:'position',order:'asc'])
+			}
+		}
+				
+		def elementlist = { elements.collect { f ->
+				boolean hasChildren=false
+				def cssClass=""
+				hasChildren= Document.countByParent(f)>0
+					cssClass="document documenttype-${f.documentType?.name} fieldtype-${f.documentType?.fieldType?.name} basetype-${f.documentType?.fieldType?.baseType?.name}"
+				
+
+				def nodeRel = hasChildren ? 'folder' : 'default'
+				def nodeClass="jstree-default ${cssClass}"
+				//
+				def nodeState =hasChildren ? 'closed' : ''
+				[
+				
+				attr: [id: "content_${f.id}",title:f.name?:f.documentDescription,class: nodeClass,rel:nodeRel],
+				
+				
+				data: "${f.name?:f.documentDescription}",
+				title: f.name?:f.documentDescription,
+				state:nodeState,
+				rel:nodeRel
+			 ]
+		}
+			}
+			render elementlist() as JSON
+		
+		}
+
+	def before = {
+		def node1=[:]
+		def node2=[:]
+		
+		if (params.id1) {
+			node1.id=params.id1.split("_")[1]
+			node1.type=params.id1.split("_")[0]
+		}
+		
+		if (params.id2) {
+			node2.id=params.id2.split("_")[1]
+			node2.type=params.id2.split("_")[0]
+		}
+		def moveType=params.moveType
+		def func=params.func
+		def newName=params.newName
+		boolean isCopy=params.isCopy=="true"
+		def result=treeEventService.defaultResult
+		
+		log.debug "before: func:${func}, node1:${node1.id}, node2:${node2.id} moveType:${moveType}, isCopy:${isCopy}"
+		switch(func) {
+			case "move_node":
+				if ((node1.type=="content") && (node2.type=="content")) {
+					result=treeEventService.dragDocumentToDocument(node1,node2,moveType,isCopy)
+				}
+				
+			break;
+			
+			case "rename_node":
+				switch (node1.type) {
+					case "content":
+						result=treeEventService.renameDocument(node1,newName)
+					break
+				}
+				
+			break;
+			
+			case "delete_node":
+				switch(node1.type) {
+					case "content":
+						result= treeEventService.deleteDocument(node1);
+				break
+				}
+					 }
+		def res=[result:result]
+		render res as JSON
+	}
+	
 	
   }
