@@ -20,7 +20,7 @@ modules = {
 		
 		resource url:'js/jquery/jquery.cookie.js'
 		resource url:'js/jquery/jquery.hotkeys.js'
-		resource url:'js/jquery/jquery.jstree.js'
+		//resource url:'js/jquery/jquery.jstree.js'
 		resource url:'js/jquery/jquery.timers-1.2.js'		
 		resource url:'js/dme/editor.js'
 		

@@ -36,7 +36,8 @@
 	        <dialog:textField object="${documentInstance}" propertyName="cmisPath" mode="edit" class="extrawide"/>	    
 		</dialog:tab>
 		
-		<dialog:tab name="Permissions" object="${documentInstance}">			
+		<dialog:tab name="Permissions" object="${documentInstance}">
+			<dialog:checkBox object="${documentInstance}" propertyName="inheritPermissions" mode="edit" />					
 			<dialog:detailTable property="document" object="${documentInstance}" domainClass="${DocumentPermission}" newButton="true"/>			
 		</dialog:tab>
 		
