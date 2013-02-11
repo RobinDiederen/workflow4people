@@ -144,6 +144,9 @@ class FieldType {
 	 */
 	Field listParent
 	
+	
+	Map snippetConfig
+	
     /**
      * Provides a binding for the field type. The binding is used by the template.
      * Contains:

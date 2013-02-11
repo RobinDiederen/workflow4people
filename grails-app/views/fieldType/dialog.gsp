@@ -1,5 +1,5 @@
 <dialog:form title="Field type" object="${fieldTypeInstance}" height="670px">
-	<dialog:tabs names="Details,Text,List,Advanced" object="${fieldTypeInstance}">		
+	<dialog:tabs names="Details,Text,List,Advanced,Snippet" object="${fieldTypeInstance}">		
 		<dialog:tab name="Details" object="${fieldTypeInstance}">		                            
 	        <dialog:textField object="${fieldTypeInstance}" propertyName="id" mode="show" />                                                      
 	        <dialog:textField object="${fieldTypeInstance}" propertyName="name" mode="edit" />
@@ -42,5 +42,19 @@
 			<dialog:textField object="${fieldTypeInstance}" propertyName="maxExclusive" mode="edit" />
 			
 		</dialog:tab>
+		
+		<dialog:tab name="Snippet" object="${fieldTypeInstance}">
+			<g:if test="${templateSnippetConfig}">
+				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
+				<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
+					<g:textField name="snippetConfig.${parameter.key}" value="${fieldTypeInstance.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />
+					</dialog:simplerow>
+				</g:each>
+			</g:if>
+			<g:else>
+				<p>Snippet config is missing!</p>
+			</g:else>		
+		</dialog:tab>
+		
 	</dialog:tabs>
 </dialog:form>

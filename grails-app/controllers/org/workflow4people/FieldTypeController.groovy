@@ -31,6 +31,7 @@ class FieldTypeController {
     
 	def listService
 	def dialogService
+	def templateService
 	
     def index = { redirect(action:list,params:params) }
 
@@ -53,9 +54,29 @@ class FieldTypeController {
 		render listService.jsonlist(FieldType,params,request,null,actions) as JSON
 	}
 	
-	def dialog = { return dialogService.edit(FieldType,params) }
+	def dialog = {  
+		def model= dialogService.edit(FieldType,params)
+		println "And the model is: ${model.fieldTypeInstance.snippetConfig}"
+		model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType.name)		
+		return model		
+	}
 	
-	def submitdialog = { render dialogService.submit(FieldType,params) as JSON }
+	def submitdialog = { 
+		println "And the params are ${params}"
+		def prms=params
+		render dialogService.submit(FieldType,params,null) {
+			domainClassInstance.snippetConfig=prms.snippetConfig
+			domainClassInstance.save()
+			prms.each { key,value ->
+				
+				/*println "we have a winner: ${key}"
+				if (key.startsWith("snippetConfig.")) {
+					domainClassInstance."${key}"=value
+				}
+				*/
+			}
+			
+		} as JSON }
 	
 	def delete = { render dialogService.delete(FieldType,params) as JSON }
 	

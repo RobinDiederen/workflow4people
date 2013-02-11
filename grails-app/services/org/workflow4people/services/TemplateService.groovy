@@ -216,6 +216,27 @@ public class TemplateService implements  ApplicationContextAware {
 	  	  	return templateNames?.sort()
 	 }
 	 
+	 def getSnippetConfig(name){
+		 def templatePath=ApplicationConfiguration.findByConfigKey('template.path').configValue;
+			 if (templatePath.charAt(templatePath.length()-1)!='/') {
+		   templatePath+='/'
+			 }
+			 
+			 def configPath = templatePath+'snippets/FieldType/'+name+"/snippet.conf"
+			 def configFile=new File(configPath)
+			 if (!configFile.exists()) {
+				 configPath = templatePath+'snippets/BaseType/'+name+"/snippet.conf"
+				 configFile=new File(configPath)
+			 }
+			 
+			 if (configFile.exists()) {
+			 	def config = new ConfigSlurper().parse(configFile.toURL())
+				 return config
+			 } else {
+			 	return null
+			 }
+	 }
+	 
 	
 
 	 def generateProcess(def workflowDefinitionId) {
