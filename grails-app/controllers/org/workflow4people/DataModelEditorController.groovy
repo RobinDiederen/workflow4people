@@ -233,9 +233,15 @@ class DataModelEditorController {
 
 	// ##############################################################
 	
+	// TODO Deprecated, moved to FieldTypeController
+	/* 
 	def editFieldType = {
 		log.debug "Edit FieldType params: ${params}"
-		def model= dialogService.edit(FieldType,params) 
+		def model= dialogService.edit(FieldType,params)
+		if (model.fieldTypeInstance?.baseType?.name) {
+			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType?.name)
+		}
+		 
 		render(view:'/fieldType/dialog',model:model)
 	}
 	
@@ -246,7 +252,7 @@ class DataModelEditorController {
         result['result']['refreshNodes']=["dataModelTree"]
         render result as JSON
 	}
-	
+	*/
 	// ##############################################################
 	
 	def before = {

@@ -57,7 +57,9 @@ class FieldTypeController {
 	def dialog = {  
 		def model= dialogService.edit(FieldType,params)
 		println "And the model is: ${model.fieldTypeInstance.snippetConfig}"
-		model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType.name)		
+		if (model.fieldTypeInstance?.baseType?.name) {
+			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType?.name)
+		}		
 		return model		
 	}
 	
@@ -66,16 +68,8 @@ class FieldTypeController {
 		def prms=params
 		render dialogService.submit(FieldType,params,null) {
 			domainClassInstance.snippetConfig=prms.snippetConfig
-			domainClassInstance.save()
-			prms.each { key,value ->
-				
-				/*println "we have a winner: ${key}"
-				if (key.startsWith("snippetConfig.")) {
-					domainClassInstance."${key}"=value
-				}
-				*/
-			}
-			
+			domainClassInstance.save()			
+			res['result']['refreshNodes']=["dataModelTree"]
 		} as JSON }
 	
 	def delete = { render dialogService.delete(FieldType,params) as JSON }

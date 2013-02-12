@@ -44,7 +44,9 @@
 		</dialog:tab>
 		
 		<dialog:tab name="Snippet" object="${fieldTypeInstance}">
+		
 			<g:if test="${templateSnippetConfig}">
+				<dialog:simplerow label="${message(code:'fieldType.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
 				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
 				<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
 					<g:textField name="snippetConfig.${parameter.key}" value="${fieldTypeInstance.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />

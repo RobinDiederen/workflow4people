@@ -169,6 +169,7 @@ class Field {
 		
 		binding.field=this
 		binding.prefix=namespacePrefix
+		binding.parameters=fieldType.snippetConfig
 		binding.output=""
 		
 		return binding

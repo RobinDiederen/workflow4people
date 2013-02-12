@@ -169,6 +169,8 @@ class FieldType {
 		if (minExclusive) binding.restrictions+="<minExclusive value=\"${minExclusive}\" />"
 		if (maxExclusive) binding.restrictions+="<maxExclusive value=\"${maxExclusive}\" />"
 		if (pattern) binding.restrictions+="<pattern value=\"${pattern}\" />"
+		
+		binding.snippetConfig=snippetConfig
 	
 		binding.fieldType=this
 		binding.output=""

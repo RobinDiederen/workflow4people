@@ -586,7 +586,7 @@ $(function() {
         // 	Open the edit fieldtype dialog on a double click
         $("li.fieldtype").live("dblclick",function() {        
         	var theId = this.id.split('_').pop();
-        	dialog.formDialog(theId,'dataModelEditor',{ dialogname: "editFieldType", submitname: "submitFieldType"}, null);          	
+        	dialog.formDialog(theId,'fieldType',{ dialogname: "dialog", submitname: "submitdialog"}, null);          	
         	return false;
         });
 
