@@ -142,15 +142,17 @@ class DocumentService implements InitializingBean {
     		if (header.workflowName.text()) {
 				log.debug "starting process by creating a workflow domain object"
 				def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
-    			def workflow=new Workflow()
-	    		workflow.document=documentInstance
-	    		workflow.workflowDefinition=workflowDefinition
-	    		workflow.name=workflowDefinition.name
-	    		workflow.priority=0
-	    		workflow.externalId="1"
-	    		workflow.workflowEngine=workflowDefinition.workflowEngine
-	    		workflow.save(flush:true,failOnError:true)
-	    		log.debug "Done. Workflow id = ${workflow.id}"
+				if (workflowDefinition && workflowDefinition.run) {
+					def workflow=new Workflow()
+		    		workflow.document=documentInstance
+		    		workflow.workflowDefinition=workflowDefinition
+		    		workflow.name=workflowDefinition.name
+		    		workflow.priority=0
+		    		workflow.externalId="1"
+		    		workflow.workflowEngine=workflowDefinition.workflowEngine
+		    		workflow.save(flush:true,failOnError:true)
+		    		log.debug "Done. Workflow id = ${workflow.id}"
+				}
     		}
     		theDocumentId=documentInstance.id
 	  } // withTransaction

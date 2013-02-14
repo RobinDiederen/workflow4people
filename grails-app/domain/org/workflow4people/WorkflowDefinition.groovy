@@ -62,6 +62,7 @@ class WorkflowDefinition implements Serializable {
     Date lastUpdated
     Date processDefinitionDate
     boolean publish
+	boolean run=true
 
 	String toString() {
 		return name;

@@ -36,7 +36,11 @@ class DocumentType {
     	dateCreated(nullable:true)
     	lastUpdated(nullable:true)
 		fieldType()    	
-    	cmisPathTemplate(nullable:true)
+    	cmisPathTemplate(nullable:true,size:0..1000)
+		cmisDocumentNameTemplate(nullable:true,size:0..1000)
+		cmisDocumentTemplatePath(nullable:true,size:0..1000)
+		cmisDocumentScript(nullable:true,size:0..1000000)
+		
 		defaultChildDocumentType(nullable:true)
 		
 		pathTemplate (nullable:true)
@@ -76,6 +80,10 @@ class DocumentType {
 	DocumentCategory documentCategory
 	
 	Boolean folder=false
+	
+	String cmisDocumentNameTemplate
+	String cmisDocumentTemplatePath
+	String cmisDocumentScript
     
     String toString() {
 		  return name;

@@ -15,7 +15,8 @@
 	        <dialog:domainObject object="${workflowDefinitionInstance}" propertyName="documentType" mode="edit" />
     	    <dialog:domainObject object="${workflowDefinitionInstance}" propertyName="workflowEngine" mode="edit" />
     	    
-    	    <dialog:checkBox object="${workflowDefinitionInstance}" propertyName="publish" mode="edit" />	        	    		
+    	    <dialog:checkBox object="${workflowDefinitionInstance}" propertyName="publish" mode="edit" />
+			<dialog:checkBox object="${workflowDefinitionInstance}" propertyName="run" mode="edit" />
 		</dialog:tab>
 		<dialog:tab name="Forms" object="${workflowDefinitionInstance}">
 			<dialog:detailTable property="workflow" object="${workflowDefinitionInstance}" domainClass="${org.workflow4people.Form}" />			

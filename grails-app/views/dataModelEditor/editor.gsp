@@ -21,7 +21,7 @@
 		        <div id="modelPane" class="treepane span6" >
 		        	<div class="xui-widget-header xui-corner-all xui-helper-clearfix">Data model</div>
 		        	<div class="tree-toolbar">
-						<a href="#" onclick="dialog.formDialog(null,'dataModelEditor',{ dialogname: 'editFieldType', submitname: 'submitFieldType'}, null);return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</a>
+						<a href="#" onclick="dialog.formDialog(null,'fieldType',{ dialogname: 'dialog', submitname: 'submitdialog'}, null);return false;" title="New fieldtype" class="action-new-fieldtype action" >&nbsp;</a>
 					</div>
 		        	<div id="modelTree" style="overflow:auto;" class="dmeTree" >
 		        	<ul id="tree" class="filetree treeview" />    

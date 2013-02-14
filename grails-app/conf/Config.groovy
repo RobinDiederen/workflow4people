@@ -1,4 +1,4 @@
-import com.sun.net.ssl.internal.ssl.Debug;
+//import com.sun.net.ssl.internal.ssl.Debug;
 //import org.apache.commons.dbcp.BasicDataSource
 
 // locations to search for config files that get merged into the main config
@@ -60,7 +60,7 @@ log4j = {
     //debug 'grails.app.service.org.workflow4people.services'
 	warn "grails.app"
 	warn "grails.app.controllers"
-	warn "grails.app.services"
+	debug "grails.app.services"
 	warn "grails.app.endpoints"
 	warn "grails.app.domain"
     
@@ -139,3 +139,7 @@ solr {
 }
 
 grails.plugins.twitterbootstrap.fixtaglib = true
+
+wfp {
+	apikey="CHANGETHIS"
+}
