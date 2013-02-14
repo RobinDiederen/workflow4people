@@ -160,6 +160,11 @@ class Document {
 	 * Determines if this document will inherit permissions from it's parent
 	 */
 	boolean inheritPermissions=true
+	
+	/*
+	 * Determines if this document is deleted
+	 */
+	boolean deleted=false
 		
 	/**
 	 * Populate createdBy and lastUpdated when a new item is created
@@ -216,6 +221,7 @@ class Document {
 		}
 	}
 	
+	
     /**
      * Provides the description of this document
      * @return The description of this document
@@ -254,6 +260,13 @@ class Document {
 		sid.addField("parent",parent?parent.id:0)
 		sid.addField("documentPath",path)
 		
+		
+		if (acl) {
+			acl.each { key,value ->
+				sid.addField("acl","${key}_${value}")
+			}
+		}
+		
 		DocumentIndex.findAllByDocument(this).each { di ->
 			if (di.name.startsWith("index_") || di.name.startsWith("mindex_")) {
 				sid.addField(di.name.toString(),di.value)
@@ -264,5 +277,24 @@ class Document {
 			}
 		}		
 		return sid
+	}
+	
+	def getAcl() {
+		
+		def localAcl=[:]
+		if (inheritPermissions) {
+			if (parent) {
+				localAcl=parent.acl
+			} else {
+				localAcl=[EVERYONE:"read"]
+			}
+		}
+		
+		documentPermission.each { dp ->
+			dp.role.roleAction.each { ra ->
+				localAcl+=["${dp.authority.authority}":ra.name]
+			}
+		}
+		return localAcl
 	}
 }

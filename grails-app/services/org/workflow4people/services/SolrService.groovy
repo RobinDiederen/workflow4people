@@ -338,8 +338,12 @@ class SolrService {
 					items.each { item ->
 						try {
 							log.trace item
-							def sid=item.getSolrInputDocument();
-							solr.add(sid)
+							if (!item.deleted) {
+								def sid=item.getSolrInputDocument();
+								solr.add(sid)
+							} else {
+								solr.deleteById(item.id.toString())							
+							}
 						} catch (Exception e) {
 							log.error "Caught exception while indexing ${item}: ${e.message}"
 						}
@@ -418,14 +422,13 @@ class SolrService {
 							items.each { item ->
 								log.trace item
 								incCurrentItem()
-								def sid=item.getSolrInputDocument();
-								solr.add(sid)
+								if (!item.deleted) {
+									def sid=item.getSolrInputDocument();
+									solr.add(sid)
+								} else {
+									solr.deleteById(item.id.toString())								
+								}
 							}
-
-						
-						
-						
-
 						
 						log.trace "committing"
 						solr.commit()

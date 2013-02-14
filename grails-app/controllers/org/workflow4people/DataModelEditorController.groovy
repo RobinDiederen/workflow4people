@@ -57,37 +57,40 @@ class DataModelEditorController {
 	
 	// ##############################################################
 	
-    def editField = {
+	def editField = {
 		log.debug "Edit Field params: ${params}"
 		def model = dialogService.edit(Field,params)
-
+		
 		//Find fields in the same tree (for "dependsOn" field)
 		def fieldInstance
 		if (params.parentType && params.parentType == "fieldtype") {
-			log.debug "Create Field under FieldType (parentId: ${params.parentId})"
-			fieldInstance = FieldType.get(params.parentId)?.listParent
+		        log.debug "Create Field under FieldType (parentId: ${params.parentId})"
+		        fieldInstance=new Field()
+		        fieldInstance.parent=FieldType.get(params.parentId)?.listParent
+
 		} else {
-			if (params.id && params.id == 'null' && params.parentId && params.parentId != 'null') {
-				log.debug "Create new Field under other Field (parentId: ${params.parentId})"
-				fieldInstance = Field.get(params.parentId)
-			} else {
-				log.debug "Edit Field (parentId: ${params.id})"
-				fieldInstance = model?.fieldInstance
-			}
+		        if (params.id && params.id == 'null' && params.parentId && params.parentId != 'null') {
+		                log.debug "Create new Field under other Field (parentId: ${params.parentId})"
+		                fieldInstance = Field.get(params.parentId)
+		        } else {
+		                log.debug "Edit Field (parentId: ${params.id})"
+		                fieldInstance = model?.fieldInstance
+		        }
 		}
 		if (fieldInstance) {
-			def f = fieldInstance
-			while (f.parent!=null && f.parent !=f) {
-				f = f.parent
-			}
-			def fieldsInSameTree=f.getDescendants().sort{it.toString()}
-			
-			model['fieldsInSameTree'] = fieldsInSameTree
-		}
-
-		render(view:'/field/dialog',model:model)
+		        def f = fieldInstance
+		        while (f.parent!=null && f.parent !=f) {
+		                f = f.parent
+		        }
+		        def fieldsInSameTree=f.getDescendants().sort{it.toString()}
 		
-	}
+		        model['fieldsInSameTree'] = fieldsInSameTree
+		}
+		model.fieldInstance=fieldInstance
+		render(view:'/field/dialog',model:model)
+
+    }
+
 	
 	
 	def submitField = {

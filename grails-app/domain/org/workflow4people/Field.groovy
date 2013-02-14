@@ -195,7 +195,7 @@ class Field {
 			indexString="[${name}Index]"
 		}
 		
-		if (parent) {
+		if (parent && id) {
 			return parent.readGpath(0) ?  "${parent.readGpath(0)}.${name}${indexString}" : "${name}${indexString}" 
 		} else {
 			return ""
@@ -248,7 +248,7 @@ class Field {
 	
 	
 	def getXpath() {
-		if (parent) {
+		if (parent && id) {
 			return "${parent.readXpath(0)}/${namespacePrefix}:${name}"
 		} else {
 			//return "/${namespacePrefix}:${name}"

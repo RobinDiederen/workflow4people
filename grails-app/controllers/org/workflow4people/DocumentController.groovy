@@ -48,14 +48,6 @@ class DocumentController {
 	def jsonlist() {
 		render solrService.jsonsearch(Document, params, request, "*:*",['id','documentDescription','documentType','dateCreated','lastUpdated']) as JSON
 	}
-/*
-    def list = {    	
-    	render (view:'/dialog/list', model:[dc:Document,controllerName:'document',request:request])
-    }
-    */
-    def xjsonlist = {
-    	render listService.jsonlist(Document,params,request) as JSON	
-    }
 
 	def dialog = { 		
 		if (!params.id) {
@@ -87,7 +79,27 @@ class DocumentController {
     }
 		
 	
-	def delete = { render dialogService.delete(Document,params) as JSON }
+	def delete = {
+		def result = [:]
+		try {
+			def documentInstance = Document.get(params.id)
+			documentInstance.deleted=true
+			documentInstance.save(failOnError:true)
+			result = [
+				success:true,
+				message:"Document ${params.id} deleted",
+				id: params.id				
+			]
+		} catch (Exception e) {
+			result = [
+				success:false,
+				message:e.message,
+				id: params.id				
+			]
+		}
+		def res=[result:result]
+		render res as JSON 
+	}
 	
 	
 	// Document tree
