@@ -105,12 +105,11 @@ class DocumentService implements InitializingBean {
     		}	
     		
     		def	documentInstance = new Document(name:'new')
-			documentInstance.user=header.user.name
-			documentInstance.groupId=header.group
-    	    
-    		def documentType= DocumentType.findByName(header.documentType.text());
+			documentInstance.user=header?.user?.name
+			documentInstance.groupId=header?.group
+    		def documentType= DocumentType.findByName(header?.documentType?.text());
     		if(!documentType) {
-    			throw new DocumentException("Unknown document type:"+header.documentType.text())
+    			throw new RuntimeException("Unknown document type:"+header?.documentType?.text())
     		}
     		documentInstance.documentType=documentType	
     		documentInstance.xmlDocument=xmlDocument
@@ -124,6 +123,8 @@ class DocumentService implements InitializingBean {
 			documentInstance.name=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.nameTemplate+"\"")
 			moveDocumentToDefaultPath(documentInstance,document)
     		createCaseFolder(documentInstance,document)
+			
+			
     		documentInstance.save(failOnError:true,flush:true)
     		theDocumentId=documentInstance.id
     		// Get the document again because it might have changed
@@ -257,7 +258,7 @@ class DocumentService implements InitializingBean {
 	   
     // This is not transactional on purpose. 
     def storeDocument(document,source="service") throws DocumentException {
-		if (document.header.documentId?.text().size()>0) {
+		if (document?.header?.documentId?.text().size()>0) {
 			Document.withTransaction {
 				def documentId=updateDocument(document,source)
 
@@ -319,28 +320,11 @@ class DocumentService implements InitializingBean {
 	    	
 	    	def cmisPath=new GroovyShell(new Binding([document:documentInstance,xmlDocument:document])).evaluate('"""'+cmisPathTemplate+'"""')
 	    	cmisPath=cmisPath.trim()
+			
 	    	documentInstance.cmisPath=cmisPath
 	    	documentInstance.save(failOnError:true)
 	    	
-	    	def pathElements=cmisPath.split("/")
-	    	
-	    	def parent=cmisServiceProxy.getEntryByPath("/")
-	    	
-	    	def path=""
-	    	pathElements.each { pathElement ->
-	    		if (pathElement.length()>0) {
-	
-		    		path+="/"+pathElement
-		    		def entry=cmisServiceProxy.getEntryByPath(path)
-		    		if(!entry) {
-		    			cmisServiceProxy.createFolder(parent.objectId,pathElement,"Created by wfp document service")
-		    			parent=cmisServiceProxy.getEntryByPath(path)
-		    		} else {
-		    			parent=entry
-		    		}
-	    		}
-	    	}
-	    	
+			cmisServiceProxy.createPath(cmisPath)			
 	    	return cmisPath			
 	
 		} else {
@@ -799,7 +783,9 @@ class DocumentService implements InitializingBean {
 }
 
 class DocumentException extends Exception {
-	DocumentException(String s) {super(s)};
+	DocumentException(String s) {
+		super(s)
+	};
 }
 
 
