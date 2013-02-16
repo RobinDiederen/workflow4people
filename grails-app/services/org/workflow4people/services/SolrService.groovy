@@ -281,7 +281,8 @@ class SolrService {
 	 */
 	
 	void reIndexByLastUpdated(dc) {
-		def dcName=new DefaultGrailsDomainClass(dc).shortName
+		def defaultDomainClass = new DefaultGrailsDomainClass( dc )
+		def dcName=defaultDomainClass.shortName
 		currentItemType=dcName
 		log.trace "Reindex by last updated for ${dcName}"
 		ping++
@@ -338,12 +339,12 @@ class SolrService {
 					items.each { item ->
 						try {
 							log.trace item
-							if (!item.deleted) {
-								def sid=item.getSolrInputDocument();
-								solr.add(sid)
-							} else {
-								solr.deleteById(item.id.toString())							
-							}
+							if ( !defaultDomainClass.hasProperty("deleted") || !item.deleted) {
+									def sid=item.getSolrInputDocument();
+									solr.add(sid)
+								} else {
+									solr.deleteById(item.id.toString())								
+								}
 						} catch (Exception e) {
 							log.error "Caught exception while indexing ${item}: ${e.message}"
 						}
@@ -377,7 +378,8 @@ class SolrService {
 	
 	
 	 void reIndexAll(dc,fromId) {
-		def dcName=new DefaultGrailsDomainClass(dc).shortName
+		def defaultDomainClass = new DefaultGrailsDomainClass( dc )
+		def dcName=defaultDomainClass.shortName
 		abortFlag=false
 		Long currentId=fromId
 		def chunkSize=50
@@ -422,7 +424,8 @@ class SolrService {
 							items.each { item ->
 								log.trace item
 								incCurrentItem()
-								if (!item.deleted) {
+								
+								if ( !defaultDomainClass.hasProperty("deleted") || !item.deleted) {
 									def sid=item.getSolrInputDocument();
 									solr.add(sid)
 								} else {

@@ -17,7 +17,7 @@
             
     	<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
-        		<div class="container">        		      
+        		<div class="container-fluid">        		      
           			<div class="nav-collapse collapse">
 	            		<ul class="nav">            
 		              		<li class="">                
@@ -107,7 +107,7 @@
 			</div>
 		</div>
 
-	    <div class="container" id="page">               
+	    <div class="container-fluid" id="page">               
         	<div class="row">
         		<div class="span12" style="margin-top:45px;">        			
 	        		<div id="statusmessage">	        		

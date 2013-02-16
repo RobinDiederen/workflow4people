@@ -3,7 +3,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title>${form.title}</title>
-        <ccmis:head path="*{document.header.cmis.path.text()}" username="*{session.username}" /></ccmis:head>
+        <ccmis:head path="*{document.header.cmis.path.text()}" username="*{session.username}" />
     </head>
 	<body>
 		<form:form action="submit" title="${form.title}" explanation="${form.explanationMessage}" name="request" process="${form.workflow.name}" type="task" task="*{task}">			
@@ -24,7 +24,9 @@
 				</div>
 			</div>    		
 		</form:form>
-		<ccmis:list />
+		<f:if test="*{document.header?.cmis?.path?.text().size()!=0}" >
+			<ccmis:list />
+		</f:if>
 	</body>
 </html>
 
