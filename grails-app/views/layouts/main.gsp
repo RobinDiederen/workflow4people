@@ -18,7 +18,7 @@
     	<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
         		<div class="container-fluid">        		      
-          			<div class="nav-collapse collapse">
+          			
 	            		<ul class="nav">            
 		              		<li class="">                
 		                		<a href="/workflow4people" class="brand" >Workflow4people</a>
@@ -101,14 +101,14 @@
 		       				</li>
 		       			</ul>
 		       					       				      			            
-					</div>
+					
 					          
 				</div>
 			</div>
 		</div>
 
 	    <div class="container-fluid" id="page">               
-        	<div class="row">
+        	<div class="row-fluid">
         		<div class="span12" style="margin-top:45px;">        			
 	        		<div id="statusmessage">	        		
 	        		<g:if test="${flash.message}">        		
