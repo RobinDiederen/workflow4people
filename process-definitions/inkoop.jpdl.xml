@@ -2,27 +2,27 @@
 
 <process key="inkoop" name="inkoop" xmlns="http://jbpm.org/4.4/jpdl">
    <start g="471,36,48,48" name="start">
-      <transition name="Aanvraag indienen" to="beoordelen" g="-75,-22"/>
+      <transition g="-75,-22" name="Aanvraag indienen" to="beoordelen"/>
    </start>
    
    <task candidate-groups="Managers" duedate="3 business days" form="beoordelen" g="445,450,100,80" name="beoordelen">
    	<description>Beoordelen</description>
-      <transition name="Akkoord" to="afhandelen" g="-98,-22"/>
-      <transition name="Terug naar aanvrager" to="herzien" g="713,581:-75,-22"/>
-      <transition name="Weigeren" to="end" g="-98,-22"/>   
+      <transition g="-98,-22" name="Akkoord" to="afhandelen"/>
+      <transition g="713,581;817,397:-75,-22" name="Terug naar aanvrager" to="herzien"/>
+      <transition g="-98,-22" name="Weigeren" to="end"/>   
    </task>
    
-   <task candidate-groups="Inkoop" duedate="3 business days" form="afhandelen" g="463,642,100,80" name="afhandelen">
+   <task candidate-groups="Inkoop" duedate="3 business days" form="afhandelen" g="569,675,100,80" name="afhandelen">
    <description>Afhandelen</description>
-      <transition name="Afgehandeld" to="end" g="-48,-22"/>
-      <transition name="Opnieuw beoordelen" to="beoordelen" g="713,581:-75,-22"/>
-      <transition name="Annuleren" to="end" g="-98,-22"/>
+      <transition g="590,814:-48,-22" name="Afgehandeld" to="end"/>
+      <transition g="650,632:-75,-22" name="Opnieuw beoordelen" to="beoordelen"/>
+      <transition g="-98,-22" name="Annuleren" to="end"/>
    </task>
    
    <task assignee="#{user}" duedate="3 business days" form="herzien" g="445,450,100,80" name="herzien">
    	<description>Herzien</description>
-      <transition name="Opnieuw indienen" to="beoordelen" g="-98,-22"/>
-      <transition name="Annuleren" to="end" g="-98,-22"/>   
+      <transition g="870,732:-98,-22" name="Opnieuw indienen" to="beoordelen"/>
+      <transition g="286,648:-98,-22" name="Annuleren" to="end"/>   
    </task>
    
    <end g="473,793,48,48" name="end"/>

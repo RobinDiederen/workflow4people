@@ -72,6 +72,7 @@ class DocumentService implements InitializingBean {
     Binding binding(Document document) {		
 		groovy.lang.Binding binding = new Binding()		
 		binding.document=document
+		binding.doc=new XmlSlurper().parseText(document.xmlDocument)
 		return binding
 	}
 	

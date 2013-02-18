@@ -77,7 +77,7 @@ class DataModelEditorController {
 		                fieldInstance = model?.fieldInstance
 		        }
 		}
-		if (fieldInstance) {
+		if (fieldInstance.id) {
 		        def f = fieldInstance
 		        while (f.parent!=null && f.parent !=f) {
 		                f = f.parent

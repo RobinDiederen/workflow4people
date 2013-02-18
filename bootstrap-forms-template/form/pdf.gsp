@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title>Printversie ${form.title}</title>
-        <link rel="stylesheet" media="print" type="text/css" href="file://*{formsPath}common/css/print.css" />
+        <link rel="stylesheet" media="print" type="text/css" href="file://*{formsPath}/common/css/print.css" />
     </head>
 	<body>
 		<form:form action="submit" title="${form.title}" explanation="${form.explanationMessage}" name="request" process="${form.workflow.name}" type="show">			

@@ -3,7 +3,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
 		<jqui:resources theme="smoothness" />
-        <title>Thank you!</title>       
+        <title>Dank u wel!</title>       
     </head>
     
     <body>

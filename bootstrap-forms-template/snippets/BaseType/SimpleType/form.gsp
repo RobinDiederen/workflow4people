@@ -1,6 +1,6 @@
 <!-- form.gsp -->
 <form:input type="text" 
-			class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name} ${field.dependencySource ? 'dependency-source' : ''}" 
+			class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name} ${field.dependencySource ? 'dependency-source' : ''} input-xxlarge" 
 			regexp="${pattern}" 
 			minlength="${minLength}"
 			maxlength="${maxLength}"
