@@ -43,6 +43,7 @@ import javax.xml.namespace.*;
 import org.jbpm.api.model.*
 import org.springframework.transaction.annotation.*
 
+import org.apache.commons.io.FileUtils;
 
 class DocumentService implements InitializingBean {
 	
@@ -124,7 +125,7 @@ class DocumentService implements InitializingBean {
 			documentInstance.name=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.nameTemplate+"\"")
 			moveDocumentToDefaultPath(documentInstance,document)
     		createCaseFolder(documentInstance,document)
-			
+			generateOfficeDoc(documentInstance,document)
 			
     		documentInstance.save(failOnError:true,flush:true)
     		theDocumentId=documentInstance.id
@@ -332,6 +333,140 @@ class DocumentService implements InitializingBean {
 			//log.debug "CMIS disabled, skipping case folder creation"
 		}
     }
+	
+	private boolean initializeCMIS(docInstance) {
+		if (cmisServiceProxy.initialized) {
+			return true
+		} else {
+			// Is CMIS enabled in application
+			String value = ApplicationConfiguration.findByConfigKey('cmis.enabled').configValue
+			def cmisEnabled = (value.toLowerCase() == "true" || value == "1")
+			// Is CMIS enabled in documentType
+			if (cmisEnabled && docInstance.documentType.useCmis) {
+				String cmisPassword= ApplicationConfiguration.findByConfigKey('cmis.password').configValue
+				String cmisUsername= ApplicationConfiguration.findByConfigKey('cmis.username').configValue
+				String cmisUrl = ApplicationConfiguration.findByConfigKey('cmis.url').configValue
+				cmisServiceProxy.init(cmisUrl,cmisUsername,cmisPassword)
+			}
+		}
+		return cmisServiceProxy.initialized
+	}
+	
+	/**
+	 * Create a docx or odt document in the DMS using CMIS
+	 * @param documentInstance
+	 * @param document
+	 * @return
+	 */
+	def generateOfficeDoc(def documentInstance,document) {
+		def result
+		
+		// Init CMIS if needed
+		if (!initializeCMIS(documentInstance)) {
+			return // do nothing
+		}
+		
+		// Get values from script
+		def officeDocConfig = new OfficeDocConfigDelegate(documentInstance, document)
+		def cmisResultFile = officeDocConfig.processedDocumentFileName
+		def cmisResultPath = officeDocConfig.processedDocumentFilePath
+		def cmisTemplFilePath  = officeDocConfig.processedTemplateFilePath //including file
+		def fieldMap = officeDocConfig.processedDocumentFields
+
+		// Validate the cmis path values
+		def templateInCmis = (cmisTemplFilePath) ? cmisServiceProxy.getObjectByPath(cmisTemplFilePath) : null
+		if (!templateInCmis) {
+			log.error "No Document template found"
+			return
+		}
+		def resultPathInCmis
+		if (cmisResultPath) {
+			resultPathInCmis = cmisServiceProxy.getObjectByPath(cmisResultPath)
+			if (!resultPathInCmis) {
+				resultPathInCmis = cmisServiceProxy.createPath(cmisResultPath)
+			} else if (cmisResultFile) {
+				def cmisObject = cmisServiceProxy.getObjectByPath(new File(cmisResultPath, cmisResultFile).toString())
+				if (cmisObject) {
+					log.error "Duplicate result file"
+					return
+				}
+			} else {
+				log.error "No result filename"
+				return
+			}
+		} else {
+			log.error "No Document result path"
+			return
+		}
+
+		// Create a local workdir
+		String myUUID = UUID.randomUUID().toString()
+		String tmpDir = System.getProperty("java.io.tmpdir")
+		File workFolder = new File(tmpDir, "WF4P_" + myUUID)
+		workFolder.mkdirs()
+		
+		try	{
+			// Template file
+			File tmpFile = new File(workFolder, "template.zip")
+		
+			// Download template from cmis
+			BufferedOutputStream outputStream = null
+			try {
+				outputStream = new BufferedOutputStream(new FileOutputStream(tmpFile))
+				outputStream << templateInCmis.contentStream.stream
+			} finally {
+				outputStream?.close()
+			}
+		
+			File unzipFolder = new File(workFolder, "/unzip")
+			
+			// Extract document
+			AntBuilder antBuilder = new AntBuilder()
+			HashMap<String, Object> extractParams = new HashMap<String, Object>()
+			extractParams.put("src", tmpFile)
+			extractParams.put("dest", unzipFolder)
+			extractParams.put("overwrite", "true")
+			antBuilder.invokeMethod("unzip", extractParams)
+			
+			// Read document content (content.xml or word/document.xml)
+			def content = new File(unzipFolder, "/word/document.xml") //DOCX
+			if (!content.exists()) {
+				content = new File(unzipFolder, "/content.xml") //ODT
+			}
+			String contentString = FileUtils.readFileToString(content, "UTF-8");
+			
+			// Replace placeHolders with values
+			fieldMap?.each { key, value ->
+				contentString = contentString.replaceAll('\\$\\{' + key + '\\}', value)
+			}
+			
+			// Write new content back
+			FileUtils.writeStringToFile(content, contentString, "UTF-8");
+			
+			// Result file
+			tmpFile = new File(workFolder, "result.zip")
+
+			// Create document
+			HashMap<String, Object> createParams = new HashMap<String, Object>();
+			createParams.put("destfile", tmpFile);
+			createParams.put("basedir", unzipFolder);
+			createParams.put("includes", "**/*.*");
+			createParams.put("excludes", "");
+			createParams.put("encoding", "UTF-8");
+			antBuilder.invokeMethod("zip", createParams);
+		
+			// Upload file to cmis
+			result = cmisServiceProxy.createDocument(resultPathInCmis, tmpFile.toString(), cmisResultFile)
+		} finally {
+			// Remove from tmp dir
+			if (workFolder?.exists()) {
+				FileUtils.deleteDirectory(workFolder)
+			}
+		}
+		
+		return result
+	}
+	
 	
 	/**
 	 * Move document to it's default path

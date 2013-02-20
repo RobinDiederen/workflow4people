@@ -22,8 +22,8 @@
 		<dialog:tab name="CMIS" object="${documentTypeInstance}">
 			<dialog:checkBox object="${documentTypeInstance}" propertyName="useCmis" mode="edit" />
 			<dialog:textField object="${documentTypeInstance}" propertyName="cmisPathTemplate" mode="edit" class="extrawide" />
-			<dialog:textField object="${documentTypeInstance}" propertyName="cmisDocumentNameTemplate" mode="edit" class="extrawide"/>
-			<dialog:textField object="${documentTypeInstance}" propertyName="cmisDocumentTemplatePath" mode="edit" class="extrawide"/>
+<%--			<dialog:textField object="${documentTypeInstance}" propertyName="cmisDocumentNameTemplate" mode="edit" class="extrawide"/>--%>
+<%--			<dialog:textField object="${documentTypeInstance}" propertyName="cmisDocumentTemplatePath" mode="edit" class="extrawide"/>--%>
 			<dialog:textArea object="${documentTypeInstance}" propertyName="cmisDocumentScript" mode="edit" class="codemirror wide" codeMirrorMode="text/x-groovy" />
 		</dialog:tab>		
 	</dialog:tabs>		
