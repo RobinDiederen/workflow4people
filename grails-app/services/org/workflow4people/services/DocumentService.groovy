@@ -361,6 +361,11 @@ class DocumentService implements InitializingBean {
 	def generateOfficeDoc(def documentInstance,document) {
 		def result
 		
+		// Do not run without script block
+		if (!(document?.documentType?.cmisDocumentScript)) {
+			return // do nothing
+		}
+		
 		// Init CMIS if needed
 		if (!initializeCMIS(documentInstance)) {
 			return // do nothing
