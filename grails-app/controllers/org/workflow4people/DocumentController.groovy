@@ -83,6 +83,7 @@ class DocumentController {
 		def result = [:]
 		try {
 			def documentInstance = Document.get(params.id)
+			// TODO need to delete children too here.
 			documentInstance.deleted=true
 			documentInstance.save(failOnError:true)
 			result = [
@@ -112,20 +113,20 @@ class DocumentController {
 		def elements=[]
 		def fieldType=false
 		if (!params.id || params.id=="") {
-			elements=Document.findAllByParent(null,[order:'asc',sort:'position'])
+			elements=Document.findAllByParentAndDeleted(null,false,[order:'asc',sort:'position'])
 			fieldType=true
 		} else {
 			if (params.id.startsWith("content_")) {
 				def id=new Integer(params.id.split("_")[1])
 				def p=Document.get(id)
-				elements=Document.findAllByParent(p,[sort:'position',order:'asc'])
+				elements=Document.findAllByParentAndDeleted(p,false,[sort:'position',order:'asc'])
 			}
 		}
 				
 		def elementlist = { elements.collect { f ->
 				boolean hasChildren=false
 				def cssClass=""
-				hasChildren= Document.countByParent(f)>0
+				hasChildren= Document.countByParentAndDeleted(f,false)>0
 					cssClass="document documenttype-${f.documentType?.name} fieldtype-${f.documentType?.fieldType?.name} basetype-${f.documentType?.fieldType?.baseType?.name}"
 				
 

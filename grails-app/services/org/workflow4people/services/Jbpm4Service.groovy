@@ -240,16 +240,24 @@ class Jbpm4Service implements InitializingBean {
 			
 			
 			// Store the document again, now with the processInstanceId in it.
-	
+			log.debug "The original xml is ${workflow.document.xmlDocument}"
 			def document = new XmlSlurper().parseText(workflow.document.xmlDocument)
-	
+			log.debug "The workflow id is ${workflow.id}"
+			log.debug "The document id is ${workflow.document.id}"
 			document.header.processInstanceId=workflow.id
 			document.header.documentId=workflow.document.id
 			def outputBuilder = new StreamingMarkupBuilder()
-	
-			workflow.document.xmlDocument=outputBuilder.bind { mkp.yield document }
-					
+			def resultXML=outputBuilder.bind { mkp.yield document }.toString()			
+			log.debug "The result XML is ${resultXML}"
+			workflow.document.xmlDocument=resultXML
+			log.debug "Saving document with xml Document ${workflow.document.xmlDocument}"
+			workflow.document.save(flush:true,failOnError:true)
+
+			log.debug "Saving workflow"
 			workflow.save(flush:true,failOnError:true)
+			
+			log.debug "The xml document in workflow.document.xmlDocument is now ${workflow.document.xmlDocument}"
+			log.debug "All done."
 			
 			def hibSession = sessionFactory.getCurrentSession()
 			
