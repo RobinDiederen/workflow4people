@@ -33,8 +33,75 @@ environments {
     production {
         grails.serverURL = "http://localhost"
     }
+	
+	test {
+		grails.naming.entries = [
+			'jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "wf4p",
+			password: "wf4p",
+			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			],
+		
+			// Needed for test ...?!? tomcat prepends jaav:comp/env/ during test
+			'java:comp/env/jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "wf4p",
+			password: "wf4p",
+			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			]
+		
+		]
+		
+		
+		
+	}
     
-    development {    	
+    development {
+		grails.naming.entries = [
+			'jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "wf4p",
+			password: "wf4p",
+			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			],
+		
+			// Needed for test ...?!? tomcat prepends jaav:comp/env/ during test
+			'java:comp/env/jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "wf4p",
+			password: "wf4p",
+			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			]
+		
+		]
+	
+		
+		    	
 	}
 }
 
@@ -120,8 +187,23 @@ cmis {
 	username="admin"
 	password="admin"
 }
+/*
+grails.naming.entries = [
+	'jdbc/wf4p': [
+	type: "javax.sql.DataSource", //required
+		//auth: "Container", // optional
+		description: "Data source for ...", //optional
+		//properties for particular type of resource
+	url: "jdbc:mysql://localhost:3306/wf4p",
+	username: "wf4p",
+	password: "wf4p",
+	driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
+	maxActive: "8", //and so on
+		maxIdle: "4"
+	],
 
-grails.naming.entries = ['jdbc/wf4p': [
+	// Needed for test ...?!? tomcat prepends jaav:comp/env/ during test
+	'java:comp/env/jdbc/wf4p': [
 	type: "javax.sql.DataSource", //required
 		//auth: "Container", // optional
 		description: "Data source for ...", //optional
@@ -133,7 +215,9 @@ grails.naming.entries = ['jdbc/wf4p': [
 	maxActive: "8", //and so on
 		maxIdle: "4"
 	]
+
 ]
+*/
 solr {
 	url="http://localhost:8080/solr"
 }
