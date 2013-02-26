@@ -65,7 +65,10 @@ class DataModelEditorController {
 		def fieldInstance
 		if (params.parentType && params.parentType == "fieldtype") {
 			log.debug "Create Field under FieldType (parentId: ${params.parentId})"
-			fieldInstance = FieldType.get(params.parentId)?.listParent
+			//fieldInstance = FieldType.get(params.parentId)?.listParent
+			fieldInstance=new Field()
+			fieldInstance.parent=FieldType.get(params.parentId)?.listParent
+			println "The parent field  is ${fieldInstance.parent.name}"
 		} else {
 			if (params.id && params.id == 'null' && params.parentId && params.parentId != 'null') {
 				log.debug "Create new Field under other Field (parentId: ${params.parentId})"
@@ -84,7 +87,7 @@ class DataModelEditorController {
 			
 			model['fieldsInSameTree'] = fieldsInSameTree
 		}
-
+		model.fieldInstance=fieldInstance
 		render(view:'/field/dialog',model:model)
 		
 	}

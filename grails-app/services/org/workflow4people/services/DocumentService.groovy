@@ -152,6 +152,7 @@ class DocumentService implements InitializingBean {
     		theDocumentId=documentInstance.id
 	  } // withTransaction
 		def msg=[eventType:"afterCreateDocument",source:source,xmlDocument:xmlDocument]
+		log.debug "*** createDocument: sending message ${msg}"
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
 	return 	theDocumentId
 	}
@@ -245,6 +246,7 @@ class DocumentService implements InitializingBean {
 			indexDocument(documentInstance)
 			documentInstance.id
 			def msg=[eventType:"afterUpdateDocument",source:source,xmlDocument:xmlDocument]
+			log.debug "*** updateDocument: sending message ${msg}"
 			jmsService.send(topic:"wfp.event",msg,"standard",null)
 			
 		//}
@@ -455,7 +457,7 @@ class DocumentService implements InitializingBean {
     
     // Just save the xml, nothing smart going on here ...
 	@Transactional
-    def setDocument(document) {  	
+    def setDocument(document,source="service") {  	
     	def theId=document.header.documentId.text().asType(Long)
     	def documentInstance=Document.get(theId)
     	def outputBuilder = new StreamingMarkupBuilder()
@@ -476,8 +478,10 @@ class DocumentService implements InitializingBean {
     	log.debug "Setting document ${theId}"
     	log.debug documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
+		indexDocument(documentInstance)
 		
 		def msg=[eventType:"afterSetDocument",source:source,xmlDocument:documentInstance.xmlDocument]
+		log.debug "*** setDocument: sending message ${msg}"
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
 		
 		//dataDistributionService.afterUpdate(documentInstance.id)

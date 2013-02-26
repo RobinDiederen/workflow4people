@@ -247,7 +247,7 @@ class Field {
 	
 	
 	def getXpath() {
-		if (parent) {
+		if (parent && id) {
 			return "${parent.readXpath(0)}/${namespacePrefix}:${name}"
 		} else {
 			//return "/${namespacePrefix}:${name}"
@@ -273,16 +273,20 @@ class Field {
 		
 	
 	def getNamespacePrefix() {
-			def thePrefix=null
+		def thePrefix=null
+		
+		try {
 			def f=this
 			//log.debug "getting namesp"
 			while (thePrefix==null && f.parent!=null && f.parent!=f) {
 				//log.debug "f=${f}"				
 				f=f.parent
-				if (f.fieldType.namespace) {
-					thePrefix=f.fieldType.namespace.prefix
+				if (f?.fieldType?.namespace) {
+					thePrefix=f.fieldType.namespace?.prefix
 				}
 			}
+		} catch (Exception e) {
+		}	
 			return thePrefix
 	}
 	
