@@ -607,8 +607,9 @@ class DocumentService implements InitializingBean {
      */
     @Transactional
     def getDocument(java.lang.Long documentId) {  	
-		log.debug "The document id is ${documentId}"
-		def document=Document.get(documentId)		
+		log.trace "The document id is ${documentId}"
+		def document=Document.get(documentId)
+		if (!document) throw new RuntimeException("Document ${documentId} does not exist")
 		def xmlDocument = new XmlSlurper().parseText(document.xmlDocument)
 		xmlDocument.header.taskId=""
 		xmlDocument.header.taskOutcome=""    		
@@ -618,18 +619,24 @@ class DocumentService implements InitializingBean {
 		xmlDocument.header.group=document.groupId
 		xmlDocument.header.documentDescription=document.documentDescription
 	
-		xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
+		//xmlDocument.header.cmis.folderUrl=document.cmisFolderUrl
 		xmlDocument.header.cmis.folderObjectId=document.cmisFolderObjectId
 		xmlDocument.header.cmis.path=document.cmisPath
-		document.discard()
+		//document.discard()
 		return xmlDocument
     }
     
-    // Just save the xml, nothing smart going on here ...
+	/**
+	 * Just save the xml, nothing smart going on here ...
+	 * @param document a Slurped XML document
+	 * @return
+	 */
 	@Transactional
-    def setDocument(document) {  	
+    def setDocument(document,source="service") {  	
     	def theId=document.header.documentId.text().asType(Long)
     	def documentInstance=Document.get(theId)
+		if (!documentInstance) throw new RuntimeException("Document ${theId} does not exist")
+		
     	def outputBuilder = new StreamingMarkupBuilder()
     	documentInstance.xmlDocument= outputBuilder.bind { mkp.yield document }
     	
@@ -645,14 +652,12 @@ class DocumentService implements InitializingBean {
 			documentInstance.completionDate=null
 		}
 		
-    	log.debug "Setting document ${theId}"
-    	log.debug documentInstance.xmlDocument
+    	log.trace "Setting document ${theId}"
+    	log.trace documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
 		
 		def msg=[eventType:"afterSetDocument",source:source,xmlDocument:documentInstance.xmlDocument]
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
-		
-		//dataDistributionService.afterUpdate(documentInstance.id)
     }
    
     def getDocumentIndexFields() {
