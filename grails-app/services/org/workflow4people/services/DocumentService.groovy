@@ -654,65 +654,7 @@ class DocumentService implements InitializingBean {
 		
 		//dataDistributionService.afterUpdate(documentInstance.id)
     }
-    
-    
-    /*
-    def getAllDocumentHeaders(String userName,boolean userDocumentsOnly) {
-    	def allDocuments
-    	if(userDocumentsOnly) {
-    		allDocuments=Document.findAllByUser(userName);
-    	} else {
-    		def groupNames=identityService.findGroupIdsByUser(userName)
-    		log.debug groupNames
-    		def c = Document.createCriteria()
-    		allDocuments=c.list {
-    			or {
-    				eq("user",userName)
-    				if(groupNames) {
-    				'in'("groupId",groupNames)
-    				}				
-    			}
-    		}    		
-    	}
-    	
-    	def documentheaders    	
-    	documentheaders = allDocuments.collect {
-    		try {
-    		  getDocument(it.id).header
-    		} catch (Exception e) {
-    			""
-    		}	
-    	}
-    	return documentheaders
-    }
-    */
-    /*
-    def luceneSearch(String query, def params,String userName="",boolean userDocumentsOnly=true,boolean groupDocumentsOnly=true) {
-    	if (userName!="") {
-    		if(userDocumentsOnly) {
-    			if (query!="" && query!="*") {
-    				query="(${query}) AND user:${userName}"
-    			} else {
-    				query="user:${userName}"
-    			}
-    		} else if (groupDocumentsOnly) {
-        		def groupNames=identityService.findGroupIdsByUser(userName)
-        		def groupClause=""
-        		groupNames.each { groupClause += " OR groupId:${it}"}
-        		if (query!="" && query!="*") {
-        			query="(${query}) AND (user:${userName} ${groupClause})"
-        		} else {
-        			query="user:${userName} ${groupClause}"
-        		}
-    		}
-    	}
-    	//params.analyzer="standard"
-    	log.debug "The query is: ${query}"
-    	log.debug "The query is: ${query}"
-    	return searchableService.search(query, params)
-    }
-    */
-	
+   
     def getDocumentIndexFields() {
     	def documentIndexFields=DocumentIndexField.findAllByPublish(true)
     	documentIndexFields+=[['name':'$/Document/id','title':'Nummer'],['name':'dateCreated','title':'Aanmaak Datum'],['name':'lastUpdated','title':'Bijwerk Datum'],['name':'completionDate','title':'Eind Datum'],['name':'documentType','title':'Document Type'],['name':'documentDescription','title':'Omschrijving'],['name':'user','title':'Gebruiker'],['name':'groupId','title':'Groep'],['name':'documentStatus','title':'Status'],['name':'processingDays','title':'Doorlooptijd']]
