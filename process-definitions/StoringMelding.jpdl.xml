@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <process key="StoringMelding" name="StoringMelding" xmlns="http://jbpm.org/4.4/jpdl">
-   <start g="471,36,48,48" name="start">
-      <transition g="-75,-22" name="Storing melden" to="afhandelen"/>
+   <start g="488,38,48,48" name="start">
+      <transition g="5,-68" name="Storing melden" to="afhandelen"/>
    </start>
    
-   <task candidate-groups="Servicedesk" duedate="3 business days" form="afhandelen" g="569,675,100,80" name="afhandelen">
-   <description>Afhandelen</description>
-      <transition g="590,814:-48,-22" name="Afgehandeld" to="end"/>
-      <transition g="650,632:-75,-22" name="Meer informatie vragen" to="meer-informatie"/>
-      <transition g="-98,-22" name="Annuleren" to="end"/>
+   <task candidate-groups="Servicedesk" duedate="3 business days" form="afhandelen" g="463,254,100,80" name="afhandelen">
+   <description>#{"Afhandelen storing ${documentId}: ${documentService.getDocument(documentId).korteOmschrijving}"}</description>
+      <transition g="542,447:10,-11" name="Afgehandeld" to="end"/>
+      <transition g="-52,-457" name="Meer informatie vragen" to="meer-informatie"/>
+      <transition g="475,442:-76,-5" name="Annuleren" to="end"/>
    </task>
    
-   <task assignee="#{user}" duedate="3 business days" form="meer-informatie" g="445,450,100,80" name="meer-informatie">
-   	<description>Herzien</description>
-      <transition g="870,732:-98,-22" name="Melding opslaan" to="afhandelen"/>
-      <transition g="286,648:-98,-22" name="Annuleren" to="end"/>   
+   <task assignee="#{user}" duedate="3 business days" form="meer-informatie" g="650,155,137,80" name="meer-informatie">
+   	<description>#{"Meer informatie nodig voor storing ${documentId}: ${documentService.getDocument(documentId).korteOmschrijving}"}</description>
+      <transition g="604,198:-67,-30" name="Melding opslaan" to="afhandelen"/>
+      <transition g="668,445:14,1" name="Annuleren" to="end"/>   
    </task>
    
-   <end g="473,793,48,48" name="end"/>
+   <end g="484,571,48,48" name="end"/>
    
    
 </process>
