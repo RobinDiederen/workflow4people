@@ -35,7 +35,7 @@ environments {
     }
 	
 	test {
-		grails.naming.entries = [
+		xgrails.naming.entries = [
 			'jdbc/wf4p': [
 			type: "javax.sql.DataSource", //required
 				//auth: "Container", // optional
@@ -65,6 +65,36 @@ environments {
 		
 		]
 		
+		grails.naming.entries = [
+			'jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "sa",
+			password: "",
+			driverClassName : "org.h2.Driver",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			],
+		
+			// Needed for test ...?!? tomcat prepends jaav:comp/env/ during test
+			'java:comp/env/jdbc/wf4p': [
+			type: "javax.sql.DataSource", //required
+				//auth: "Container", // optional
+				description: "Data source for ...", //optional
+				//properties for particular type of resource
+			url: "jdbc:mysql://localhost:3306/wf4p",
+			username: "sa",
+			password: "",
+			
+			driverClassName : "org.h2.Driver",
+			maxActive: "8", //and so on
+				maxIdle: "4"
+			]
+		
+		]
 		
 		
 	}
