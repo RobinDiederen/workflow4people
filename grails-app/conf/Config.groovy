@@ -35,7 +35,7 @@ environments {
     }
 	
 	test {
-		xgrails.naming.entries = [
+		grails.naming.entries = [
 			'jdbc/wf4p': [
 			type: "javax.sql.DataSource", //required
 				//auth: "Container", // optional
@@ -64,14 +64,14 @@ environments {
 			]
 		
 		]
-		
+		/*
 		grails.naming.entries = [
 			'jdbc/wf4p': [
 			type: "javax.sql.DataSource", //required
 				//auth: "Container", // optional
 				description: "Data source for ...", //optional
 				//properties for particular type of resource
-			url: "jdbc:mysql://localhost:3306/wf4p",
+			url: "jdbc:h2:mem:devDb",
 			username: "sa",
 			password: "",
 			driverClassName : "org.h2.Driver",
@@ -85,7 +85,7 @@ environments {
 				//auth: "Container", // optional
 				description: "Data source for ...", //optional
 				//properties for particular type of resource
-			url: "jdbc:mysql://localhost:3306/wf4p",
+			url: "jdbc:h2:mem:devDb",
 			username: "sa",
 			password: "",
 			
@@ -95,7 +95,7 @@ environments {
 			]
 		
 		]
-		
+		*/
 		
 	}
     

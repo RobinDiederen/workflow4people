@@ -1,19 +1,22 @@
 package org.workflow4people.services
+
 import grails.test.*
 import org.workflow4people.*
 import org.workflow4people.services.*
 import grails.test.mixin.TestFor
 import org.apache.activemq.*
+import static org.junit.Assert.*
+import org.junit.*
 
-
-@TestFor(DocumentService)
-@Mock([Document,DocumentType,FieldType,DocumentHistory,Person,ApplicationConfiguration,WorkflowEngine,WorkflowDefinition])
 class DocumentServiceTests {
-	def xmlDocument	
+	def xmlDocument
 	
 	def jmsMap
 	def jmsMessage
+	def documentService
 	
+	
+	@Before
 	void setUp() {
 		// Fake isDirty is needed - mocked domain classes lack this
 		Document.metaClass.isDirty =
@@ -25,7 +28,7 @@ class DocumentServiceTests {
 		
 		grails.plugin.jms.JmsService.metaClass.send =
 		{ return null }
-		
+		/*
 		// Mock the JMS service
 		def mock = mockFor(grails.plugin.jms.JmsService)
 		mock.demand.send(1..10)  {map,message,jmsTemplateName,postProcessor ->
@@ -35,7 +38,7 @@ class DocumentServiceTests {
 			return null}
 		
 		service.jmsService=mock.createMock()
-		
+		*/
 		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
 		
 		def fieldType=new FieldType(name:'test',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
@@ -47,7 +50,7 @@ class DocumentServiceTests {
 		def workflowEngine=new WorkflowEngine(name:'jbpm',title:'jbpm',description:'jbpm').save(failOnError:true,flush:true)
 		def workflowDefinition=new WorkflowDefinition(name:'test',title:'test',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:false).save(failOnError:true,flush:true)
 		
-		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">  
+		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			  <doc:header xmlns:doc="http://www.workflow4people.org/schemas/documents">
 			    <doc:documentId>1</doc:documentId>
 			    <doc:documentType>test</doc:documentType>
@@ -107,67 +110,26 @@ class DocumentServiceTests {
 								  dateCreated:dateCreated,
 								  lastUpdated:lastUpdated).save(failOnError:true,flush:true)
 	}
+  
+
+    @After
+    void tearDown() {
+        // Tear down logic here
+    }
+
+    @Test
+    void testSomething() {
+        //fail "Implement me"
+    }
 	
-	void testCamelCase() {
-		assert service.camelCase("TestString")=="testString"
-	}
-	/**
-	 * Test the getDocument method
-	 */
-	void testGetDocument() {
-		def sxmlDocument=service.getDocument(1)
-		//assert sxmlDocument.header.dateCreated=='2012-02-12T21:59:12'
-		//assert sxmlDocument.header.lastUpdated=='2013-02-24T19:47:39'
-		assert sxmlDocument.header.taskId==""
-		assert sxmlDocument.header.taskOutcome==""
-		assert sxmlDocument.header.user.name=="john"
-		assert sxmlDocument.header.group=="testgroup"
-		assert sxmlDocument.header.documentDescription=="Test description"
-				
-		assert sxmlDocument.header.cmis.folderObjectId=="12"
-		assert sxmlDocument.header.cmis.path=="/test"
-		
-		shouldFail(RuntimeException) {
-			def nxmlDocument=service.getDocument(0)
-		}
-	}
-	
-	/**
-	 * Test the binding method
-	 */
-	void testBinding() {
-		def document=Document.get(1)
-		def b=service.binding(document)
-		assert b.document==document
-		assert b.doc.header.documentId.text()=="1"
-	}
-	
-	void testSetDocument() {
-			
-		def sxmlDocument=service.getDocument(1)
-		assert sxmlDocument.header.user.name=="john"
-		sxmlDocument.header.processingDays="17"
-		service.setDocument(sxmlDocument)
-		def doc=Document.get(1)
-		assert doc.processingDays==17
-		def rdocument=service.getDocument(1)
-		assert rdocument.header.processingDays.text()=="17"
-		
-		assert jmsMessage.eventType=="afterSetDocument"
-		assert jmsMap.topic=="wfp.event"
-	}
-	
-	void testCreateDocument() {
-		def sxmlDocument=service.getDocument(1)
+	@Test
+	void testCreateDocument() {		
+		def sxmlDocument=documentService.getDocument(1)
 		sxmlDocument.header.documentId=""
 		
-		service.createDocument(sxmlDocument)
+		documentService.createDocument(sxmlDocument)
 		Document.findAll().each { doc ->
 			println "document ${doc.id}"
 		}
 	}
-	
-	
-	
-	
 }

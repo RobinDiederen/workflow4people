@@ -26,7 +26,7 @@ environments {
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:mem:devDb'"
+            url = "jdbc:h2:mem:devDb"
         }
     }
     production {

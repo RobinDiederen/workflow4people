@@ -21,10 +21,10 @@ beans = {
 	}
 	
 	
-		cmisServiceProxy(org.springframework.aop.scope.ScopedProxyFactoryBean) {
-			targetBeanName = 'cmisService'
-			proxyTargetClass = true
-	   }
+	cmisServiceProxy(org.springframework.aop.scope.ScopedProxyFactoryBean) {
+		targetBeanName = 'cmisService'
+		proxyTargetClass = true
+   }
 	   
 }
 
