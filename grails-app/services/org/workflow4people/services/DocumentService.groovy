@@ -362,7 +362,7 @@ class DocumentService implements InitializingBean {
 		def result
 		
 		// Do not run without script block
-		if (!(document?.documentType?.cmisDocumentScript)) {
+		if (!(document?.documentType?.cmisDocumentScript?.size()>0)) {
 			return // do nothing
 		}
 		
