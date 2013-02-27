@@ -3,11 +3,17 @@ import grails.test.*
 import org.workflow4people.*
 import org.workflow4people.services.*
 import grails.test.mixin.TestFor
+import org.apache.activemq.*
+
 
 @TestFor(DocumentService)
-@Mock([Document,DocumentType,FieldType,DocumentHistory])
+@Mock([Document,DocumentType,FieldType,DocumentHistory,Person,ApplicationConfiguration])
 class DocumentServiceTests {
 	def xmlDocument	
+	
+	def jmsMap
+	def jmsMessage
+	
 	void setUp() {
 		// Fake isDirty is needed - mocked domain classes lack this
 		Document.metaClass.isDirty =
@@ -17,23 +23,28 @@ class DocumentServiceTests {
 		Document.metaClass.getPersistentValue =
 		{ return "0.1" }
 		
-		/*defineBeans {
-			jmsService(grails.plugin.jms.JmsService)
-			
-			
-		  }
-		*/
-		//def jmsService = new grails.plugin.jms.JmsService()
-		/*def jmsService = mockFor(grails.plugin.jms.JmsService, true)
-		def wasCalled = false
-		jmsService.send(0..2) { x,y -> 
-			//I like to have an assert in here to test what's being passed in so I can ensure wiring is correct
-			wasCalled = true
-			null //this is what the method will now return
-		}
-		*/
+		grails.plugin.jms.JmsService.metaClass.send =
+		{ return null }
+		
+		// Mock the JMS service
+		def mock = mockFor(grails.plugin.jms.JmsService)
+		mock.demand.send(1..10)  {map,message,jmsTemplateName,postProcessor ->
+			println "JMS Service send: ${map}, message: ${message}"
+			jmsMap=map
+			jmsMessage=message
+			return null}
+		
+		service.jmsService=mock.createMock()
+		
+		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
+		
 		def fieldType=new FieldType(name:'test',description:'test',help:'test',alert:'test').save(failOnError:true)
 		def documentType=new DocumentType(name:'test',description:'test',fieldType:fieldType).save(failOnError:true)
+		
+		def folderFieldType=new FieldType(name:'folder',description:'test',help:'test',alert:'test').save(failOnError:true)
+		
+		def folderDocumentType=new DocumentType(name:'Folder',folder:true,description:'test',fieldType:folderFieldType).save(failOnError:true)
+		
 		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">  
 			  <doc:header xmlns:doc="http://www.workflow4people.org/schemas/documents">
 			    <doc:documentId>1</doc:documentId>
@@ -128,8 +139,9 @@ class DocumentServiceTests {
 		assert b.document==document
 		assert b.doc.header.documentId.text()=="1"
 	}
-	/*
+	
 	void testSetDocument() {
+			
 		def sxmlDocument=service.getDocument(1)
 		assert sxmlDocument.header.user.name=="john"
 		sxmlDocument.header.processingDays="17"
@@ -138,8 +150,23 @@ class DocumentServiceTests {
 		assert doc.processingDays==17
 		def rdocument=service.getDocument(1)
 		assert rdocument.header.processingDays.text()=="17"
+		
+		assert jmsMessage.eventType=="afterSetDocument"
+		assert jmsMap.topic=="wfp.event"
 	}
-	*/
+	
+	void testCreateDocument() {
+		def sxmlDocument=service.getDocument(1)
+		sxmlDocument.header.documentId=""
+		//Document.static.withNewTransaction = withNewTransactionImpl
+		
+		service.createDocument(sxmlDocument)
+		Document.each { doc ->
+			println "document ${doc.id}"
+		}
+	}
+	
+	
 	
 	
 }
