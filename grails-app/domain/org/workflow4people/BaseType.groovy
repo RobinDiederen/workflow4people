@@ -34,6 +34,9 @@ class BaseType {
         name(blank: false)    
         description(size:0..50000)
     }
+	static mapping = {
+		description type: 'text'	
+	}
     /**
      * The name of the base type
      */

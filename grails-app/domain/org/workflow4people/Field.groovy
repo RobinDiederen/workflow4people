@@ -48,6 +48,14 @@ class Field {
 		dependencyType(nullable:true,inList:['true','false','empty','nonempty','gt','lt','eq','ne'])	    	
 		dependencyParameter(nullable:true)	    
     }
+	
+	static mapping = {
+		description type: 'text'
+		help type: 'text'
+		alert type: 'text'
+		contentText type: 'text'
+	}
+	
 	def templateService
     int position=1
     

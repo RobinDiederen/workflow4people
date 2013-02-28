@@ -60,6 +60,13 @@ class FieldType {
 		listParent(nullable:true)
 	    
     }
+	
+	static mapping = {
+		description type: 'text'
+		help type: 'text'
+		alert type: 'text'
+	}
+	
 	/**
 	 *  The name of the field type. This name is used in the XML Schema. 
 	 */

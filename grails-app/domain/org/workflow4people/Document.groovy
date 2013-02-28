@@ -67,6 +67,9 @@ class Document {
 			return exists?['validator.versionLabelExists',label]:null
 		}
     }
+	static mapping = {
+		xmlDocument type: 'text'		
+	}
 	int position=0
 	Collection children
 	

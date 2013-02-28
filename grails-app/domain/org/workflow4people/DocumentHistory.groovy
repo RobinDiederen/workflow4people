@@ -42,6 +42,10 @@ class DocumentHistory {
 		versionLabel	nullable:true		
 	}
 	
+	static mapping = {
+		xmlDocument type: 'text'
+	}
+	
     
 	static belongsTo=[ document: Document ]
 	
