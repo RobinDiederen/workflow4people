@@ -35,7 +35,7 @@ class DocumentHistory {
 		documentLastUpdated(nullable:true)
 	    name(nullable:true)
 		documentDescription(nullable:true)
-		xmlDocument(size:0..50000)
+		xmlDocument(size:0..50000000,nullable:true)
 	    
 		createdBy		nullable:true
 		lastUpdatedBy	nullable:true

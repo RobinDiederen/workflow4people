@@ -80,17 +80,18 @@ class DocumentService implements InitializingBean {
 	/**
 	 * Create a new XML document in the database
 	 * 
-	 * @param document
+	 * @param document slurped XML document
 	 * @return
 	 * @throws DocumentException
 	 */
 	
 	def createDocument(document,source="service") throws DocumentException {
-		def theDocumentId
 		def startProcess=false
 		def currentUserName
 		def currentUser
-		String xmlDocument
+		
+		def theDocumentId
+		def xmlDocument
     	Document.withNewTransaction { status ->
 			log.debug "createDocument Transaction #1 - newTransaction:${status.isNewTransaction()}"
 			
@@ -98,42 +99,41 @@ class DocumentService implements InitializingBean {
 			currentUser=Person.findByUsername(currentUserName)
     		def header=document.header
     		log.debug "The document id is ${header.documentId} and the type is ${header.documentType}"
-    		def outputBuilder = new StreamingMarkupBuilder()
+			
+			def documentType= DocumentType.findByName(header?.documentType?.text());
+			if(!documentType) {
+				throw new RuntimeException("Unknown document type:"+header?.documentType?.text())
+			}
+			
+			def	documentInstance = new Document(name:'new',
+												documentType:documentType,
+												documentStatus:header?.documentStatus?.text(),
+												user:header?.user?.name.text(),
+												groupId:header?.group?.text()
+												).save(failOnError:true,flush:true)
+			
+    		def outputBuilder = new StreamingMarkupBuilder()			
+			document.header.documentId=documentInstance.id
 
-    		xmlDocument = outputBuilder.bind{
+    		documentInstance.xmlDocument = outputBuilder.bind{
     			// Only needed if you want <?xml etc. at the top of the XML document
     			// mkp.xmlDeclaration()
     			mkp.yield document 
     		}	
-    		
-    		def	documentInstance = new Document(name:'new')
-			documentInstance.user=header?.user?.name
-			documentInstance.groupId=header?.group
-    		def documentType= DocumentType.findByName(header?.documentType?.text());
-    		if(!documentType) {
-    			throw new RuntimeException("Unknown document type:"+header?.documentType?.text())
-    		}
-    		documentInstance.documentType=documentType	
-    		documentInstance.xmlDocument=xmlDocument
-    		documentInstance.documentStatus=header.documentStatus
 			
-			// Needed to get ID
-    		documentInstance.save(failOnError:true,flush:true)
-			
-			//TODO make slurped document available to binding
-    		documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
+			documentInstance.documentDescription=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.descriptionTemplate+"\"")
 			documentInstance.name=new GroovyShell(binding(documentInstance)).evaluate("\""+documentType.nameTemplate+"\"")
+			
 			moveDocumentToDefaultPath(documentInstance,document)
+			
     		createCaseFolder(documentInstance,document)
 			generateOfficeDoc(documentInstance,document)
 			
     		documentInstance.save(failOnError:true,flush:true)
-    		theDocumentId=documentInstance.id
+    	/*	theDocumentId=documentInstance.id
     		// Get the document again because it might have changed
-    		// In particular at the start of the process the jPDL can change the document
+    		// In particular at the start of the process the jPDL can change the document?!
     	}
-		
-		
 		
 		Document.withNewTransaction { status ->
 			log.debug "createDocument Transaction #2 - newTransaction:${status.isNewTransaction()}"
@@ -141,7 +141,7 @@ class DocumentService implements InitializingBean {
     		document = new XmlSlurper().parseText(documentInstance.xmlDocument)
     		def header=document.header
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
-    	
+    	*/
     		if (header.workflowName.text()) {
 				log.debug "starting process by creating a workflow domain object"
 				def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
@@ -157,8 +157,10 @@ class DocumentService implements InitializingBean {
 		    		log.debug "Done. Workflow id = ${workflow.id}"
 				}
     		}
-    		theDocumentId=documentInstance.id
-	  } // withTransaction
+			theDocumentId=documentInstance.id
+			xmlDocument=documentInstance.xmlDocument
+    		
+	  } // withNewTransaction
 		def msg=[eventType:"afterCreateDocument",source:source,xmlDocument:xmlDocument]
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
 	return 	theDocumentId
@@ -188,7 +190,6 @@ class DocumentService implements InitializingBean {
 				mkp.yield document
 			}
 			def documentInstance
-			
 			
 			def theId=header.documentId.text().asType(Integer)
 			documentInstance=Document.get(theId)

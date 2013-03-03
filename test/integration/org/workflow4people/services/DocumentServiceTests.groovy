@@ -15,9 +15,20 @@ class DocumentServiceTests {
 	def jmsMessage
 	def documentService
 	
+	def transactional=false
 	
 	@Before
 	void setUp() {
+		println "Hello. This is the setup part of DocumentServiceTests"
+		Document.findAll().each { doc ->
+			println "document ${doc.id}:${doc.name}"
+		}
+		
+		DocumentType.findAll().each { doc ->
+			println "documentType ${doc.id}:${doc.name}"
+		}
+		
+		/*
 		// Fake isDirty is needed - mocked domain classes lack this
 		Document.metaClass.isDirty =
 		{ return true }
@@ -26,10 +37,12 @@ class DocumentServiceTests {
 		Document.metaClass.getPersistentValue =
 		{ return "0.1" }
 		
+		/*
 		grails.plugin.jms.JmsService.metaClass.send =
 		{ return null }
-		/*
+		*/
 		// Mock the JMS service
+		/*
 		def mock = mockFor(grails.plugin.jms.JmsService)
 		mock.demand.send(1..10)  {map,message,jmsTemplateName,postProcessor ->
 			println "JMS Service send: ${map}, message: ${message}"
@@ -37,8 +50,9 @@ class DocumentServiceTests {
 			jmsMessage=message
 			return null}
 		
-		service.jmsService=mock.createMock()
+		documentService.jmsService=mock.createMock()
 		*/
+		
 		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
 		
 		def fieldType=new FieldType(name:'test',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
@@ -96,6 +110,7 @@ class DocumentServiceTests {
 			  <test:testString>testValue</test:testString>  
 			</test:Test>
 			"""
+		//def documentType=DocumentType.get(1)
 		def dateCreated=Date.parse("yyyyMMddhhmmss","20120212215912")
 		def lastUpdated=Date.parse("yyyyMMddhhmmss","20130224194739")
 
@@ -109,6 +124,7 @@ class DocumentServiceTests {
 								  documentType:documentType,
 								  dateCreated:dateCreated,
 								  lastUpdated:lastUpdated).save(failOnError:true,flush:true)
+								  
 	}
   
 
@@ -117,17 +133,14 @@ class DocumentServiceTests {
         // Tear down logic here
     }
 
-    @Test
-    void testSomething() {
-        //fail "Implement me"
-    }
-	
+   
 	@Test
 	void testCreateDocument() {		
 		def sxmlDocument=documentService.getDocument(1)
-		sxmlDocument.header.documentId=""
+		//sxmlDocument.header.documentId=""
+		documentService.setDocument(sxmlDocument)
+		//documentService.createDocument(sxmlDocument)
 		
-		documentService.createDocument(sxmlDocument)
 		Document.findAll().each { doc ->
 			println "document ${doc.id}"
 		}

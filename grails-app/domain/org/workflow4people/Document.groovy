@@ -50,7 +50,7 @@ class Document {
 		cmisFolderObjectId(nullable:true)
 		cmisFolderUrl(nullable:true)
 	    
-		xmlDocument(size:0..50000000)
+		xmlDocument(size:0..50000000,nullable:true)
 	    
 		cmisPath(nullable:true)
 		
