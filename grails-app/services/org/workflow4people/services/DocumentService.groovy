@@ -483,6 +483,7 @@ class DocumentService implements InitializingBean {
 	 */
 	@Transactional
 	def moveDocumentToDefaultPath(def documentInstance,document) {
+		
 		log.debug "Creating document path folder for ${documentInstance.id}"
 		def pathTemplate=documentInstance.documentType.pathTemplate
 		
@@ -496,23 +497,31 @@ class DocumentService implements InitializingBean {
     	def currentPath=""
     	pathElements.each { pathElement ->
     		if (pathElement.length()>0) {
+				
 	    		currentPath+="/"+pathElement
 	    		def doc=Document.findByNameAndParent(pathElement,parent)
-	    		if(!doc) {
+				
+	    		if(!doc) {				
 					def documentType=parent?.documentType?.defaultChildDocumentType 
 					documentType=documentType?:DocumentType.findByName('Folder')
 					doc=new Document(name:pathElement,documentDescription:pathElement,documentType:documentType,xmlDocument:"""<test></test>""")
 					doc.parent=parent
 					doc.save(failOnError:true)	    			
-	    			parent=doc
+	    			parent=doc	    			
 	    		} else {
-	    			parent=doc
+					if (doc!=documentInstance) {
+						parent=doc
+					}
 	    		}
+	    		
     		}
     	}
+		
 		documentInstance.parent=parent
 		documentInstance.save(failOnError:true)
-    	return path				
+		
+    	return path
+    					
     }
 	
 

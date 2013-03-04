@@ -137,9 +137,9 @@ class DocumentServiceTests {
 	@Test
 	void testCreateDocument() {		
 		def sxmlDocument=documentService.getDocument(1)
-		//sxmlDocument.header.documentId=""
-		documentService.setDocument(sxmlDocument)
-		//documentService.createDocument(sxmlDocument)
+		sxmlDocument.header.documentId=""
+		//documentService.setDocument(sxmlDocument)
+		documentService.createDocument(sxmlDocument)
 		
 		Document.findAll().each { doc ->
 			println "document ${doc.id}"
