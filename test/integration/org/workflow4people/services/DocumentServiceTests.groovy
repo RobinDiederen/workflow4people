@@ -55,6 +55,12 @@ class DocumentServiceTests {
 		
 		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
 		def apc2= new ApplicationConfiguration(configKey:'identity.group.home.default',configValue:"test").save(failOnError:true,flush:true)
+		def apc3= new ApplicationConfiguration(configKey:'calendar.businessDayInMinutes',configValue:"450").save(failOnError:true,flush:true)
+		def apc4= new ApplicationConfiguration(configKey:'calendar.businessWeekInMinutes',configValue:"2250").save(failOnError:true,flush:true)
+		def apc5= new ApplicationConfiguration(configKey:'calendar.businessMonthInDays',configValue:"22").save(failOnError:true,flush:true)
+		def apc6= new ApplicationConfiguration(configKey:'calendar.businessYearInDays',configValue:"220").save(failOnError:true,flush:true)
+		
+		
 		def holiday= new Holiday(title:'test',fromDate:new Date(),toDate:new Date()).save(failOnError:true,flush:true)
 		
 		
