@@ -143,9 +143,12 @@ class DocumentService implements InitializingBean {
     		log.debug "After re-getting the document the document is now ${documentInstance.xmlDocument}"
     	*/
     		if (header.workflowName.text()) {
-				log.debug "starting process by creating a workflow domain object"
+				log.debug "workflow name found in header: ${header.workflowName.text()}"
 				def workflowDefinition=WorkflowDefinition.findByName(header.workflowName.text())
+				log.debug "workflowdefinition found: ${workflowDefinition} with run flag ${workflowDefinition?.run}"
 				if (workflowDefinition && workflowDefinition.run) {
+					log.debug "starting process by creating a workflow domain object"
+					
 					def workflow=new Workflow()
 		    		workflow.document=documentInstance
 		    		workflow.workflowDefinition=workflowDefinition

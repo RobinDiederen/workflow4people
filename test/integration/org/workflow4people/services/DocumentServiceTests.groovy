@@ -54,6 +54,9 @@ class DocumentServiceTests {
 		*/
 		
 		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
+		def apc2= new ApplicationConfiguration(configKey:'identity.group.home.default',configValue:"test").save(failOnError:true,flush:true)
+		def holiday= new Holiday(title:'test',fromDate:new Date(),toDate:new Date()).save(failOnError:true,flush:true)
+		
 		
 		def fieldType=new FieldType(name:'test',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
 		def documentType=new DocumentType(name:'test',description:'test',fieldType:fieldType).save(failOnError:true,flush:true)
@@ -61,8 +64,8 @@ class DocumentServiceTests {
 		def folderFieldType=new FieldType(name:'folder',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
 		
 		def folderDocumentType=new DocumentType(name:'Folder',folder:true,description:'test',fieldType:folderFieldType).save(failOnError:true,flush:true)
-		def workflowEngine=new WorkflowEngine(name:'jbpm',title:'jbpm',description:'jbpm').save(failOnError:true,flush:true)
-		def workflowDefinition=new WorkflowDefinition(name:'test',title:'test',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:false).save(failOnError:true,flush:true)
+		def workflowEngine=new WorkflowEngine(name:'jbpm4',title:'jbpm4',description:'jbpm').save(failOnError:true,flush:true)
+		def workflowDefinition=new WorkflowDefinition(name:'StoringMelding',title:'test',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:true).save(failOnError:true,flush:true)
 		
 		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			  <doc:header xmlns:doc="http://www.workflow4people.org/schemas/documents">
@@ -71,7 +74,7 @@ class DocumentServiceTests {
 			    <doc:documentStatus>Some status</doc:documentStatus>
 			    <doc:documentKey/>
 			    <doc:documentDescription>Test</doc:documentDescription>
-			    <doc:workflowName>test</doc:workflowName>
+			    <doc:workflowName>StoringMelding</doc:workflowName>
 			    <doc:taskId/>
 			    <doc:taskOutcome/>
 			    <doc:processInstanceId>1000</doc:processInstanceId>
@@ -144,5 +147,8 @@ class DocumentServiceTests {
 		Document.findAll().each { doc ->
 			println "document ${doc.id}"
 		}
+		println "Taking a nap ..."
+		Thread.sleep(3000)
+		println "Bye!"
 	}
 }

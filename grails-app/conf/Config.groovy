@@ -41,9 +41,9 @@ environments {
 				//auth: "Container", // optional
 				description: "Data source for ...", //optional
 				//properties for particular type of resource
-			url: "jdbc:mysql://localhost:3306/wf4p",
-			username: "wf4p",
-			password: "wf4p",
+			url: "jdbc:mysql://localhost:3306/wfptest",
+			username: "wfptest",
+			password: "wfptest",
 			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
 			maxActive: "8", //and so on
 				maxIdle: "4"
@@ -55,9 +55,9 @@ environments {
 				//auth: "Container", // optional
 				description: "Data source for ...", //optional
 				//properties for particular type of resource
-			url: "jdbc:mysql://localhost:3306/wf4p",
-			username: "wf4p",
-			password: "wf4p",
+			url: "jdbc:mysql://localhost:3306/wfptest",
+			username: "wfptest",
+			password: "wfptest",
 			driverClassName: "com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource",
 			maxActive: "8", //and so on
 				maxIdle: "4"
@@ -160,6 +160,7 @@ log4j = {
 	debug "grails.app.services"
 	warn "grails.app.endpoints"
 	warn "grails.app.domain"
+	debug "org.workflow4people"
     
 }
 
