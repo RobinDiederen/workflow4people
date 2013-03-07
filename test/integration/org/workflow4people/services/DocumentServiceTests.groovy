@@ -14,6 +14,7 @@ class DocumentServiceTests {
 	def jmsMap
 	def jmsMessage
 	def documentService
+	def setupService
 	
 	def transactional=false
 	
@@ -60,6 +61,22 @@ class DocumentServiceTests {
 		def apc5= new ApplicationConfiguration(configKey:'calendar.businessMonthInDays',configValue:"22").save(failOnError:true,flush:true)
 		def apc6= new ApplicationConfiguration(configKey:'calendar.businessYearInDays',configValue:"220").save(failOnError:true,flush:true)
 		
+		def dp1=new DayPart(dayName:"Monday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
+		def dp2=new DayPart(dayName:"Monday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
+		
+		def dp3=new DayPart(dayName:"Tuesday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
+		def dp4=new DayPart(dayName:"Tuesday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
+		
+		def dp5=new DayPart(dayName:"Wednesday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
+		def dp6=new DayPart(dayName:"Wednesday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
+		
+		def dp7=new DayPart(dayName:"Thursday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
+		def dp8=new DayPart(dayName:"Thursday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
+		
+		def dp9=new DayPart(dayName:"Friday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
+		def dp10=new DayPart(dayName:"Friday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
+		
+		
 		
 		def holiday= new Holiday(title:'test',fromDate:new Date(),toDate:new Date()).save(failOnError:true,flush:true)
 		
@@ -72,6 +89,10 @@ class DocumentServiceTests {
 		def folderDocumentType=new DocumentType(name:'Folder',folder:true,description:'test',fieldType:folderFieldType).save(failOnError:true,flush:true)
 		def workflowEngine=new WorkflowEngine(name:'jbpm4',title:'jbpm4',description:'jbpm').save(failOnError:true,flush:true)
 		def workflowDefinition=new WorkflowDefinition(name:'StoringMelding',title:'test',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:true).save(failOnError:true,flush:true)
+		
+		setupService.addUser("test","test","Test user","admin@open-t.nl",["ROLE_WF4P_ADMIN"]);
+		setupService.addUser("john","test","John","john@open-t.nl",["Servicedesk"]);
+		
 		
 		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			  <doc:header xmlns:doc="http://www.workflow4people.org/schemas/documents">
@@ -153,8 +174,8 @@ class DocumentServiceTests {
 		Document.findAll().each { doc ->
 			println "document ${doc.id}"
 		}
-		println "Taking a nap ..."
-		Thread.sleep(3000)
-		println "Bye!"
+		log.debug "Taking a nap ..."
+		Thread.sleep(7000)
+		log.debug "Bye!"
 	}
 }
