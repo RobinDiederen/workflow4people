@@ -503,7 +503,7 @@ class DataModelEditorController {
 
 					} else {
 						hasChildren= Field.countByParent(f)>0
-						cssClass="field fieldtype-${f.fieldType?.name} basetype-${f.fieldType?.baseType?.name}"
+						cssClass="field fieldtype-${f.fieldType.name} basetype-${f.fieldType.baseType.name}"
 					}
  
 					def nodeRel = hasChildren ? 'folder' : 'default'						

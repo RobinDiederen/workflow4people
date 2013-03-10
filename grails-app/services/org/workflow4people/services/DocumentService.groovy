@@ -165,6 +165,7 @@ class DocumentService implements InitializingBean {
     		
 	  } // withNewTransaction
 		def msg=[eventType:"afterCreateDocument",source:source,xmlDocument:xmlDocument]
+		log.debug "*** createDocument: sending message ${msg}"
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
 	return 	theDocumentId
 	}
@@ -257,6 +258,7 @@ class DocumentService implements InitializingBean {
 			indexDocument(documentInstance)
 			documentInstance.id
 			def msg=[eventType:"afterUpdateDocument",source:source,xmlDocument:xmlDocument]
+			log.debug "*** updateDocument: sending message ${msg}"
 			jmsService.send(topic:"wfp.event",msg,"standard",null)
 			
 		//}
@@ -668,8 +670,10 @@ class DocumentService implements InitializingBean {
     	log.trace "Setting document ${theId}"
     	log.trace documentInstance.xmlDocument
     	documentInstance.save(flush:true,failOnError:true)
+		indexDocument(documentInstance)
 		
 		def msg=[eventType:"afterSetDocument",source:source,xmlDocument:documentInstance.xmlDocument]
+		log.debug "*** setDocument: sending message ${msg}"
 		jmsService.send(topic:"wfp.event",msg,"standard",null)
     }
    
