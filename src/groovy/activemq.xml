@@ -60,8 +60,8 @@
   </broker>
   
   
-  <!-- Store-and-forward configuratie voor remote wfp -->
-
+  <!-- Store-and-forward configuration for remote wfp; changed directory below and uncomment this for DDS -->
+<!--
   <broker useJmx="true"  xmlns="http://activemq.apache.org/schema/core" persistent="true" brokerName="ddsBroker" useShutdownHook="false">
           <managementContext>
             <managementContext createConnector="true"/>
@@ -77,7 +77,7 @@
 		</persistenceAdapter>
 		        
   </broker>
-
+-->
   
   
   

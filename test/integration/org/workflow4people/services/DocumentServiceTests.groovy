@@ -61,6 +61,10 @@ class DocumentServiceTests {
 		def apc5= new ApplicationConfiguration(configKey:'calendar.businessMonthInDays',configValue:"22").save(failOnError:true,flush:true)
 		def apc6= new ApplicationConfiguration(configKey:'calendar.businessYearInDays',configValue:"220").save(failOnError:true,flush:true)
 		
+		def apc7= new ApplicationConfiguration(configKey:'wfp.id',configValue:"test").save(failOnError:true,flush:true)
+		
+		
+		
 		def dp1=new DayPart(dayName:"Monday",fromTime:"09:00",toTime:"12:00").save(failOnError:true,flush:true)
 		def dp2=new DayPart(dayName:"Monday",fromTime:"12:30",toTime:"17:00").save(failOnError:true,flush:true)
 		
