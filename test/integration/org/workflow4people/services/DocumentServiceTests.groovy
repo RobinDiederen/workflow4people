@@ -175,7 +175,7 @@ class DocumentServiceTests {
 			println "document ${doc.id}"
 		}
 		log.debug "Taking a nap ..."
-		Thread.sleep(7000)
+		Thread.sleep(1000)
 		log.debug "Bye!"
 	}
 }
