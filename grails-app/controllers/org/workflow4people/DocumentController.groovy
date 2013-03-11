@@ -113,16 +113,16 @@ class DocumentController {
 		def elements=[]
 		def fieldType=false
 		if (!params.id || params.id=="") {
-			elements=Document.findAllByParentAndDeleted(null,false,[order:'asc',sort:'position'])
+			elements=Document.findAllByParentAndDeleted(null,false,[order:'asc',sort:'position',max:100])
+			
 			fieldType=true
 		} else {
 			if (params.id.startsWith("content_")) {
 				def id=new Integer(params.id.split("_")[1])
 				def p=Document.get(id)
-				elements=Document.findAllByParentAndDeleted(p,false,[sort:'position',order:'asc'])
+				elements=Document.findAllByParentAndDeleted(p,false,[sort:'position',order:'asc',max:100])
 			}
 		}
-				
 		def elementlist = { elements.collect { f ->
 				boolean hasChildren=false
 				def cssClass=""
