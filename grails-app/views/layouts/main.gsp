@@ -39,7 +39,7 @@
 		              					<dialog:menuitem controller="wf4pProcessDefinition" action="list" icon="icon-list"/>		              					
 		              				</dialog:submenu>
 		              				<dialog:submenu code="wfp.activiti">
-		              					<dialog:menuitem controller="workflowDefinition" action="list" icon="icon-list"/>
+		              					<dialog:menuitem controller="activitiProcessDefinition" action="list" icon="icon-list"/>
 		              				</dialog:submenu>		              				
 	              				</dialog:dropdown>
 	              			</sec:ifAnyGranted>	

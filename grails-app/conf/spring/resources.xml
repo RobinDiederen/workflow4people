@@ -34,14 +34,12 @@ http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/ac
 	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
 	 -->
 	 
-	 
 	<!-- jBPM 4.3 style config" --> 
-  
+
     <bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper">
        <property name="jbpmCfg" value="jbpm/jbpm.cfg.xml"/>
     </bean>			
 			
-
 	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
 
 
