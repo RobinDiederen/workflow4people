@@ -35,7 +35,7 @@ class ListConfig {
 			}
 			def detailTableId="detailTable_${this.name}"
 			def propName="activitiProcessController"
-			def actions="""<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog(${item.id},'${this.controller}',{ refresh : '${detailTableId}'}, null)">edit</span><span class="btn btn-small" onclick="dialog.deleteDialog('${item.id}','${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span></div>"""
+			def actions="""<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog('${item.id}','${this.controller}',{ refresh : '${detailTableId}'}, null)">edit</span><span class="btn btn-small" onclick="dialog.deleteDialog('${item.id}','${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span></div>"""
 			row.put(col,actions)
 			aaData+=row
 		}

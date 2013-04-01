@@ -59,11 +59,7 @@
 	</head>    
 	<body>	
 		<h3><g:message code="list.${listConfig.name}.title" /></h3>
-		<div class="row-fluid">
-		<div class="span12">
-		<dialog:upload sFileName="upload.bpmn20.xml" identifier="42" action="${createLink(controller:'activitiProcessDefinition',action:'upload')}"/>
-		</div>
-		</div>
+		
 		<div class="row-fluid">
 		<div class="span12">
    		<div class="datatable dialog-events" id="tableWrapper_${listConfig.name}">	      

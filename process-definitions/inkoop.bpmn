@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/bpmn20">
-  <process id="StoringMelding" name="Storing melding proces" isExecutable="true">
+  <process id="inkoop" name="inkoop" isExecutable="true">
     <startEvent id="start" name="Start" activiti:formKey="wf:submitReviewTask"></startEvent>
     <exclusiveGateway id="reviewDecision" name="Review Decision"></exclusiveGateway>
     <sequenceFlow id="flow3" name="Meer informatie nodig" sourceRef="reviewDecision" targetRef="meer-informatie">
@@ -16,8 +16,8 @@
     </sequenceFlow>
     <sequenceFlow id="flow10" name="Start" sourceRef="start" targetRef="afhandelen"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_StoringMelding">
-    <bpmndi:BPMNPlane bpmnElement="StoringMelding" id="BPMNPlane_StoringMelding">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_inkoop">
+    <bpmndi:BPMNPlane bpmnElement="inkoop" id="BPMNPlane_inkoop">
       <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
         <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

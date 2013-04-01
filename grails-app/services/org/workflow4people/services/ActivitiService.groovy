@@ -281,7 +281,7 @@ class ActivitiService  {
 			
 			// Find the tasks that the process engine has created while we were waiting for it to return.		
 			
-			Task.findAllByExternalWorkflowId(workflow.externalId).each { task ->
+			org.workflow4people.Task.findAllByExternalWorkflowId(workflow.externalId).each { task ->
 				task.workflow=workflow
 				task.noMessage=true
 				if (!task.form){					

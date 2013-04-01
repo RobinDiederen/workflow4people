@@ -40,6 +40,8 @@
 		              				</dialog:submenu>
 		              				<dialog:submenu code="wfp.activiti">
 		              					<dialog:menuitem controller="activitiProcessDefinition" action="list" icon="icon-list"/>
+		              					<dialog:menuitem controller="activitiProcessInstance" action="list" icon="icon-list"/>
+		              					<dialog:menuitem controller="activitiTask" action="list" icon="icon-list"/>		              					
 		              				</dialog:submenu>		              				
 	              				</dialog:dropdown>
 	              			</sec:ifAnyGranted>	

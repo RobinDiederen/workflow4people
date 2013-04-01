@@ -8,28 +8,33 @@ import grails.plugins.springsecurity.Secured
 import org.workflow4people.activiti.command.*
 
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_PROCESS_ADMIN','ROLE_WF4P_DEVELOPER'])
+class ActivitiTaskController {
 
-class ActivitiProcessDefinitionController {
-	
-	ProcessEngine activitiProcessEngine
+    ProcessEngine activitiProcessEngine
 	RepositoryService activitiRepositoryService
 	ManagementService activitiManagementService
 	RuntimeService activitiRuntimeService
 	IdentityService activitiIdentityService
 	HistoryService activitiHistoryService
 	FormService activitiFormService
+	TaskService activitiTaskService
 	def fileService
 
     def index = { 	
 		redirect (action:list)
 	}
 	
-	def listConfig=new ListConfig(name:'activitiProcessDefinition',controller: 'activitiProcessDefinition').configure {
+	def listConfig=new ListConfig(name:'activitiTask',controller: 'activitiTask').configure {
 		column name:'id',sortable:true		
-		column name:'key',sortable:true
-		column name:'version',sortable:true
-		column name:'name',sortable:true
-		column name:'description'
+		column name:'processDefinitionId',sortable:true	
+		column name:'taskDefinitionKey',sortable:true
+		column name:'name',sortable:false
+		column name:'description',sortable:false
+		column name:'priority',sortable:false
+		column name:'assignee',sortable:false
+		column name:'createTime',sortable:false		
+		column name:'dueDate',sortable:false
+		
 	}
 	
 	def list() {		
@@ -37,24 +42,17 @@ class ActivitiProcessDefinitionController {
 	}
 
 	def jsonlist() {				
-		def datalist=activitiRepositoryService.createProcessDefinitionQuery().active().latestVersion()
+		def datalist=activitiTaskService.createTaskQuery()
 		
 		switch(params.iSortCol_0) {
 			case '0':
-				datalist=datalist.orderByProcessDefinitionId()
+				datalist=datalist.orderByTaskId()
 			break
 						
 			case '1':
-				datalist=datalist.orderByProcessDefinitionKey()
+				datalist=datalist.orderByProcessInstanceId()
 			break
 			
-			case '2':
-				datalist=datalist.orderByProcessDefinitionVersion()
-			break
-		
-			case '3':
-				datalist=datalist.orderByProcessDefinitionName()
-			break
 		}
 				
 		switch (params.sSortDir_0) {
@@ -71,7 +69,7 @@ class ActivitiProcessDefinitionController {
 		
 		datalist=datalist.listPage(firstResult,maxResults)
 		
-		def totalRecords=activitiRepositoryService.createProcessDefinitionQuery().active().count()
+		def totalRecords=activitiTaskService.createTaskQuery().count()
 		render listConfig.renderList(datalist,totalRecords,params) as JSON
 				
 	}
@@ -101,24 +99,4 @@ class ActivitiProcessDefinitionController {
 		render res as JSON
 	}
 	
-	
-	def testdeploy(){ 
-		def processDefinitionText=new File('/home/joost/workspaces/grails-workspace/wfp/process-definitions/StoringMelding.bpmn').text
-		println processDefinitionText
-		def id = activitiRepositoryService.createDeployment().name("test").addString("process.bpmn20.xml", processDefinitionText).deploy().getId();
-		def json=[id:id]
-		render json as JSON
-	}
-	def upload() {
-		def res=fileService.uploadFile(request,params)
-		println "UPLOAD ${res}"
-		
-		def processDefinitionText=new File(res.path).text
-
-		def id = activitiRepositoryService.createDeployment().name("upload").addString("process.bpmn20.xml", processDefinitionText).deploy().getId();
-		
-		
-		render res as JSON
-	}
-
 }
