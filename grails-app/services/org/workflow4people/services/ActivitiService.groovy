@@ -36,6 +36,12 @@ import org.workflow4people.*;
 import groovy.xml.StreamingMarkupBuilder
 import grails.plugin.jms.Queue
 
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.activiti.engine.impl.context.Context;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
+
+
 /**
  * Activiti JMS message service class
  * Listens to events for Activiti processes from both ends (Grails domain objects and Activiti task and process listeners)
@@ -61,6 +67,8 @@ class ActivitiService  {
 	def domFactory
 	
 	def sessionFactory
+	
+	def createTaskLister=new CreateTaskListenerImpl()
 	
 	
 
@@ -305,10 +313,11 @@ class ActivitiService  {
 	 */
 
 	def afterUpdateWfpTask(msg) {
-		Task.withTransaction { status ->
+		org.workflow4people.Task.withTransaction { status ->
 			def task = Task.get(msg.id)
 			if (task.outcome) {
-				taskService.completeTask(task.externalId,task.outcome)
+				def variables=[outcome:task.outcome]
+				activitiTaskService.complete(task.externalId, variables)				
 				task.completionDate=new Date()
 				task.noMessage=true
 				task.save(flush:true,failOnError:true)
@@ -316,4 +325,39 @@ class ActivitiService  {
 		}
 	}
 	
+	
+	private final class CreateTaskListenerImpl implements TaskListener {		
+		@Override		
+		public void notify(DelegateTask delegateTask) {
+		
+		//TODO: this is where your logic should be added
+			println "TASK CREATE from Activiti " + delegateTask.toString();
+			log.trace ("TASK CREATE from Activiti " + delegateTask.toString());
+			
+			org.workflow4people.Task.withTransaction { status ->
+				def workflow= org.workflow4people.Workflow.findByExternalId(delegateTask.processInstanceId)
+				def task= new org.workflow4people.Task(
+					name:delegateTask.name,					
+					description:delegateTask.description,
+					
+					dueDate:delegateTask.dueDate,					
+					
+					//assignee(nullable:true)
+					//outcome(nullable:true)
+					//transitions(nullable:true)
+					//form(nullable:true)
+					externalId:delegateTask.id,
+					externalWorkflowId:delegateTask.processInstanceId,
+					workflow:workflow,
+					priority:delegateTask.priority,
+					//cssClass(nullable:true)
+					//taskStatus(nullable:true)
+					//statusUser(nullable:true)
+					
+					
+					).save(failOnError:true)
+			
+	         }		
+		}
+	}		
 }
