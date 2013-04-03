@@ -34,6 +34,6 @@ public class WfpUserTaskParseHandler extends AbstractBpmnParseHandler<UserTask> 
 		//taskDefinition.addTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, USER_TASK_ASSIGNMENT_HANDLER);
 		
 		taskDefinition.addTaskListener(TaskListener.EVENTNAME_CREATE, SpringUtil.getBean("activitiService").createTaskLister);
-		//taskDefinition.addTaskListener(TaskListener.EVENTNAME_COMPLETE, USER_TASK_ID_HANDLER);
+		taskDefinition.addTaskListener(TaskListener.EVENTNAME_COMPLETE, , SpringUtil.getBean("activitiService").completeTaskLister);
 	  }	
 }

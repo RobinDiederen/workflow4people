@@ -4,15 +4,17 @@
     <startEvent id="start" name="Start" activiti:formKey="wf:submitReviewTask"></startEvent>
     <exclusiveGateway id="reviewDecision" name="Review Decision"></exclusiveGateway>
     <sequenceFlow id="flow3" name="Meer informatie nodig" sourceRef="reviewDecision" targetRef="meer-informatie">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!meer_informatie_nodig}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='Meer informatie nodig'}]]></conditionExpression>
     </sequenceFlow>
     <endEvent id="end" name="End"></endEvent>
-    <userTask id="afhandelen" name="afhandelen" activiti:candidateGroups="Servicedesk"></userTask>
+    <userTask id="afhandelen" name="afhandelen" activiti:candidateGroups="Servicedesk">
+      <documentation>Afhandelen van de inkoop</documentation>
+    </userTask>
     <sequenceFlow id="flow7" sourceRef="afhandelen" targetRef="reviewDecision"></sequenceFlow>
     <userTask id="meer-informatie" name="meer-informatie" activiti:assignee="${user}"></userTask>
     <sequenceFlow id="flow8" sourceRef="meer-informatie" targetRef="afhandelen"></sequenceFlow>
     <sequenceFlow id="flow9" sourceRef="reviewDecision" targetRef="end">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!meer_informatie_nodig}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome =='Afgehandeld'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow10" name="Start" sourceRef="start" targetRef="afhandelen"></sequenceFlow>
   </process>

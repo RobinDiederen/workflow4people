@@ -10,6 +10,7 @@
 
 			<dialog:select object="${taskInstance}" propertyName="outcome" mode="edit" from="${taskInstance.getTransitionsArray()}" />				                     
 			<dialog:domainObject object="${taskInstance}" propertyName="form" mode="edit" />
+			<dialog:textField object="${taskInstance}" propertyName="transitions" mode="edit" />
 			
 			<dialog:domainObject object="${taskInstance}" propertyName="taskStatus" mode="edit"/>
 			<dialog:textField object="${taskInstance}" propertyName="statusUser" mode="edit" />

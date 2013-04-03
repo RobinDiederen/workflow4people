@@ -18,6 +18,7 @@
  */
 
 package org.workflow4people.services
+
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -69,8 +70,9 @@ class ActivitiService  {
 	def sessionFactory
 	
 	def createTaskLister=new CreateTaskListenerImpl()
+	def completeTaskLister=new CompleteTaskListenerImpl()
 	
-	
+	def jmsService
 
 	static exposes = ['jms']
 
@@ -97,13 +99,14 @@ class ActivitiService  {
 			break
 			
 			case "afterCreateActivitiTask":
+				afterCreateActivitiTask(msg)
 			break
 			
 			case "afterUpdateActivitiTask":
 				afterUpdateActivitiTask(msg)
 			break
 			
-			case "afterDeleteJbpmTask":
+			case "afterDeleteActivitiTask":
 				afterDeleteActivitiTask(msg)
 			break						
 
@@ -128,7 +131,7 @@ class ActivitiService  {
 	}
     
 	/**
-	 * When a JBPM workflow is removed, we keep the wfp workflow and only populate the completion date.
+	 * When an Activiti workflow is removed, we keep the wfp workflow and only populate the completion date.
 	 * @param msg
 	 * @return
 	 */
@@ -144,83 +147,12 @@ class ActivitiService  {
 	}
 	
 	/**
-	 * Handle task updates. The bulk of the logic is here. Due to the way jBPM handles the creation of a process instance there isn't much we can do before the first task exists.
+	 * Handle task updates. TODO 
 	 * @param msg
 	 * @return
 	 */
-	def afterUpdateActivitiTask(msg) {		
-		org.activiti.engine.task.Task activitiTask = activitiTaskService.createTaskQuery().taskId(msg.id).singleResult()
-			
-		def task=Task.findByExternalId(msg.id)
-		if (!task) {
-			def executionId=acivitiTask.executionId
-			jbpmTask.getExecutionId()
-			def workflow=Workflow.findByExternalId(executionId)
-			
-			log.debug("Before wait for workflow instance")
-			def iCounter = 1
-			while (!workflow) {
-				if (iCounter > 600) {
-					log.error("Giving up waiting for workflow instance")
-					break
-				}
-				log.error("wait for workflow instance, sleep for 100ms now ...")
-				sleep(100)
-				workflow=Workflow.findByExternalId(executionId)
-				iCounter++
-			}
-
-			log.debug("After wait for workflow instance")
-			
-			org.workflow4people.Task.withTransaction { status ->
-				task = new org.workflow4people.Task()
-				task.workflow=workflow
-				task.externalId=msg.id
-				task.externalWorkflowId=activitiTask.getExecutionId()				
-				task.description=activitiTask.description
-
-				task.name=activitiTask.name
-
-				// Hard-linked task name = form name for the moment
-				def formName=activitiTask.name
-				if(task.workflow?.workflowDefinition) {
-					task.form=Form.findByWorkflowAndName(task.workflow.workflowDefinition,formName)
-				}
-				task.dueDate= activitiTask.dueDate
-				task.priority=activitiTask.priority
-				task.workflow=workflow
-				// TODO Dit moet anders want getOutcomes bestaat niet voor Activiti
-				/*
-				taskService.getOutcomes (msg.id).each { outcome ->
-					if (task.transitions){
-						task.transitions="${task.transitions},${outcome}"
-					} else {
-						task.transitions=outcome
-					}
-				}
-				*/
-				if (activitiTask.assignee) {
-					task.assignee=Person.findByUsername(activitiTask.assignee)
-				}
-				activitiTaskService.getIdentityLinksForTask(activitiTask.id).each { IdentityLink il ->
-					if (il.type == IdentityLinkType.CANDIDATE && il.groupId) {
-						def group=Authority.findByAuthority(il.groupId)
-						task.addToCandidateGroups(group)
-					}
-					
-					if (il.type == IdentityLinkType.CANDIDATE && il.userId) {
-						def person=Person.findByUsername(il.groupId)
-						task.addToCandidateUsers(person)						
-					}					
-				}
-							
-				task.noMessage=true
-
-				task.save(failOnError:true,flush:true)
-			} // withTransaction
-		}
-		return null
-		
+	def afterUpdateActivitiTask(msg) {						
+		return null		
 	}
 	
 	/**
@@ -229,7 +161,7 @@ class ActivitiService  {
 	 * @param msg
 	 * @return
 	 */
-
+	
 	def afterDeleteActivitiTask(msg) {
 		org.workflow4people.Task.withTransaction { status ->
 			def task=org.workflow4people.Task.findByExternalId(msg.id)
@@ -299,6 +231,7 @@ class ActivitiService  {
 					
 					if(task.workflow?.workflowDefinition) {
 						task.form=Form.findByWorkflowAndName(task.workflow.workflowDefinition,formName)
+						task.transitions=task.form?.outcomes
 					}
 				}
 				
@@ -314,7 +247,8 @@ class ActivitiService  {
 
 	def afterUpdateWfpTask(msg) {
 		org.workflow4people.Task.withTransaction { status ->
-			def task = Task.get(msg.id)
+			//def task = activitiTaskService.createTaskQuery().taskId(msg.id).singleResult()
+			def task = org.workflow4people.Task.get(msg.id)
 			if (task.outcome) {
 				def variables=[outcome:task.outcome]
 				activitiTaskService.complete(task.externalId, variables)				
@@ -325,39 +259,87 @@ class ActivitiService  {
 		}
 	}
 	
+	def afterCreateActivitiTask(msg) {
+		
+		org.workflow4people.Task.withTransaction { status ->
+			def workflow= org.workflow4people.Workflow.findByExternalId(msg.processInstanceId)
+			def task= new org.workflow4people.Task(
+				name:msg.name,
+				description:msg.description,
+				
+				dueDate:msg.dueDate,
+				
+				externalId:msg.id,
+				externalWorkflowId:msg.processInstanceId,
+				workflow:workflow,
+				priority:msg.priority
+				// TODO
+				//cssClass
+				//taskStatus
+				//statusUser				
+				)
+				
+				if (msg.assignee) {
+					task.assignee=Person.findByUsername(msg.assignee)
+				}
+				msg.candidateUsers.split(",").each { userId ->
+					def person=Person.findByUsername(userId)
+					if (person) {
+						task.addToCandidateUsers(person)
+					}
+				}
+				msg.candidateGroups.split(",").each { groupId ->
+					def group=Authority.findByAuthority(groupId)
+					if (group) {
+						task.addToCandidateGroups(group)
+					}
+				}
+
+				if (workflow) {
+					def form =org.workflow4people.Form.findByWorkflowAndName(workflow.workflowDefinition,msg.name)
+					task.form=form
+					println "*** The form is ${form} (${form.id})and the transitions are :${form?.outcomes}"
+					task.transitions=form?.outcomes
+				}
+				
+				task.save(failOnError:true)
+				
+				
+		
+		 }
+	
+	}
+	
 	
 	private final class CreateTaskListenerImpl implements TaskListener {		
 		@Override		
 		public void notify(DelegateTask delegateTask) {
-		
-		//TODO: this is where your logic should be added
-			println "TASK CREATE from Activiti " + delegateTask.toString();
-			log.trace ("TASK CREATE from Activiti " + delegateTask.toString());
+			log.debug ("TASK CREATE from Activiti " + delegateTask.toString());
 			
-			org.workflow4people.Task.withTransaction { status ->
-				def workflow= org.workflow4people.Workflow.findByExternalId(delegateTask.processInstanceId)
-				def task= new org.workflow4people.Task(
-					name:delegateTask.name,					
-					description:delegateTask.description,
-					
-					dueDate:delegateTask.dueDate,					
-					
-					//assignee(nullable:true)
-					//outcome(nullable:true)
-					//transitions(nullable:true)
-					//form(nullable:true)
-					externalId:delegateTask.id,
-					externalWorkflowId:delegateTask.processInstanceId,
-					workflow:workflow,
-					priority:delegateTask.priority,
-					//cssClass(nullable:true)
-					//taskStatus(nullable:true)
-					//statusUser(nullable:true)
-					
-					
-					).save(failOnError:true)
+			def candidateGroups=[]
+			def candidateUsers=[]
+			delegateTask.candidates?.each { idLink ->
+				if (idLink.groupId) {
+					candidateGroups+=idLink.groupId					
+				}
+				if (idLink.userId) {
+					candidateUsers+=idLink.userId					
+				}
+			}
 			
-	         }		
+			jmsService.send("wfp.engine.activiti",[messageType:"afterCreateActivitiTask",id:delegateTask.getId(),name:delegateTask.name,dueDate:delegateTask.dueDate,description:delegateTask.description,processInstanceId:delegateTask.processInstanceId,priority:delegateTask.priority,assignee:delegateTask.assignee,
+				candidateUsers:candidateUsers.join(","),candidateGroups:candidateGroups.join(",")
+				])						
 		}
 	}		
+	
+	
+	
+	private final class CompleteTaskListenerImpl implements TaskListener {
+		@Override
+		public void notify(DelegateTask delegateTask) {		
+			log.debug ("TASK COMPLETE from Activiti " + delegateTask.toString());			
+			jmsService.send("wfp.engine.activiti",[messageType:"afterDeleteActivitiTask",id:delegateTask.getId()])
+		}
+	}
 }

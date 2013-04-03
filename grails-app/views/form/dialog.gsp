@@ -6,6 +6,7 @@
 	        <dialog:textField object="${formInstance}" propertyName="name" mode="edit" />                            
 	        <dialog:textField object="${formInstance}" propertyName="title" mode="edit" />
 	        <dialog:textArea object="${formInstance}" propertyName="description" mode="edit" />
+	        <dialog:textField object="${formInstance}" propertyName="outcomes" mode="edit" class="wide"/>
 	        
 	        <dialog:select object="${formInstance}" propertyName="template" mode="edit" from="${formTemplateNames}"/>	        
 	        <dialog:domainObject object="${formInstance}" propertyName="formAction" mode="edit" />

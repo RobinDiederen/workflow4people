@@ -32,7 +32,8 @@ class Form implements Serializable {
     static constraints = {    	
     	description(size:0..50000)
     	explanationMessage(size:0..50000)
-    	confirmationMessage(size:0..50000)    	
+    	confirmationMessage(size:0..50000)
+		outcomes nullable:true    	
     }
 	static belongsTo = [workflow: WorkflowDefinition]
     static hasMany = [formPage : FormPage]                  
@@ -44,6 +45,7 @@ class Form implements Serializable {
     String confirmationMessage
     String template="task"
     Action formAction
+	String outcomes
     	
     String toString() {
 		  return name;
