@@ -79,7 +79,7 @@ class ActivitiService  {
     boolean transactional = false
 	
 	/**
-	 * Process messages from jBPM and Wfp
+	 * Process messages from Activiti and Wfp
 	 * @param msg
 	 * @return
 	 */
@@ -92,7 +92,8 @@ class ActivitiService  {
 			break
 			case "afterUpdateActivitiWorkflow":
 				// Do nothing. The process instance would be accessible as follows:
-				// def processInstance=executionService.findProcessInstanceById(msg.id)
+				//def pi=activitiRuntimeService.createProcessInstanceQuery().processInstanceId(msg.id).singleResult()
+	
 			break
 			case "afterDeleteActivitiWorkflow":
 				afterDeleteActivitiWorkflow(msg)
@@ -136,7 +137,9 @@ class ActivitiService  {
 	 * @return
 	 */
 	def afterDeleteActivitiWorkflow(msg) {
-		def processInstance=executionService.findProcessInstanceById(msg.id)
+		//def pi=activitiRuntimeService.createProcessInstanceQuery().processInstanceId(msg.id).singleResult()
+		//def processInstance=new ProcessInstanceCommand(id:params.id,processDefinitionId:pi.processDefinitionId)
+
 		def engine=WorkflowEngine.findByName("activiti")
 		def workflow=Workflow.findByWorkflowEngineAndExternalId(engine,msg.id)
 		if (workflow) {
@@ -175,7 +178,7 @@ class ActivitiService  {
 	}
 
 	/**
-	 * When a new workflow domain object is created in wfp start a new process instance in jBPM
+	 * When a new workflow domain object is created in wfp start a new process instance in Activiti
  	 * @param msg	
  	 * 
 	 */
@@ -222,6 +225,7 @@ class ActivitiService  {
 			// Find the tasks that the process engine has created while we were waiting for it to return.		
 			
 			org.workflow4people.Task.findAllByExternalWorkflowId(workflow.externalId).each { task ->
+				log.debug "Found task after process creation : ${task}"
 				task.workflow=workflow
 				task.noMessage=true
 				if (!task.form){					
@@ -247,7 +251,6 @@ class ActivitiService  {
 
 	def afterUpdateWfpTask(msg) {
 		org.workflow4people.Task.withTransaction { status ->
-			//def task = activitiTaskService.createTaskQuery().taskId(msg.id).singleResult()
 			def task = org.workflow4people.Task.get(msg.id)
 			if (task.outcome) {
 				def variables=[outcome:task.outcome]

@@ -23,6 +23,10 @@ beans = {
 	jmsConnectionFactory(ActiveMQConnectionFactory) {
 		brokerURL = "tcp://localhost:61616"
 	}
+	
+	ddsConnectionFactory(ActiveMQConnectionFactory) {
+		brokerURL = "tcp://localhost:61617"
+	}
 
 	eventListener(org.workflow4people.EventListener) {
 		jmsService = ref("jmsService")
