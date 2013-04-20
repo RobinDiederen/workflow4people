@@ -23,6 +23,10 @@ beans = {
 	jmsConnectionFactory(ActiveMQConnectionFactory) {
 		brokerURL = "tcp://localhost:61616"
 	}
+	
+	ddsConnectionFactory(ActiveMQConnectionFactory) {
+		brokerURL = "tcp://localhost:61617"
+	}
 
 	eventListener(org.workflow4people.EventListener) {
 		jmsService = ref("jmsService")
@@ -45,7 +49,13 @@ beans = {
 	
 	activitiProcessEngineConfiguration(org.activiti.spring.SpringProcessEngineConfiguration) {
 		processEngineName = "activiti"
-		databaseType = "mysql"
+		if (grails.util.GrailsUtil.environment=="test") {
+			databaseType = "h2"
+		} else {
+			databaseType = "mysql"
+		}
+		
+		
 		databaseSchemaUpdate = "true"
 		deploymentName = "ActivitiAutoDeploy"
 		  

@@ -39,9 +39,9 @@ class DataDistributionService {
 	 * Send message containing document to queue
 	 * Fetches the document from the document service and sends the entire document in the message
 	 */
-	def sendMessage(topic,documentId,event){
+	def sendMessage(queue,documentId,event){
 		def wfpid=wf4pConfigService.getConfigValue("wfp.id")		
-		log.debug "sending document ${documentId} to topic ${topic}"
+		log.debug "sending document ${documentId} to queue ${queue}"
 		def outputBuilder = new StreamingMarkupBuilder()
 		//Document.withTransaction { trx ->		
 			def document=documentService.getDocument(documentId)	
@@ -51,12 +51,14 @@ class DataDistributionService {
 				// mkp.xmlDeclaration()
 				mkp.yield document
 			}
-			jmsService.send(topic:topic,[id:documentId,document:xmlDocument,event:event],"dds")  { 
+			def recipients=document.header.remote?.recipients?.id?.collect { it.text() }.join(",")
+			
+			jmsService.send(queue:queue,[id:documentId,document:xmlDocument,event:event,recipients:recipients],"dds")  { 
 				Message msg ->
 				msg.setProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,5000)
 			}
 		//}
-		log.debug "sending document ${documentId} to topic ${topic} completed"				 
+		log.debug "sending document ${documentId} to queue ${queue} completed"				 
 	}
 	
 	/*
@@ -66,7 +68,7 @@ class DataDistributionService {
 	@Subscriber(topic="wfp.event")
 	void eventHandler(msg) {
 		log.debug "Received wfp.event message: ${msg}"
-		def topic="wfp.remote.rx"
+		def queue="wfp.remote.tx"
 		//
 		if (msg.source!='dds' && msg.eventType in ['afterCreateDocument','afterSetDocument','afterUpdateDocument']) {
 			
@@ -85,11 +87,13 @@ class DataDistributionService {
 					mkp.yield document
 				}
 				// Tell the world!
-				jmsService.send(topic:topic,[id:document.header.documentId.text(),document:xmlDocument,event:msg.eventType],"dds")  {
+				def recipients=document.header.remote?.recipients?.id?.collect { it.text() }.join(",")
+				println "Sanity check. The recipients are ${recipients}"
+				jmsService.send(queue:queue,[id:document.header.documentId.text(),document:xmlDocument,event:msg.eventType,recipients:recipients],"dds")  {
 					Message theMsg ->
 					theMsg.setProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,5000)
 				}
-				log.debug "sending document ${document.header.documentId.text()} to topic ${topic} completed"
+				log.debug "sending document ${document.header.documentId.text()} to queue ${queue} completed"
 			}
 						
 		}
@@ -158,7 +162,7 @@ class DataDistributionService {
 	 * There is a single remote queue per wfp instance now, this ensures messages are always processed in the right order 
 	 */
 	
-	@Subscriber(topic="wfp.remote.rx")
+	@Queue(name="wfp.remote.rx")
 	def ddsrx(msg) {
 			
 		// get document

@@ -79,7 +79,7 @@ class ActivitiService  {
     boolean transactional = false
 	
 	/**
-	 * Process messages from jBPM and Wfp
+	 * Process messages from Activiti and Wfp
 	 * @param msg
 	 * @return
 	 */
@@ -222,6 +222,7 @@ class ActivitiService  {
 			// Find the tasks that the process engine has created while we were waiting for it to return.		
 			
 			org.workflow4people.Task.findAllByExternalWorkflowId(workflow.externalId).each { task ->
+				log.debug "Found task after process creation : ${task}"
 				task.workflow=workflow
 				task.noMessage=true
 				if (!task.form){					
@@ -247,7 +248,6 @@ class ActivitiService  {
 
 	def afterUpdateWfpTask(msg) {
 		org.workflow4people.Task.withTransaction { status ->
-			//def task = activitiTaskService.createTaskQuery().taskId(msg.id).singleResult()
 			def task = org.workflow4people.Task.get(msg.id)
 			if (task.outcome) {
 				def variables=[outcome:task.outcome]

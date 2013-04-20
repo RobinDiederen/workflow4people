@@ -8,7 +8,7 @@ import org.apache.activemq.*
 import static org.junit.Assert.*
 import org.junit.*
 
-class DocumentServiceTests {
+class DataDistributionServiceTests {
 	def xmlDocument
 	
 	def jmsMap
@@ -16,11 +16,14 @@ class DocumentServiceTests {
 	def documentService
 	def setupService
 	
+	def activeMQService
+	
 	def transactional=false
 	
 	@Before
 	void setUp() {
-		println "Hello. This is the setup part of DocumentServiceTests"
+		println "Hello. This is the setup part of DataDistributionTests"
+		activeMQService.init()
 		Document.findAll().each { doc ->
 			println "document ${doc.id}:${doc.name}"
 		}
@@ -28,31 +31,6 @@ class DocumentServiceTests {
 		DocumentType.findAll().each { doc ->
 			println "documentType ${doc.id}:${doc.name}"
 		}
-		
-		/*
-		// Fake isDirty is needed - mocked domain classes lack this
-		Document.metaClass.isDirty =
-		{ return true }
-		
-		// Fake getPersistentValue is needed - mocked domain classes lack this
-		Document.metaClass.getPersistentValue =
-		{ return "0.1" }
-		
-		/*
-		grails.plugin.jms.JmsService.metaClass.send =
-		{ return null }
-		*/
-		// Mock the JMS service
-		/*
-		def mock = mockFor(grails.plugin.jms.JmsService)
-		mock.demand.send(1..10)  {map,message,jmsTemplateName,postProcessor ->
-			println "JMS Service send: ${map}, message: ${message}"
-			jmsMap=map
-			jmsMessage=message
-			return null}
-		
-		documentService.jmsService=mock.createMock()
-		*/
 		
 		def apc= new ApplicationConfiguration(configKey:'cmis.enabled',configValue:"false").save(failOnError:true,flush:true)
 		def apc2= new ApplicationConfiguration(configKey:'identity.group.home.default',configValue:"test").save(failOnError:true,flush:true)
@@ -88,20 +66,25 @@ class DocumentServiceTests {
 		def fieldType=new FieldType(name:'test',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
 		def documentType=new DocumentType(name:'test',description:'test',fieldType:fieldType).save(failOnError:true,flush:true)
 		
+		def documentType2=new DocumentType(name:'StoringMelding',description:'test',fieldType:fieldType).save(failOnError:true,flush:true)
+		def documentType3=new DocumentType(name:'ddsdemo',description:'test',fieldType:fieldType).save(failOnError:true,flush:true)
+		
+		
 		def folderFieldType=new FieldType(name:'folder',description:'test',help:'test',alert:'test').save(failOnError:true,flush:true)
 		
 		def folderDocumentType=new DocumentType(name:'Folder',folder:true,description:'test',fieldType:folderFieldType).save(failOnError:true,flush:true)
 		def workflowEngine=new WorkflowEngine(name:'jbpm4',title:'jbpm4',description:'jbpm').save(failOnError:true,flush:true)
 		def workflowDefinition=new WorkflowDefinition(name:'StoringMelding',title:'test',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:true).save(failOnError:true,flush:true)
+		def workflowDefinition2=new WorkflowDefinition(name:'ddsdemo',title:'ddsdemo',description:'test',documentType:documentType,workflowEngine:workflowEngine,publish:true,run:true).save(failOnError:true,flush:true)
 		
 		setupService.addUser("test","test","Test user","admin@open-t.nl",["ROLE_WF4P_ADMIN"]);
-		setupService.addUser("john","test","John","john@open-t.nl",["Servicedesk"]);
+		setupService.addUser("john","test","John","john@open-t.nl",["Servicedesk","Customer service"]);
 		
 		
 		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?><test:Test xmlns:test="http://www.workflow4people.org/schemas/test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			  <doc:header xmlns:doc="http://www.workflow4people.org/schemas/documents">
 			    <doc:documentId>1</doc:documentId>
-			    <doc:documentType>test</doc:documentType>
+			    <doc:documentType>StoringMelding</doc:documentType>
 			    <doc:documentStatus>Some status</doc:documentStatus>
 			    <doc:documentKey/>
 			    <doc:documentDescription>Test</doc:documentDescription>
@@ -144,6 +127,88 @@ class DocumentServiceTests {
 			  <test:testString>testValue</test:testString>  
 			</test:Test>
 			"""
+		
+		xmlDocument="""<?xml version="1.0" encoding="UTF-8"?>	
+<DDSDemo xmlns:m="http://www.workflow4people.org/schemas/model"
+xmlns:doc="http://www.workflow4people.org/schemas/documents"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.workflow4people.org/schemas/model" xsi:schemaLocation="http://www.workflow4people.org/schemas/model ddsdemo.xsd">
+		
+
+	<doc:header>
+	<doc:documentId>1</doc:documentId>
+ 	<doc:documentType>ddsdemo</doc:documentType>
+	<doc:documentStatus>In behandeling</doc:documentStatus>
+	<doc:documentKey></doc:documentKey>
+	<doc:documentDescription></doc:documentDescription>
+	<doc:workflowName>ddsdemo</doc:workflowName>
+	<doc:taskId></doc:taskId>
+	<doc:taskOutcome></doc:taskOutcome>
+	<doc:processInstanceId></doc:processInstanceId>
+	<doc:dateCreated>2010-01-01T00:00:00</doc:dateCreated>
+	<doc:lastUpdated>2010-01-01T00:00:00</doc:lastUpdated>
+	<doc:completionDate>2010-01-01T00:00:00</doc:completionDate>
+	<doc:processingDays>0</doc:processingDays>
+	  <doc:user>
+			      <doc:name>test</doc:name>
+			      <doc:displayName>Test User</doc:displayName>
+			      <doc:email>test@open-t.nl</doc:email>
+			    </doc:user>
+	<doc:onbehalfof></doc:onbehalfof>
+	<doc:group></doc:group>
+	<doc:comments></doc:comments>
+	<doc:forms></doc:forms>
+	<doc:files></doc:files>
+	<doc:cmis>
+		<doc:folderObjectId></doc:folderObjectId>
+		<doc:folderUrl></doc:folderUrl>
+		<doc:path></doc:path>
+	</doc:cmis>
+	<doc:task>
+		<doc:id></doc:id>
+		<doc:name></doc:name>
+		<doc:description></doc:description>
+		<doc:outcome></doc:outcome>
+		<doc:dueDate></doc:dueDate>
+		<doc:priority></doc:priority>
+		<doc:assignee></doc:assignee>
+		<doc:status></doc:status>
+		<doc:statusUser></doc:statusUser>
+	</doc:task>
+	<doc:remote>
+		<doc:originator>tipp</doc:originator>
+		<doc:recipients><doc:id>azm</doc:id><doc:id>tipp</doc:id></doc:recipients>
+		<doc:cancelRecipients></doc:cancelRecipients>
+		<doc:master>tipp</doc:master>
+		<doc:masterDocumentId>tipp_1</doc:masterDocumentId>	
+		<doc:remoteOutcome></doc:remoteOutcome>
+	</doc:remote>
+</doc:header>
+
+	<m:respons></m:respons>
+
+	<m:omschrijving></m:omschrijving>
+
+	<m:ziekenhuis></m:ziekenhuis>
+
+	<m:adres>
+		
+			<m:straatnaam></m:straatnaam>
+		
+			<m:huisnummer></m:huisnummer>
+		
+			<m:postcode>1234 AA</m:postcode>
+		
+			<m:plaatsnaam></m:plaatsnaam>
+		
+			<m:landnaam>Nederland</m:landnaam>
+		
+</m:adres>	
+									
+				
+		
+</DDSDemo>
+"""	
+		
 		//def documentType=DocumentType.get(1)
 		def dateCreated=Date.parse("yyyyMMddhhmmss","20120212215912")
 		def lastUpdated=Date.parse("yyyyMMddhhmmss","20130224194739")
@@ -169,7 +234,16 @@ class DocumentServiceTests {
 
    
 	@Test
-	void testCreateDocument() {		
+	void testCreateDocument() {
+		def wfpQueue=activeMQService.getQueue("wfpBroker","wfp.engine.jbpm4")
+		println "WFP queue size: ${wfpQueue.getQueueSize()}"
+
+		def eventTopic=activeMQService.getTopic("wfpBroker","wfp.event")
+		println "Event topic size: ${eventTopic.getQueueSize()}"
+	
+
+
+
 		def sxmlDocument=documentService.getDocument(1)
 		sxmlDocument.header.documentId=""
 		//documentService.setDocument(sxmlDocument)
@@ -179,9 +253,34 @@ class DocumentServiceTests {
 			println "document ${doc.id}"
 		}
 		log.debug "Taking a nap ..."
-		Thread.sleep(1000)
-		// check org.apache.activemq:BrokerName=ddsBroker,Type=Queue,Destination=wfp.engine.jbpm4
-		
+		Thread.sleep(6000)
 		log.debug "Bye!"
+
+
+		println "Event topic size: ${eventTopic.getQueueSize()}"
+		println "Event enqueue count: ${eventTopic.getEnqueueCount()}"
+		println "Event dequeue count: ${eventTopic.getDequeueCount()}"
+
+		def ddsQueue=activeMQService.getQueue("ddsBroker","wfp.remote.tx")
+		println "DDS queue size: ${ddsQueue.getQueueSize()}"
+		println "DDS enqueue count: ${ddsQueue.getEnqueueCount()}"
+		println "DDS dequeue count: ${ddsQueue.getDequeueCount()}"
+
+
+		println "WFP queue size: ${wfpQueue.getQueueSize()}"
+		println "WFP enqueue count: ${wfpQueue.getEnqueueCount()}"
+		println "WFP dequeue count: ${wfpQueue.getDequeueCount()}"
+		
+		
+		
+//		println ddsQueue.browseMessages()
+
+
+		println "Messages in DDS queue:"
+		def compositeData = ddsQueue.browse()
+		println "Size:${compositeData.size()}"
+		compositeData.each { println it }
+	
+		
 	}
 }

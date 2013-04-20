@@ -37,7 +37,6 @@ import grails.plugin.jms.Queue
 class Jbpm4Service implements InitializingBean {
 	
 	def documentService
-	def solrService
 	
 	def processEngine
 	TaskService taskService
@@ -213,8 +212,7 @@ class Jbpm4Service implements InitializingBean {
 			def task=Task.findByExternalId(msg.id)
 			if(task) {
 				task.delete(failOnError:true,flush:true)
-				// TODO maybe arrange this through a message queue so Solr and wfp are decoupled
-				solrService.deleteItem(Task,msg.id)			
+				// The afterDelete event handler removes the task from Solr
 				log.debug "TASK ${task.id} DELETED (exernal id was ${msg.id}"
 			}
 		}

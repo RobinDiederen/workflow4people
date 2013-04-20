@@ -258,3 +258,16 @@ grails.plugins.twitterbootstrap.fixtaglib = true
 wfp {
 	apikey="CHANGETHIS"
 }
+jms {
+	templates {
+		dds {
+			meta {
+				parentBean = 'standardJmsTemplate'
+			}
+			connectionFactoryBean = "ddsConnectionFactory" // use different connection factory defined in resources.groovy
+		}
+	}
+}
+
+
+
