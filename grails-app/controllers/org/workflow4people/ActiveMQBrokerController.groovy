@@ -12,8 +12,9 @@ import javax.jms.*
 
 import grails.converters.JSON
 import org.workflow4people.activemq.command.*
+import grails.plugins.springsecurity.Secured
 
-
+@Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_USER_ADMIN'])
 class ActiveMQBrokerController {
 	
 	def activeMQService

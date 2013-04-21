@@ -1,7 +1,7 @@
 <%@page import="org.workflow4people.activemq.command.ActiveMQQueueCommand"%>
 <%@page import="org.workflow4people.activemq.command.ActiveMQTopicCommand"%>
 
-<dialog:form title="ActiveMQ brokerCommand" object="${brokerCommand}" height="740px" width="950px">
+<dialog:form title="ActiveMQ Broker" object="${brokerCommand}" height="740px" width="950px">
 	<dialog:tabs names="Details,Queues,Topics" object="${brokerCommand}">		
 		<dialog:tab name="Details" object="${brokerCommand}">		                            	                                   
 	        <dialog:textField object="${brokerCommand}" propertyName="brokerName" mode="show" />

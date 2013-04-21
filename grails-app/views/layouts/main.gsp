@@ -90,6 +90,7 @@
 									<dialog:menuitem controller="action" action="list" icon="icon-list"/>
 									<dialog:menuitem controller="feature" action="list" icon="icon-star"/>
 									<dialog:menuitem controller="workflowEngine" action="list" icon="icon-cog"/>
+									<dialog:menuitem controller="activeMQBroker" action="list" icon="icon-random"/>
 									<dialog:menuitem controller="applicationConfiguration" action="list" icon="icon-wrench"/>
 									<dialog:menuitem controller="status" action="status" icon="icon-info-sign"/>
 								</dialog:dropdown>							
