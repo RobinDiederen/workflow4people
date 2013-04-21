@@ -6,6 +6,7 @@ class ListConfig {
 	Boolean bFilter=false
 	def toolbar=false
 	def rowreordering=false
+	def idName="id"
 	List<ListConfigColumn> columns=new ArrayList()
 	
 	
@@ -35,7 +36,8 @@ class ListConfig {
 			}
 			def detailTableId="detailTable_${this.name}"
 			def propName="activitiProcessController"
-			def actions="""<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog('${item.id}','${this.controller}',{ refresh : '${detailTableId}'}, null)">edit</span><span class="btn btn-small" onclick="dialog.deleteDialog('${item.id}','${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span></div>"""
+			def itemId=item."${idName}"
+			def actions="""<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog('${itemId}','${this.controller}',{ refresh : '${detailTableId}'}, null)">edit</span><span class="btn btn-small" onclick="dialog.deleteDialog('${itemId}','${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span></div>"""
 			row.put(col,actions)
 			aaData+=row
 		}

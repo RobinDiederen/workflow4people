@@ -7,16 +7,75 @@ import javax.management.remote.*
 import org.apache.activemq.broker.jmx.*
 import javax.management.*
 import org.apache.activemq.broker.jmx.*
+import org.apache.activemq.broker.jmx.BrokerView
 import javax.management.*
 import javax.jms.*
 
 import grails.converters.JSON
+import org.workflow4people.activemq.command.*
+
 
 class ActiveMQController {
 	
 	def activeMQService
+	def jmsService
 
     def index = { }
+	
+	def list() {
+		[ request:request, listConfig:ActiveMQBrokerCommand.listConfig]
+	}
+
+	def jsonlist() {
+	
+		def brokers=activeMQService.brokers
+		def totalRecords=brokers.size()
+		
+		// convert to list
+		def datalist=brokers.collect { broker ->
+			def queues=broker.queues.collect { it.getKeyProperty('Destination') }.join('<br>')
+			def topics=broker.topics.collect { it.getKeyProperty('Destination') }.join('<br>')
+			new ActiveMQBrokerCommand(brokerName:broker.brokerName,queues:queues,topics:topics,totalEnqueueCount:broker.totalEnqueueCount,totalDequeueCount:broker.totalDequeueCount)
+		}
+		
+		switch(params.iSortCol_0) {
+			case '0':
+				//datalist=datalist.orderByProcessInstanceId()
+			break
+						
+			case '1':
+				datalist=datalist.sort { it.brokerName}
+			break
+			
+		}
+				
+		switch (params.sSortDir_0) {
+			case 'asc':
+				//datalist=datalist
+			break
+			case 'desc':
+				datalist=datalist.reverse()
+			break
+		}
+		
+		Integer firstResult=params.iDisplayStart?new Integer(params.iDisplayStart):0
+		Integer maxResults=params.iDisplayLength?new Integer(params.iDisplayLength):10
+		
+		// pagination
+		if (firstResult>totalRecords) { firstResult=totalRecords }
+		if ((firstResult+maxResults)>totalRecords) {maxResults=totalRecords-firstResult}
+		datalist=datalist[firstResult..maxResults-1]
+		
+		render ActiveMQBrokerCommand.listConfig.renderList(datalist,totalRecords,params) as JSON
+				
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	def test = {
 		JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi");
@@ -25,6 +84,22 @@ class ActiveMQController {
 		MBeanServerConnection connection =connector.getMBeanServerConnection();
 		println connection.properties
 		//println connection.properties
+		
+		
+		
+		println "Brokers:"
+		ObjectName brokerQueryName = new ObjectName("org.apache.activemq:BrokerName=*,Type=Broker");
+		connection.queryMBeans(brokerQueryName, null).each {  broker ->
+			BrokerViewMBean mbean =(BrokerViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, broker.name, BrokerViewMBean.class, true);
+			
+			println broker.name
+			println broker.class.name
+			println mbean.properties			
+		}
+		println "============================"
+		
+		
+		
 		ObjectName name = new ObjectName("org.apache.activemq:BrokerName=wfpBroker,Type=Broker");
 		
 		println "Topics:"
@@ -75,7 +150,8 @@ class ActiveMQController {
 	}
 	
 	def test2 = {
-		activeMQService.init()
+
+		//activeMQService.init()
 		def ddsQueue=activeMQService.getQueue("ddsBroker","wfp.engine.jbpm4")
 		println "DDS queue size: ${ddsQueue.getQueueSize()}"
 		println ddsQueue.browse()
@@ -83,6 +159,22 @@ class ActiveMQController {
 		render res as JSON
 	}
 	
+	def test3 = {
+		//activeMQService.init()
+		def brokers=activeMQService.brokers
+		activeMQService.brokers.each { broker ->
+			println broker.properties
+		}
+		
+		def res=[brokers:brokers]
+		render res as JSON
+	}
+	
+	def create = {
+		jmsService.send("testqueue",[messageType:"test",id:"lalala",name:"aap"])
+		def res=[message:"Message sent to testqueue"]
+		render res as JSON
+	}
 	
 	
 }
