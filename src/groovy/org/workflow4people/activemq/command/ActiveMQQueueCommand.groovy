@@ -19,7 +19,7 @@ class ActiveMQQueueCommand extends Command {
 	int queueSize
 	
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQQueue',controller: 'activeMQQueue').configure {
+	static listConfig=new org.workflow4people.ListConfig(name:'activeMQQueue',controller: 'activeMQQueue',actions:['dialog':'show']).configure {
 		column name:'name',sortable:true
 		
 		column name:'enqueueCount',sortable:false

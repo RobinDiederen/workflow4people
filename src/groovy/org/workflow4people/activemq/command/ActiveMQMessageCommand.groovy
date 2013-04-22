@@ -20,7 +20,7 @@ class ActiveMQMessageCommand extends Command {
 	String JMSDestination
 	String contentMap
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQMessage',controller: 'activeMQMessage').configure {
+	static listConfig=new org.workflow4people.ListConfig(name:'activeMQMessage',controller: 'activeMQMessage',actions:['dialog':'show']).configure {
 		column name:'JMSMessageID',sortable:true				
 	}
 }

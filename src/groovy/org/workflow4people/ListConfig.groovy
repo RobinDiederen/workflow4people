@@ -9,7 +9,6 @@ class ListConfig {
 	def idName="id"
 	List<ListConfigColumn> columns=new ArrayList()
 	
-	
 	def configure (Closure closure) {
 		closure.setDelegate(this)
 		closure.setResolveStrategy(Closure.DELEGATE_FIRST)
@@ -21,8 +20,30 @@ class ListConfig {
 		String name
 		Boolean sortable
 	}
+	
 	def column (params){
 		columns.add (new ListConfigColumn(params))
+	}
+	
+	def actions=['dialog':'edit','delete':'&times;']
+	
+	
+	def renderActions = { props ->  
+		def s="""<div class="btn-group">"""
+		actions.each { action,label ->
+			switch(action) {
+				case "delete":
+					s+="""<span class="btn btn-small" onclick="dialog.deleteDialog('${props.itemId}','${props.propName}',{ refresh : '${props.detailTableId}'}, null)">${label}</span>"""
+				break
+				
+				default:					
+					s+="""<span class="btn btn-small" onclick="dialog.formDialog('${props.itemId}','${this.controller}',{ dialogname:'${action}',refresh : '${props.detailTableId}'}, null)">${label}</span>"""
+			}
+			
+		
+		}
+		s+="""</div>"""
+		return s
 	}
 	
 	def renderList(datalist,totalRecords,params) {
@@ -34,11 +55,18 @@ class ListConfig {
 				row.put(col,item."${column.name}")
 				col++
 			}
-			def detailTableId="detailTable_${this.name}"
-			def propName="activitiProcessController"
-			def itemId=item."${idName}"
-			def actions="""<div class="btn-group"><span class="btn btn-small" onclick="dialog.formDialog('${itemId}','${this.controller}',{ refresh : '${detailTableId}'}, null)">edit</span><span class="btn btn-small" onclick="dialog.deleteDialog('${itemId}','${propName}',{ refresh : '${detailTableId}'}, null)">&times;</span></div>"""
-			row.put(col,actions)
+			//def detailTableId="detailTable_${this.name}"
+			//def propName="activitiProcessController"
+			//def itemId=item."${idName}"
+			def props=[detailTableId:"detailTable_${this.name}",propName:controller,itemId:item."${idName}"]
+			//renderActions.detailTableId=detailTableId
+			//renderActions.propName=propName
+			//renderActions.itemId=itemId
+			
+			def actionsString=renderActions(props)
+			
+							
+			row.put(col,actionsString)
 			aaData+=row
 		}
 		

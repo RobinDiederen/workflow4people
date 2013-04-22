@@ -12,7 +12,7 @@
 	        	                
 		</dialog:tab>
 		<dialog:tab name="Messages" object="${queueCommand}">
-			<dialog:detailTable property="test" object="${queueCommand}" controllerName="activeMQMessage" domainClass="${ActiveMQMessageCommand}" rowreordering="false"/>																		
+			<dialog:detailTable newButton="false" property="test" object="${queueCommand}" controllerName="activeMQMessage" domainClass="${ActiveMQMessageCommand}" rowreordering="false"/>																		
 		</dialog:tab>		
 	</dialog:tabs>
 </dialog:form>

@@ -19,7 +19,7 @@ class ActiveMQTopicCommand extends Command {
 	int queueSize
 	
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQTopic',controller: 'activeMQTopic').configure {
+	static listConfig=new org.workflow4people.ListConfig(name:'activeMQTopic',controller: 'activeMQTopic',actions:['dialog':'show']).configure {
 		column name:'name',sortable:true
 		
 		column name:'enqueueCount',sortable:false

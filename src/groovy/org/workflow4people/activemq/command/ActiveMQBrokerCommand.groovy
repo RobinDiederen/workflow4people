@@ -25,7 +25,7 @@ class ActiveMQBrokerCommand extends Command {
 		return brokerName
 	}
 
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName').configure {
+	static listConfig=new org.workflow4people.ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName',actions:['dialog':'show']).configure {
 		column name:'brokerName',sortable:true
 		column name:'queues',sortable:false
 		column name:'topics',sortable:false
