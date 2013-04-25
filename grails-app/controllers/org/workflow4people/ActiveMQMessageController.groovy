@@ -28,10 +28,14 @@ class ActiveMQMessageController {
 	}
 
 	def jsonlist() {
-		def (brokerName,queueName)=params.objectId.split("_")
-		def queue=activeMQService.getQueue(brokerName,queueName)
+		def (brokerName,queueType,queueName)=params.objectId.split("____")
+		def queue
+		if (queueType=="Queue") {
+			queue=activeMQService.getQueue(brokerName,queueName)
+		} else {
+			queue=activeMQService.getTopic(brokerName,queueName)
+		}
 		def messages=queue.browse()
-		
 		
 		def totalRecords=messages.size()
 		def datalist=[]
@@ -85,7 +89,7 @@ class ActiveMQMessageController {
 	}	
 	
 	def dialog() {		
-		def (brokerName,queueName,messageId)=params.id.split("_")
+		def (brokerName,queueName,messageId)=params.id.split("____")
 		def queue=activeMQService.getQueue(brokerName,queueName)
 		def message=queue.getMessage(messageId)
 		def props = message.compositeType.keySet().collectEntries { key -> ["${key}": message."${key}"] }

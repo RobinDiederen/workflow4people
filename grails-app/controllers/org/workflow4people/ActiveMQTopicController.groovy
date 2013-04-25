@@ -76,7 +76,7 @@ class ActiveMQTopicController {
 	}	
 	
 	def dialog() {		
-		def (brokerName,topicName)=params.id.split("_")
+		def (brokerName,queueType,topicName)=params.id.split("____")
 		def queue=activeMQService.getTopic(brokerName,topicName)
 		println "BROWSE: ${queue.browse()}"
 		def topicCommand=new ActiveMQTopicCommand(brokerName:brokerName)

@@ -4,7 +4,7 @@ import org.open_t.dialog.command.Command
 
 class ActiveMQTopicCommand extends Command {
 		def getId() {
-		return "${brokerName}_${name}"
+		return "${brokerName}____Topic____${name}"
 	}
 	String brokerName
 	String name

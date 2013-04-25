@@ -4,7 +4,7 @@ import org.open_t.dialog.command.Command
 
 class ActiveMQQueueCommand extends Command {
 	def getId() {
-		return "${brokerName}_${name}"
+		return "${brokerName}____Queue____${name}"
 	}
 	String brokerName
 	String name

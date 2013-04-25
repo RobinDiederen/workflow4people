@@ -3,6 +3,7 @@ package org.workflow4people.services
 import javax.management.remote.JMXConnectorFactory
 import javax.management.remote.JMXServiceURL
 import javax.management.remote.*
+import java.lang.management.*
 
 
 import org.apache.activemq.broker.jmx.*
@@ -20,7 +21,24 @@ class ActiveMQService implements InitializingBean {
 	
 
     void afterPropertiesSet() {
-		JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi");
+		def pid = ManagementFactory.getRuntimeMXBean().getName().replaceAll("@.*","")
+		println "The PID is ${pid}"
+		com.sun.tools.attach.VirtualMachine vm = com.sun.tools.attach.VirtualMachine.attach(pid);
+		String javaHome = vm.getSystemProperties().getProperty("java.home");
+		String agentJar = javaHome + File.separator +  "lib" + File.separator + "management-agent.jar";
+		vm.loadAgent(agentJar, "com.sun.management.jmxremote");
+		String localConnectorAddress = vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
+		if (localConnectorAddress == null) {
+			// Check system properties
+			localConnectorAddress = vm.getSystemProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
+		}
+		vm.detach();
+		System.out.println("Local connector address = " + localConnectorAddress);
+		
+		
+		
+		//JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi");
+		JMXServiceURL url = new JMXServiceURL(localConnectorAddress);
 		JMXConnector connector = JMXConnectorFactory.connect(url, null);
 		connector.connect();
 		connection =connector.getMBeanServerConnection();
@@ -47,6 +65,7 @@ class ActiveMQService implements InitializingBean {
 	}
 	
 	def getQueues(brokerName){
+		println "BROKERNAME:${brokerName}"
 		ObjectName queryName = new ObjectName("org.apache.activemq:BrokerName=${brokerName},Type=Queue,*");		
 		connection.queryMBeans(queryName, null).collect {
 			QueueViewMBean queue=(QueueViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, it.name, QueueViewMBean.class,true);
@@ -62,7 +81,6 @@ class ActiveMQService implements InitializingBean {
 	}
 
 	def getTopic(brokerName,topicName) {
-
 		def objectName=new ObjectName("org.apache.activemq:BrokerName=${brokerName},Type=Topic,Destination=${topicName}");
 		TopicViewMBean queue=(TopicViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, objectName, TopicViewMBean.class,true);
 	}

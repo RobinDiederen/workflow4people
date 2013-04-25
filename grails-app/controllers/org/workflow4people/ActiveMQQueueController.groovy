@@ -77,7 +77,7 @@ class ActiveMQQueueController {
 	}	
 	
 	def dialog() {
-		def (brokerName,queueName)=params.id.split("_")
+		def (brokerName,queueType,queueName)=params.id.split("____")
 		def queue=activeMQService.getQueue(brokerName,queueName)
 		//println "BROWSE: ${queue.browse()}"
 		println "BROWSE*:"
