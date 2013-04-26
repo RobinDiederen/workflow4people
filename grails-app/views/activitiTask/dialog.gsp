@@ -1,12 +1,20 @@
-<%@page import="org.workflow4people.activiti.command.ProcessVariableCommand"%>
-<dialog:form title="Activiti Process instance" object="${processInstance}" height="500px">
-	<dialog:tabs names="Details,Variables" object="${processInstance}">		
-		<dialog:tab name="Details" object="${processInstance}">		                            
-	        <dialog:textField object="${processInstance}" propertyName="id" mode="show" />                            
-	        <dialog:textField object="${processInstance}" propertyName="processDefinitionId" mode="show" />							        
+<%@page import="org.workflow4people.activiti.command.VariableCommand"%>
+<dialog:form title="Activiti Task" object="${taskCommand}" height="520px">
+	<dialog:tabs names="Details,Variables,Dates" object="${taskCommand}">		
+		<dialog:tab name="Details" object="${taskCommand}">		                            
+	        <dialog:textField object="${taskCommand}" propertyName="id" mode="show" />                            
+	        <dialog:textField object="${taskCommand}" propertyName="name" mode="edit" />
+			<dialog:textArea object="${taskCommand}" propertyName="description" mode="edit" />
+			<dialog:textField object="${taskCommand}" propertyName="assignee" mode="edit" />
+			<dialog:textField object="${taskCommand}" propertyName="priority" mode="edit" />
 		</dialog:tab>
-		<dialog:tab name="Variables" object="${processInstance}">
-			<dialog:detailTable property="processInstance" object="${processInstance}" listConfig="${variableListConfig}" controllerName="activitiProcessVariable" domainClass="${ProcessVariableCommand}" rowreordering="false"/>								
+		<dialog:tab name="Variables" object="${taskCommand}">
+			<dialog:detailTable property="taskCommand" object="${taskCommand}" xlistConfig="${variableListConfig}" controllerName="activitiVariable" domainClass="${VariableCommand}" rowreordering="false"/>
 		</dialog:tab>		
+
+		<dialog:tab name="Dates" object="${taskCommand}">		                            
+			<dialog:date object="${taskCommand}" propertyName="createTime" mode="show" />
+			<dialog:date object="${taskCommand}" propertyName="dueDate" mode="edit" />
+		</dialog:tab>
 	</dialog:tabs>
 </dialog:form>

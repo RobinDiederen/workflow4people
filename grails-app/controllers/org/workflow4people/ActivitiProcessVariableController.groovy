@@ -126,7 +126,7 @@ class ActivitiProcessVariableController {
 		
 		
 		def value=activitiRuntimeService.setVariable(processVariable.id, processVariable.name,processVariable.value)
-		def resultMessage="${processVariable.name} set to ${provessVariable.value}"
+		def resultMessage="${processVariable.name} set to ${processVariable.value}"
 		
 		def result = [
 			success:successFlag,

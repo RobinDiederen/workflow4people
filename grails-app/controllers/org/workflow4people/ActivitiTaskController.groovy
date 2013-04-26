@@ -24,21 +24,8 @@ class ActivitiTaskController {
 		redirect (action:list)
 	}
 	
-	def listConfig=new ListConfig(name:'activitiTask',controller: 'activitiTask').configure {
-		column name:'id',sortable:true		
-		column name:'processDefinitionId',sortable:true	
-		column name:'taskDefinitionKey',sortable:true
-		column name:'name',sortable:false
-		column name:'description',sortable:false
-		column name:'priority',sortable:false
-		column name:'assignee',sortable:false
-		column name:'createTime',sortable:false		
-		column name:'dueDate',sortable:false
-		
-	}
-	
 	def list() {		
-		[ request:request, listConfig:this.listConfig]
+		[ request:request, listConfig:TaskCommand.listConfig]
 	}
 
 	def jsonlist() {				
@@ -46,10 +33,12 @@ class ActivitiTaskController {
 		
 		switch(params.iSortCol_0) {
 			case '0':
+				println "AAAA"
 				datalist=datalist.orderByTaskId()
 			break
 						
 			case '1':
+				println "BBBB"
 				datalist=datalist.orderByProcessInstanceId()
 			break
 			
@@ -70,32 +59,41 @@ class ActivitiTaskController {
 		datalist=datalist.listPage(firstResult,maxResults)
 		
 		def totalRecords=activitiTaskService.createTaskQuery().count()
-		render listConfig.renderList(datalist,totalRecords,params) as JSON
-				
+
+		datalist=datalist.collect { it ->
+			def task = new TaskCommand(taskId:it.id) 
+			task.getFrom(it)
+			task
+		}
+		render TaskCommand.listConfig.renderList(datalist,totalRecords,params) as JSON
 	}
 	
 	def dialog() {
-		def pd=activitiRepositoryService.getProcessDefinition(params.id)
-		def processDefinition=new ProcessDefinitionCommand(id:params.id,name:pd.name,description:pd.description,key:pd.key,version:pd.version)
-		// The construct below excludes key and id ... 
-		//def processDefinition=new ProcessDefinitionCommand()
-		//processDefinition.getFrom(pd)
-		
-		[processDefinition:processDefinition]
+		def id=params.id.split("_")[1]
+		def task=activitiTaskService.createTaskQuery().taskId(id).singleResult()		
+		def taskCommand=new TaskCommand(taskId:id)
+		taskCommand.getFrom(task)
+		[taskCommand:taskCommand]
 	}
 	
-	def submitdialog = { ProcessDefinitionCommand processDefinition ->
-		//ProcessDefinition pd=activitiRepositoryService.getProcessDefinition(processDefinition.id)
-		
-		
+	def submitdialog = { TaskCommand taskCommand ->
+		def successFlag=false
+		def resultMessage="Error occurred while saving task"
+		try {
+			def activitiTask=activitiTaskService.newTask()
+			taskCommand.storeTo(activitiTask)
+			activitiTaskService.saveTask(activitiTask)
+			successFlag=true
+			resultMessage="Saved task ${activitiTask}"
+		} catch (Exception e) {
+			
+		}
 		def result = [
 			success:successFlag,
 			message:resultMessage,
-			id: domainClassInstance.id,
-			//name: domainClassInstance.toString(),
-			//errorFields:theErrorFields
+			id: activitiTask.id
 		]
-		res=[result:result]
+		def res=[result:result]
 		render res as JSON
 	}
 	

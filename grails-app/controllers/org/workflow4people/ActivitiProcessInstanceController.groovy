@@ -34,7 +34,8 @@ class ActivitiProcessInstanceController {
 
 	def jsonlist() {				
 		def datalist=activitiRuntimeService.createProcessInstanceQuery().active()
-		
+
+	
 		switch(params.iSortCol_0) {
 			case '0':
 				datalist=datalist.orderByProcessInstanceId()
@@ -59,9 +60,14 @@ class ActivitiProcessInstanceController {
 		Integer maxResults=params.iDisplayLength?new Integer(params.iDisplayLength):10
 		
 		datalist=datalist.listPage(firstResult,maxResults)
+
+		def dl =datalist.collect {
+			new ProcessInstanceCommand(processInstanceId:it.getProcessInstanceId())
+		} 
+	
 		
 		def totalRecords=activitiRuntimeService.createProcessInstanceQuery().active().count()
-		render listConfig.renderList(datalist,totalRecords,params) as JSON
+		render listConfig.renderList(dl,totalRecords,params) as JSON
 				
 	}
 	/*
@@ -73,8 +79,9 @@ class ActivitiProcessInstanceController {
 	*/
 	
 	def dialog() {
-		def pi=activitiRuntimeService.createProcessInstanceQuery().processInstanceId(params.id).singleResult()
-		def processInstance=new ProcessInstanceCommand(id:params.id,processDefinitionId:pi.processDefinitionId)
+		def id=params.id.split("_")[1]
+		def pi=activitiRuntimeService.createProcessInstanceQuery().processInstanceId(id).singleResult()
+		def processInstance=new ProcessInstanceCommand(processInstanceId:id,processDefinitionId:pi.processDefinitionId)
 		// The construct below excludes key and id ... 
 		//def processDefinition=new ProcessDefinitionCommand()
 		//processDefinition.getFrom(pd)
