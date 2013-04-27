@@ -24,16 +24,9 @@ class ActivitiProcessDefinitionController {
 		redirect (action:list)
 	}
 	
-	def listConfig=new ListConfig(name:'activitiProcessDefinition',controller: 'activitiProcessDefinition').configure {
-		column name:'id',sortable:true		
-		column name:'key',sortable:true
-		column name:'version',sortable:true
-		column name:'name',sortable:true
-		column name:'description'
-	}
 	
 	def list() {		
-		[ request:request, listConfig:this.listConfig]
+		[ request:request, listConfig:ProcessDefinitionCommand.listConfig]
 	}
 
 	def jsonlist() {				
@@ -71,53 +64,77 @@ class ActivitiProcessDefinitionController {
 		
 		datalist=datalist.listPage(firstResult,maxResults)
 		
-		def totalRecords=activitiRepositoryService.createProcessDefinitionQuery().active().count()
-		render listConfig.renderList(datalist,totalRecords,params) as JSON
+		def totalRecords=activitiRepositoryService.createProcessDefinitionQuery().active().latestVersion().count()
+		render ProcessDefinitionCommand.listConfig.renderList(datalist,totalRecords,params) as JSON
 				
 	}
 	
 	def dialog() {
 		def pd=activitiRepositoryService.getProcessDefinition(params.id)
-		def processDefinition=new ProcessDefinitionCommand(id:params.id,name:pd.name,description:pd.description,key:pd.key,version:pd.version)
-		// The construct below excludes key and id ... 
-		//def processDefinition=new ProcessDefinitionCommand()
-		//processDefinition.getFrom(pd)
-		
-		[processDefinition:processDefinition]
+		[processDefinitionCommand:new ProcessDefinitionCommand().getAllFrom(pd)]
+	}
+	
+	def diagram() {
+		def pd=activitiRepositoryService.getProcessDefinition(params.id)
+		def contentStream=activitiRepositoryService.getResourceAsStream(pd.deploymentId,pd.diagramResourceName)
+
+		response.setHeader("Content-disposition", "attachment; filename=\"" +pd.diagramResourceName+"\"")
+		response.setHeader("Content-Type", "image/png")
+
+		def inputStream=contentStream
+		def bufsize=100000
+		byte[] bytes=new byte[(int)bufsize]
+
+		def offset=0
+		def len=1
+		while (len>0) {
+			len=inputStream.read(bytes, 0, bufsize)
+			if (len>0)
+			response.outputStream.write(bytes,0,len)
+			offset+=bufsize
+		}
+		response.outputStream.flush()
 	}
 	
 	def submitdialog = { ProcessDefinitionCommand processDefinition ->
-		//ProcessDefinition pd=activitiRepositoryService.getProcessDefinition(processDefinition.id)
-		
-		
 		def result = [
-			success:successFlag,
-			message:resultMessage,
-			id: domainClassInstance.id,
-			//name: domainClassInstance.toString(),
-			//errorFields:theErrorFields
+			success:true,
+			message:"",
+			id: processDefinition.id
 		]
 		res=[result:result]
 		render res as JSON
 	}
 	
 	
-	def testdeploy(){ 
-		def processDefinitionText=new File('/home/joost/workspaces/grails-workspace/wfp/process-definitions/StoringMelding.bpmn').text
-		println processDefinitionText
-		def id = activitiRepositoryService.createDeployment().name("test").addString("process.bpmn20.xml", processDefinitionText).deploy().getId();
-		def json=[id:id]
-		render json as JSON
-	}
 	def upload() {
 		def res=fileService.uploadFile(request,params)
-		println "UPLOAD ${res}"
 		
 		def processDefinitionText=new File(res.path).text
 
 		def id = activitiRepositoryService.createDeployment().name("upload").addString("process.bpmn20.xml", processDefinitionText).deploy().getId();
 		
-		
+		render res as JSON
+	}
+	
+	def delete = {		
+		def success
+		def message
+		try {
+			def pd=activitiRepositoryService.getProcessDefinition(params.id)			
+			activitiRepositoryService.deleteDeployment(pd.deploymentId)
+			success=true
+			message="Process definition ${params.id} deleted"
+		} catch (Exception e) {
+			success=false
+			message=e.message
+		}
+		def result = [
+			success:success,
+			message:message,
+			id: params.id
+		]
+		def res=[result:result]
 		render res as JSON
 	}
 

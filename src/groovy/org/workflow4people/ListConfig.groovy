@@ -46,13 +46,45 @@ class ListConfig {
 		return s
 	}
 	
+	def paginateList(datalist,params) {
+		def totalRecords=datalist.size()
+		if (params.iSortCol_0 && params.iSortCol_0.length()>0) { 
+			def columnName=params.iSortCol_0
+			def name=this.columns[new Integer(columnName)].name
+			datalist=datalist.sort { it."${name}" }
+		}
+		if (params.sSortDir_0=='desc') {
+			datalist=datalist.reverse()
+		}
+		
+		Integer firstResult=params.iDisplayStart?new Integer(params.iDisplayStart):0
+		Integer maxResults=params.iDisplayLength?new Integer(params.iDisplayLength):10
+		
+		// pagination
+		if (firstResult>totalRecords) { firstResult=totalRecords }
+		if ((firstResult+maxResults)>totalRecords) {maxResults=totalRecords-firstResult}
+		datalist=datalist[firstResult..maxResults-1]
+		
+		renderList (datalist,totalRecords,params)
+	}
+	
+	
 	def renderList(datalist,totalRecords,params) {
 		def aaData=[]
 		datalist.each { item ->
 			def row=[:]
 			def col=0
 			this.columns.each { column ->
-				row.put(col,item."${column.name}")
+				//row.put(col,item."${column.name}")
+				def val=item."${column.name}"
+				
+				// Convert date to String -- if we don't do it here the JSON converter will do it AND correct it for locale 
+				if (val && val.class==java.util.Date) {
+					val=val.format("yyyy-MM-dd'T'HH:mm:ss")
+					val=val.replaceAll("T00:00:00","")
+				}
+				
+				row.put(col,val)
 				col++
 			}
 			//def detailTableId="detailTable_${this.name}"

@@ -22,20 +22,19 @@ class ActivitiProcessInstanceController {
     def index = { 	
 		redirect (action:list)
 	}
-	
+	/*
 	def listConfig=new ListConfig(name:'activitiProcessInstance',controller: 'activitiProcessInstance').configure {
 		column name:'id',sortable:true		
 		column name:'processDefinitionId',sortable:true		
 	}
-	
+	*/
 	def list() {		
-		[ request:request, listConfig:this.listConfig]
+		[ request:request, listConfig:ProcessInstanceCommand.listConfig]
 	}
 
 	def jsonlist() {				
 		def datalist=activitiRuntimeService.createProcessInstanceQuery().active()
 
-	
 		switch(params.iSortCol_0) {
 			case '0':
 				datalist=datalist.orderByProcessInstanceId()
@@ -62,47 +61,49 @@ class ActivitiProcessInstanceController {
 		datalist=datalist.listPage(firstResult,maxResults)
 
 		def dl =datalist.collect {
-			new ProcessInstanceCommand(processInstanceId:it.getProcessInstanceId())
+			new ProcessInstanceCommand().getAllFrom(it)
 		} 
-	
-		
+			
 		def totalRecords=activitiRuntimeService.createProcessInstanceQuery().active().count()
-		render listConfig.renderList(dl,totalRecords,params) as JSON
+		render ProcessInstanceCommand.listConfig.renderList(dl,totalRecords,params) as JSON
 				
 	}
-	/*
-	def variableListConfig=new ListConfig(name:'activitiProcessVariable',controller: 'activitiProcessVariable').configure {
-		column name:'id',sortable:true
-		column name:'name',sortable:true
-		column name:'value',sortable:true
-	}
-	*/
 	
 	def dialog() {
 		def id=params.id.split("_")[1]
 		def pi=activitiRuntimeService.createProcessInstanceQuery().processInstanceId(id).singleResult()
-		def processInstance=new ProcessInstanceCommand(processInstanceId:id,processDefinitionId:pi.processDefinitionId)
-		// The construct below excludes key and id ... 
-		//def processDefinition=new ProcessDefinitionCommand()
-		//processDefinition.getFrom(pd)
-		
-		[processInstance:processInstance]
+		[processInstanceCommand:new ProcessInstanceCommand().getAllFrom(pi)]
 	}
 	
-	def submitdialog = { ProcessDefinitionCommand processDefinition ->
-		//ProcessDefinition pd=activitiRepositoryService.getProcessDefinition(processDefinition.id)
-		
-		
+	def submitdialog = { ProcessInstanceCommand processInstanceCommand ->
 		def result = [
-			success:successFlag,
-			message:resultMessage,
-			id: domainClassInstance.id,
-			//name: domainClassInstance.toString(),
-			//errorFields:theErrorFields
+			success:true,
+			message:"",
+			id: processDefinitionCommand.id,
 		]
 		res=[result:result]
 		render res as JSON
 	}
 	
+	def delete = {
+		def id=params.id.split("_")[1]
+		def success
+		def message
+		try {
+			activitiRuntimeService.deleteProcessInstance(id, null)
+			success=true
+			message="Process instance ${id} deleted"
+		} catch (Exception e) {
+			success=false
+			message=e.message
+		}
+		def result = [
+			success:success,
+			message:message,
+			id: params.id
+		]
+		def res=[result:result]
+		render res as JSON
+	}
 
 }

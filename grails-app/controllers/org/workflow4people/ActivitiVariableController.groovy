@@ -45,14 +45,16 @@ class ActivitiVariableController {
 			break			
 		}			
 		
-		def totalRecords=dl.size()
+		
 		// convert to list
 		def datalist=dl.collect { 
 				def variableCommand = new VariableCommand(parentType:parentType,parentId:id,name:it.key)
 				variableCommand.getFrom(it)
 				return variableCommand
 			}
-		
+		render VariableCommand.listConfig.paginateList(datalist,params) as JSON
+		/*
+		def totalRecords=dl.size()
 		switch(params.iSortCol_0) {
 			case '0':
 				//datalist=datalist.orderByProcessInstanceId()
@@ -83,10 +85,10 @@ class ActivitiVariableController {
 		
 		
 		render VariableCommand.listConfig.renderList(datalist,totalRecords,params) as JSON
-				
+			*/	
 	}
 		
-	def dialog() {
+	def dialog() { 
 		def (parentType,id,name)=params.id.split('_')
 		def value
 		if (parentType=="Task") {
@@ -99,9 +101,14 @@ class ActivitiVariableController {
 	}
 	
 	def submitdialog = { VariableCommand variableCommand ->
-
+		variableCommand.id=params.id
 		def successFlag=true
+		def resultMessage
+		
 		def val
+		
+		try {
+		
 		switch (variableCommand.variableClassName) {
 			
 			case 'java.lang.Boolean':
@@ -139,7 +146,12 @@ class ActivitiVariableController {
 		} else {
 			activitiRuntimeService.setVariable(variableCommand.parentId, variableCommand.name,val)
 		}
-		def resultMessage="${variableCommand.name} set to ${variableCommand.value}"
+			resultMessage="${variableCommand.name} set to ${variableCommand.value}"
+		
+		} catch (Exception e) {
+			resultMessage=e.message
+			successFlag=false
+		}
 		
 		def result = [
 			success:successFlag,

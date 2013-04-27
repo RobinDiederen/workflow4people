@@ -14,6 +14,10 @@ class VariableCommand extends Command {
 		return "${parentType}_${parentId}_${name}"
 	}
 	
+	void setId(idValue) {
+		(parentType,parentId,name)=idValue.split('_')
+	}
+	
 	static listConfig=new org.workflow4people.ListConfig(name:'activitiVariable',controller: 'activitiVariable').configure {
 		column name:'id',sortable:true
 		column name:'name',sortable:true

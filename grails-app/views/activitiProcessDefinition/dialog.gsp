@@ -1,13 +1,15 @@
-<dialog:form title="Activiti Process definition" object="${processDefinition}" height="740px">
-	<dialog:tabs names="Details,Upload" object="${processDefinition}">		
-		<dialog:tab name="Details" object="${processDefinition}">		                            
-	        <dialog:textField object="${processDefinition}" propertyName="id" mode="show" />                            
-	        <dialog:textField object="${processDefinition}" propertyName="name" mode="edit" />			
-			<dialog:textField object="${processDefinition}" propertyName="key" mode="edit" />
-			<dialog:textField object="${processDefinition}" propertyName="version" mode="edit" />
-			<dialog:textArea object="${processDefinition}" propertyName="description" mode="edit" />	        
+<dialog:form title="Activiti Process definition" object="${processDefinitionCommand}" >
+	<dialog:tabs names="Details,Diagram" object="${processDefinitionCommand}">		
+		<dialog:tab name="Details" object="${processDefinitionCommand}">		                            
+	        <dialog:textField object="${processDefinitionCommand}" propertyName="id" mode="show" />                            
+	        <dialog:textField object="${processDefinitionCommand}" propertyName="name" mode="show" />			
+			<dialog:textField object="${processDefinitionCommand}" propertyName="key" mode="show" />
+			<dialog:textField object="${processDefinitionCommand}" propertyName="diagramResourceName" mode="show" />
+			<dialog:textField object="${processDefinitionCommand}" propertyName="version" mode="show" />
+			<dialog:textArea object="${processDefinitionCommand}" propertyName="description" mode="show" />	        
 		</dialog:tab>
-		<dialog:tab name="Upload" object="${processDefinition}">						
-		</dialog:tab>		
+		<dialog:tab name="Diagram" object="${processDefinitionCommand}">			
+			<img src="${createLink(action:'diagram',id:processDefinitionCommand.id)}" />			
+		</dialog:tab>
 	</dialog:tabs>
 </dialog:form>

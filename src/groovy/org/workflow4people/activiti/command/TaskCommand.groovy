@@ -3,7 +3,6 @@ package org.workflow4people.activiti.command
 import org.open_t.dialog.command.Command
 
 class TaskCommand extends Command {
-	//static listProperties=['name','description']
 	String name
 	String description	
 	String assignee
@@ -17,6 +16,10 @@ class TaskCommand extends Command {
 	
 	def getId() {
 		return "Task_${taskId}"
+	}
+	
+	void setId(idValue) {
+		taskId=idValue.split('_')[1]
 	}
 	
 	static listConfig=new org.workflow4people.ListConfig(name:'activitiTask',controller: 'activitiTask').configure {

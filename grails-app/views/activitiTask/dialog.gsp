@@ -1,5 +1,6 @@
 <%@page import="org.workflow4people.activiti.command.VariableCommand"%>
 <dialog:form title="Activiti Task" object="${taskCommand}" height="520px">
+	<g:hiddenField  value="${taskCommand.taskId}" name="taskId" />
 	<dialog:tabs names="Details,Variables,Dates" object="${taskCommand}">		
 		<dialog:tab name="Details" object="${taskCommand}">		                            
 	        <dialog:textField object="${taskCommand}" propertyName="id" mode="show" />                            
@@ -9,7 +10,7 @@
 			<dialog:textField object="${taskCommand}" propertyName="priority" mode="edit" />
 		</dialog:tab>
 		<dialog:tab name="Variables" object="${taskCommand}">
-			<dialog:detailTable property="taskCommand" object="${taskCommand}" xlistConfig="${variableListConfig}" controllerName="activitiVariable" domainClass="${VariableCommand}" rowreordering="false"/>
+			<dialog:detailTable newButton="false" property="taskCommand" object="${taskCommand}" xlistConfig="${variableListConfig}" controllerName="activitiVariable" domainClass="${VariableCommand}" rowreordering="false"/>
 		</dialog:tab>		
 
 		<dialog:tab name="Dates" object="${taskCommand}">		                            

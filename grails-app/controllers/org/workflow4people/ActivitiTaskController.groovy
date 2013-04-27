@@ -76,22 +76,56 @@ class ActivitiTaskController {
 		[taskCommand:taskCommand]
 	}
 	
-	def submitdialog = { TaskCommand taskCommand ->
+	def submitdialog = { 
+		TaskCommand taskCommand ->
+		//def taskCommand=new TaskCommand(params)
+		//taskCommand.properties = params
+		
 		def successFlag=false
-		def resultMessage="Error occurred while saving task"
-		try {
-			def activitiTask=activitiTaskService.newTask()
-			taskCommand.storeTo(activitiTask)
+		def resultMessage="Error occurred while saving task"		
+		def activitiTask
+		try {			
+			activitiTask=activitiTaskService.createTaskQuery().taskId(taskCommand.taskId).singleResult()		
+			activitiTask.description=taskCommand.description
+			activitiTask.assignee=taskCommand.assignee
+			activitiTask.priority=taskCommand.priority
+			println "Setting due date to ${taskCommand.dueDate}"
+			activitiTask.dueDate=taskCommand.dueDate
+			activitiTask.name=taskCommand.name
 			activitiTaskService.saveTask(activitiTask)
 			successFlag=true
 			resultMessage="Saved task ${activitiTask}"
 		} catch (Exception e) {
-			
+			resultMessage=e.message	
 		}
 		def result = [
 			success:successFlag,
 			message:resultMessage,
-			id: activitiTask.id
+			id: taskCommand.id
+		]
+		def res=[result:result]
+		render res as JSON
+	}
+	
+	def delete = {
+		def id=params.id.split("_")[1]
+		def success
+		def message
+		try {
+			activitiTaskService.deleteTask(id)
+			success=true
+			message="Task ${id} deleted"
+			
+		} catch (Exception e) {
+			success=false
+			message=e.message
+			
+		}
+	
+		def result = [
+			success:success,
+			message:message,
+			id: params.id
 		]
 		def res=[result:result]
 		render res as JSON

@@ -1,4 +1,5 @@
-import org.workflow4people.util.*;
+//import org.workflow4people.util.*;
+import org.open_t.dialog.*;
 import org.apache.activemq.*
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
@@ -10,6 +11,7 @@ import grails.util.Environment
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
 import org.workflow4people.activiti.WfpUserTaskParseHandler
+
 //import org.springframework.core.io.Resource
 //import org.grails.activiti.ActivitiConstants
 //import org.grails.activiti.serializable.SerializableVariableType
