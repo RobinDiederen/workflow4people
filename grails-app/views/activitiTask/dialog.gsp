@@ -10,7 +10,7 @@
 			<dialog:textField object="${taskCommand}" propertyName="priority" mode="edit" />
 		</dialog:tab>
 		<dialog:tab name="Variables" object="${taskCommand}">
-			<dialog:detailTable newButton="false" property="taskCommand" object="${taskCommand}" xlistConfig="${variableListConfig}" controllerName="activitiVariable" domainClass="${VariableCommand}" rowreordering="false"/>
+			<dialog:detailTable newButton="false" property="taskCommand" object="${taskCommand}" controllerName="activitiVariable" domainClass="${VariableCommand}" />
 		</dialog:tab>		
 
 		<dialog:tab name="Dates" object="${taskCommand}">		                            

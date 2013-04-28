@@ -10,7 +10,6 @@ class BootStrap {
      def init = { servletContext ->
       	
 		 //def ctx = org.codehaus.groovy.grails.web.context.ServletContextHolder.servletContext.getAttribute(org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes.APPLICATION_CONTEXT);
-		 println "Hi. I'm in the bootstrap."
 		 setupService.setup()
 		 
 		 // see http://jira.grails.org/browse/GRAILS-7093	
@@ -48,7 +47,6 @@ class BootStrap {
 				   }
 				 }
 				 
-				 //println "sharedVars ${sharedVars}"
 				 def template = new TransactionTemplate(ctx.getBean('transactionManager'))
 				 properties.entrySet().each {
 				   property ->

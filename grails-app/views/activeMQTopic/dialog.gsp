@@ -13,7 +13,7 @@
 	        	                
 		</dialog:tab>
 		<dialog:tab name="Messages" object="${topicCommand}">		
-			<dialog:detailTable newButton="false" property="test" object="${topicCommand}" controllerName="activeMQMessage" domainClass="${ActiveMQMessageCommand}" rowreordering="false"/>																		
+			<dialog:detailTable newButton="false" property="test" object="${topicCommand}" controllerName="activeMQMessage" domainClass="${ActiveMQMessageCommand}" />																		
 		</dialog:tab>		
 	</dialog:tabs>
 </dialog:form>

@@ -21,14 +21,11 @@ class ActiveMQBrokerController {
 
     def index = { }
 	
-	def list() {
-		[ request:request, listConfig:ActiveMQBrokerCommand.listConfig]
-	}
+	def list = { render (view:'/dialog/list', model:[listConfig:ActiveMQBrokerCommand.listConfig,request:request]) }
 
 	def jsonlist() {
 	
 		def brokers=activeMQService.brokers
-		def totalRecords=brokers.size()
 		
 		// convert to list
 		def datalist=brokers.collect { broker ->
@@ -37,44 +34,8 @@ class ActiveMQBrokerController {
 			def topics=broker.topics.collect { it.getKeyProperty('Destination') }.join('<br>')
 			new ActiveMQBrokerCommand(brokerName:broker.brokerName,queues:queues,topics:topics,totalEnqueueCount:broker.totalEnqueueCount,totalDequeueCount:broker.totalDequeueCount)
 		}
-		
-		switch(params.iSortCol_0) {
-			case '0':
-				//datalist=datalist.orderByProcessInstanceId()
-			break
-						
-			case '1':
-				datalist=datalist.sort { it.brokerName}
-			break
-			
-		}
-				
-		switch (params.sSortDir_0) {
-			case 'asc':
-				//datalist=datalist
-			break
-			case 'desc':
-				datalist=datalist.reverse()
-			break
-		}
-		
-		Integer firstResult=params.iDisplayStart?new Integer(params.iDisplayStart):0
-		Integer maxResults=params.iDisplayLength?new Integer(params.iDisplayLength):10
-		
-		// pagination
-		if (firstResult>totalRecords) { firstResult=totalRecords }
-		if ((firstResult+maxResults)>totalRecords) {maxResults=totalRecords-firstResult}
-		datalist=datalist[firstResult..maxResults-1]
-		
-		def actions= {  doc,env -> """<div class="btn-group">
-                                        <span class="btn btn-small" onclick="dialog.formDialog(${doc.brokerName},'workflowDefinition', { refresh : '${env.detailTableId}'}, null)"></span>
-                                        <a class="btn btn-small" href="${createLink(controller:'dataModelEditor',action:'workflow',id:doc.id)}">model &raquo;</a>
-                                        <span class="btn btn-small" onclick="dialog.deleteDialog(${doc.id},'workflowDefinition',{ refresh : '${env.detailTableId}'})">&times;</span>
-                                    </div>"""
-					}
 
-		
-		render ActiveMQBrokerCommand.listConfig.renderList(datalist,totalRecords,params) as JSON
+		render ActiveMQBrokerCommand.listConfig.paginateList(datalist,params) as JSON
 				
 	}	
 	
@@ -82,25 +43,19 @@ class ActiveMQBrokerController {
 		def broker=activeMQService.getBroker(params.id)
 		def brokerCommand=new ActiveMQBrokerCommand(brokerName:broker.brokerName)
 
-		//def brokerCommand=new ActiveMQBrokerCommand()
 		brokerCommand.getFrom(broker)
 		
 		[brokerCommand:brokerCommand]
 	}
-	/*
-	def submitdialog = { ProcessDefinitionCommand processDefinition ->
-		//ProcessDefinition pd=activitiRepositoryService.getProcessDefinition(processDefinition.id)
-		
-		
+	
+	def submitdialog = { ActiveMQBrokerCommand activeMQBrokerCommand ->				
 		def result = [
-			success:successFlag,
-			message:resultMessage,
-			id: domainClassInstance.id,
-			//name: domainClassInstance.toString(),
-			//errorFields:theErrorFields
+			success:true,
+			message:"",
+			id: activeMQBrokerCommand.id,
 		]
-		res=[result:result]
+		def res=[result:result]		
 		render res as JSON
 	}
-	*/
+	
 }

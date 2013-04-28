@@ -22,14 +22,9 @@ class ActivitiProcessInstanceController {
     def index = { 	
 		redirect (action:list)
 	}
-	/*
-	def listConfig=new ListConfig(name:'activitiProcessInstance',controller: 'activitiProcessInstance').configure {
-		column name:'id',sortable:true		
-		column name:'processDefinitionId',sortable:true		
-	}
-	*/
-	def list() {		
-		[ request:request, listConfig:ProcessInstanceCommand.listConfig]
+	
+	def list() {				
+		render (view:'/dialog/list',model:[ request:request, listConfig:ProcessInstanceCommand.listConfig])
 	}
 
 	def jsonlist() {				

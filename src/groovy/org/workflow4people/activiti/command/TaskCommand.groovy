@@ -1,7 +1,7 @@
 package org.workflow4people.activiti.command
 
 import org.open_t.dialog.command.Command
-
+import org.open_t.dialog.*
 class TaskCommand extends Command {
 	String name
 	String description	
@@ -22,20 +22,20 @@ class TaskCommand extends Command {
 		taskId=idValue.split('_')[1]
 	}
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activitiTask',controller: 'activitiTask').configure {
-		column name:'id',sortable:true
+	static listConfig=new ListConfig(name:'activitiTask',controller: 'activitiTask').configure {
+		column name:'taskId',sortable:true
 		column name:'processInstanceId',sortable:true	
 		column name:'processDefinitionId',sortable:false
 	
 
 
-		column name:'name',sortable:false
-		column name:'description',sortable:false
-		column name:'assignee',sortable:false
+		column name:'name',sortable:true
+		column name:'description',sortable:true
+		column name:'assignee',sortable:true
 
-		column name:'priority',sortable:false
-		column name:'createTime',sortable:false		
-		column name:'dueDate',sortable:false
+		column name:'priority',sortable:true
+		column name:'createTime',sortable:true		
+		column name:'dueDate',sortable:true
 	
 
 	}

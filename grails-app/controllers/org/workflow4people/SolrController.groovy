@@ -60,7 +60,6 @@ class SolrController {
 	
 	def abort() {
 		//Abort import
-		println "ABORT"
 		solrService.abort()
 		def res=[]
 		render res as JSON

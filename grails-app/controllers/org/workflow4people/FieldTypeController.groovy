@@ -56,7 +56,6 @@ class FieldTypeController {
 	
 	def dialog = {  
 		def model= dialogService.edit(FieldType,params)
-		println "And the model is: ${model.fieldTypeInstance.snippetConfig}"
 		if (model.fieldTypeInstance?.baseType?.name) {
 			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType?.name)
 		}		
@@ -64,7 +63,6 @@ class FieldTypeController {
 	}
 	
 	def submitdialog = { 
-		println "And the params are ${params}"
 		def prms=params
 		render dialogService.submit(FieldType,params,null) {
 			domainClassInstance.snippetConfig=prms.snippetConfig

@@ -1,6 +1,6 @@
 package org.workflow4people.activiti.command
 import org.workflow4people.*
-
+import org.open_t.dialog.*
 import org.open_t.dialog.command.Command
 
 class ProcessInstanceCommand extends Command {

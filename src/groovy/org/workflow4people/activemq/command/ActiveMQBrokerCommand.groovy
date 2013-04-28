@@ -1,6 +1,7 @@
 package org.workflow4people.activemq.command
 
 import org.open_t.dialog.command.Command
+import org.open_t.dialog.*
 
 class ActiveMQBrokerCommand extends Command {
 	static listProperties=['brokerName','queues','topics','totalEnqueueCount','totalDequeueCount']
@@ -25,7 +26,7 @@ class ActiveMQBrokerCommand extends Command {
 		return brokerName
 	}
 
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName',actions:['dialog':'show']).configure {
 		column name:'brokerName',sortable:true
 		column name:'queues',sortable:false
 		column name:'topics',sortable:false

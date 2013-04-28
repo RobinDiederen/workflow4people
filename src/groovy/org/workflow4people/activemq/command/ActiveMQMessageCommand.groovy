@@ -1,7 +1,7 @@
 package org.workflow4people.activemq.command
 
 import org.open_t.dialog.command.Command
-
+import org.open_t.dialog.*
 class ActiveMQMessageCommand extends Command {
 		def getId() {
 		return "${brokerName}____${queueName}____${JMSMessageID}"
@@ -20,7 +20,7 @@ class ActiveMQMessageCommand extends Command {
 	String JMSDestination
 	String contentMap
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQMessage',controller: 'activeMQMessage',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQMessage',controller: 'activeMQMessage',actions:['dialog':'show']).configure {
 		column name:'JMSMessageID',sortable:true				
 	}
 }

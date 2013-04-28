@@ -23,7 +23,7 @@ class ActiveMQController {
     def index = { }
 	
 	def list() {
-		[ request:request, listConfig:ActiveMQBrokerCommand.listConfig]
+		render (view:'/dialog/list',model:[ request:request, listConfig:ActiveMQBrokerCommand.listConfig])
 	}
 
 	def jsonlist() {
@@ -82,12 +82,7 @@ class ActiveMQController {
 		JMXConnector connector = JMXConnectorFactory.connect(url, null);
 		connector.connect();
 		MBeanServerConnection connection =connector.getMBeanServerConnection();
-		println connection.properties
-		//println connection.properties
 		
-		
-		
-		println "Brokers:"
 		ObjectName brokerQueryName = new ObjectName("org.apache.activemq:BrokerName=*,Type=Broker");
 		connection.queryMBeans(brokerQueryName, null).each {  broker ->
 			BrokerViewMBean mbean =(BrokerViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, broker.name, BrokerViewMBean.class, true);

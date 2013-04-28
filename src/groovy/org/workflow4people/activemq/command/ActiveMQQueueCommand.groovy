@@ -1,7 +1,7 @@
 package org.workflow4people.activemq.command
 
 import org.open_t.dialog.command.Command
-
+import org.open_t.dialog.*
 class ActiveMQQueueCommand extends Command {
 	def getId() {
 		return "${brokerName}____Queue____${name}"
@@ -19,7 +19,7 @@ class ActiveMQQueueCommand extends Command {
 	int queueSize
 	
 	
-	static listConfig=new org.workflow4people.ListConfig(name:'activeMQQueue',controller: 'activeMQQueue',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQQueue',controller: 'activeMQQueue',actions:['dialog':'show']).configure {
 		column name:'name',sortable:true
 		
 		column name:'enqueueCount',sortable:false

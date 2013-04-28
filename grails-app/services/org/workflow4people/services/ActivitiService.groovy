@@ -298,7 +298,6 @@ class ActivitiService  {
 				if (workflow) {
 					def form =org.workflow4people.Form.findByWorkflowAndName(workflow.workflowDefinition,msg.name)
 					task.form=form
-					println "*** The form is ${form} (${form.id})and the transitions are :${form?.outcomes}"
 					task.transitions=form?.outcomes
 				}
 				

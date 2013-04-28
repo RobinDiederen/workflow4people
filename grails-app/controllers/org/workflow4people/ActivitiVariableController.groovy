@@ -24,13 +24,8 @@ class ActivitiVariableController {
 		redirect (action:list)
 	}
 	
-	def listConfig=new ListConfig(name:'activitiProcessVariable',controller: 'activitiProcessVariable').configure {
-		column name:'name',sortable:true		
-		column name:'value',sortable:false		
-	}
-	
 	def list() {		
-		[ request:request, listConfig:this.variableListConfig]
+		render (view:'/dialog/list',model:[ request:request, listConfig:this.variableListConfig])
 	}
 
 	def jsonlist() {

@@ -41,7 +41,7 @@ class DataDistributionService {
 	 */
 	def sendMessage(queue,documentId,event){
 		def wfpid=wf4pConfigService.getConfigValue("wfp.id")		
-		log.debug "sending document ${documentId} to queue ${queue}"
+		log.trace "sending document ${documentId} to queue ${queue}"
 		def outputBuilder = new StreamingMarkupBuilder()
 		//Document.withTransaction { trx ->		
 			def document=documentService.getDocument(documentId)	
@@ -58,7 +58,7 @@ class DataDistributionService {
 				msg.setProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,5000)
 			}
 		//}
-		log.debug "sending document ${documentId} to queue ${queue} completed"				 
+		log.trace "sending document ${documentId} to queue ${queue} completed"				 
 	}
 	
 	/*
@@ -67,7 +67,7 @@ class DataDistributionService {
 	
 	@Subscriber(topic="wfp.event")
 	void eventHandler(msg) {
-		log.debug "Received wfp.event message: ${msg}"
+		log.trace "Received wfp.event message: ${msg}"
 		def queue="wfp.remote.tx"
 		//
 		if (msg.source!='dds' && msg.eventType in ['afterCreateDocument','afterSetDocument','afterUpdateDocument']) {
@@ -79,7 +79,7 @@ class DataDistributionService {
 			
 			//figure out if we have remote recipients
 			if (document.header.remote?.recipients?.id?.size()>0) {
-				log.debug "We have recipients ( ${document.header.remote?.recipients} ), so we'll send a message to the remote wfp"
+				log.trace "We have recipients ( ${document.header.remote?.recipients} ), so we'll send a message to the remote wfp"
 				document.header.remote.originator=wfpid
 				String xmlDocument = outputBuilder.bind{
 					// Only needed if you want <?xml etc. at the top of the XML document
@@ -88,12 +88,12 @@ class DataDistributionService {
 				}
 				// Tell the world!
 				def recipients=document.header.remote?.recipients?.id?.collect { it.text() }.join(",")
-				println "Sanity check. The recipients are ${recipients}"
+				log.trace "Sanity check. The recipients are ${recipients}"
 				jmsService.send(queue:queue,[id:document.header.documentId.text(),document:xmlDocument,event:msg.eventType,recipients:recipients],"dds")  {
 					Message theMsg ->
 					theMsg.setProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,5000)
 				}
-				log.debug "sending document ${document.header.documentId.text()} to queue ${queue} completed"
+				log.trace "sending document ${document.header.documentId.text()} to queue ${queue} completed"
 			}
 						
 		}
@@ -101,9 +101,9 @@ class DataDistributionService {
 	}
 	
 	void afterUpdate(documentId) {
-		println "DDS AFTERUPDATE"
+		log.trace "DDS AFTERUPDATE"
 		def doc=documentService.getDocument(documentId)
-		log.debug "Recipients: ${doc.header.remote?.recipients}"
+		log.trace "Recipients: ${doc.header.remote?.recipients}"
 		if(doc.header.remote?.recipients) {
 			sendMessage("wfp.remote.tx",documentId,'update') 
 		}			    
@@ -153,7 +153,7 @@ class DataDistributionService {
 	def reparse(xml){
 		def outputBuilder= new StreamingMarkupBuilder()
 		String result = outputBuilder.bind { mkp.yield xml }
-		println "The reparsing result result is ${result}"
+		log.trace "The reparsing result result is ${result}"
 		return new XmlSlurper().parseText(result)
 	}
 	
@@ -166,22 +166,22 @@ class DataDistributionService {
 	def ddsrx(msg) {
 			
 		// get document
-		log.debug "wfp.remote.rx received: ${msg.id}"
+		log.trace "wfp.remote.rx received: ${msg.id}"
 		def doc = new XmlSlurper().parseText(msg.document)
-		log.debug "Received Recipients: ${doc.header.remote?.recipients} Master: ${doc.header.remote?.master}"
+		log.trace "Received Recipients: ${doc.header.remote?.recipients} Master: ${doc.header.remote?.master}"
 		
 		// Check if it's for me
 		def wfpid=wf4pConfigService.getConfigValue("wfp.id")
-		log.debug "My id is ${wfpid}"
+		log.trace "My id is ${wfpid}"
 		def forMe=doc.header.remote?.recipients.id.findAll { it.text() == wfpid }.size()>0
-		log.debug "forMe=${forMe}"		
+		log.trace "forMe=${forMe}"		
 		// Only respond if it's for me and it's not my own message
 		if (forMe && doc.header.remote.originator.text()!=wfpid) {
 			def localDoc=getLocalDocument(doc)
 			
 			// yes -> update document
 			if (localDoc) {
-				log.debug "update"
+				log.trace "update"
 				def localXmlDocument=new XmlSlurper().parseText(localDoc.xmlDocument)
 				def newXmlDocument=doc
 				
@@ -194,17 +194,17 @@ class DataDistributionService {
 				def workflow=Workflow.get(localProcessId)
 				// This needs a sanity check!!!!
 				def taskId=Task.findByWorkflow(workflow).id
-				println "The task id is ${taskId}"
+				log.trace "The task id is ${taskId}"
 				newXmlDocument.header.task.id=taskId
 				
 				newXmlDocument=reparse(newXmlDocument)
 				
 				documentService.storeDocument(newXmlDocument,"dds")
-				log.debug "update - completed"
+				log.trace "update - completed"
 			} else {
 			// no -> create new document
 				// Massage the header
-				log.debug "new"
+				log.trace "new"
 				doc.header.documentId=""
 				doc.header.outcome=""
 				doc.header.taskId=""
@@ -213,10 +213,10 @@ class DataDistributionService {
 				doc.header.user.email="test@test.test"
 				doc.header.group=doc.header.remote.master?.text()
 				documentService.storeDocument(doc,"dds")
-				log.debug "new - completed"
+				log.trace "new - completed"
 			}
 		} else {
-			log.debug "Not processed."
+			log.trace "Not processed."
 		}
 		
 		return null

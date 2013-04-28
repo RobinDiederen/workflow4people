@@ -7,13 +7,13 @@ class SetupService {
 	def springSecurityService
 	
 	def addAuthority(name) {
-		println "Adding authority ${name}"
+		log.debug "Adding authority ${name}"
 		def authority=new Authority();
 		authority.authority=name
 		authority.save(failOnError:true)
 	}
 	def addUser(username,password,userRealName,email,authorities) {
-		println "Adding user ${username}"
+		log.debug "Adding user ${username}"
 		def person=new Person();
 		person.username=username
 		person.passwd=springSecurityService.encodePassword("admin")
@@ -56,8 +56,7 @@ class SetupService {
 	
 	
     def setup() {
-		println "Hi. I'm the setup service."
-		//println "pwd: ${springSecurityService.encodePassword("admin")}"
+		log.debug "Hi. I'm the setup service."
 		/*
 		def authorityCount=Authority.count()
 		if (authorityCount==0) {

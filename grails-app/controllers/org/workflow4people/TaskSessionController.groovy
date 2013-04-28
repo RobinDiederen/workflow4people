@@ -43,7 +43,6 @@ class TaskSessionController {
 				timeRemainingStr = """<span style="font-weight: bold;">timed out</span>"""
 			}
 			
-			println "taskSessionItem: ${taskSessionItem}"
 			def itemMap = [taskId: item, userName: taskSessionItem.userName, userRealName: taskSessionItem.userRealName, sessionId: taskSessionItem.sessionId, userIpAddress: taskSessionItem.userIpAddress, userAgent: taskSessionItem.userAgent, lastUpdated: lastUpdated + " (" + timeRemainingStr + ")"]
 			taskSessionMap.add(itemMap)
 		}

@@ -13,10 +13,10 @@
 	        <dialog:checkBox object="${brokerCommand}" propertyName="slave" mode="show" />	                 
 		</dialog:tab>
 		<dialog:tab name="Queues" object="${brokerCommand}">
-			<dialog:detailTable newButton="false" property="test" object="${brokerCommand}" controllerName="activeMQQueue" domainClass="${ActiveMQQueueCommand}" rowreordering="false"/>																
+			<dialog:detailTable newButton="false" property="test" object="${brokerCommand}" controllerName="activeMQQueue" domainClass="${ActiveMQQueueCommand}" />																
 		</dialog:tab>
 		<dialog:tab name="Topics" object="${brokerCommand}">
-			<dialog:detailTable newButton="false" property="test" object="${brokerCommand}" controllerName="activeMQTopic" domainClass="${ActiveMQTopicCommand}" rowreordering="false"/>						
+			<dialog:detailTable newButton="false" property="test" object="${brokerCommand}" controllerName="activeMQTopic" domainClass="${ActiveMQTopicCommand}" />						
 		</dialog:tab>
 		<dialog:tab name="Statistics" object="${brokerCommand}">
 			<dialog:textField object="${brokerCommand}" propertyName="totalEnqueueCount" mode="show" />

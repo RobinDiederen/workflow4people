@@ -179,7 +179,6 @@ class DocumentService implements InitializingBean {
 		def currentUser
 		String xmlDocument
 		//Document.withTransaction { status ->
-			//println "UPDATEDOCUMENT TRANSACTION 1: ${status.isNewTransaction()}"
 		
 			
 			currentUserName="${document?.header?.user?.name?.text()}"
@@ -532,7 +531,6 @@ class DocumentService implements InitializingBean {
 
 	@Transactional
     public void indexDocument(Document documentInstance){
-    	println "indexing"
     	def builder = domFactory.newDocumentBuilder()
 		try {
 			//Document.withTransaction {

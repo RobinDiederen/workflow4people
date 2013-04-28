@@ -25,8 +25,8 @@ class ActivitiProcessDefinitionController {
 	}
 	
 	
-	def list() {		
-		[ request:request, listConfig:ProcessDefinitionCommand.listConfig]
+	def list() {				
+		render (view:'/dialog/list',model:[ request:request, listConfig:ProcessDefinitionCommand.listConfig])
 	}
 
 	def jsonlist() {				

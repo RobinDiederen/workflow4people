@@ -58,6 +58,7 @@ class Document {
 
 		createdBy		nullable:true
 		lastUpdatedBy	nullable:true
+		
 		versionLabel	nullable:true,validator: { label,documentInstance ->
 			// We get Object references an unsaved transient instance errors here if we do the search on a new object. This is avoided by checking for the id which is empty for new instances
 			def exists=false
@@ -66,6 +67,7 @@ class Document {
 			}
 			return exists?['validator.versionLabelExists',label]:null
 		}
+		
     }
 	static mapping = {
 		xmlDocument type: 'text'		

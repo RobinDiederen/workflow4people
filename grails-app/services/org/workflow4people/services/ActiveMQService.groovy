@@ -22,7 +22,6 @@ class ActiveMQService implements InitializingBean {
 
     void afterPropertiesSet() {
 		def pid = ManagementFactory.getRuntimeMXBean().getName().replaceAll("@.*","")
-		println "The PID is ${pid}"
 		com.sun.tools.attach.VirtualMachine vm = com.sun.tools.attach.VirtualMachine.attach(pid);
 		String javaHome = vm.getSystemProperties().getProperty("java.home");
 		String agentJar = javaHome + File.separator +  "lib" + File.separator + "management-agent.jar";
@@ -33,7 +32,6 @@ class ActiveMQService implements InitializingBean {
 			localConnectorAddress = vm.getSystemProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
 		}
 		vm.detach();
-		System.out.println("Local connector address = " + localConnectorAddress);
 		
 		
 		
@@ -65,7 +63,6 @@ class ActiveMQService implements InitializingBean {
 	}
 	
 	def getQueues(brokerName){
-		println "BROKERNAME:${brokerName}"
 		ObjectName queryName = new ObjectName("org.apache.activemq:BrokerName=${brokerName},Type=Queue,*");		
 		connection.queryMBeans(queryName, null).collect {
 			QueueViewMBean queue=(QueueViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, it.name, QueueViewMBean.class,true);

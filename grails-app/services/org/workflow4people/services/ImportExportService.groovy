@@ -14,7 +14,6 @@ class ImportExportService {
 		defaultDomainClass.persistentProperties.each() { property ->
 			def value=domainClassInstance."${property.name}"
 			def type=value.getClass().name
-			println "Property: ${property.name} : ${value} (${type} - ${property?.type.name} ${property?.oneToMany} ${property?.association})"
 		}
 		
 		def buildmap = { "object" () 

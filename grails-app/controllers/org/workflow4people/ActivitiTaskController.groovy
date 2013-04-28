@@ -25,7 +25,7 @@ class ActivitiTaskController {
 	}
 	
 	def list() {		
-		[ request:request, listConfig:TaskCommand.listConfig]
+		render (view:'/dialog/list',model:[ request:request, listConfig:TaskCommand.listConfig])
 	}
 
 	def jsonlist() {				
@@ -33,13 +33,35 @@ class ActivitiTaskController {
 		
 		switch(params.iSortCol_0) {
 			case '0':
-				println "AAAA"
 				datalist=datalist.orderByTaskId()
 			break
 						
 			case '1':
-				println "BBBB"
 				datalist=datalist.orderByProcessInstanceId()
+			break
+			
+			case '3':
+				datalist=datalist.orderByTaskName()
+			break
+			
+			case '4':
+				datalist=datalist.orderByTaskDescription()
+			break
+			
+			case '5':
+				datalist=datalist.orderByTaskAssignee()
+			break
+			
+			case '6':
+				datalist=datalist.orderByTaskPriority()
+			break
+			
+			case '7':
+				datalist=datalist.orderByTaskCreateTime()
+			break
+			
+			case '8':
+				datalist=datalist.orderByDueDate()
 			break
 			
 		}
@@ -89,7 +111,6 @@ class ActivitiTaskController {
 			activitiTask.description=taskCommand.description
 			activitiTask.assignee=taskCommand.assignee
 			activitiTask.priority=taskCommand.priority
-			println "Setting due date to ${taskCommand.dueDate}"
 			activitiTask.dueDate=taskCommand.dueDate
 			activitiTask.name=taskCommand.name
 			activitiTaskService.saveTask(activitiTask)
