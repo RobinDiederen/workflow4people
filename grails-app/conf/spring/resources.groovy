@@ -98,5 +98,21 @@ beans = {
 		  activitiIdentityService(activitiProcessEngine:"getIdentityService")
 		  activitiHistoryService(activitiProcessEngine:"getHistoryService")
 		  activitiFormService(activitiProcessEngine:"getFormService")
-				  
+		  
+		  
+		  println "Loading internal broker"
+		  beans {
+			  'org.workflow4people.BrokerContainer' (org.apache.activemq.xbean.BrokerFactoryBean) {
+				 config = "/opt/tomcat-test/extension/activemq.xml"
+			  }
+		   }
+		   
+
+		  println "This is resources.groovy"
+		  if (application.config.customBeanLocations) {
+			  println "\nLoading bean definitions from $application.config.customBeanLocations"
+			  for (location in application.config.customBeanLocations) {
+				 loadBeans(location)
+			  }
+		   }
 }

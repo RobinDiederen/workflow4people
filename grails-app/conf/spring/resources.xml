@@ -82,10 +82,12 @@ http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/ac
 	   
 	   
 	   	<!-- active MQ -->
+	<!-- 
 	<bean id="org.workflow4people.BrokerContainer" class="org.apache.activemq.xbean.BrokerFactoryBean">
 		<property name="config" value="classpath:activemq.xml"/>
 	</bean>
-	<!-- 
+	 -->
+	 <!-- 
 	<bean id="org.workflow4people.JmsTemplate" class="org.springframework.jms.core.JmsTemplate">
 		<property name="connectionFactory">
 			<bean class="org.springframework.jms.connection.SingleConnectionFactory">
