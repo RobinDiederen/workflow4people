@@ -2,6 +2,9 @@ package org.workflow4people.activiti.command
 
 import org.open_t.dialog.command.Command
 import org.open_t.dialog.*
+import grails.validation.Validateable;
+
+@Validateable
 class VariableCommand extends Command {
 	static listProperties=['name','value']
 	String parentId

@@ -2,6 +2,9 @@ package org.workflow4people.activemq.command
 
 import org.open_t.dialog.command.Command
 import org.open_t.dialog.*
+import grails.validation.Validateable;
+
+@Validateable
 class ActiveMQTopicCommand extends Command {
 		def getId() {
 		return "${brokerName}____Topic____${name}"

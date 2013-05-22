@@ -2,7 +2,9 @@ package org.workflow4people.activemq.command
 
 import org.open_t.dialog.command.Command
 import org.open_t.dialog.*
+import grails.validation.Validateable;
 
+@Validateable
 class ActiveMQBrokerCommand extends Command {
 	static listProperties=['brokerName','queues','topics','totalEnqueueCount','totalDequeueCount']
 	String brokerName

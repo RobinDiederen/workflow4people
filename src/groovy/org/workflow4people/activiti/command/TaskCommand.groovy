@@ -2,6 +2,10 @@ package org.workflow4people.activiti.command
 
 import org.open_t.dialog.command.Command
 import org.open_t.dialog.*
+
+import grails.validation.Validateable;
+
+@Validateable
 class TaskCommand extends Command {
 	String name
 	String description	

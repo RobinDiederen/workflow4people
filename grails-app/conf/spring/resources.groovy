@@ -101,12 +101,14 @@ beans = {
 		  
 		  
 		  println "Loading internal broker"
+		  
 		  beans {
 			  'org.workflow4people.BrokerContainer' (org.apache.activemq.xbean.BrokerFactoryBean) {
-				 config = "/opt/tomcat-test/extension/activemq.xml"
+				 config = "classpath:activemq.xml"
 			  }
 		   }
 		   
+		  
 
 		  println "This is resources.groovy"
 		  if (application.config.customBeanLocations) {

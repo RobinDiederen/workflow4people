@@ -5,7 +5,10 @@ class WfpGrailsPlugin {
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0.0 > *"
     // the other plugins this plugin depends on
+    //def dependsOn = [jquery:"1.8.0",springws:"0.5.0.1",'background-thread':"1.6","dialog":"2.0.0"]
     def dependsOn = [jquery:"1.8.0",springws:"0.5.0.1",'background-thread':"1.6"]
+
+
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp"
