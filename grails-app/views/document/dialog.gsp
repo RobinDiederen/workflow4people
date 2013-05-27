@@ -25,7 +25,7 @@
 					    
 		</dialog:tab>		
 		<dialog:tab name="XML" object="${documentInstance}">
-	        <dialog:xml noLabel="true" noHelp="true" object="${documentInstance}" propertyName="xmlDocument" mode="edit" class="xmldoc codemirror"  codeMirrorMode="text/html" />
+	        <dialog:xml height="100%" rows="30" noLabel="true" noHelp="true" object="${documentInstance}" propertyName="xmlDocument" mode="edit" class="xmldoc codemirror"  codeMirrorMode="text/html" />
 		</dialog:tab>
 		<dialog:tab name="Index" object="${documentInstance}">
 			<dialog:detailTable property="document" object="${documentInstance}" domainClass="${org.workflow4people.DocumentIndex}" />	    		

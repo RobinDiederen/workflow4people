@@ -34,8 +34,8 @@
 					{ "bSortable": false, "aTargets": [ ${listConfig.columns.size()} ,"nonsortable"] }
 				] ,
 				
-				"oLanguage": {
-		     	 "sUrl": "${resource(plugin:'dialog',dir:'js/jquery')}/dataTables/localisation/dataTables.${g.message(code:'datatables.language',default:'en')}.txt"
+				"oLanguage": {		     	 
+		     	 "sUrl": dialog.dataTablesLanguageUrl, 
 		    	},
 		    	"fnInitComplete": function() {
 		    		 
