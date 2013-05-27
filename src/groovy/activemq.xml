@@ -54,7 +54,20 @@
 <!-- <transportConnector name="xmpp"     uri="xmpp://localhost:61222"/> -->
     </transportConnectors>
 
-   
+   <systemUsage>
+	   <systemUsage>
+	        <memoryUsage>
+		       <memoryUsage limit="20 mb"/>
+	        </memoryUsage>
+	     <storeUsage>
+       <storeUsage limit="1 gb" name="wfpBroker"/>
+     </storeUsage>
+     		<tempUsage>
+       		<tempUsage limit="100 mb"/>
+     		</tempUsage>
+   		</systemUsage>
+ 	</systemUsage>
+		
 
 
         
@@ -75,7 +88,21 @@
 		</networkConnectors>
 		<persistenceAdapter>
 			<kahaDB directory="/var/opt/wfp-dds-activemq/dds" journalMaxFileLength="16mb"/>
-		</persistenceAdapter>
+	</persistenceAdapter>
+
+	<systemUsage>
+	   <systemUsage>
+	        <memoryUsage>
+		       <memoryUsage limit="20 mb"/>
+	        </memoryUsage>
+	     <storeUsage>
+       <storeUsage limit="1 gb" name="ddsBroker"/>
+     </storeUsage>
+     		<tempUsage>
+       		<tempUsage limit="100 mb"/>
+     		</tempUsage>
+   		</systemUsage>
+ 	</systemUsage>
 		        
 </broker>
 
