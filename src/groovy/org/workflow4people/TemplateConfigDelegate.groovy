@@ -202,6 +202,8 @@ class TemplateConfigDelegate
 		//s=templateService.prettyPrint(s)
 	}
 	if (!options.contains("noReplace")) {
+		s=s.replace("<render-","<");		
+		s=s.replace("</render-","</");
 		s=s.replace("<f:","<g:");
 		s=s.replace("</f:","</g:");
 		s=s.replace('*{',"\${");

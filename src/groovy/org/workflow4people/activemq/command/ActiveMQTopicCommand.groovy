@@ -22,7 +22,7 @@ class ActiveMQTopicCommand extends Command {
 	int queueSize
 	
 	
-	static listConfig=new ListConfig(name:'activeMQTopic',controller: 'activeMQTopic',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQTopic',controller: 'activeMQTopic',actions:['dialog']).configure {
 		column name:'name',sortable:true
 		
 		column name:'enqueueCount',sortable:false

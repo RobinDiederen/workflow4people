@@ -1,6 +1,6 @@
 <%@page import="org.workflow4people.Document"%>
 <%@page import="org.workflow4people.DocumentHistory"%>
-<dialog:form title="History" object="${documentHistoryInstance}" width="800px" height="450px">
+<dialog:form title="History" object="${documentHistoryInstance}" width="800px" height="500px">
 	<dialog:tabs names="History,Document" object="${documentHistoryInstance}">		
 		<dialog:tab name="History" object="${documentHistoryInstance}">
 			<dialog:textField object="${documentHistoryInstance}" propertyName="versionLabel" mode="show" />			
@@ -11,7 +11,7 @@
 			<dialog:textField object="${documentHistoryInstance}" propertyName="lastUpdatedBy" mode="show" class="wide"/>								
 		</dialog:tab>		
 		<dialog:tab name="Document" object="${documentHistoryInstance}">			
-			<dialog:xml noLabel="true" noHelp="true" object="${documentHistoryInstance}" propertyName="xmlDocument" mode="show" class="xmldoc xcodemirror" xcodeMirrorMode="text/html" />		
+			<dialog:xml cols="80" style="width:700px;height:270px;" noLabel="true" noHelp="true" object="${documentHistoryInstance}" propertyName="xmlDocument" mode="show" class="xmldoc xcodemirror" xcodeMirrorMode="text/html" />		
 		</dialog:tab>		
 	</dialog:tabs>
 </dialog:form>

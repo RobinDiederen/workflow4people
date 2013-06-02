@@ -148,17 +148,17 @@ class Field {
 		binding.help=getFieldProperty('help')			
 		binding.alert=getFieldProperty('alert')		
 		binding.fieldLength=getFieldProperty('fieldLength')
-		binding.minLength=fieldType.minLength ? fieldType.minLength : ""
-		binding.maxLength=fieldType.maxLength ? fieldType.maxLength : ""
+		binding.minLength=fieldType.snippetConfig?.minLength ? fieldType.snippetConfig?.minLength : ""
+		binding.maxLength=fieldType.snippetConfig?.maxLength ? fieldType.snippetConfig?.maxLength : ""
 		
-		binding.minInclusive=fieldType.minInclusive ? fieldType.minInclusive : ""
-		binding.maxInclusive=fieldType.maxInclusive ? fieldType.maxInclusive : ""
+		binding.minInclusive=fieldType.snippetConfig?.minInclusive ? fieldType.snippetConfig?.minInclusive : ""
+		binding.maxInclusive=fieldType.snippetConfig?.maxInclusive ? fieldType.snippetConfig?.maxInclusive : ""
 			
-		binding.minExclusive=fieldType.minExclusive ? fieldType.minExclusive : ""
-		binding.maxExclusive=fieldType.maxExclusive ? fieldType.maxExclusive : ""
+		binding.minExclusive=fieldType.snippetConfig?.minExclusive ? fieldType.snippetConfig?.minExclusive : ""
+		binding.maxExclusive=fieldType.snippetConfig?.maxExclusive ? fieldType.snippetConfig?.maxExclusive : ""
 			
-		binding.pattern=fieldType.pattern ? fieldType.pattern : ""	
-			
+		binding.pattern=fieldType.snippetConfig?.pattern ? fieldType.snippetConfig?.pattern : ""
+		
 		binding.defaultValue = getFieldProperty('defaultValue')
 		
 		binding.fieldTypeName=fieldType.name

@@ -23,7 +23,7 @@ class ActiveMQMessageCommand extends Command {
 	String JMSDestination
 	String contentMap
 	
-	static listConfig=new ListConfig(name:'activeMQMessage',controller: 'activeMQMessage',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQMessage',controller: 'activeMQMessage',actions:['dialog']).configure {
 		column name:'JMSMessageID',sortable:true				
 	}
 }

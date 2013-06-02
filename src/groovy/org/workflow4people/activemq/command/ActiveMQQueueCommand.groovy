@@ -22,7 +22,7 @@ class ActiveMQQueueCommand extends Command {
 	int queueSize
 	
 	
-	static listConfig=new ListConfig(name:'activeMQQueue',controller: 'activeMQQueue',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQQueue',controller: 'activeMQQueue',actions:['dialog']).configure {
 		column name:'name',sortable:true
 		
 		column name:'enqueueCount',sortable:false

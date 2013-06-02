@@ -85,7 +85,7 @@ class GetDocumentEndpoint {
 			xmlDocument.header.task.name=task.name
 			xmlDocument.header.task.description=task.description
 			xmlDocument.header.task.outcome=""
-			xmlDocument.header.task.dueDate=task.dueDate.format('yyyy-MM-dd')			
+			xmlDocument.header.task.dueDate=task.dueDate?.format('yyyy-MM-dd')			
 			xmlDocument.header.task.priority=task.priority
 			xmlDocument.header.task.assignee=task.assignee?.username
 			xmlDocument.header.task.status=task.status

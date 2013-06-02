@@ -25,7 +25,7 @@
   </jq:jquery>
 </head>
 <body>
- 	<div class="body" sstyle="width:90%;">
+ 	<div class="body" >
   		<div class="nav" >
   		<span class="menuButton">&nbsp;</span>
   		</div>

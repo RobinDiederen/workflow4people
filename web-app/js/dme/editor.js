@@ -107,7 +107,7 @@ dme.generateFormsDialog = function generateFormsDialog(node) {
 	 var dialogHTML2=$(dialogHTML).find("#dialog")
 	 var theDialog=$(dialogHTML2).dialog({ 
 		 modal:true,
-		 width:800,
+		 width:900,
 		 height:500,
 		 buttons: { 
 		 	"Ok": function() {

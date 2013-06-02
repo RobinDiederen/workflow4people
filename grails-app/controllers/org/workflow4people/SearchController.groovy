@@ -44,7 +44,7 @@ class SearchController {
     }
 	
 	def searchdocument() {
-		render (view:"/dialog/list", model:[dc:Document, controllerName:"search", request:request, bFilter:true,jsonlist:'jsonsearchdocument'])
+		render (view:"/dialog/list", model:[toolbar:'<div></div>',dc:Document, controllerName:"search", request:request, bFilter:true,jsonlist:'jsonsearchdocument'])
 	}
 
 	def jsonsearchdocument() {

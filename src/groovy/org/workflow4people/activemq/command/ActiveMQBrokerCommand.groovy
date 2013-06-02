@@ -28,7 +28,7 @@ class ActiveMQBrokerCommand extends Command {
 		return brokerName
 	}
 
-	static listConfig=new ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName',actions:['dialog':'show']).configure {
+	static listConfig=new ListConfig(name:'activeMQBroker',controller: 'activeMQBroker',idName:'brokerName',actions:['dialog']).configure {
 		column name:'brokerName',sortable:true
 		column name:'queues',sortable:false
 		column name:'topics',sortable:false

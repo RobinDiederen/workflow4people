@@ -168,14 +168,14 @@ class FieldType {
 		binding.baseSchemaType=this.baseSchemaType
 		
 		binding.restrictions=""
-		if (maxLength) binding.restrictions+="<maxLength value=\"${maxLength}\" />"
-		if (minLength) binding.restrictions+="<minLength value=\"${minLength}\" />"
+		if (snippetConfig?.maxLength) binding.restrictions+="<maxLength value=\"${snippetConfig?.maxLength}\" />"
+		if (snippetConfig?.minLength) binding.restrictions+="<minLength value=\"${snippetConfig?.minLength}\" />"
 		if (length) binding.restrictions+="<length value=\"${length}\" />"
-		if (minInclusive) binding.restrictions+="<minInclusive value=\"${minInclusive}\" />"
-		if (maxInclusive) binding.restrictions+="<maxInclusive value=\"${maxInclusive}\" />"
-		if (minExclusive) binding.restrictions+="<minExclusive value=\"${minExclusive}\" />"
-		if (maxExclusive) binding.restrictions+="<maxExclusive value=\"${maxExclusive}\" />"
-		if (pattern) binding.restrictions+="<pattern value=\"${pattern}\" />"
+		if (snippetConfig?.minInclusive) binding.restrictions+="<minInclusive value=\"${snippetConfig?.minInclusive}\" />"
+		if (snippetConfig?.maxInclusive) binding.restrictions+="<maxInclusive value=\"${snippetConfig?.maxInclusive}\" />"
+		if (snippetConfig?.minExclusive) binding.restrictions+="<minExclusive value=\"${snippetConfig?.minExclusive}\" />"
+		if (snippetConfig?.maxExclusive) binding.restrictions+="<maxExclusive value=\"${snippetConfig?.maxExclusive}\" />"
+		if (snippetConfig?.pattern) binding.restrictions+="<pattern value=\"${snippetConfig?.pattern}\" />"
 		
 		binding.snippetConfig=snippetConfig
 	

@@ -7,9 +7,13 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='meer_informatie_nodig'}]]></conditionExpression>
     </sequenceFlow>
     <endEvent id="end" name="End"></endEvent>
-    <userTask id="afhandelen" name="afhandelen" activiti:candidateGroups="Servicedesk"></userTask>
+    <userTask id="afhandelen" name="afhandelen" activiti:candidateGroups="Servicedesk">
+      <documentation>Afhandelen storing melding (document ${documentId})</documentation>
+    </userTask>
     <sequenceFlow id="flow7" sourceRef="afhandelen" targetRef="reviewDecision"></sequenceFlow>
-    <userTask id="meer-informatie" name="meer-informatie" activiti:assignee="${user}"></userTask>
+    <userTask id="meer-informatie" name="meer-informatie" activiti:assignee="${user}">
+      <documentation>Meer informatie voor storing melding (document ${documentId})</documentation>
+    </userTask>
     <sequenceFlow id="flow8" sourceRef="meer-informatie" targetRef="afhandelen"></sequenceFlow>
     <sequenceFlow id="flow9" sourceRef="reviewDecision" targetRef="end">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='afgehandeld'}]]></conditionExpression>
