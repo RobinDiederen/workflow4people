@@ -1,5 +1,5 @@
 <dialog:form title="Edit field" object="${fieldInstance}" height="635px">
-	<dialog:tabs names="Details,Text,Advanced" object="${fieldInstance}">		
+	<dialog:tabs names="Details,Text,Advanced,Snippet" object="${fieldInstance}">		
 		<dialog:tab name="Details" object="${fieldInstance}">		                            
 	        <dialog:textField object="${fieldInstance}" propertyName="id" mode="show" />                            
 	        <dialog:textField object="${fieldInstance}" propertyName="position" mode="show" />                            
@@ -26,5 +26,20 @@
 			<dialog:textField object="${fieldInstance}" propertyName="xpath" mode="show" />
 			<dialog:domainObject object="${fieldInstance}" propertyName="parent" mode="show" />
 		</dialog:tab>
+		
+		<dialog:tab name="Snippet" object="${fieldInstance}">
+			<g:if test="${templateSnippetConfig}">
+				<dialog:simplerow label="${message(code:'field.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
+				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
+					<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
+					<g:textField name="snippetConfig.${parameter.key}" value="${fieldInstance.snippetConfig[parameter.key]?:fieldInstance.fieldType.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />
+					</dialog:simplerow>
+				</g:each>
+			</g:if>
+			<g:else>
+				<p>Snippet config is missing!</p>
+			</g:else>		
+		</dialog:tab>
+		
 	</dialog:tabs>
 </dialog:form>

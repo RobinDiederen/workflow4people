@@ -87,6 +87,12 @@ class DataModelEditorController {
 		        model['fieldsInSameTree'] = fieldsInSameTree
 		}
 		model.fieldInstance=fieldInstance
+		
+		if (model.fieldInstance.fieldType?.baseType?.name) {
+			println "OK adding templateSnippetConfig"
+			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldInstance.fieldType?.baseType?.name)
+		}
+		
 		render(view:'/field/dialog',model:model)
 
     }

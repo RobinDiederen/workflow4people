@@ -47,7 +47,6 @@
 		</dialog:tab>
 		
 		<dialog:tab name="Snippet" object="${fieldTypeInstance}">
-		
 			<g:if test="${templateSnippetConfig}">
 				<dialog:simplerow label="${message(code:'fieldType.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
 				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
@@ -60,6 +59,5 @@
 				<p>Snippet config is missing!</p>
 			</g:else>		
 		</dialog:tab>
-		
 	</dialog:tabs>
 </dialog:form>

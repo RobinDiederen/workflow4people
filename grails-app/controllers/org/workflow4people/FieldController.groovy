@@ -106,10 +106,32 @@ class FieldController {
             return [ fieldInstance : fieldInstance ]
         }
     }
-   
-	def dialog = { return dialogService.edit(Field,params) }
 	
-	def submitdialog = { render dialogService.submit(Field,params) as JSON }
+	def dialog = {
+		def model= dialogService.edit(Field,params)
+		println "*********** AAAA"
+		if (model.fieldInstance.fieldType?.baseType?.name) {
+			println "OK adding templateSnippetConfig"
+			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldInstance.fieldType?.baseType?.name)
+		}
+		return model
+	}
+	
+	def submitdialog = {
+		def prms=params
+		render dialogService.submit(Field,params,null) {
+			domainClassInstance.snippetConfig=prms.snippetConfig
+			domainClassInstance.save()
+			res['result']['refreshNodes']=["dataModelTree"]
+		} as JSON }
+	
+	
+   
+	def xdialog = { return dialogService.edit(Field,params) }
+	
+	
+	
+	def xsubmitdialog = { render dialogService.submit(Field,params) as JSON }
 	
 	
 	def treeJSON = {

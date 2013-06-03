@@ -17,6 +17,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import java.util.Map;
+
 import org.workflow4people.services.*;
 
 /**
@@ -96,6 +98,8 @@ class Field {
     Field dependsOn
     String dependencyType
     String dependencyParameter
+	
+	Map snippetConfig
         
     String toString() {
 		

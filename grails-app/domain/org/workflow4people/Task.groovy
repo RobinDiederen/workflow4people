@@ -133,6 +133,7 @@ class Task {
 	def afterDelete() {
 		log.debug "AfterDelete task ${id}"
 		try {
+			// TODO maybe arrange this through a message queue so Solr and wfp are decoupled
 			solrService.deleteItem(Task,id)
 		} catch (Exception e){
 			log.error "Error while removing task from Solr: ${e.message}"
