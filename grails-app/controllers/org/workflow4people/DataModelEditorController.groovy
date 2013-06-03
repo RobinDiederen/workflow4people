@@ -85,11 +85,11 @@ class DataModelEditorController {
 		        def fieldsInSameTree=f.getDescendants().sort{it.toString()}
 		
 		        model['fieldsInSameTree'] = fieldsInSameTree
+				model['treeParent']=f
 		}
 		model.fieldInstance=fieldInstance
 		
-		if (model.fieldInstance.fieldType?.baseType?.name) {
-			
+		if (model.fieldInstance.fieldType?.baseType?.name) {			
 			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldInstance.fieldType?.baseType?.name)
 		}
 		
