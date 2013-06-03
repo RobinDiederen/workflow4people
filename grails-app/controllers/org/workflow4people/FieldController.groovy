@@ -109,9 +109,7 @@ class FieldController {
 	
 	def dialog = {
 		def model= dialogService.edit(Field,params)
-		println "*********** AAAA"
 		if (model.fieldInstance.fieldType?.baseType?.name) {
-			println "OK adding templateSnippetConfig"
 			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldInstance.fieldType?.baseType?.name)
 		}
 		return model

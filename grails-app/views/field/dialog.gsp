@@ -18,7 +18,9 @@
 			<dialog:textField object="${fieldInstance}" propertyName="minOccurs" mode="edit" />                            
 			<dialog:textField object="${fieldInstance}" propertyName="maxOccurs" mode="edit" />
 			<dialog:checkBox object="${fieldInstance}" propertyName="nillable" mode="edit" />                                                					
-			<dialog:domainObject object="${fieldInstance}" propertyName="dependsOn" from="${fieldsInSameTree}" mode="edit" />										
+			<%--<dialog:domainObject object="${fieldInstance}" propertyName="dependsOn" from="${fieldsInSameTree}" mode="edit" />--%>
+			<dialog:treeselect   object="${fieldInstance}" propertyName="dependsOn" root="fieldtype_${treeParent?.fieldType?.id}" /> 	    
+													
 			<dialog:select object="${fieldInstance}" propertyName="dependencyType" mode="edit" />
 			<dialog:textField object="${fieldInstance}" propertyName="dependencyParameter" mode="edit" />
 			<dialog:checkBox object="${fieldInstance}" propertyName="readonly" mode="edit" />
