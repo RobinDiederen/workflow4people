@@ -177,7 +177,8 @@ class FieldType {
 		if (snippetConfig?.maxExclusive) binding.restrictions+="<maxExclusive value=\"${snippetConfig?.maxExclusive}\" />"
 		if (snippetConfig?.pattern) binding.restrictions+="<pattern value=\"${snippetConfig?.pattern}\" />"
 		
-		binding.snippetConfig=snippetConfig
+		def templateSnippetConfig=templateService.getSnippetConfig(name)?:templateService.getSnippetConfig(baseType.name)
+		binding.snippetConfig=templateSnippetConfig.parameters+snippetConfig
 	
 		binding.fieldType=this
 		binding.output=""

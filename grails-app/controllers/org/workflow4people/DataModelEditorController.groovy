@@ -89,7 +89,7 @@ class DataModelEditorController {
 		model.fieldInstance=fieldInstance
 		
 		if (model.fieldInstance.fieldType?.baseType?.name) {
-			println "OK adding templateSnippetConfig"
+			
 			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldInstance.fieldType?.baseType?.name)
 		}
 		

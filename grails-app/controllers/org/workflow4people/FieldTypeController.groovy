@@ -56,8 +56,10 @@ class FieldTypeController {
 	
 	def dialog = {  
 		def model= dialogService.edit(FieldType,params)
-		if (model.fieldTypeInstance?.baseType?.name) {
-			model['templateSnippetConfig']=templateService.getSnippetConfig(model.fieldTypeInstance.baseType?.name)
+		
+		def templateSnippetConfig=templateService.getSnippetConfig(model.fieldTypeInstance?.name)?:templateService.getSnippetConfig(model.fieldTypeInstance?.baseType?.name)		
+		if (model.fieldTypeInstance?.baseType?.name) {			
+			model['templateSnippetConfig']=templateSnippetConfig
 		}		
 		return model		
 	}
@@ -72,47 +74,6 @@ class FieldTypeController {
 	
 	def delete = { render dialogService.delete(FieldType,params) as JSON }
 	
-
-    def show = {
-        def fieldTypeInstance = FieldType.get( params.id )
-
-        if(!fieldTypeInstance) {
-            flash.message = "FieldType not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else { return [ fieldTypeInstance : fieldTypeInstance ] }
-    }
-
-    def xdelete = {
-        def fieldTypeInstance = FieldType.get( params.id )
-        if(fieldTypeInstance) {
-            try {
-                fieldTypeInstance.delete(flush:true)
-                flash.message = "FieldType ${params.id} deleted"
-                redirect(action:list)
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "FieldType ${params.id} could not be deleted"
-                redirect(action:show,id:params.id)
-            }
-        }
-        else {
-            flash.message = "FieldType not found with id ${params.id}"
-            redirect(action:list)
-        }
-    }
-
-    def edit = {
-        def fieldTypeInstance = FieldType.get( params.id )
-
-        if(!fieldTypeInstance) {
-            flash.message = "FieldType not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else {
-            return [ fieldTypeInstance : fieldTypeInstance ]
-        }
-    }
     
     def copy = {
         def fieldTypeInstance = FieldType.get( params.id )

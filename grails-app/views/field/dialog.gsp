@@ -6,12 +6,12 @@
 	        <dialog:textField object="${fieldInstance}" propertyName="name" mode="edit" />                            
 	        <dialog:domainObject object="${fieldInstance}" propertyName="fieldType" mode="edit" />                        
 	    	<dialog:textArea object="${fieldInstance}" propertyName="description" mode="edit" />                        	
-	        <dialog:textField object="${fieldInstance}" propertyName="defaultValue" mode="edit" />
-	    	<dialog:textField object="${fieldInstance}" propertyName="label" mode="edit" />
+	        <dialog:textField object="${fieldInstance}" propertyName="defaultValue" mode="edit" placeholder="${fieldInstance.fieldType?.defaultValue?:''}"/>
+	    	<dialog:textField object="${fieldInstance}" propertyName="label" mode="edit" placeholder="${fieldInstance.fieldType?.label?:''}" />
 		</dialog:tab>
 		<dialog:tab name="Text" object="${fieldInstance}">
-			<dialog:textArea object="${fieldInstance}" propertyName="help" mode="edit" />
-	        <dialog:textArea object="${fieldInstance}" propertyName="alert" mode="edit" />
+			<dialog:textArea object="${fieldInstance}" propertyName="help" mode="edit" placeholder="${fieldInstance.fieldType?.help?:''}"/>
+	        <dialog:textArea object="${fieldInstance}" propertyName="alert" mode="edit" placeholder="${fieldInstance.fieldType?.alert?:''}"/>
 	    	<dialog:textArea object="${fieldInstance}" propertyName="contentText" mode="edit" />
 		</dialog:tab>
 		<dialog:tab name="Advanced" object="${fieldInstance}">
@@ -32,7 +32,7 @@
 				<dialog:simplerow label="${message(code:'field.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
 				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
 					<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
-					<g:textField name="snippetConfig.${parameter.key}" value="${fieldInstance.snippetConfig[parameter.key]?:fieldInstance.fieldType.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />
+					<g:textField name="snippetConfig.${parameter.key}" value="${fieldInstance.snippetConfig[parameter.key]}" placeholder="${fieldInstance.fieldType.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />
 					</dialog:simplerow>
 				</g:each>
 			</g:if>
