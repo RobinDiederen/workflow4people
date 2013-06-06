@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /** 
  * Defines an action in the permission model.
@@ -29,7 +30,12 @@ class Action {
 	/**
 	 * properties to be shown in the user interface list	
 	 */
-	static listProperties=['id','name','title','description']
+	static listConfig=new ListConfig(name:'action',controller: 'action').configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true
+		column name:'title',sortable:true
+		column name:'description',sortable:true
+	}
 	
 	/**
 	 * The unique name of this action

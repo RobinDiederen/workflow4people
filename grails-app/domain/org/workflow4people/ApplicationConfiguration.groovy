@@ -17,7 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
-
+import org.open_t.dialog.*
 /**
  * Application Configuration domain class.
  * Simply stores key/value pairs used to configure workflow4people. This serves as a settings registry.
@@ -28,7 +28,12 @@ class ApplicationConfiguration {
 	/**
 	 * properties to be shown in the user interface list	
 	 */
-	static listProperties=['id','configKey','configValue']
+	
+	static listConfig=new ListConfig(name:'applicationConfiguration',controller: 'applicationConfiguration',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'configKey',sortable:true,filter:true
+		column name:'configValue',sortable:true,filter:true
+	}
 	
 	static features = []
     static constraints = {
