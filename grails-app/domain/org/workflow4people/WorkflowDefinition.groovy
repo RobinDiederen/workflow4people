@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * WorkflowDefinition domain class.
@@ -26,7 +27,18 @@ package org.workflow4people
  * @author Joost Horward
  */
 class WorkflowDefinition implements Serializable {
-	static listProperties=['id','publish','name','title','description','version','dateCreated','lastUpdated']
+		
+	static listConfig=new ListConfig(name:'workflowDefinition',controller: 'workflowDefinition',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'publish',sortable:true,filter:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+		column name:'version',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'lastUpdated',sortable:true,filter:true
+		
+	}
 
 	static hasMany = [form : Form,workflowPermission:WorkflowPermission]	
 

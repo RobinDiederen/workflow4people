@@ -18,6 +18,7 @@
  */
 package org.workflow4people
 import grails.plugin.jms.*
+import org.open_t.dialog.*
 
 /**
  * Workflow domain class
@@ -30,7 +31,13 @@ class Workflow {
 	static transients = ["noMessage"]
 	static hasMany = [workflowLog:WorkflowLog]
 
-	static listProperties=['id','workflowDefinition','dateCreated','dueDate','completionDate']
+	static listConfig=new ListConfig(name:'workflow',controller: 'workflow',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'workflowDefinition',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'dueDate',sortable:true,filter:true
+		column name:'completionDate',sortable:true,filter:true
+	}
 
     static constraints = {
 		externalId(nullable:true)

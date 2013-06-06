@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * DocumentCategory domain class. This is used to group document types in the document creation menu
@@ -24,8 +25,12 @@ package org.workflow4people
  * @author Joost Horward
  */
 class DocumentCategory {
-	
-	static listProperties=['id','name','title','description']
+	static listConfig=new ListConfig(name:'documentCategory',controller: 'documentCategory',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+	}
 	
 	String name
 	String title

@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Feature domain class. This defines presentation features. It is used to control access to these features.
@@ -26,7 +27,12 @@ package org.workflow4people
  */
 class Feature {
 	
-	static listProperties=['id','name','title','description']
+	static listConfig=new ListConfig(name:'feature',controller: 'feature',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true		
+	}
 	
 	static hasMany=[featurePermission:FeaturePermission]
 	String name

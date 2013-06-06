@@ -18,6 +18,7 @@
  */
 package org.workflow4people
 import groovy.lang.Binding;
+import org.open_t.dialog.*
 
 /**
  * FormItem domain class. 
@@ -29,7 +30,12 @@ class FormItem {
 	def templateService
 
 	static belongsTo = [formSection: FormSection]
-	static listProperties=['position','field','readonly']
+	static listConfig=new ListConfig(name:'form',controller: 'form',rowreordering:true).configure {
+		column name:'position'
+		column name:'field'
+		column name:'readonly'
+	}
+	
 	static constraints = {    	
 		snippet(nullable:true)
 		baseXpath(nullable:true)

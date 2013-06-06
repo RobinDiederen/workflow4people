@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * XML document database index definition domain class.
@@ -31,7 +32,14 @@ class DocumentIndexField {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-	static listProperties=['id','name','title','xpath','publish']
+	
+	static listConfig=new ListConfig(name:'documentIndexField',controller: 'documentIndexField',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'gpath',sortable:true,filter:true
+		column name:'publish',sortable:true,filter:true
+	}
     static constraints = {    	
     	description(nullable:true)    	
     }

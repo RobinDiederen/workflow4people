@@ -18,6 +18,7 @@
  */
 package org.workflow4people
 import java.util.Date;
+import org.open_t.dialog.*
 
 /** 
  * XML document database type domain class.
@@ -29,8 +30,13 @@ class DocumentType {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-    static listProperties=['id','name','description','dateCreated','lastUpdated']
-	
+	static listConfig=new ListConfig(name:'documentType',controller: 'documentType',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'lastUpdated',sortable:true,filter:true		
+	}
     static constraints = {
     	name(unique:true)
     	dateCreated(nullable:true)

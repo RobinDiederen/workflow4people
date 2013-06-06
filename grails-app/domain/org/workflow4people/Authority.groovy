@@ -28,7 +28,7 @@ class Authority {
 	/**
 	 * properties to be shown in the user interface list	
 	 */	
-	static listProperties=['id','authority','description','authorityType']
+	
 	static listConfig=new ListConfig(name:'authority',controller: 'authority',bFilter:true).configure {
 		column name:'id',sortable:true
 		column name:'authority',sortable:true,filter:true

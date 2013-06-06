@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Namespace domain class. 
@@ -25,7 +26,16 @@ package org.workflow4people
  * @author Joost Horward
  */
 class Namespace {
-	static listProperties=['id','prefix','uri','filename','generateXSDFile','includeSchema','importSchema']
+	static listConfig=new ListConfig(name:'namespace',controller: 'namespace',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'prefix',sortable:true,filter:true
+		column name:'uri',sortable:true,filter:true
+		column name:'filename',sortable:true,filter:true
+		column name:'generateXSDFile',sortable:true,filter:true
+		column name:'includeSchema',sortable:true,filter:true
+		column name:'importSchema',sortable:true,filter:true
+	}
+	
 	static hasMany = [importSchema:Namespace]
 
 	static constraints = {    	

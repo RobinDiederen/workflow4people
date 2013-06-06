@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * FieldTypeItem domain class. 
@@ -25,9 +26,15 @@ package org.workflow4people
  * @author Joost Horward
  */
 class FieldTypeItem {
-	
 	static belongsTo = [fieldType:FieldType]	
-   	static listProperties=['position','id','label','value']
+	
+	static listConfig=new ListConfig(name:'fieldTypeItem',controller: 'fieldTypeItem',bFilter:true,rowreordering:true).configure {
+		column name:'position'
+		column name:'id',filter:true
+		column name:'label',filter:true
+		column name:'value',filter:true		
+	}
+   
 
     static constraints = {    	
     }

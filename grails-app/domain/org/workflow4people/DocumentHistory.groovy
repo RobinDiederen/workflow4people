@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 
 /**
@@ -28,7 +29,15 @@ class DocumentHistory {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-    static listProperties=['id','versionLabel','name','documentDescription','dateCreated','lastUpdatedBy']
+	static listConfig=new ListConfig(name:'documentHistory',controller: 'documentHistory',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'versionLabel',sortable:true,filter:true
+		column name:'name',sortable:true,filter:true
+		column name:'documentDescription',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'lastUpdatedBy',sortable:true,filter:true
+	}
+    
     static constraints = {    	    
 
 		dateCreated(nullable:true)

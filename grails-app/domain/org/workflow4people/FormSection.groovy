@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Form section domain class
@@ -28,7 +29,11 @@ class FormSection {
 	static belongsTo = [formPage: FormPage]
 	static hasMany = [formItem : FormItem]
 
-	static listProperties=['position','name','title']
+	static listConfig=new ListConfig(name:'formSection',controller: 'formSection',rowreordering:true).configure {
+		column name:'position'
+		column name:'name'
+		column name:'title'
+	}
 
 	static constraints = {		
 		title(nullable:true)

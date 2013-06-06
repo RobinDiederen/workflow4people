@@ -19,6 +19,7 @@
 package org.workflow4people
 import groovy.lang.Binding;
 import org.workflow4people.services.*;
+import org.open_t.dialog.*
 
 /**
  * FieldType domain class. This defines a type of field. It links back to an XML Schema type (baseSchemaType) and a BaseFieldType.
@@ -29,7 +30,14 @@ import org.workflow4people.services.*;
 class FieldType {
 	def templateService
 	
-	static listProperties=['id','name','namespace','baseType','baseSchemaType','description']
+	static listConfig=new ListConfig(name:'fieldType',controller: 'fieldType',bFilter:true).configure {		
+		column name:'id',sortable:true,filter:true
+		column name:'name',sortable:true,filter:true
+		column name:'namespace',sortable:true,filter:true
+		column name:'baseType',sortable:true,filter:true
+		column name:'baseSchemaType',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+	}
 	
 	static hasMany = [fieldTypeItem : FieldTypeItem]    
 	static constraints = {		

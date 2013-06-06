@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Role domain class. 
@@ -26,7 +27,13 @@ package org.workflow4people
  * @author Joost Horward
  */
 class Role {
-	static listProperties=['id','name','title','description']
+	static listConfig=new ListConfig(name:'role',controller: 'role',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true		
+	}
+
 
 	String name
 	String title

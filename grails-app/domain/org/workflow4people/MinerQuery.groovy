@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * MinerQuery domain class. 
@@ -25,7 +26,13 @@ package org.workflow4people
  * @author Joost Horward
  */
 class MinerQuery {
-	static listProperties=['id','name','title','description','query']
+	static listConfig=new ListConfig(name:'minerQuery',controller: 'minerQuery',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+		column name:'query',sortable:true,filter:true
+	}
 	static constraints = {    	
 		description(size:0..50000)
 		explanationMessage(size:0..50000)

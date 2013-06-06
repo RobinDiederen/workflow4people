@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Holiday domain class. 
@@ -24,8 +25,14 @@ package org.workflow4people
  * 
  * @author Joost Horward
  */
-class Holiday {
-	static listProperties=['id','title','fromDate','toDate']	
+class Holiday {	
+	static listConfig=new ListConfig(name:'holiday',controller: 'holiday',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'title',sortable:true,filter:true
+		column name:'fromDate',sortable:true,filter:true		
+		column name:'toDate',sortable:true,filter:true
+	}
+	
 	static constraints = {    	
 	}
 	String title

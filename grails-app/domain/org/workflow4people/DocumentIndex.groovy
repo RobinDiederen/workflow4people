@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Stores index information associated with XML Documents stored in Document 
@@ -29,7 +30,12 @@ class DocumentIndex {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-    static listProperties=['id','name','value']
+	static listConfig=new ListConfig(name:'documentIndex',controller: 'documentIndex',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'value',sortable:true,filter:true		
+	}
+	
 	static belongsTo=[document:Document]
     static constraints = {    	
     	value(nullable:true)

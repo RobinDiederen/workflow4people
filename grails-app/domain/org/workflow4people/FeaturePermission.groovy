@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Feature permission domain class. This defines presentation feature permissions. It is used to control access to features defined in org.workflow4people.Feature.
@@ -25,7 +26,14 @@ package org.workflow4people
  * @author Joost Horward
  */
 class FeaturePermission {
-	static listProperties=['id','authority','role','remark']
+	
+	static listConfig=new ListConfig(name:'featurePermission',controller: 'featurePermission',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'authority',sortable:true,filter:true
+		column name:'role',sortable:true,filter:true
+		column name:'remark',sortable:true,filter:true
+	}
+	
 	static belongsTo=[feature:Feature]
 
 	Authority authority

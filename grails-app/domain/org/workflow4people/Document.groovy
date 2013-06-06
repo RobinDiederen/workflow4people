@@ -20,6 +20,7 @@ package org.workflow4people
 import java.util.Collection;
 
 import org.apache.solr.common.*
+import org.open_t.dialog.*
 
 /**
  * XML document database domain class.
@@ -31,7 +32,15 @@ class Document {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-    static listProperties=['id','documentDescription','documentType','dateCreated','lastUpdated']
+	static listConfig=new ListConfig(name:'document',controller: 'document',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'documentDescription',sortable:true,filter:true
+		column name:'documentType',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'lastUpdated',sortable:true,filter:true
+
+	}
+	
     static constraints = {    	    
 		position		nullable:true
 		

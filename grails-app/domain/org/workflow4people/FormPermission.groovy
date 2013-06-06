@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * FormPermission domain class. 
@@ -27,6 +28,12 @@ package org.workflow4people
  */
 class FormPermission {
 	static belongsTo=[form:Form]
+	
+	static listConfig=new ListConfig(name:'formPermission',controller: 'formPermission').configure {
+		column name:'authority'
+		column name:'role'
+		column name:'remark'
+	}
 
 	Authority authority
 	Role role

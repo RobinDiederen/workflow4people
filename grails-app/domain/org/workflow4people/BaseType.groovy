@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Base types are the foundation of the data model. Each type has a parent base type for which a snippet set is defined.
@@ -27,9 +28,13 @@ package org.workflow4people
 class BaseType {
 	/**
 	 * properties to be shown in the user interface list
-	 */
-	static listProperties=['id','name','description']
-	
+	 */	
+	static listConfig=new ListConfig(name:'baseType',controller: 'baseType',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'name',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+
+	}
     static constraints = {
         name(blank: false)    
         description(size:0..50000)

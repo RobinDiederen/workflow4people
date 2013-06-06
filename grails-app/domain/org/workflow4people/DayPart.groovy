@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
 /**
  * Day part domain class.
@@ -28,7 +29,12 @@ class DayPart {
 	/**
 	 * properties to be shown in the user interface list
 	 */
-	static listProperties=['position','dayName','fromTime','toTime']
+	static listConfig=new ListConfig(name:'dayPart',controller: 'dayPart',rowreordering:true).configure {
+		column name:'position'
+		column name:'dayName'
+		column name:'fromTime'
+		column name:'toTime'
+	}
 	
     static constraints = {    	
     	dayName(inList:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'])

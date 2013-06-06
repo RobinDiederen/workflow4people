@@ -17,6 +17,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import org.open_t.dialog.*
 
  /**
   * Form page domain class
@@ -26,8 +27,13 @@ package org.workflow4people
 class FormPage {
 	static belongsTo = [form: Form]
 	static hasMany = [formSection : FormSection]
-
-	static listProperties=['id','position','name','title']
+	
+	static listConfig=new ListConfig(name:'formPage',controller: 'formPage',rowreordering:true).configure {
+		column name:'position'
+		column name:'name'
+		column name:'title'
+	}
+	
 
     static constraints = {		
 		title(nullable:true)

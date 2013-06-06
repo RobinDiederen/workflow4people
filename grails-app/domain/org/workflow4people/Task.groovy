@@ -19,6 +19,7 @@
 package org.workflow4people
 import java.util.Date;
 import org.apache.solr.common.SolrInputDocument;
+import org.open_t.dialog.*
 
 /**
  * Task domain class
@@ -29,7 +30,12 @@ class Task {
 	def solrService
 	static transients = ["noMessage"]
 
-   	static listProperties=['id','description','dueDate','assignee']
+	static listConfig=new ListConfig(name:'task',controller: 'task',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'description',sortable:true,filter:true
+		column name:'dueDate',sortable:true,filter:true
+		column name:'assignee',sortable:true,filter:true
+	}
     static constraints = {
 		name(nullable:true)
 		description(nullable:true)

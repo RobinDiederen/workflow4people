@@ -19,6 +19,7 @@
 package org.workflow4people
 import java.io.Serializable;
 import groovy.lang.Binding;
+import org.open_t.dialog.*
 
 /**
  * Form domain class. 
@@ -28,7 +29,15 @@ import groovy.lang.Binding;
  */
 class Form implements Serializable {
 	def templateService
-	static listProperties=['id','name','title','workflow']
+
+	static listConfig=new ListConfig(name:'form',controller: 'form',bFilter:true).configure {		
+		column name:'id',sortable:true,filter:true
+		column name:'name',sortable:true,filter:true
+		column name:'title',sortable:true,filter:true
+		column name:'workflow',sortable:true,filter:true
+	}
+	
+	
     static constraints = {    	
     	description(size:0..50000)
     	explanationMessage(size:0..50000)

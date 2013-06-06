@@ -20,6 +20,7 @@ package org.workflow4people
 import java.util.Map;
 
 import org.workflow4people.services.*;
+import org.open_t.dialog.*
 
 /**
  * Field domain class. This defines a field
@@ -28,7 +29,14 @@ import org.workflow4people.services.*;
  * @author Joost Horward
  */
 class Field {
-	static listProperties=['position','id','name','description']
+	
+	static listConfig=new ListConfig(name:'field',controller: 'field',bFilter:true).configure {
+		column name:'position',sortable:true
+		column name:'id',sortable:true,filter:true
+		column name:'name',sortable:true,filter:true
+		column name:'description',sortable:true,filter:true
+	}
+
 	static belongsTo = [parent: Field]
     static constraints = {
 		parent(nullable:true)		
