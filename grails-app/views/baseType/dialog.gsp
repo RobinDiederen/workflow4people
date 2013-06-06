@@ -1,4 +1,4 @@
-<dialog:form title="Field" object="${baseTypeInstance}">
+<dialog:form object="${baseTypeInstance}">
 	<dialog:table>		                            
 		<dialog:textField object="${baseTypeInstance}" propertyName="id" mode="show" />                                                        
 		<dialog:textField object="${baseTypeInstance}" propertyName="name" mode="edit" />                                                    
