@@ -190,7 +190,12 @@ class Field {
 		binding.field=this
 		binding.prefix=namespacePrefix
 		def templateSnippetConfig=templateService.getSnippetConfig(fieldType.name)?:templateService.getSnippetConfig(fieldType.baseType?.name)
-		binding.snippetConfig=templateSnippetConfig.parameters+fieldType.snippetConfig+snippetConfig
+
+
+		def defaultConfig=templateSnippetConfig.parameters.collectEntries { key, item ->
+			[key,item.defaultValue]
+		}
+		binding.snippetConfig=defaultConfig+fieldType.snippetConfig+snippetConfig
 		binding.parameters=binding.snippetConfig
 		binding.output=""
 		

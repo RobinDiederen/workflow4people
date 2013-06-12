@@ -184,10 +184,16 @@ class FieldType {
 		if (snippetConfig?.minExclusive) binding.restrictions+="<minExclusive value=\"${snippetConfig?.minExclusive}\" />"
 		if (snippetConfig?.maxExclusive) binding.restrictions+="<maxExclusive value=\"${snippetConfig?.maxExclusive}\" />"
 		if (snippetConfig?.pattern) binding.restrictions+="<pattern value=\"${snippetConfig?.pattern}\" />"
-		
+
+
 		def templateSnippetConfig=templateService.getSnippetConfig(name)?:templateService.getSnippetConfig(baseType.name)
-		binding.snippetConfig=templateSnippetConfig.parameters+snippetConfig
-	
+
+		def defaultConfig=templateSnippetConfig.parameters.collectEntries { key, item ->
+			[key,item.defaultValue]
+		}
+
+		binding.snippetConfig=defaultConfig+snippetConfig
+		
 		binding.fieldType=this
 		binding.output=""
 		return binding
