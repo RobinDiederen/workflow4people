@@ -55,15 +55,7 @@ class FieldType {
 	    
 	    
 	    generateSchemaType(nullable:true)
-	    restrictions(nullable:true)
-	    length(nullable:true)
-	    minLength(nullable:true)
-	    maxLength(nullable:true)
-	    pattern(nullable:true)
-	    minInclusive(nullable:true)
-	    maxInclusive(nullable:true)
-	    minExclusive(nullable:true)
-	    maxExclusive(nullable:true)
+	    
 	    
 		listParent(nullable:true)
 	    
@@ -117,82 +109,39 @@ class FieldType {
     boolean generateSchemaType=true
     // the Schema type on which this fieldtype is based
     String baseSchemaType
+    
+    
     /**
-     * Flag to indicate whether restrictions should be applied. The fieldtype binding for the template provides a 'restrictions' generated field that contains XML schema bindings based on the properties of the field type.
-     */
-    boolean restrictions=false
-    /**
-     * Fixed length restriction
-     */
-    String length
-    /**
-     * Minimum length restriction
-     */
-    String minLength
-    /**
-     * Maximum length restriction
-     */
-    String maxLength
-    /**
-     * Pattern restriction
-     */
-    String pattern
-    /**
-     * Minimum inclusive range restriction
-     */
-    String minInclusive
-    /**
-     * Maximum inclusive range restriction
-     */
-    String maxInclusive
-    /**
-     * Minimum exclusive range restriction
-     */
-    String minExclusive
-    /**
-     * Maximum exclusive range restriction
-     */
-    String maxExclusive	
-	
-	/**
 	 * Parent for field list associated with this FieldType
 	 */
 	Field listParent
 	
 	
-	Map snippetConfig
+	Map snippetParameters
 	
     /**
      * Provides a binding for the field type. The binding is used by the template.
      * Contains:
      * - name
      * - baseSchemaType
-     * - restrictions
      * - fieldType
+     * - parameters
+     * - snippetConfig
      */
     Binding binding() {	
 		groovy.lang.Binding binding = new Binding()		
 		binding.name=this.name
 		binding.baseSchemaType=this.baseSchemaType
-		
-		binding.restrictions=""
-		if (snippetConfig?.maxLength) binding.restrictions+="<maxLength value=\"${snippetConfig?.maxLength}\" />"
-		if (snippetConfig?.minLength) binding.restrictions+="<minLength value=\"${snippetConfig?.minLength}\" />"
-		if (length) binding.restrictions+="<length value=\"${length}\" />"
-		if (snippetConfig?.minInclusive) binding.restrictions+="<minInclusive value=\"${snippetConfig?.minInclusive}\" />"
-		if (snippetConfig?.maxInclusive) binding.restrictions+="<maxInclusive value=\"${snippetConfig?.maxInclusive}\" />"
-		if (snippetConfig?.minExclusive) binding.restrictions+="<minExclusive value=\"${snippetConfig?.minExclusive}\" />"
-		if (snippetConfig?.maxExclusive) binding.restrictions+="<maxExclusive value=\"${snippetConfig?.maxExclusive}\" />"
-		if (snippetConfig?.pattern) binding.restrictions+="<pattern value=\"${snippetConfig?.pattern}\" />"
-
-
+	
 		def templateSnippetConfig=templateService.getSnippetConfig(name)?:templateService.getSnippetConfig(baseType.name)
 
-		def defaultConfig=templateSnippetConfig.parameters.collectEntries { key, item ->
+		def defaultParameters=templateSnippetConfig.parameters.collectEntries { key, item ->
 			[key,item.defaultValue]
 		}
+		
+		binding.snippetConfig=templateSnippetConfig
 
-		binding.snippetConfig=defaultConfig+snippetConfig
+		binding.parameters=defaultParameters+snippetParameters
 		
 		binding.fieldType=this
 		binding.output=""
@@ -240,7 +189,11 @@ class FieldType {
     
     def getSchemaType() {
     	if (generateSchemaType)
-    		return "${namespace.prefix}:${name}"
+			if(namespace) {
+				return "${namespace?.prefix}:${name}"
+			} else {
+				return name
+			}
 		else
 			return baseSchemaType
     }

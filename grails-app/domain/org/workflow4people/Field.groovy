@@ -45,7 +45,7 @@ class Field {
     	label(nullable:true)
     	help(nullable:true,size:0..50000)
 	    alert(nullable:true,size:0..50000)
-	    fieldLength(nullable:true)
+	    //fieldLength(nullable:true)
 	    contentText(nullable:true,size:0..50000)
 	    
 	    // Determines repetition of this field	    
@@ -92,7 +92,6 @@ class Field {
      * The alert to show in the Form. If empty, the alert from the FieldType is used 
      */
     String alert
-    String fieldLength
     
     String contentText
     
@@ -107,7 +106,7 @@ class Field {
     String dependencyType
     String dependencyParameter
 	
-	Map snippetConfig
+	Map snippetParameters
         
     String toString() {
 		
@@ -159,17 +158,6 @@ class Field {
 		binding.label = getFieldProperty('label')
 		binding.help=getFieldProperty('help')			
 		binding.alert=getFieldProperty('alert')		
-		binding.fieldLength=getFieldProperty('fieldLength')
-		binding.minLength=fieldType.snippetConfig?.minLength ? fieldType.snippetConfig?.minLength : ""
-		binding.maxLength=fieldType.snippetConfig?.maxLength ? fieldType.snippetConfig?.maxLength : ""
-		
-		binding.minInclusive=fieldType.snippetConfig?.minInclusive ? fieldType.snippetConfig?.minInclusive : ""
-		binding.maxInclusive=fieldType.snippetConfig?.maxInclusive ? fieldType.snippetConfig?.maxInclusive : ""
-			
-		binding.minExclusive=fieldType.snippetConfig?.minExclusive ? fieldType.snippetConfig?.minExclusive : ""
-		binding.maxExclusive=fieldType.snippetConfig?.maxExclusive ? fieldType.snippetConfig?.maxExclusive : ""
-			
-		binding.pattern=fieldType.snippetConfig?.pattern ? fieldType.snippetConfig?.pattern : ""
 		
 		binding.defaultValue = getFieldProperty('defaultValue')
 		
@@ -179,7 +167,7 @@ class Field {
 		binding.occurrence=""
 		if (minOccurs?.size()>0) binding.occurrence+=" minOccurs=\"${minOccurs}\""
 		if (maxOccurs?.size()>0) binding.occurrence+=" maxOccurs=\"${maxOccurs}\""
-			
+
 		binding.xpath=xpath
 		binding.gpath=gpath
 		binding.listGpath=listGpath
@@ -192,11 +180,12 @@ class Field {
 		def templateSnippetConfig=templateService.getSnippetConfig(fieldType.name)?:templateService.getSnippetConfig(fieldType.baseType?.name)
 
 
-		def defaultConfig=templateSnippetConfig.parameters.collectEntries { key, item ->
+		def defaultParameters=templateSnippetConfig.parameters.collectEntries { key, item ->
 			[key,item.defaultValue]
 		}
-		binding.snippetConfig=defaultConfig+fieldType.snippetConfig+snippetConfig
-		binding.parameters=binding.snippetConfig
+		binding.snippetConfig=templateSnippetConfig
+		binding.parameters=defaultParameters+fieldType.snippetParameters+snippetParameters
+		
 		binding.output=""
 		
 		return binding

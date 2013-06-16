@@ -293,13 +293,41 @@ public class TemplateService implements  ApplicationContextAware {
 		}
 	
 	 def prettyPrint(String inputHTML) {
+		 String res=""
+		 int indent=0
+		 inputHTML.eachLine { line ->
+			 def l=line.trim()
+			 if (l.size()>0) {
+		 
+				 if (l.startsWith("</")) {
+					 indent-=1
+				 }
+		 
+		 
+				 def s=l
+				 for (int i=0;i<indent;i++) s="    ${s}"
+				 if (indent>=0) {
+					 res+="${s}\n"
+				 } else {
+					 res+= "${line}\n"
+				 }
+		 
+				 if (l.startsWith("<") && !l.contains("</") && !l.startsWith("<!--") && !l.endsWith("/>") && !l.startsWith("<?")) {
+					 indent+=1
+				 }
+			 }
+		 }
+		 
+		 
+		 return res
+		 /*
 		 Tidy tidy = new Tidy();
          
          tidy.setXHTML(true);       
 		 ByteArrayOutputStream xhtmlByteOutStream = new ByteArrayOutputStream();             
 		 tidy.parse(new ByteArrayInputStream(inputHTML.getBytes()),xhtmlByteOutStream);
 		 return xhtmlByteOutStream.toString()
-		 
+		 */
 	}
 	 String getStackTrace(Exception e) {
 		 ByteArrayOutputStream os = new ByteArrayOutputStream();

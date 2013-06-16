@@ -197,9 +197,8 @@ class TemplateConfigDelegate
   		outputDir.mkdirs() 
 	}	
 	def s=templateService.runTemplate(templatePath+theTemplatePath, model)
-	if (!options.contains("noPretty")) {
-		//disabled it for now
-		//s=templateService.prettyPrint(s)
+	if (!options.contains("noPretty")) {		
+		s=templateService.prettyPrint(s)
 	}
 	if (!options.contains("noReplace")) {
 		s=s.replace("<render-","<");		

@@ -28,22 +28,7 @@
 		</dialog:tab>
 		</g:if>
 		<dialog:tab name="Advanced" object="${fieldTypeInstance}">
-			<dialog:checkBox object="${fieldTypeInstance}" propertyName="generateSchemaType" mode="edit" />
-			<dialog:checkBox object="${fieldTypeInstance}" propertyName="restrictions" mode="edit" />
-			
-			<%-- <dialog:textField object="${fieldTypeInstance}" propertyName="length" mode="edit" />
-			<dialog:textField object="${fieldTypeInstance}" propertyName="minLength" mode="edit" />
-			<dialog:textField object="${fieldTypeInstance}" propertyName="maxLength" mode="edit" />
-			
-			
-			<dialog:textField object="${fieldTypeInstance}" propertyName="pattern" mode="edit" />
-			
-			<dialog:textField object="${fieldTypeInstance}" propertyName="minInclusive" mode="edit" />
-			<dialog:textField object="${fieldTypeInstance}" propertyName="maxInclusive" mode="edit" />
-			
-			<dialog:textField object="${fieldTypeInstance}" propertyName="minExclusive" mode="edit" />
-			<dialog:textField object="${fieldTypeInstance}" propertyName="maxExclusive" mode="edit" />
-			--%>
+			<dialog:checkBox object="${fieldTypeInstance}" propertyName="generateSchemaType" mode="edit" />			
 		</dialog:tab>
 		
 		<dialog:tab name="Snippet" object="${fieldTypeInstance}">
@@ -51,7 +36,7 @@
 				<dialog:simplerow label="${message(code:'fieldType.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
 				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
 				<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
-					<g:textField name="snippetConfig.${parameter.key}" value="${fieldTypeInstance.snippetConfig[parameter.key]}" placeholder="${parameter.value.defaultValue}"/>
+					<g:textField name="snippetParameters.${parameter.key}" value="${fieldTypeInstance.snippetParameters[parameter.key]}" placeholder="${parameter.value.defaultValue}"/>
 					</dialog:simplerow>
 				</g:each>
 			</g:if>

@@ -1,13 +1,12 @@
 modules = {
 	wfp {
-		dependsOn 'dialog,dialog-tree,dialog-dataTables,dialog-altselect,dialog-codemirror,bootstrap-css,bootstrap-tooltip,bootstrap-popover,bootstrap-modal,dialog-bootstrap,dialog-fileuploader,dialog-last'		
-		
+		dependsOn 'dialog,dialog-tree,dialog-dataTables,dialog-altselect,dialog-codemirror,bootstrap-css,bootstrap-tooltip,bootstrap-popover,bootstrap-modal,dialog-bootstrap,dialog-fileuploader,dialog-last'
 		//resource url:'/css/workflow4people.css'
 		//resource url:'/css/theme/roller-theme.css'
 		resource url:'/css/theme/theme.css'
 		resource url:'/images/favicon.ico'
 		
-		resource url:'js/jquery/localisation/jquery.localisation-min.js'
+	//	resource url:'js/jquery/localisation/jquery.localisation-min.js'
 		resource url:'js/workflow4people.js'
 		
 	}

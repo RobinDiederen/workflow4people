@@ -24,7 +24,7 @@
 			<dialog:select object="${fieldInstance}" propertyName="dependencyType" mode="edit" />
 			<dialog:textField object="${fieldInstance}" propertyName="dependencyParameter" mode="edit" />
 			<dialog:checkBox object="${fieldInstance}" propertyName="readonly" mode="edit" />
-			<dialog:textField object="${fieldInstance}" propertyName="fieldLength" mode="edit" />
+			
 			<dialog:textField object="${fieldInstance}" propertyName="xpath" mode="show" />
 			<dialog:domainObject object="${fieldInstance}" propertyName="parent" mode="show" />
 		</dialog:tab>
@@ -34,7 +34,7 @@
 				<dialog:simplerow label="${message(code:'field.snippetConfig.description')}" >${templateSnippetConfig.description}</dialog:simplerow>
 				<g:each in="${templateSnippetConfig.parameters}" var="parameter">
 					<dialog:simplerow label="${parameter.value.label}" help="${parameter.value.help}">
-					<g:textField name="snippetConfig.${parameter.key}" value="${fieldInstance.snippetConfig[parameter.key]}" placeholder="${fieldInstance.fieldType.snippetConfig[parameter.key]?:parameter.value.defaultValue}" />
+					<g:textField name="snippetParameters.${parameter.key}" value="${fieldInstance.snippetParameters[parameter.key]}" placeholder="${fieldInstance.fieldType.snippetParameters[parameter.key]?:parameter.value.defaultValue}" />
 					</dialog:simplerow>
 				</g:each>
 			</g:if>

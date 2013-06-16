@@ -31,6 +31,8 @@ class FieldController {
 	
 	def dialogService
 	def listService
+	
+	def templateService
     
     def index = { redirect(action:list,params:params) }
 
@@ -118,7 +120,7 @@ class FieldController {
 	def submitdialog = {
 		def prms=params
 		render dialogService.submit(Field,params,null) {
-			domainClassInstance.snippetConfig=prms.snippetConfig
+			domainClassInstance.snippetParameters=prms.snippetParameters
 			domainClassInstance.save()
 			res['result']['refreshNodes']=["dataModelTree"]
 		} as JSON }

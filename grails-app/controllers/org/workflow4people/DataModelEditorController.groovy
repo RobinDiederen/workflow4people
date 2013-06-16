@@ -108,6 +108,8 @@ class DataModelEditorController {
 	    	fieldInstance = Field.newInstance()
 	    }
 		fieldInstance.properties = params
+		fieldInstance.snippetParameters=params.snippetParameters
+		
 		
 		def res = dialogService.submit(Field,params,fieldInstance)
 

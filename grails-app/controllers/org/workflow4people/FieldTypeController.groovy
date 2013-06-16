@@ -66,8 +66,8 @@ class FieldTypeController {
 	
 	def submitdialog = { 
 		def prms=params
-		render dialogService.submit(FieldType,params,null) {
-			domainClassInstance.snippetConfig=prms.snippetConfig
+		render dialogService.submit(FieldType,params,null) {			
+			domainClassInstance.snippetParameters=prms.snippetParameters
 			domainClassInstance.save()			
 			res['result']['refreshNodes']=["dataModelTree"]
 		} as JSON }
