@@ -1,5 +1,5 @@
 <dialog:form title="Form" object="${formInstance}" height="540px">
-	<dialog:tabs names="Details,Description,Messages,Pages" object="${formInstance}">		
+	<dialog:tabs names="Details,Description,Messages,Pages,Permissions" object="${formInstance}">		
 		<dialog:tab name="Details" object="${formInstance}">		                            
 	        <dialog:textField object="${formInstance}" propertyName="id" mode="show" />
 			<dialog:domainObject object="${formInstance}" propertyName="workflow" mode="show" />
@@ -20,6 +20,9 @@
 		</dialog:tab>
 		<dialog:tab name="Pages" object="${formInstance}">
 			<dialog:detailTable property="form" object="${formInstance}" domainClass="${org.workflow4people.FormPage}" />
+		</dialog:tab>
+		<dialog:tab name="Permissions" object="${formInstance}">
+			<dialog:detailTable property="form" object="${formInstance}" domainClass="${org.workflow4people.FormPermission}" />	    		
 		</dialog:tab>
 	</dialog:tabs>
 </dialog:form>

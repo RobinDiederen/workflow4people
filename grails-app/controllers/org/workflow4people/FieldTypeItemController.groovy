@@ -55,15 +55,5 @@ class FieldTypeItemController {
 	def submitdialog = { render dialogService.submit(FieldTypeItem,params) as JSON }
 	
 	def delete = { render dialogService.delete(FieldTypeItem,params) as JSON }
-	
-    def show = {
-        def fieldTypeItemInstance = FieldTypeItem.get( params.id )
-
-        if(!fieldTypeItemInstance) {
-            flash.message = "FieldTypeItem not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else { return [ fieldTypeItemInstance : fieldTypeItemInstance ] }
-    }
 
 }

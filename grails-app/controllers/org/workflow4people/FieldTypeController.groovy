@@ -74,8 +74,8 @@ class FieldTypeController {
 	
 	def delete = { render dialogService.delete(FieldType,params) as JSON }
 	
-    
-    def copy = {
+    // TODO is this unused?
+    def xcopy = {
         def fieldTypeInstance = FieldType.get( params.id )
 
         if(!fieldTypeInstance) {
@@ -111,8 +111,8 @@ class FieldTypeController {
     }
 
     
-
-    def update = {
+	// TODO is this unused?
+    def xupdate = {
         def fieldTypeInstance = FieldType.get( params.id )
         if(fieldTypeInstance) {
             if(params.version) {
@@ -139,13 +139,14 @@ class FieldTypeController {
         }
     }
 
-    def create = {
+	// TODO is this unused?
+    def xcreate = {
         def fieldTypeInstance = new FieldType()
         fieldTypeInstance.properties = params
         return ['fieldTypeInstance':fieldTypeInstance]
     }
-
-    def save = {
+	// TODO is this unused?
+    def xsave = {
         def fieldTypeInstance = new FieldType(params)
         if(!fieldTypeInstance.hasErrors() && fieldTypeInstance.save()) {
             flash.message = "FieldType ${fieldTypeInstance.id} created"
