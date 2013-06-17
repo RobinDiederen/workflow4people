@@ -87,4 +87,33 @@ class FormTagLib {
         out << body((attrs.var):fieldType)
 		})	
 	}
+	/**
+	 * Generate a tag based on name and attributes
+	 * <w:tag name="a" attributes="${[href:'http://www.open-t.nl']}" > 
+	 * genrates
+	 * <a href="http://www.open-t.nl">
+	 */
+	
+	def tag = { attrs, body ->
+		def copiedAttrs=""
+		def skipAttrs=['name','attributes']
+		
+		attrs.each { attrKey, attrValue ->
+			 if (!skipAttrs.contains(attrKey) && (attrValue))
+			 {
+				 copiedAttrs+=" ${attrKey}=\"${attrValue}\""		 
+			 }
+		}
+		if (attrs.attributes) {
+			attrs.attributes.each { attrKey, attrValue ->
+				if (attrValue) {
+					copiedAttrs+=" ${attrKey}=\"${attrValue}\""
+				}
+			}
+		}
+		
+		out << """<${attrs.name}${copiedAttrs}>"""
+		out << body()
+		out << "</${attrs.name}>"
+	}
 }

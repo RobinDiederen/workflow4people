@@ -1,4 +1,5 @@
-<form:input  
+<w:tag name="form:input"
+			attributes="${parameters}"
 			depends-on="update-document.${field.dependsOn?.gpath}"
 			dependency-type="${field.dependencyType}"
 			dependency-parameter="${field.dependencyParameter}"
