@@ -17,7 +17,7 @@ class VersionService {
 	}
 
 	def nextVersion(String version) {
-		if (version.contains('.')) {
+		if (version?.contains('.')) {
 			def versionParts=version.split("\\.").collect { it }
 			def lastPart=versionParts.pop()		
 			//	 	versionParts.pop()
