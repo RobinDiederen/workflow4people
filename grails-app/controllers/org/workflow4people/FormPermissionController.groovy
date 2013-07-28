@@ -18,6 +18,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses
  */
 package org.workflow4people
+import grails.converters.JSON;
+
 import grails.plugins.springsecurity.Secured
 /**
  * Controller for FormPermission domain class
@@ -26,115 +28,22 @@ import grails.plugins.springsecurity.Secured
  */
 @Secured(['ROLE_WF4P_ADMIN','ROLE_WF4P_DEVELOPER'])
 class FormPermissionController {
+	def listService
+	def dialogService
 
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST"]
-
-    def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [formPermissionInstanceList: FormPermission.list(params), formPermissionInstanceTotal: FormPermission.count()]
-    }
-
-    def create = {
-        def formPermissionInstance = new FormPermission()
-        formPermissionInstance.properties = params
-        return [formPermissionInstance: formPermissionInstance]
-    }
-
-    def save = {
-        def formPermissionInstance = new FormPermission(params)
-        if (!formPermissionInstance.hasErrors() && formPermissionInstance.save()) {
-            flash.message = "formPermission.created"
-            flash.args = [formPermissionInstance.id]
-            flash.defaultMessage = "FormPermission ${formPermissionInstance.id} created"
-            redirect(action: "show", id: formPermissionInstance.id)
-        }
-        else {
-            render(view: "create", model: [formPermissionInstance: formPermissionInstance])
-        }
-    }
-
-    def show = {
-        def formPermissionInstance = FormPermission.get(params.id)
-        if (!formPermissionInstance) {
-            flash.message = "formPermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FormPermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [formPermissionInstance: formPermissionInstance]
-        }
-    }
-
-    def edit = {
-        def formPermissionInstance = FormPermission.get(params.id)
-        if (!formPermissionInstance) {
-            flash.message = "formPermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FormPermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [formPermissionInstance: formPermissionInstance]
-        }
-    }
-
-    def update = {
-        def formPermissionInstance = FormPermission.get(params.id)
-        if (formPermissionInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (formPermissionInstance.version > version) {
-                    
-                    formPermissionInstance.errors.rejectValue("version", "formPermission.optimistic.locking.failure", "Another user has updated this FormPermission while you were editing")
-                    render(view: "edit", model: [formPermissionInstance: formPermissionInstance])
-                    return
-                }
-            }
-            formPermissionInstance.properties = params
-            if (!formPermissionInstance.hasErrors() && formPermissionInstance.save()) {
-                flash.message = "formPermission.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "FormPermission ${params.id} updated"
-                redirect(action: "show", id: formPermissionInstance.id)
-            }
-            else {
-                render(view: "edit", model: [formPermissionInstance: formPermissionInstance])
-            }
-        }
-        else {
-            flash.message = "formPermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FormPermission not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def formPermissionInstance = FormPermission.get(params.id)
-        if (formPermissionInstance) {
-            try {
-                formPermissionInstance.delete()
-                flash.message = "formPermission.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FormPermission ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "formPermission.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "FormPermission ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "formPermission.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "FormPermission not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
+	
+	def jsonlist = {
+		render listService.jsonlist(FormPermission,params,request) as JSON
+	}
+	
+	def dialog = { return dialogService.edit(FormPermission,params) }
+	
+	def submitdialog = { render dialogService.submit(FormPermission,params) as JSON }
+	
+	def delete = { render dialogService.delete(FormPermission,params) as JSON }
+	
 }

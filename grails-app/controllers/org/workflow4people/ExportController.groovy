@@ -27,7 +27,6 @@ class ExportController {
 		[xmlDocument:xmlDocument]
 		
 		//render form as XML
-		//render form as XML
 	}
 	
 }

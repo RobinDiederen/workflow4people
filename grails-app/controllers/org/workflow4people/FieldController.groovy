@@ -47,7 +47,8 @@ class FieldController {
 		render listService.jsonlist(Field,params,request,null,null) as JSON
 	}
 
-    def show = {
+	// TODO is this unused?
+    def xajaxshow = {
         def fieldInstance = Field.get( params.id )
 
         if(!fieldInstance) {
@@ -56,18 +57,8 @@ class FieldController {
         }
         else { return [ fieldInstance : fieldInstance ] }
     }
-    
-    def ajaxshow = {
-        def fieldInstance = Field.get( params.id )
-
-        if(!fieldInstance) {
-            flash.message = "Field not found with id ${params.id}"
-            redirect(action:list)
-        }
-        else { return [ fieldInstance : fieldInstance ] }
-    }
-    
-    def json = {
+	// TODO is this unused?
+    def xjson = {
         def fieldInstance = Field.get( params.id )
 
         if(!fieldInstance) {
@@ -94,10 +85,11 @@ class FieldController {
         	}
         }
     }
+	
 	def delete = { render dialogService.delete(Field,params) as JSON }
 	
-
-    def edit = {
+	// TODO is this unused?
+    def xedit = {
         def fieldInstance = Field.get( params.id )
 
         if(!fieldInstance) {
@@ -123,16 +115,7 @@ class FieldController {
 			domainClassInstance.snippetParameters=prms.snippetParameters
 			domainClassInstance.save()
 			res['result']['refreshNodes']=["dataModelTree"]
-		} as JSON }
-	
-	
-   
-	def xdialog = { return dialogService.edit(Field,params) }
-	
-	
-	
-	def xsubmitdialog = { render dialogService.submit(Field,params) as JSON }
-	
+		} as JSON }	
 	
 	def treeJSON = {
 		def elements=[]
@@ -195,7 +178,4 @@ class FieldController {
 		
 	}
 	
-	
-	
-    
 }
