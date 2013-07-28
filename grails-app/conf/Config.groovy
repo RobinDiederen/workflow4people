@@ -28,6 +28,9 @@ grails.converters.encoding="UTF-8"
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 
+grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
+ 
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
@@ -157,10 +160,10 @@ log4j = {
     //debug 'grails.app.service.org.workflow4people.services'
 	warn "grails.app"
 	warn "grails.app.controllers"
-	debug "grails.app.services"
-	warn "grails.app.endpoints"
+	trace "grails.app.services"
+	trace "grails.app.endpoints"
 	warn "grails.app.domain"
-	debug "org.workflow4people"
+	trace "org.workflow4people"
     
 }
 
