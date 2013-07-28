@@ -41,6 +41,15 @@ class Document {
 
 	}
 	
+	static searchListConfig=new ListConfig(name:'document',controller: 'search',action:'jsonsearchdocument',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'documentDescription',sortable:true,filter:true
+		column name:'documentType',sortable:true,filter:true
+		column name:'dateCreated',sortable:true,filter:true
+		column name:'lastUpdated',sortable:true,filter:true
+
+	}
+	
     static constraints = {    	    
 		position		nullable:true
 		

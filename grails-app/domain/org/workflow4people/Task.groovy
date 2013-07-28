@@ -36,6 +36,15 @@ class Task {
 		column name:'dueDate',sortable:true,filter:true
 		column name:'assignee',sortable:true,filter:true
 	}
+	
+	static searchListConfig=new ListConfig(name:'task',controller: 'search',action:'jsonsearchtask',bFilter:true).configure {
+		column name:'id',sortable:true
+		column name:'description',sortable:true,filter:true
+		column name:'dueDate',sortable:true,filter:true
+		column name:'assignee',sortable:true,filter:true
+	}
+	
+	
     static constraints = {
 		name(nullable:true)
 		description(nullable:true)
