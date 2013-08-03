@@ -1,14 +1,6 @@
-<form:input type="date" 
+<form:input type="text" 
 			class="${field.nillable ? '' : 'required'} fieldtype-${fieldTypeName} field-${name} ${field.dependencySource ? 'dependency-source' : ''}" 
-			regexp="${pattern}" 
-			minlength="${minLength}"
-			maxlength="${maxLength}"
-			 
-			min="${minInclusive}" 
-			max="${maxInclusive}"
 			
-			minexcl="${minExclusive}" 
-			maxexcl="${maxExclusive}"
 			
 			depends-on="update-document.${field.dependsOn?.gpath}"
 			dependency-type="${field.dependencyType}"
