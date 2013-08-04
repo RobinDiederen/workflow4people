@@ -1,4 +1,4 @@
-<form:form form style="width:1200px;height:auto;" action="/forms/form/submit" title="${form.title}" explanation="${form.explanationMessage}" name="request" process="${form.workflow.name}" type="request">			
+<form:form style="width:1200px;height:auto;" action="/forms/form/submit" title="${form.title}" explanation="${form.explanationMessage}" name="request" process="${form.workflow.name}" type="request">			
         <w:pages form="${form}" var="page">
                 <w:sections page="${page}" var="section">
                         <legend>${section.title}

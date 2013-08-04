@@ -18,6 +18,8 @@
 </w:snippet>
 --%>
 <w:snippet type="Default" name="labelwrapper" label="Uiterste datum" >
+  <render-g:if test="*{document.header?.task?.dueDate?.text()}" >
 *{new java.text.SimpleDateFormat(g.message(code: 'output.date.format')).format(new java.text.SimpleDateFormat("yyyy-MM-dd").parse(document.header?.task?.dueDate?.text()))}
+  </render-g:if>
 </w:snippet>
 </f:if>

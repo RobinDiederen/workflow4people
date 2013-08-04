@@ -18,7 +18,7 @@
                         <div class="controls ">	
                 <ccmis:list />	
                 </div>
-        </div>			
+        </div>
         </f:if>
         <div class="control-group">
                 <label class="control-label" for="comment">*{g.message(code: 'comment')}</label>
