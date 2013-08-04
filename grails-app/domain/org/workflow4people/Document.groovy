@@ -41,7 +41,7 @@ class Document {
 
 	}
 	
-	static searchListConfig=new ListConfig(name:'document',controller: 'search',action:'jsonsearchdocument',bFilter:true).configure {
+	static searchListConfig=new ListConfig(name:'document',controller: 'search',action:'jsonsearchdocument',bFilter:true,newButton:false).configure {
 		column name:'id',sortable:true
 		column name:'documentDescription',sortable:true,filter:true
 		column name:'documentType',sortable:true,filter:true
