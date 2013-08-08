@@ -48,6 +48,8 @@ beans = {
 	
    /* activiti */
 	wfpUserTaskParseHandler(org.workflow4people.activiti.WfpUserTaskParseHandler)
+    wfpExecutionParseHandler(org.workflow4people.activiti.WfpExecutionParseHandler)
+    
 	
 	activitiProcessEngineConfiguration(org.activiti.spring.SpringProcessEngineConfiguration) {
 		processEngineName = "activiti"
@@ -76,7 +78,8 @@ beans = {
 		postBpmnParseHandlers = [
 			//wfpUserTaskParseHandler(org.workflow4people.activiti.WfpUserTaskParseHandler),
 			//wfpUserTaskParseHandler2(org.workflow4people.activiti.WfpUserTaskParseHandler)
-			ref("wfpUserTaskParseHandler")
+			ref("wfpUserTaskParseHandler"),
+            ref("wfpExecutionParseHandler")
 			//org.workflow4people.activiti.WfpProcessParseHandler
 		]
 		

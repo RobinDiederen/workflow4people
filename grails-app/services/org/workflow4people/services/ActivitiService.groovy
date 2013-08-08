@@ -41,6 +41,8 @@ import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.activiti.engine.delegate.ExecutionListener
+import org.activiti.engine.delegate.DelegateExecution
 
 
 /**
@@ -69,8 +71,9 @@ class ActivitiService  {
 	
 	def sessionFactory
 	
-	def createTaskLister=new CreateTaskListenerImpl()
-	def completeTaskLister=new CompleteTaskListenerImpl()
+	def createTaskListener=new CreateTaskListenerImpl()
+	def completeTaskListener=new CompleteTaskListenerImpl()
+    def endExecutionListener = new EndExcutionListenerImpl()
 	
 	def jmsService
 
@@ -136,7 +139,7 @@ class ActivitiService  {
 	 * @return
 	 */
 	def afterDeleteActivitiWorkflow(msg) {
-		def processInstance=executionService.findProcessInstanceById(msg.id)
+		//def processInstance=executionService.findProcessInstanceById(msg.id)
 		def engine=WorkflowEngine.findByName("activiti")
 		def workflow=Workflow.findByWorkflowEngineAndExternalId(engine,msg.id)
 		if (workflow) {
@@ -313,7 +316,7 @@ class ActivitiService  {
 	private final class CreateTaskListenerImpl implements TaskListener {		
 		@Override		
 		public void notify(DelegateTask delegateTask) {
-			log.debug ("TASK CREATE from Activiti " + delegateTask.toString());
+			log.trace ("TASK CREATE from Activiti " + delegateTask.toString());
 			
 			def candidateGroups=[]
 			def candidateUsers=[]
@@ -337,8 +340,17 @@ class ActivitiService  {
 	private final class CompleteTaskListenerImpl implements TaskListener {
 		@Override
 		public void notify(DelegateTask delegateTask) {		
-			log.debug ("TASK COMPLETE from Activiti " + delegateTask.toString());			
+			log.trace ("TASK COMPLETE from Activiti " + delegateTask.toString());			
 			jmsService.send("wfp.engine.activiti",[messageType:"afterDeleteActivitiTask",id:delegateTask.getId()])
 		}
 	}
+    
+    private final class EndExcutionListenerImpl implements ExecutionListener {		
+        @Override
+        public void notify(DelegateExecution delegateExecution) {
+            log.trace ("EXECUTION COMPLETE from Activiti " + delegateExecution.toString());
+            jmsService.send("wfp.engine.activiti",[messageType:"afterDeleteActivitiWorkflow",id:delegateExecution.getId()])
+        }
+        
+    }
 }
